@@ -1,0 +1,168 @@
+package ssh.protocol;
+
+import ssh.utils.Logger;
+import java.nio.ByteBuffer;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.zip.CRC32;
+
+/**
+ * Abstract base class for all SSH protocol messages.
+ */
+public abstract class Message {
+    private MessageType type;
+    private byte[] payload;
+    private int checksum;
+
+    public Message(MessageType type) {
+        this.type = type;
+    }
+
+    /**
+     * Serialize the message to bytes for transmission.
+     */
+    public abstract byte[] serialize();
+
+    /**
+     * Deserialize the message from bytes.
+     */
+    public abstract void deserialize(byte[] data);
+
+    /**
+     * Calculate the checksum of the payload.
+     */
+    public void calculateChecksum() {
+        if (payload != null) {
+            CRC32 crc = new CRC32();
+            crc.update(payload);
+            this.checksum = (int) crc.getValue();
+        }
+    }
+
+    /**
+     * Verify the checksum of the payload.
+     */
+    public boolean verifyChecksum() {
+        if (payload == null) {
+            return checksum == 0;
+        }
+        
+        CRC32 crc = new CRC32();
+        crc.update(payload);
+        return checksum == (int) crc.getValue();
+    }
+
+    /**
+     * Create a complete message packet with length, type, payload, and checksum.
+     */
+    public byte[] toPacket() {
+        byte[] serializedPayload = serialize();
+        this.payload = serializedPayload;
+        calculateChecksum();
+
+        // Packet structure: [4 bytes: length] [1 byte: type] [payload] [4 bytes: checksum]
+        int restLength = 1 + serializedPayload.length + 4; // type + payload + checksum
+        ByteBuffer buffer = ByteBuffer.allocate(4 + restLength);
+        
+        buffer.putInt(restLength); // Length of the rest of the message (not including these 4 bytes)
+        buffer.put((byte) type.getValue());
+        buffer.put(serializedPayload);
+        buffer.putInt(checksum);
+        
+        return buffer.array();
+    }
+
+    /**
+     * Parse a complete message packet.
+     */
+    public static Message fromPacket(byte[] packet) {
+        ByteBuffer buffer = ByteBuffer.wrap(packet);
+        
+        int restLength = buffer.getInt(); // Length of type + payload + checksum
+        Logger.info("fromPacket: restLength = " + restLength);
+        
+        MessageType type = MessageType.fromValue(buffer.get() & 0xFF);
+        Logger.info("fromPacket: parsed message type = " + type);
+        
+        // Payload length = restLength - type(1) - checksum(4)
+        int payloadLength = restLength - 5;
+        Logger.info("fromPacket: payloadLength = " + payloadLength + " (restLength=" + restLength + " - 5)");
+        
+        byte[] payload = new byte[payloadLength];
+        buffer.get(payload);
+        
+        int checksum = buffer.getInt();
+        Logger.info("fromPacket: checksum = " + checksum);
+        
+        Message message = createMessage(type);
+        message.payload = payload;
+        message.checksum = checksum;
+        
+        if (!message.verifyChecksum()) {
+            Logger.error("fromPacket: Checksum verification failed");
+            throw new IllegalArgumentException("Checksum verification failed");
+        }
+        
+        message.deserialize(payload);
+        return message;
+    }
+
+    /**
+     * Factory method to create appropriate message instances.
+     */
+    private static Message createMessage(MessageType type) {
+        switch (type) {
+            case KEY_EXCHANGE_INIT:
+                return new ssh.protocol.messages.KeyExchangeMessage(MessageType.KEY_EXCHANGE_INIT);
+            case KEY_EXCHANGE_REPLY:
+                return new ssh.protocol.messages.KeyExchangeMessage(MessageType.KEY_EXCHANGE_REPLY);
+            case AUTH_REQUEST:
+                return new ssh.protocol.messages.AuthMessage(MessageType.AUTH_REQUEST);
+            case AUTH_SUCCESS:
+                return new ssh.protocol.messages.AuthMessage(MessageType.AUTH_SUCCESS);
+            case AUTH_FAILURE:
+                return new ssh.protocol.messages.AuthMessage(MessageType.AUTH_FAILURE);
+            case SHELL_COMMAND:
+                return new ssh.protocol.messages.ShellMessage(MessageType.SHELL_COMMAND);
+            case SHELL_RESULT:
+                return new ssh.protocol.messages.ShellMessage(MessageType.SHELL_RESULT);
+            case FILE_UPLOAD_REQUEST:
+                return new ssh.protocol.messages.FileTransferMessage(MessageType.FILE_UPLOAD_REQUEST);
+            case FILE_DOWNLOAD_REQUEST:
+                return new ssh.protocol.messages.FileTransferMessage(MessageType.FILE_DOWNLOAD_REQUEST);
+            case FILE_DATA:
+                return new ssh.protocol.messages.FileTransferMessage(MessageType.FILE_DATA);
+            case FILE_ACK:
+                return new ssh.protocol.messages.FileTransferMessage(MessageType.FILE_ACK);
+            case ERROR:
+                return new ssh.protocol.messages.ErrorMessage();
+            default:
+                throw new IllegalArgumentException("Unsupported message type: " + type);
+        }
+    }
+
+    // Getters and setters
+    public MessageType getType() {
+        return type;
+    }
+
+    public void setType(MessageType type) {
+        this.type = type;
+    }
+
+    public byte[] getPayload() {
+        return payload;
+    }
+
+    public void setPayload(byte[] payload) {
+        this.payload = payload;
+    }
+
+    public int getChecksum() {
+        return checksum;
+    }
+
+    public void setChecksum(int checksum) {
+        this.checksum = checksum;
+    }
+} 
