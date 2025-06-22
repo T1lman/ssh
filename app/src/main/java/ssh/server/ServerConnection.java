@@ -161,9 +161,15 @@ public class ServerConnection implements Runnable {
             credentials.put("publicKey", authMessage.getPublicKey());
             credentials.put("signature", authMessage.getSignature());
             // For public key auth, we need session data for signature verification
-            credentials.put("sessionData", this.sessionId);
+            credentials.put("sessionData", java.util.Base64.getEncoder().encodeToString(this.sessionId.getBytes()));
         } else if ("password".equals(authType)) {
             credentials.put("password", authMessage.getPassword());
+        } else if ("dual".equals(authType)) {
+            // For dual authentication, include both password and public key
+            credentials.put("password", authMessage.getPassword());
+            credentials.put("publicKey", authMessage.getPublicKey());
+            credentials.put("signature", authMessage.getSignature());
+            credentials.put("sessionData", java.util.Base64.getEncoder().encodeToString(this.sessionId.getBytes()));
         }
 
         // Authenticate user
@@ -198,7 +204,11 @@ public class ServerConnection implements Runnable {
             try {
                 message = protocolHandler.receiveMessage();
             } catch (IOException e) {
-                ui.displayError("Client disconnected or error: " + e.getMessage());
+                if (e.getMessage().contains("Client disconnected gracefully")) {
+                    ui.displayMessage("Client " + getClientInfo() + " disconnected gracefully");
+                } else {
+                    ui.displayError("Client disconnected or error: " + e.getMessage());
+                }
                 break;
             } catch (Exception e) {
                 ui.displayError("Unexpected error: " + e.getMessage());
@@ -222,8 +232,11 @@ public class ServerConnection implements Runnable {
                     handleFileDownload((ssh.protocol.messages.FileTransferMessage) message);
                     break;
                 case DISCONNECT:
-                    ui.displayMessage("Client " + getClientInfo() + " sent disconnect message.");
+                    ui.displayMessage("Client " + getClientInfo() + " disconnected cleanly.");
                     return;
+                case RELOAD_USERS:
+                    handleReloadUsers();
+                    break;
                 case ERROR:
                     ui.displayError("Received error message from client: " + ((ssh.protocol.messages.ErrorMessage) message).getErrorMessage());
                     break;
@@ -427,6 +440,34 @@ public class ServerConnection implements Runnable {
     }
 
     /**
+     * Handle reload users request.
+     */
+    private void handleReloadUsers() {
+        try {
+            ui.displayMessage("Reloading user database...");
+            authManager.reloadUsers();
+            ui.displayMessage("User database reloaded successfully");
+            
+            // Send acknowledgment back to client
+            ssh.protocol.messages.ServiceMessage response = new ssh.protocol.messages.ServiceMessage(MessageType.SERVICE_ACCEPT);
+            response.setService("reload_users");
+            protocolHandler.sendMessage(response);
+            
+        } catch (Exception e) {
+            ui.displayError("Failed to reload user database: " + e.getMessage());
+            
+            // Send error response to client
+            ssh.protocol.messages.ErrorMessage errorMsg = new ssh.protocol.messages.ErrorMessage();
+            errorMsg.setErrorMessage("Failed to reload user database: " + e.getMessage());
+            try {
+                protocolHandler.sendMessage(errorMsg);
+            } catch (Exception sendError) {
+                ui.displayError("Failed to send error response: " + sendError.getMessage());
+            }
+        }
+    }
+
+    /**
      * Get client information string.
      */
     private String getClientInfo() {
@@ -438,7 +479,11 @@ public class ServerConnection implements Runnable {
      */
     private void cleanup() {
         try {
-            ui.displayMessage("Cleaning up connection for " + getClientInfo());
+            if (authenticatedUser != null) {
+                ui.displayMessage("Cleaning up connection for " + getClientInfo() + " (user: " + authenticatedUser + ")");
+            } else {
+                ui.displayMessage("Cleaning up connection for " + getClientInfo());
+            }
             if (protocolHandler != null) {
                 protocolHandler.close();
             }

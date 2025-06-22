@@ -3,7 +3,10 @@ package ssh.client;
 import ssh.client.ui.AuthCredentials;
 import ssh.client.ui.ClientUI;
 import ssh.client.ui.ServerInfo;
+import ssh.utils.CredentialsManager;
 import ssh.utils.Logger;
+import ssh.protocol.messages.ShellMessage;
+import ssh.protocol.messages.ServiceMessage;
 
 /**
  * Main SSH client class that manages the client lifecycle.
@@ -32,46 +35,78 @@ public class SSHClient {
      */
     public void start() {
         try {
+            System.out.println("DEBUG: SSHClient.start() called");
+            ui.showConnectionProgress("Requesting user credentials...");
+            // Use a temporary manager to get available users before full connection
+            CredentialsManager tempManager = new CredentialsManager("config/credentials.properties");
+            System.out.println("DEBUG: Got credentials manager, requesting auth");
+            this.credentials = ui.getAuthCredentials(tempManager.getAvailableUsers());
+
+            if (credentials == null) {
+                System.out.println("DEBUG: Authentication cancelled by user");
+                ui.displayError("Authentication cancelled.");
+                return;
+            }
+
+            System.out.println("DEBUG: Authentication successful for user: " + credentials.getUsername());
+
+            // Set the username in server info
+            serverInfo.setUsername(credentials.getUsername());
+
             // Get server information if not already provided
             if (this.serverInfo == null) {
                 this.serverInfo = ui.getServerInfo();
             }
             
-            // Get authentication credentials if not already provided
-            if (this.credentials == null) {
-                this.credentials = ui.getAuthCredentials();
-            }
-            
             // Create connection
+            System.out.println("DEBUG: Creating client connection");
             connection = new ClientConnection(serverInfo, credentials, ui);
             
             // Connect to server
             ui.showConnectionProgress("Connecting to server...");
+            System.out.println("DEBUG: Attempting to connect to server");
             if (!connection.connect()) {
+                System.out.println("DEBUG: Connection failed");
                 ui.displayError("Failed to connect to server");
                 return;
             }
             
+            System.out.println("DEBUG: Connection successful");
             ui.showConnectionStatus(true);
             ui.displayMessage("Connected to server successfully");
             
             // Perform key exchange
             ui.showConnectionProgress("Performing key exchange...");
+            System.out.println("DEBUG: Starting key exchange");
             if (!connection.performKeyExchange()) {
+                System.out.println("DEBUG: Key exchange failed");
                 ui.displayError("Key exchange failed");
                 return;
             }
             
+            System.out.println("DEBUG: Key exchange successful");
+            
             // Authenticate
             ui.showConnectionProgress("Authenticating...");
+            System.out.println("DEBUG: Starting authentication");
             if (!connection.authenticate()) {
+                System.out.println("DEBUG: Authentication failed");
                 ui.displayError("Authentication failed");
                 return;
             }
             
-            ui.displayMessage("Authentication successful");
+            System.out.println("DEBUG: Authentication successful");
+            ui.showAuthenticationResult(true, "Authentication successful");
             
-            // Main client loop
+            // For GUI clients, we don't enter the main loop immediately
+            // The GUI will handle user interaction through the UI
+            if (ui instanceof ssh.client.gui.JavaFXClientUI) {
+                System.out.println("DEBUG: GUI client - not entering main loop, waiting for user interaction");
+                return;
+            }
+            
+            // Main client loop (for console clients)
+            System.out.println("DEBUG: Starting main client loop");
             mainLoop();
             
         } catch (OutOfMemoryError e) {
@@ -83,7 +118,10 @@ public class SSHClient {
             ui.displayError("Client error: " + e.getMessage());
             e.printStackTrace();
         } finally {
-            cleanup();
+            // Don't cleanup immediately for GUI clients
+            if (!(ui instanceof ssh.client.gui.JavaFXClientUI)) {
+                cleanup();
+            }
         }
     }
 
@@ -164,7 +202,7 @@ public class SSHClient {
             
             try {
                 // Send command to server
-                connection.sendShellCommand(command);
+                sendShellCommand(command);
                 
                 // Get response
                 String response = connection.receiveShellResponse();
@@ -254,5 +292,64 @@ public class SSHClient {
      */
     public void stop() {
         this.running = false;
+    }
+
+    /**
+     * Send a disconnect message to the server.
+     */
+    public void sendDisconnect() {
+        if (connection != null && connection.isActive()) {
+            connection.sendDisconnect();
+        }
+    }
+
+    /**
+     * Request the server to reload its user database.
+     */
+    public void reloadServerUsers() {
+        if (connection != null && connection.isActive()) {
+            connection.sendReloadUsers();
+        }
+    }
+
+    public void sendShellCommand(String command) {
+        if (connection != null && connection.isActive()) {
+            try {
+                connection.sendShellCommand(command);
+                
+                // For GUI clients, receive the response in a background thread
+                if (ui instanceof ssh.client.gui.JavaFXClientUI) {
+                    new Thread(() -> {
+                        try {
+                            String response = connection.receiveShellResponse();
+                            ui.displayShellOutput(response);
+                            
+                            // Update the working directory display in the GUI
+                            String newWorkingDirectory = connection.getWorkingDirectory();
+                            if (ui instanceof ssh.client.gui.JavaFXClientUI) {
+                                ((ssh.client.gui.JavaFXClientUI) ui).updateWorkingDirectory(newWorkingDirectory);
+                            }
+                        } catch (Exception e) {
+                            ui.displayError("Error receiving response: " + e.getMessage());
+                        }
+                    }).start();
+                }
+            } catch (Exception e) {
+                ui.displayError("Error sending command: " + e.getMessage());
+            }
+        } else {
+            ui.displayError("Not connected to server.");
+        }
+    }
+
+    private void handleIncomingMessages() {
+        new Thread(() -> {
+            try {
+                // ... existing code ...
+            } catch (Exception e) {
+                Logger.error("Error in handleIncomingMessages: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }).start();
     }
 }

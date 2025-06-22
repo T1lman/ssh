@@ -40,6 +40,9 @@ public class AuthenticationManager {
             case "password":
                 Logger.info("Attempting password authentication for: " + username);
                 return authenticatePassword(username, credentials);
+            case "dual":
+                Logger.info("Attempting dual authentication (password + public key) for: " + username);
+                return authenticateDual(username, credentials);
             default:
                 Logger.error("Unknown authentication type: " + authType);
                 return false;
@@ -55,17 +58,30 @@ public class AuthenticationManager {
             String signatureString = credentials.get("signature");
             String sessionDataString = credentials.get("sessionData");
 
+            System.err.println("AuthenticationManager: Public key auth - publicKey: " + (publicKeyString != null ? "present" : "null"));
+            System.err.println("AuthenticationManager: Public key auth - signature: " + (signatureString != null ? "present" : "null"));
+            System.err.println("AuthenticationManager: Public key auth - sessionData: " + (sessionDataString != null ? "present" : "null"));
+
             if (publicKeyString == null || signatureString == null || sessionDataString == null) {
+                System.err.println("AuthenticationManager: Missing required credentials for public key auth");
                 return false;
             }
 
             PublicKey clientPublicKey = RSAKeyGenerator.createPublicKeyFromString(publicKeyString);
+            System.err.println("AuthenticationManager: Created public key from string");
+            
             byte[] signature = java.util.Base64.getDecoder().decode(signatureString);
+            System.err.println("AuthenticationManager: Decoded signature, length: " + signature.length);
+            
             byte[] sessionData = java.util.Base64.getDecoder().decode(sessionDataString);
+            System.err.println("AuthenticationManager: Decoded session data, length: " + sessionData.length);
 
-            return publicKeyAuth.authenticate(username, clientPublicKey, signature, sessionData);
+            boolean result = publicKeyAuth.authenticate(username, clientPublicKey, signature, sessionData);
+            System.err.println("AuthenticationManager: Public key auth result: " + result);
+            return result;
         } catch (Exception e) {
             System.err.println("Public key authentication error: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
@@ -84,6 +100,46 @@ public class AuthenticationManager {
         boolean result = passwordAuth.authenticate(username, password);
         Logger.info("Password authentication result for " + username + ": " + result);
         return result;
+    }
+
+    /**
+     * Authenticate using dual authentication (both password and public key).
+     */
+    private boolean authenticateDual(String username, Map<String, String> credentials) {
+        try {
+            // Check if both password and public key credentials are provided
+            String password = credentials.get("password");
+            String publicKeyString = credentials.get("publicKey");
+            String signatureString = credentials.get("signature");
+            String sessionDataString = credentials.get("sessionData");
+
+            if (password == null || publicKeyString == null || signatureString == null || sessionDataString == null) {
+                Logger.error("Dual authentication requires both password and public key credentials");
+                return false;
+            }
+
+            // First, authenticate with password
+            boolean passwordAuth = authenticatePassword(username, credentials);
+            if (!passwordAuth) {
+                Logger.error("Password authentication failed for dual auth");
+                return false;
+            }
+
+            // Then, authenticate with public key
+            boolean publicKeyAuth = authenticatePublicKey(username, credentials);
+            if (!publicKeyAuth) {
+                Logger.error("Public key authentication failed for dual auth");
+                return false;
+            }
+
+            // Both must succeed for dual authentication
+            Logger.info("Dual authentication successful for user: " + username);
+            return true;
+
+        } catch (Exception e) {
+            Logger.error("Dual authentication error: " + e.getMessage());
+            return false;
+        }
     }
 
     /**
@@ -149,5 +205,19 @@ public class AuthenticationManager {
      */
     public PasswordAuth getPasswordAuth() {
         return passwordAuth;
+    }
+
+    /**
+     * Reload the user database from disk.
+     */
+    public void reloadUsers() {
+        try {
+            Logger.info("Reloading user database...");
+            userStore.loadUsers();
+            Logger.info("User database reloaded successfully");
+        } catch (Exception e) {
+            Logger.error("Failed to reload user database: " + e.getMessage());
+            throw new RuntimeException("Failed to reload user database", e);
+        }
     }
 } 

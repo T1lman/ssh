@@ -30,15 +30,7 @@ public class SSHClientMain {
             // Get Server Info from user
             ServerInfo serverInfo = ui.getServerInfoFromUser();
             
-            // Get Auth Credentials from user
-            AuthCredentials authCredentials = ui.getAuthCredentials(credentialsManager);
-            
-            // Set username in serverInfo
-            if (authCredentials != null) {
-                serverInfo.setUsername(authCredentials.getUsername());
-            }
-
-            SSHClient client = new SSHClient(serverInfo, authCredentials, ui);
+            SSHClient client = new SSHClient(serverInfo, null, ui);
             ConsoleInterface.progressComplete();
             
             ConsoleInterface.progress("Starting SSH client");

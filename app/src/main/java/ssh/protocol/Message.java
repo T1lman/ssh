@@ -139,8 +139,11 @@ public abstract class Message {
             case FILE_ACK:
                 return new ssh.protocol.messages.FileTransferMessage(MessageType.FILE_ACK);
             case ERROR:
-            case DISCONNECT:
                 return new ssh.protocol.messages.ErrorMessage();
+            case DISCONNECT:
+                return new ssh.protocol.messages.DisconnectMessage();
+            case RELOAD_USERS:
+                return new ssh.protocol.messages.ReloadUsersMessage();
             default:
                 throw new IllegalArgumentException("Unsupported message type: " + type);
         }

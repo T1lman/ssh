@@ -35,16 +35,16 @@ public class RSAKeyGenerator {
      * Save a key pair to files.
      */
     public static void saveKeyPair(KeyPair keyPair, String privateKeyPath, String publicKeyPath) throws Exception {
-        // Save private key
+        // Save private key as binary
         try (FileOutputStream fos = new FileOutputStream(privateKeyPath)) {
             byte[] privateKeyBytes = keyPair.getPrivate().getEncoded();
             fos.write(privateKeyBytes);
         }
 
-        // Save public key
-        try (FileOutputStream fos = new FileOutputStream(publicKeyPath)) {
-            byte[] publicKeyBytes = keyPair.getPublic().getEncoded();
-            fos.write(publicKeyBytes);
+        // Save public key as Base64-encoded text
+        try (FileWriter writer = new FileWriter(publicKeyPath)) {
+            String publicKeyString = getPublicKeyString(keyPair.getPublic());
+            writer.write(publicKeyString);
         }
     }
 
@@ -57,21 +57,12 @@ public class RSAKeyGenerator {
         try (FileInputStream fis = new FileInputStream(privateKeyPath)) {
             privateKeyBytes = fis.readAllBytes();
         }
-
-        // Load public key
-        byte[] publicKeyBytes;
-        try (FileInputStream fis = new FileInputStream(publicKeyPath)) {
-            publicKeyBytes = fis.readAllBytes();
-        }
-
-        // Create key specs
         PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
-        X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBytes);
-
-        // Generate key pair
         java.security.KeyFactory keyFactory = java.security.KeyFactory.getInstance("RSA");
         PrivateKey privateKey = keyFactory.generatePrivate(privateKeySpec);
-        PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
+
+        // Load public key (handles both binary and Base64 text)
+        PublicKey publicKey = loadPublicKey(publicKeyPath);
 
         return new KeyPair(publicKey, privateKey);
     }
@@ -80,14 +71,27 @@ public class RSAKeyGenerator {
      * Load a public key from file.
      */
     public static PublicKey loadPublicKey(String publicKeyPath) throws Exception {
-        byte[] publicKeyBytes;
+        // Read the file content
+        String content;
         try (FileInputStream fis = new FileInputStream(publicKeyPath)) {
-            publicKeyBytes = fis.readAllBytes();
+            byte[] bytes = fis.readAllBytes();
+            
+            // Try to read as text first (Base64)
+            try {
+                content = new String(bytes, "UTF-8").trim();
+                // If it looks like Base64 (starts with MII), decode it
+                if (content.startsWith("MII")) {
+                    return createPublicKeyFromString(content);
+                }
+            } catch (Exception e) {
+                // If text reading fails, treat as binary
+            }
+            
+            // Fallback to binary format
+            X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(bytes);
+            java.security.KeyFactory keyFactory = java.security.KeyFactory.getInstance("RSA");
+            return keyFactory.generatePublic(publicKeySpec);
         }
-
-        X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBytes);
-        java.security.KeyFactory keyFactory = java.security.KeyFactory.getInstance("RSA");
-        return keyFactory.generatePublic(publicKeySpec);
     }
 
     /**

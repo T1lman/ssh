@@ -60,8 +60,10 @@ public interface ClientUI {
 
     /**
      * Get authentication credentials.
+     * @param availableUsers An array of usernames for the user to select from.
+     * @return The credentials chosen by the user, or null if the action is cancelled.
      */
-    AuthCredentials getAuthCredentials();
+    AuthCredentials getAuthCredentials(String[] availableUsers);
 
     /**
      * Show connection progress.

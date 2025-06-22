@@ -62,6 +62,10 @@ public class ProtocolHandler {
                 byte[] lengthBytes = new byte[4];
                 int bytesRead = inputStream.read(lengthBytes);
                 Logger.info("Read " + bytesRead + " bytes for encrypted message length");
+                if (bytesRead == -1) {
+                    Logger.info("Client disconnected gracefully (end of stream)");
+                    throw new IOException("Client disconnected gracefully");
+                }
                 if (bytesRead != 4) {
                     Logger.error("Failed to read encrypted message length. Expected 4 bytes, got " + bytesRead);
                     throw new IOException("Failed to read encrypted message length");
@@ -77,8 +81,8 @@ public class ProtocolHandler {
                 while (totalRead < encryptedLength) {
                     int read = inputStream.read(encryptedMessage, totalRead, encryptedLength - totalRead);
                     if (read == -1) {
-                        Logger.error("Stream closed before reading complete encrypted message");
-                        throw new IOException("Stream closed before reading complete encrypted message");
+                        Logger.info("Client disconnected gracefully during encrypted message read");
+                        throw new IOException("Client disconnected gracefully");
                     }
                     totalRead += read;
                 }
@@ -109,6 +113,10 @@ public class ProtocolHandler {
                 byte[] lengthBytes = new byte[4];
                 int bytesRead = inputStream.read(lengthBytes);
                 Logger.info("Read " + bytesRead + " bytes for message length");
+                if (bytesRead == -1) {
+                    Logger.info("Client disconnected gracefully (end of stream)");
+                    throw new IOException("Client disconnected gracefully");
+                }
                 if (bytesRead != 4) {
                     Logger.error("Failed to read message length. Expected 4 bytes, got " + bytesRead);
                     throw new IOException("Failed to read message length");
@@ -124,8 +132,8 @@ public class ProtocolHandler {
                 while (totalRead < messageLength) {
                     int read = inputStream.read(messageBytes, totalRead, messageLength - totalRead);
                     if (read == -1) {
-                        Logger.error("Stream closed before reading complete message");
-                        throw new IOException("Stream closed before reading complete message");
+                        Logger.info("Client disconnected gracefully during message read");
+                        throw new IOException("Client disconnected gracefully");
                     }
                     totalRead += read;
                 }

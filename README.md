@@ -1,342 +1,233 @@
-# SSH Server and Client Implementation
+# SSH Client-Server Implementation
 
-A complete Java implementation of SSH server and client with secure authentication, encryption, and shell access.
+A Java-based SSH client-server implementation with support for both console and GUI clients, featuring **dual authentication** (password + public key).
 
 ## Features
 
-- **Secure Key Exchange**: Diffie-Hellman key exchange for session key generation
-- **Multiple Authentication Methods**: Password and public key authentication
-- **AES-GCM Encryption**: Symmetric encryption for all communications
-- **Shell Access**: Remote command execution
-- **File Transfer**: Basic file upload/download functionality
-- **User Management**: Configurable user accounts
-- **Credentials Management**: Standard credentials file for easy configuration
+- **Dual Authentication**: Requires both password AND public key authentication for enhanced security
+- **Multiple Client Interfaces**: Console and JavaFX GUI clients
+- **File Transfer**: Secure file upload/download capabilities
+- **Shell Access**: Interactive command execution
+- **Key Management**: RSA key generation and management utilities
+- **Cross-platform**: Works on Windows, macOS, and Linux
 
-## Project Structure
+## Authentication System
 
-```
-ssh/
-├── app/
-│   ├── build.gradle                 # Gradle build configuration
-│   ├── data/                        # Data storage
-│   │   ├── server/
-│   │   │   ├── server_keys/         # Server RSA keys
-│   │   │   └── users.properties     # User accounts
-│   │   └── client/
-│   │       └── client_keys/         # Client keys (for public key auth)
-│   └── src/main/java/ssh/
-│       ├── auth/                    # Authentication modules
-│       ├── client/                  # Client implementation
-│       ├── crypto/                  # Cryptographic operations
-│       ├── protocol/                # SSH protocol implementation
-│       ├── server/                  # Server implementation
-│       ├── shell/                   # Shell command execution
-│       └── utils/                   # Utility classes
-├── config/
-│   ├── credentials.properties       # Client credentials configuration
-│   ├── client.properties           # Client configuration
-│   └── server.properties           # Server configuration
-└── README.md
-```
+This SSH implementation uses **dual authentication** for enhanced security:
+
+1. **Password Authentication**: Traditional username/password verification
+2. **Public Key Authentication**: RSA key pair verification
+3. **Dual Authentication**: BOTH password AND public key must be valid
+
+### Authentication Flow
+
+1. User selects username from available users
+2. Client loads both password and key information for the selected user
+3. Client sends authentication request with both credentials
+4. Server validates both password AND public key
+5. Connection is established only if BOTH authentications succeed
 
 ## Quick Start
 
-### Prerequisites
+### 1. Setup Dual Authentication
 
-- Java 11 or higher
-- Gradle (included in the project)
-
-### Building the Project
+First, set up the dual authentication system:
 
 ```bash
-./gradlew build
+# Generate key pairs and configure server
+java -cp app/build/classes/java/main ssh.utils.SetupDualAuth
 ```
 
-### Starting the Server
+This will:
+- Generate RSA key pairs for all users (admin, test, user1)
+- Add public keys to server's authorized keys
+- Validate all key pairs
+
+### 2. Start the Server
 
 ```bash
-# Start server with default configuration
-./gradlew run --args="server"
-
-# Start server with custom port
-./gradlew run --args="server --port 2223"
-
-# Start server with custom configuration file
-./gradlew run --args="server --config config/server.properties"
+# Start SSH server on port 2222
+java -cp app/build/classes/java/main ssh.server.SSHServer
 ```
 
-### Starting the Client
+### 3. Connect with Client
 
+#### GUI Client (Recommended)
 ```bash
-# Start client (uses credentials from config/credentials.properties)
-./gradlew run --args="client"
+./gradlew run
+```
 
-# Start client with custom credentials file
-./gradlew run --args="client --credentials config/my-credentials.properties"
+#### Console Client
+```bash
+java -cp app/build/classes/java/main ssh.client.SSHClientMain
 ```
 
 ## Configuration
 
-### Credentials File (config/credentials.properties)
-
-The client uses a standard credentials file to store authentication information. This eliminates the need for manual input of passwords and keys.
+### User Credentials (`config/credentials.properties`)
 
 ```properties
-# Default user credentials
+# Dual authentication configuration
 default.username=admin
 default.password=admin
-default.auth.type=password
+default.auth.type=dual
+default.privateKey=data/client/client_keys/admin_rsa
+default.publicKey=data/client/client_keys/admin_rsa.pub
 
-# Additional users
 user1.username=test
 user1.password=test
-user1.auth.type=password
+user1.auth.type=dual
+user1.privateKey=data/client/client_keys/test_rsa
+user1.publicKey=data/client/client_keys/test_rsa.pub
 
-user2.username=user1
-user2.password=password
-user2.auth.type=password
-
-# Public key authentication example (commented out)
-# user3.username=keyuser
-# user3.auth.type=publickey
-# user3.private.key.path=data/client/client_keys/id_rsa
-# user3.public.key.path=data/client/client_keys/id_rsa.pub
-
-# Server connection defaults
+# Server connection
 server.host=localhost
 server.port=2222
 ```
 
-### Server Configuration (config/server.properties)
+### Authentication Types
 
-```properties
-# Server settings
-server.port=2222
-server.host=0.0.0.0
-server.max.connections=10
+- `password`: Only password authentication
+- `publickey`: Only public key authentication  
+- `dual`: Both password AND public key required (recommended)
 
-# Security settings
-server.key.size=2048
-server.session.timeout=300000
+## GUI Client Features
 
-# Logging
-server.log.level=INFO
+The JavaFX GUI client provides:
+
+- **User Selection**: Dropdown to choose from configured users
+- **Authentication Type**: Support for password, public key, or dual authentication
+- **Key Management**: Generate new key pairs or browse existing keys
+- **Interactive Shell**: Command input with working directory display
+- **File Transfer**: Upload/download files with progress tracking
+- **Connection Management**: Connect/disconnect with status display
+
+### GUI Authentication Dialog
+
+When using dual authentication:
+1. Select username from dropdown
+2. Choose "dual" authentication type
+3. Enter password
+4. Select or generate key pair
+5. Click "Login" to authenticate
+
+## Console Client Features
+
+The console client provides:
+
+- **User Selection**: Numbered list of available users
+- **Interactive Shell**: Command execution with output display
+- **Service Selection**: Choose between shell, file transfer, or exit
+- **Error Handling**: Graceful handling of connection issues
+
+## Key Management
+
+### Generate New Key Pairs
+
+```bash
+# Using the GUI client
+# Click "Generate New Keys" in the authentication dialog
+
+# Using the console utility
+java -cp app/build/classes/java/main ssh.utils.KeyManager generate admin_rsa
 ```
 
-### Client Configuration (config/client.properties)
+### Add Keys to Server
 
-```properties
-# Client settings
-client.connection.timeout=30000
-client.read.timeout=30000
+```bash
+# Using the setup utility (automatic)
+java -cp app/build/classes/java/main ssh.utils.SetupDualAuth
 
-# Security settings
-client.key.size=2048
-
-# Logging
-client.log.level=INFO
+# Using the key manager
+java -cp app/build/classes/java/main ssh.utils.KeyManager add-key admin data/client/client_keys/admin_rsa.pub
 ```
 
-## Usage
+### Validate Key Pairs
 
-### Server
-
-1. **Start the server**:
-   ```bash
-   ./gradlew run --args="server"
-   ```
-
-2. **Default users** (configured in `app/data/server/users.properties`):
-   - Username: `admin`, Password: `admin`
-   - Username: `test`, Password: `test`
-   - Username: `user1`, Password: `password`
-
-3. **Server will listen** on port 2222 by default
-
-### Client
-
-1. **Configure credentials** in `config/credentials.properties`
-
-2. **Start the client**:
-   ```bash
-   ./gradlew run --args="client"
-   ```
-
-3. **Select user** (if multiple users are configured)
-
-4. **Choose service**:
-   - Shell: Execute remote commands
-   - File Transfer: Upload/download files
-   - Exit: Close connection
-
-## Authentication Methods
-
-### Password Authentication
-
-The default authentication method. Users provide username and password.
-
-```properties
-default.username=admin
-default.password=admin
-default.auth.type=password
+```bash
+java -cp app/build/classes/java/main ssh.utils.KeyManager validate data/client/client_keys/admin_rsa data/client/client_keys/admin_rsa.pub
 ```
 
-### Public Key Authentication
+## File Structure
 
-For enhanced security, users can use RSA key pairs.
-
-```properties
-user3.username=keyuser
-user3.auth.type=publickey
-user3.private.key.path=data/client/client_keys/id_rsa
-user3.public.key.path=data/client/client_keys/id_rsa.pub
+```
+ssh/
+├── app/
+│   ├── src/main/java/ssh/
+│   │   ├── auth/           # Authentication system
+│   │   ├── client/         # Client implementations
+│   │   │   ├── gui/        # JavaFX GUI client
+│   │   │   └── ui/         # Client UI interfaces
+│   │   ├── crypto/         # Cryptographic utilities
+│   │   ├── protocol/       # SSH protocol implementation
+│   │   ├── server/         # Server implementation
+│   │   ├── shell/          # Shell command execution
+│   │   └── utils/          # Utility classes
+│   └── build.gradle
+├── config/
+│   └── credentials.properties  # User credentials
+├── data/
+│   ├── client/
+│   │   └── client_keys/    # Client private/public keys
+│   └── server/
+│       ├── authorized_keys/ # Server authorized keys
+│       ├── files/          # Server file storage
+│       └── users.properties # Server user database
+└── README.md
 ```
 
 ## Security Features
 
-- **Diffie-Hellman Key Exchange**: Secure session key generation
-- **AES-GCM Encryption**: Authenticated encryption for all data
-- **RSA Key Pairs**: For server identity and public key authentication
-- **Session Management**: Secure session handling with timeouts
-- **User Isolation**: Separate user accounts and permissions
+- **Dual Authentication**: Requires both password and public key
+- **RSA Key Pairs**: 2048-bit RSA encryption
+- **Session Management**: Secure session establishment
+- **File Transfer Security**: Encrypted file transfers
+- **Input Validation**: Comprehensive input sanitization
 
-## Protocol Specification
+## Troubleshooting
 
-### Message Types
+### Authentication Issues
 
-- `KEY_EXCHANGE`: Diffie-Hellman key exchange
-- `AUTH_REQUEST`: Authentication request
-- `AUTH_RESPONSE`: Authentication response
-- `SHELL_COMMAND`: Shell command execution
-- `SHELL_RESPONSE`: Shell command response
-- `FILE_TRANSFER`: File transfer operations
-- `ERROR`: Error messages
+1. **Dual Auth Required**: Ensure both password and key are configured
+2. **Key Validation**: Run key validation to check key pairs
+3. **User Configuration**: Verify user exists in both client and server configs
 
-### Connection Flow
+### Connection Issues
 
-1. **TCP Connection**: Client connects to server
-2. **Key Exchange**: Diffie-Hellman key exchange
-3. **Authentication**: Password or public key authentication
-4. **Service Selection**: Shell or file transfer
-5. **Data Exchange**: Encrypted communication
-6. **Disconnection**: Clean connection termination
+1. **Server Running**: Ensure server is started on correct port
+2. **Firewall**: Check if port 2222 is accessible
+3. **Network**: Verify localhost connectivity
+
+### GUI Issues
+
+1. **JavaFX**: Ensure JavaFX is available
+2. **Permissions**: Check file permissions for key files
+3. **Display**: Verify display settings for GUI
 
 ## Development
 
 ### Building
 
 ```bash
-# Build the project
 ./gradlew build
-
-# Run tests
-./gradlew test
-
-# Clean build
-./gradlew clean build
 ```
 
-### Project Structure Details
+### Testing
 
-- **Protocol Layer**: Handles SSH protocol messages and state management
-- **Crypto Layer**: Implements cryptographic operations (RSA, AES, DH)
-- **Auth Layer**: Manages user authentication and authorization
-- **Shell Layer**: Executes shell commands and manages output
-- **UI Layer**: Provides user interface abstraction for both client and server
+```bash
+./gradlew test
+```
 
-### Extending the Project
+### Running
 
-- **New Authentication Methods**: Implement additional auth providers
-- **Additional Services**: Add new SSH services (SFTP, port forwarding)
-- **Enhanced Security**: Add certificate-based authentication
-- **GUI Interface**: Implement graphical user interface
-- **Plugin System**: Add plugin architecture for extensibility
+```bash
+# Server
+./gradlew runServer
 
-## Troubleshooting
-
-### Common Issues
-
-1. **Port already in use**:
-   - Change server port in configuration
-   - Check if another SSH server is running
-
-2. **Authentication failed**:
-   - Verify credentials in `config/credentials.properties`
-   - Check server user configuration
-
-3. **Connection refused**:
-   - Ensure server is running
-   - Check host and port configuration
-
-4. **Key file not found**:
-   - Verify key file paths in credentials
-   - Generate keys if needed
-
-### Logging
-
-Enable debug logging by setting log level to DEBUG in configuration files:
-
-```properties
-server.log.level=DEBUG
-client.log.level=DEBUG
+# Client
+./gradlew run
 ```
 
 ## License
 
-This project is for educational purposes. Use at your own risk in production environments.
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests
-5. Submit a pull request
-
-## Security Notes
-
-- This is an educational implementation
-- Not recommended for production use
-- Missing some security features of real SSH implementations
-- Always use established SSH implementations for production systems
-
-## File Transfer
-
-The SSH client supports secure file transfer operations:
-
-### Upload Files
-Upload local files to the server:
-```bash
-# Start client and select file transfer service
-./gradlew runClient
-
-# Choose operation: upload
-# Enter local file path: /path/to/local/file.txt
-# Enter remote file path: remote_file.txt
-```
-
-### Download Files
-Download files from the server:
-```bash
-# Start client and select file transfer service
-./gradlew runClient
-
-# Choose operation: download
-# Enter remote file path: remote_file.txt
-# Enter local file path: /path/to/local/download.txt
-```
-
-### File Storage
-- **Server files**: Stored in `data/server/files/[username]/`
-- **Client downloads**: Stored in user-specified local path
-- **Progress tracking**: Real-time transfer progress display
-- **Chunked transfer**: Large files transferred in 8KB chunks
-- **Error handling**: Comprehensive error checking and reporting
-
-### Security Features
-- **User isolation**: Each user has separate file storage
-- **Path validation**: Prevents directory traversal attacks
-- **Encrypted transfer**: All file data encrypted using AES-GCM
-- **Authentication required**: File operations require successful authentication
-
-## Authentication Methods 
+This project is for educational purposes. Use at your own risk in production environments. 

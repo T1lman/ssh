@@ -1,0 +1,159 @@
+[2025-06-22 21:39:33] [INFO] [JavaFX Application Thread] Logger initialized - logging to: logs/client_gui.log
+[2025-06-22 21:39:33] [ERROR] [JavaFX Application Thread] Failed to load credentials from config/credentials.properties: config/credentials.properties (No such file or directory)
+[2025-06-22 21:39:33] [INFO] [JavaFX Application Thread] Current working directory: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/app
+[2025-06-22 21:39:33] [INFO] [JavaFX Application Thread] Attempting to create default credentials...
+[2025-06-22 21:39:33] [INFO] [JavaFX Application Thread] Using default credentials - admin/admin
+[2025-06-22 21:39:33] [INFO] [Thread-4] ClientConnection constructor called
+[2025-06-22 21:39:33] [INFO] [Thread-4] Connecting to localhost:2222
+[2025-06-22 21:39:33] [ERROR] [Thread-4] Connection failed: Connection refused
+[2025-06-22 21:39:33] [INFO] [Thread-4] Disconnected from server
+[2025-06-22 21:42:19] [INFO] [JavaFX Application Thread] Logger initialized - logging to: logs/client_gui.log
+[2025-06-22 21:42:19] [ERROR] [JavaFX Application Thread] Failed to load credentials from config/credentials.properties: config/credentials.properties (No such file or directory)
+[2025-06-22 21:42:19] [INFO] [JavaFX Application Thread] Current working directory: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/app
+[2025-06-22 21:42:19] [INFO] [JavaFX Application Thread] Attempting to create default credentials...
+[2025-06-22 21:42:19] [INFO] [JavaFX Application Thread] Using default credentials - admin/admin
+[2025-06-22 21:42:50] [INFO] [Thread-4] ClientConnection constructor called
+[2025-06-22 21:42:50] [INFO] [Thread-4] Connecting to 192.168.178.108:2222
+[2025-06-22 21:42:50] [INFO] [Thread-4] Connected successfully
+[2025-06-22 21:42:50] [INFO] [Thread-4] Starting key exchange...
+[2025-06-22 21:42:50] [INFO] [Thread-4] Generated DH key pair
+[2025-06-22 21:42:50] [INFO] [Thread-4] Created key exchange init message
+[2025-06-22 21:42:50] [INFO] [Thread-4] Sending message: KEY_EXCHANGE_INIT, length: 791
+[2025-06-22 21:42:50] [INFO] [Thread-4] Message sent successfully
+[2025-06-22 21:42:50] [INFO] [Thread-4] Sent key exchange init message
+[2025-06-22 21:42:50] [INFO] [Thread-4] Waiting for key exchange reply...
+[2025-06-22 21:42:50] [INFO] [Thread-4] Waiting to receive message...
+[2025-06-22 21:42:50] [INFO] [Thread-4] Read 4 bytes for message length
+[2025-06-22 21:42:50] [INFO] [Thread-4] Message length: 1196
+[2025-06-22 21:42:50] [INFO] [Thread-4] Read 1196 bytes for message body (expected 1196)
+[2025-06-22 21:42:50] [INFO] [Thread-4] Message body (first 20 bytes): 02 64 68 50 75 62 6C 69 63 4B 65 79 3A 4D 49 49 43 4B 44 43 
+[2025-06-22 21:42:50] [INFO] [Thread-4] Raw message type byte: 2
+[2025-06-22 21:42:50] [INFO] [Thread-4] Parsed message type: KEY_EXCHANGE_REPLY
+[2025-06-22 21:42:50] [INFO] [Thread-4] fromPacket: restLength = 1196
+[2025-06-22 21:42:50] [INFO] [Thread-4] fromPacket: parsed message type = KEY_EXCHANGE_REPLY
+[2025-06-22 21:42:50] [INFO] [Thread-4] fromPacket: payloadLength = 1191 (restLength=1196 - 5)
+[2025-06-22 21:42:50] [INFO] [Thread-4] fromPacket: checksum = 1712495877
+[2025-06-22 21:42:50] [INFO] [Thread-4] Received message: KEY_EXCHANGE_REPLY
+[2025-06-22 21:42:50] [INFO] [Thread-4] Received reply message: KEY_EXCHANGE_REPLY
+[2025-06-22 21:42:50] [INFO] [Thread-4] Set server's public key
+[2025-06-22 21:42:51] [INFO] [Thread-4] Computed shared secret, length: 256
+[2025-06-22 21:42:51] [INFO] [Thread-4] Initialized symmetric encryption
+[2025-06-22 21:42:51] [INFO] [Thread-4] Encryption enabled - subsequent messages will be encrypted/decrypted
+[2025-06-22 21:42:51] [INFO] [Thread-4] Enabled encryption in protocol handler
+[2025-06-22 21:42:51] [INFO] [Thread-4] Received session ID: 63eaa54a-4766-49be-b01e-74648473fad5
+[2025-06-22 21:42:51] [INFO] [Thread-4] Starting authentication...
+[2025-06-22 21:42:51] [INFO] [Thread-4] Preparing auth for user: null, type: password
+[2025-06-22 21:42:51] [INFO] [Thread-4] Using password authentication
+[2025-06-22 21:42:51] [INFO] [Thread-4] Sending message: AUTH_REQUEST, length: 27
+[2025-06-22 21:42:51] [INFO] [Thread-4] Message encrypted, new length: 55
+[2025-06-22 21:42:51] [INFO] [Thread-4] Added length prefix for encrypted message, total length: 59
+[2025-06-22 21:42:51] [INFO] [Thread-4] Message sent successfully
+[2025-06-22 21:42:51] [INFO] [Thread-4] Sent authentication request
+[2025-06-22 21:42:51] [INFO] [Thread-4] Waiting to receive message...
+[2025-06-22 21:42:51] [INFO] [Thread-4] Reading encrypted message...
+[2025-06-22 21:42:51] [INFO] [Thread-4] Read -1 bytes for encrypted message length
+[2025-06-22 21:42:51] [ERROR] [Thread-4] Failed to read encrypted message length. Expected 4 bytes, got -1
+[2025-06-22 21:42:51] [ERROR] [Thread-4] Authentication failed: Failed to read encrypted message length
+[2025-06-22 21:42:51] [INFO] [Thread-4] Sending message: DISCONNECT, length: 43
+[2025-06-22 21:42:51] [INFO] [Thread-4] Message encrypted, new length: 71
+[2025-06-22 21:42:51] [INFO] [Thread-4] Added length prefix for encrypted message, total length: 75
+[2025-06-22 21:42:51] [INFO] [Thread-4] Message sent successfully
+[2025-06-22 21:42:51] [INFO] [Thread-4] Sending message: DISCONNECT, length: 43
+[2025-06-22 21:42:51] [INFO] [Thread-4] Message encrypted, new length: 71
+[2025-06-22 21:42:51] [INFO] [Thread-4] Added length prefix for encrypted message, total length: 75
+[2025-06-22 21:42:51] [INFO] [Thread-4] Message sent successfully
+[2025-06-22 21:42:51] [INFO] [Thread-4] Protocol handler closed
+[2025-06-22 21:42:51] [INFO] [Thread-4] Disconnected from server
+[2025-06-22 21:53:57] [INFO] [JavaFX Application Thread] Logger initialized - logging to: logs/client_gui.log
+[2025-06-22 21:53:57] [ERROR] [JavaFX Application Thread] Failed to load credentials from config/credentials.properties: config/credentials.properties (No such file or directory)
+[2025-06-22 21:53:57] [INFO] [JavaFX Application Thread] Current working directory: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/app
+[2025-06-22 21:53:57] [INFO] [JavaFX Application Thread] Attempting to create default credentials...
+[2025-06-22 21:53:57] [INFO] [JavaFX Application Thread] Using default credentials - admin/admin
+[2025-06-22 21:54:22] [INFO] [Thread-4] ClientConnection constructor called
+[2025-06-22 21:54:22] [INFO] [Thread-4] Connecting to 192.168.178.108:2222
+[2025-06-22 21:54:22] [INFO] [Thread-4] Connected successfully
+[2025-06-22 21:54:22] [INFO] [Thread-4] Starting key exchange...
+[2025-06-22 21:54:22] [INFO] [Thread-4] Generated DH key pair
+[2025-06-22 21:54:22] [INFO] [Thread-4] Created key exchange init message
+[2025-06-22 21:54:22] [INFO] [Thread-4] Sending message: KEY_EXCHANGE_INIT, length: 791
+[2025-06-22 21:54:22] [INFO] [Thread-4] Message sent successfully
+[2025-06-22 21:54:22] [INFO] [Thread-4] Sent key exchange init message
+[2025-06-22 21:54:22] [INFO] [Thread-4] Waiting for key exchange reply...
+[2025-06-22 21:54:22] [INFO] [Thread-4] Waiting to receive message...
+[2025-06-22 21:54:22] [INFO] [Thread-4] Read 4 bytes for message length
+[2025-06-22 21:54:22] [INFO] [Thread-4] Message length: 1196
+[2025-06-22 21:54:22] [INFO] [Thread-4] Read 1196 bytes for message body (expected 1196)
+[2025-06-22 21:54:22] [INFO] [Thread-4] Message body (first 20 bytes): 02 64 68 50 75 62 6C 69 63 4B 65 79 3A 4D 49 49 43 4B 44 43 
+[2025-06-22 21:54:22] [INFO] [Thread-4] Raw message type byte: 2
+[2025-06-22 21:54:22] [INFO] [Thread-4] Parsed message type: KEY_EXCHANGE_REPLY
+[2025-06-22 21:54:22] [INFO] [Thread-4] fromPacket: restLength = 1196
+[2025-06-22 21:54:22] [INFO] [Thread-4] fromPacket: parsed message type = KEY_EXCHANGE_REPLY
+[2025-06-22 21:54:22] [INFO] [Thread-4] fromPacket: payloadLength = 1191 (restLength=1196 - 5)
+[2025-06-22 21:54:22] [INFO] [Thread-4] fromPacket: checksum = -760584379
+[2025-06-22 21:54:22] [INFO] [Thread-4] Received message: KEY_EXCHANGE_REPLY
+[2025-06-22 21:54:22] [INFO] [Thread-4] Received reply message: KEY_EXCHANGE_REPLY
+[2025-06-22 21:54:22] [INFO] [Thread-4] Set server's public key
+[2025-06-22 21:54:22] [INFO] [Thread-4] Computed shared secret, length: 256
+[2025-06-22 21:54:22] [INFO] [Thread-4] Initialized symmetric encryption
+[2025-06-22 21:54:22] [INFO] [Thread-4] Encryption enabled - subsequent messages will be encrypted/decrypted
+[2025-06-22 21:54:22] [INFO] [Thread-4] Enabled encryption in protocol handler
+[2025-06-22 21:54:22] [INFO] [Thread-4] Received session ID: d034f734-5173-4169-b6d4-d01acff00f9d
+[2025-06-22 21:54:22] [INFO] [Thread-4] Starting authentication...
+[2025-06-22 21:54:22] [INFO] [Thread-4] Preparing auth for user: admin, type: password
+[2025-06-22 21:54:22] [INFO] [Thread-4] Using password authentication
+[2025-06-22 21:54:22] [INFO] [Thread-4] Sending message: AUTH_REQUEST, length: 58
+[2025-06-22 21:54:22] [INFO] [Thread-4] Message encrypted, new length: 86
+[2025-06-22 21:54:22] [INFO] [Thread-4] Added length prefix for encrypted message, total length: 90
+[2025-06-22 21:54:22] [INFO] [Thread-4] Message sent successfully
+[2025-06-22 21:54:22] [INFO] [Thread-4] Sent authentication request
+[2025-06-22 21:54:22] [INFO] [Thread-4] Waiting to receive message...
+[2025-06-22 21:54:22] [INFO] [Thread-4] Reading encrypted message...
+[2025-06-22 21:54:22] [INFO] [Thread-4] Read 4 bytes for encrypted message length
+[2025-06-22 21:54:22] [INFO] [Thread-4] Encrypted message length: 81
+[2025-06-22 21:54:22] [INFO] [Thread-4] Read 81 bytes for encrypted message body
+[2025-06-22 21:54:22] [INFO] [Thread-4] Decrypting encrypted message, length: 81
+[2025-06-22 21:54:22] [INFO] [Thread-4] Message decrypted successfully, new length: 53
+[2025-06-22 21:54:22] [INFO] [Thread-4] fromPacket: restLength = 49
+[2025-06-22 21:54:22] [INFO] [Thread-4] fromPacket: parsed message type = AUTH_FAILURE
+[2025-06-22 21:54:22] [INFO] [Thread-4] fromPacket: payloadLength = 44 (restLength=49 - 5)
+[2025-06-22 21:54:22] [INFO] [Thread-4] fromPacket: checksum = -595954133
+[2025-06-22 21:54:22] [INFO] [Thread-4] Received encrypted message: AUTH_FAILURE
+[2025-06-22 21:54:22] [INFO] [Thread-4] Received auth response: AUTH_FAILURE
+[2025-06-22 21:54:22] [ERROR] [Thread-4] Authentication failed
+[2025-06-22 21:54:22] [INFO] [Thread-4] Sending message: DISCONNECT, length: 43
+[2025-06-22 21:54:22] [INFO] [Thread-4] Message encrypted, new length: 71
+[2025-06-22 21:54:22] [INFO] [Thread-4] Added length prefix for encrypted message, total length: 75
+[2025-06-22 21:54:22] [INFO] [Thread-4] Message sent successfully
+[2025-06-22 21:54:22] [INFO] [Thread-4] Sending message: DISCONNECT, length: 43
+[2025-06-22 21:54:22] [INFO] [Thread-4] Message encrypted, new length: 71
+[2025-06-22 21:54:22] [INFO] [Thread-4] Added length prefix for encrypted message, total length: 75
+[2025-06-22 21:54:22] [INFO] [Thread-4] Message sent successfully
+[2025-06-22 21:54:22] [INFO] [Thread-4] Protocol handler closed
+[2025-06-22 21:54:22] [INFO] [Thread-4] Disconnected from server
+[2025-06-22 21:59:48] [INFO] [JavaFX Application Thread] Logger initialized - logging to: logs/client_gui.log
+[2025-06-22 21:59:48] [ERROR] [JavaFX Application Thread] Failed to load credentials from config/credentials.properties: config/credentials.properties (No such file or directory)
+[2025-06-22 21:59:48] [INFO] [JavaFX Application Thread] Current working directory: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/app
+[2025-06-22 21:59:48] [INFO] [JavaFX Application Thread] Attempting to create default credentials...
+[2025-06-22 21:59:48] [INFO] [JavaFX Application Thread] Using default credentials - admin/admin
+[2025-06-22 22:00:06] [ERROR] [Thread-4] Failed to load credentials from config/credentials.properties: config/credentials.properties (No such file or directory)
+[2025-06-22 22:00:06] [INFO] [Thread-4] Current working directory: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/app
+[2025-06-22 22:00:06] [INFO] [Thread-4] Attempting to create default credentials...
+[2025-06-22 22:00:06] [INFO] [Thread-4] Using default credentials - admin/admin
+[2025-06-22 22:01:29] [INFO] [JavaFX Application Thread] Logger initialized - logging to: logs/client_gui.log
+[2025-06-22 22:01:29] [ERROR] [JavaFX Application Thread] Failed to load credentials from config/credentials.properties: config/credentials.properties (No such file or directory)
+[2025-06-22 22:01:29] [INFO] [JavaFX Application Thread] Current working directory: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/app
+[2025-06-22 22:01:29] [INFO] [JavaFX Application Thread] Attempting to create default credentials...
+[2025-06-22 22:01:29] [INFO] [JavaFX Application Thread] Using default credentials - admin/admin
+[2025-06-22 22:01:42] [ERROR] [Thread-4] Failed to load credentials from config/credentials.properties: config/credentials.properties (No such file or directory)
+[2025-06-22 22:01:42] [INFO] [Thread-4] Current working directory: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/app
+[2025-06-22 22:01:42] [INFO] [Thread-4] Attempting to create default credentials...
+[2025-06-22 22:01:42] [INFO] [Thread-4] Using default credentials - admin/admin
+[2025-06-22 22:02:19] [INFO] [JavaFX Application Thread] Logger initialized - logging to: logs/client_gui.log
+[2025-06-22 22:02:19] [ERROR] [JavaFX Application Thread] Failed to load credentials from config/credentials.properties: config/credentials.properties (No such file or directory)
+[2025-06-22 22:02:19] [INFO] [JavaFX Application Thread] Current working directory: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/app
+[2025-06-22 22:02:19] [INFO] [JavaFX Application Thread] Attempting to create default credentials...
+[2025-06-22 22:02:19] [INFO] [JavaFX Application Thread] Using default credentials - admin/admin
+[2025-06-22 22:02:55] [ERROR] [Thread-4] Failed to load credentials from config/credentials.properties: config/credentials.properties (No such file or directory)
+[2025-06-22 22:02:55] [INFO] [Thread-4] Current working directory: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/app
+[2025-06-22 22:02:55] [INFO] [Thread-4] Attempting to create default credentials...
+[2025-06-22 22:02:55] [INFO] [Thread-4] Using default credentials - admin/admin

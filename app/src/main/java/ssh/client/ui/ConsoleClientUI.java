@@ -20,7 +20,7 @@ public class ConsoleClientUI implements ClientUI {
         this.scanner = new Scanner(System.in);
         this.console = System.console();
         this.running = true;
-        this.credentialsManager = new CredentialsManager();
+        this.credentialsManager = new CredentialsManager("config/credentials.properties");
     }
 
     public ConsoleClientUI(String credentialsFile) {
@@ -90,13 +90,8 @@ public class ConsoleClientUI implements ClientUI {
 
     @Override
     public void showAuthenticationResult(boolean success, String message) {
-        // Get username from credentials for better display
-        String username = "unknown";
-        try {
-            username = getAuthCredentials().getUsername();
-        } catch (Exception e) {
-            // Use default if we can't get username
-        }
+        // Use stored selected user for better display
+        String username = selectedUser != null ? selectedUser : "unknown";
         ConsoleInterface.auth(username, success);
     }
 
@@ -151,45 +146,47 @@ public class ConsoleClientUI implements ClientUI {
         return null;
     }
 
-    public AuthCredentials getAuthCredentials(CredentialsManager credentialsManager) {
-        String[] availableUsers = credentialsManager.getAvailableUsers();
-        String selectedUser = null;
-
-        if (availableUsers != null && availableUsers.length > 0) {
-            ConsoleInterface.info("Available users:");
-            for (int i = 0; i < availableUsers.length; i++) {
-                ConsoleInterface.info((i + 1) + ". " + availableUsers[i]);
-            }
-
-            while (selectedUser == null) {
-                String choice = getInput("Select user (1-" + availableUsers.length + ") or press Enter for default");
-                if (choice.trim().isEmpty()) {
-                    selectedUser = "default";
-                } else {
-                    try {
-                        int userIndex = Integer.parseInt(choice.trim()) - 1;
-                        if (userIndex >= 0 && userIndex < availableUsers.length) {
-                            selectedUser = availableUsers[userIndex];
-                        } else {
-                            displayError("Invalid user selection.");
-                        }
-                    } catch (NumberFormatException e) {
-                        displayError("Invalid input. Please enter a number.");
-                    }
-                }
-            }
-        } else {
-            selectedUser = "default"; // Fallback if no users are found
+    @Override
+    public AuthCredentials getAuthCredentials(String[] availableUsers) {
+        selectedUser = selectUser(availableUsers);
+        if (selectedUser == null) {
+            return null; // User cancelled or invalid selection
         }
         
+        // This is a bit of a hack, but it's how the console flow works.
+        // We need the credentials manager to get the actual password/key details.
+        CredentialsManager credentialsManager = new CredentialsManager("config/credentials.properties");
         return credentialsManager.getAuthCredentials(selectedUser);
     }
 
-    @Override
-    public AuthCredentials getAuthCredentials() {
-        // This method is now handled by the version that takes a CredentialsManager.
-        // It should not be called directly.
-        return null;
+    private String selectUser(String[] availableUsers) {
+        if (availableUsers == null || availableUsers.length == 0) {
+            displayError("No users configured in credentials.properties.");
+            return "default";
+        }
+        
+        ConsoleInterface.info("Available users:");
+        for (int i = 0; i < availableUsers.length; i++) {
+            ConsoleInterface.info((i + 1) + ". " + availableUsers[i]);
+        }
+
+        while (true) {
+            String choice = getInput("Select user (1-" + availableUsers.length + ") or press Enter for default");
+            if (choice.trim().isEmpty()) {
+                return "default";
+            } else {
+                try {
+                    int userIndex = Integer.parseInt(choice.trim()) - 1;
+                    if (userIndex >= 0 && userIndex < availableUsers.length) {
+                        return availableUsers[userIndex];
+                    } else {
+                        displayError("Invalid user selection.");
+                    }
+                } catch (NumberFormatException e) {
+                    displayError("Invalid input. Please enter a number.");
+                }
+            }
+        }
     }
 
     @Override

@@ -19,7 +19,8 @@ public enum MessageType {
     FILE_DATA(13),
     FILE_ACK(14),
     ERROR(15),
-    DISCONNECT(16);
+    DISCONNECT(16),
+    RELOAD_USERS(17);
 
     private final int value;
 

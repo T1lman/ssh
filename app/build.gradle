@@ -8,6 +8,8 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
+    // Add the JavaFX plugin
+    id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
 repositories {
@@ -33,6 +35,10 @@ dependencies {
     // Logging
     implementation 'org.slf4j:slf4j-api:2.0.7'
     implementation 'ch.qos.logback:logback-classic:1.4.8'
+    
+    // JavaFX dependencies
+    implementation "org.openjfx:javafx-controls:${javafx.version}"
+    implementation "org.openjfx:javafx-fxml:${javafx.version}"
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -42,17 +48,22 @@ java {
     }
 }
 
+javafx {
+    version = "21"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
+}
+
 application {
     // Define the main class for the application.
-    mainClass = 'ssh.server.SSHServer'
+    mainClass = 'ssh.client.gui.SSHClientGuiMain'
 }
 
-tasks.named('test') {
-    // Use JUnit Platform for unit tests.
-    useJUnitPlatform()
+tasks.named('run') {
+    // This task will now run the GUI client by default
+    // We can rename it for clarity if desired, but for now, let's keep it simple
+    workingDir = project.rootDir
 }
 
-// Custom tasks for running server and client
 tasks.register('runServer', JavaExec) {
     group = 'application'
     description = 'Run the SSH Server'
@@ -65,12 +76,17 @@ tasks.register('runServer', JavaExec) {
 
 tasks.register('runClient', JavaExec) {
     group = 'application'
-    description = 'Run the SSH Client'
+    description = 'Run the SSH Client (Console)'
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'ssh.client.SSHClientMain'
     workingDir = project.rootDir
     standardInput = System.in
     jvmArgs = ['-Xmx256m', '-Xms128m', '-XX:+UseG1GC', '-XX:MaxGCPauseMillis=200']
+}
+
+tasks.named('test') {
+    // Use JUnit Platform for unit tests.
+    useJUnitPlatform()
 }
 
 // Custom task to create a fat JAR for the client

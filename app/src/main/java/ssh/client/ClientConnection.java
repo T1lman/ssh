@@ -53,18 +53,28 @@ public class ClientConnection {
      */
     public boolean connect() {
         try {
+            System.out.println("DEBUG: ClientConnection.connect() called");
             Logger.info("Connecting to " + serverInfo.getHost() + ":" + serverInfo.getPort());
-            socket = new Socket(serverInfo.getHost(), serverInfo.getPort());
+            System.out.println("DEBUG: Creating socket to " + serverInfo.getHost() + ":" + serverInfo.getPort());
+            
+            // Create socket with timeout to prevent hanging
+            socket = new Socket();
+            socket.connect(new java.net.InetSocketAddress(serverInfo.getHost(), serverInfo.getPort()), 10000); // 10 second timeout
+            
+            System.out.println("DEBUG: Socket created successfully");
             
             // Set socket timeouts to prevent hanging
             socket.setSoTimeout(30000); // 30 second read timeout
             socket.setTcpNoDelay(true); // Disable Nagle's algorithm for better performance
             
+            System.out.println("DEBUG: Creating protocol handler");
             protocolHandler = new ProtocolHandler(socket.getInputStream(), socket.getOutputStream());
             connected = true;
+            System.out.println("DEBUG: Connection successful");
             Logger.info("Connected successfully");
             return true;
         } catch (IOException e) {
+            System.out.println("DEBUG: Connection failed with exception: " + e.getMessage());
             Logger.error("Connection failed: " + e.getMessage());
             ui.displayError("Connection failed: " + e.getMessage());
             return false;
@@ -76,25 +86,34 @@ public class ClientConnection {
      */
     public boolean performKeyExchange() {
         try {
+            System.out.println("DEBUG: performKeyExchange() called");
             Logger.info("Starting key exchange...");
             
             // Initialize DH key exchange
+            System.out.println("DEBUG: Initializing DH key exchange");
             keyExchange = new DiffieHellmanKeyExchange();
             keyExchange.generateKeyPair();
+            System.out.println("DEBUG: Generated DH key pair");
             Logger.info("Generated DH key pair");
 
             // Send key exchange init message
+            System.out.println("DEBUG: Creating key exchange init message");
             KeyExchangeMessage initMessage = new KeyExchangeMessage(MessageType.KEY_EXCHANGE_INIT);
             initMessage.setDhPublicKey(keyExchange.getPublicKeyBytes());
             initMessage.setClientId("SSH-2.0-JavaSSH");
+            System.out.println("DEBUG: Created key exchange init message");
             Logger.info("Created key exchange init message");
 
+            System.out.println("DEBUG: Sending key exchange init message");
             protocolHandler.sendMessage(initMessage);
+            System.out.println("DEBUG: Sent key exchange init message");
             Logger.info("Sent key exchange init message");
 
             // Receive key exchange reply
+            System.out.println("DEBUG: Waiting for key exchange reply...");
             Logger.info("Waiting for key exchange reply...");
             Message replyMessage = protocolHandler.receiveMessage();
+            System.out.println("DEBUG: Received reply message: " + replyMessage.getType());
             Logger.info("Received reply message: " + replyMessage.getType());
             
             if (replyMessage.getType() != MessageType.KEY_EXCHANGE_REPLY) {
@@ -150,10 +169,12 @@ public class ClientConnection {
             authMessage.setAuthType(credentials.getAuthType());
             Logger.info("Preparing auth for user: " + serverInfo.getUsername() + ", type: " + credentials.getAuthType());
 
-            if (credentials.isPasswordAuth()) {
+            if (credentials.requiresPassword()) {
                 authMessage.setPassword(credentials.getPassword());
                 Logger.info("Using password authentication");
-            } else if (credentials.isPublicKeyAuth()) {
+            }
+            
+            if (credentials.requiresPublicKey()) {
                 // Load client key pair
                 clientKeyPair = RSAKeyGenerator.loadKeyPair(
                     credentials.getPrivateKeyPath(), 
@@ -176,35 +197,25 @@ public class ClientConnection {
             // Receive authentication response
             Message response = protocolHandler.receiveMessage();
             Logger.info("Received auth response: " + response.getType());
-            
-            if (response.getType() != MessageType.AUTH_SUCCESS && response.getType() != MessageType.AUTH_FAILURE) {
-                Logger.error("Expected AUTH_SUCCESS or AUTH_FAILURE, got " + response.getType());
-                ui.displayError("Expected AUTH_SUCCESS or AUTH_FAILURE, got " + response.getType());
+
+            if (response.getType() == MessageType.AUTH_SUCCESS) {
+                AuthMessage authResponse = (AuthMessage) response;
+                this.authenticated = authResponse.isSuccess();
+                Logger.info("Authentication successful: " + this.authenticated);
+                return this.authenticated;
+            } else if (response.getType() == MessageType.AUTH_FAILURE) {
+                AuthMessage authResponse = (AuthMessage) response;
+                Logger.error("Authentication failed: " + authResponse.getMessage());
+                this.authenticated = false;
+                return false;
+            } else {
+                Logger.error("Unexpected response type: " + response.getType());
                 return false;
             }
-
-            AuthMessage authResponse = (AuthMessage) response;
-            boolean success = authResponse.isSuccess();
-            
-            if (success) {
-                authenticated = true;
-                Logger.info("Authentication successful");
-                
-                // Send service request for shell
-                if (!sendServiceRequest("shell")) {
-                    Logger.error("Failed to send service request");
-                    return false;
-                }
-            } else {
-                Logger.error("Authentication failed");
-            }
-
-            return success;
 
         } catch (Exception e) {
             Logger.error("Authentication failed: " + e.getMessage());
             e.printStackTrace();
-            ui.displayError("Authentication failed: " + e.getMessage());
             return false;
         }
     }
@@ -466,13 +477,34 @@ public class ClientConnection {
     public void sendDisconnect() {
         try {
             if (protocolHandler != null) {
-                ssh.protocol.messages.ErrorMessage disconnectMsg = new ssh.protocol.messages.ErrorMessage();
-                disconnectMsg.setType(ssh.protocol.MessageType.DISCONNECT);
-                disconnectMsg.setErrorMessage("Client disconnecting");
+                ssh.protocol.messages.DisconnectMessage disconnectMsg = new ssh.protocol.messages.DisconnectMessage();
                 protocolHandler.sendMessage(disconnectMsg);
             }
         } catch (Exception e) {
             // Ignore errors on disconnect
+        }
+    }
+
+    /**
+     * Send a reload users request to the server.
+     */
+    public void sendReloadUsers() {
+        try {
+            if (protocolHandler != null && authenticated) {
+                ssh.protocol.messages.ReloadUsersMessage reloadMsg = new ssh.protocol.messages.ReloadUsersMessage();
+                protocolHandler.sendMessage(reloadMsg);
+                
+                // Wait for acknowledgment
+                Message response = protocolHandler.receiveMessage();
+                if (response.getType() == MessageType.SERVICE_ACCEPT) {
+                    Logger.info("Server acknowledged user database reload");
+                } else if (response.getType() == MessageType.ERROR) {
+                    ssh.protocol.messages.ErrorMessage errorMsg = (ssh.protocol.messages.ErrorMessage) response;
+                    Logger.error("Server failed to reload user database: " + errorMsg.getErrorMessage());
+                }
+            }
+        } catch (Exception e) {
+            Logger.error("Failed to send reload users request: " + e.getMessage());
         }
     }
 
@@ -526,5 +558,9 @@ public class ClientConnection {
      */
     public boolean isAuthenticated() {
         return authenticated;
+    }
+
+    public boolean isActive() {
+        return isConnected() && isAuthenticated();
     }
 } 

@@ -73,6 +73,27 @@ public class AuthCredentials {
         return "publickey".equals(authType);
     }
 
+    /**
+     * Check if this is dual authentication (both password and public key).
+     */
+    public boolean isDualAuth() {
+        return "dual".equals(authType);
+    }
+
+    /**
+     * Check if this requires password authentication.
+     */
+    public boolean requiresPassword() {
+        return isPasswordAuth() || isDualAuth();
+    }
+
+    /**
+     * Check if this requires public key authentication.
+     */
+    public boolean requiresPublicKey() {
+        return isPublicKeyAuth() || isDualAuth();
+    }
+
     @Override
     public String toString() {
         return "AuthCredentials{" +

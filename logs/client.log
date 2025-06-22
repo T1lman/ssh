@@ -1,90 +1,337 @@
-[2025-06-22 19:59:29] [INFO] [main] Logger initialized - logging to: logs/client.log
-[2025-06-22 19:59:29] [INFO] [main] Credentials loaded from: config/credentials.properties
-[2025-06-22 19:59:29] [INFO] [main] Credentials loaded from: config/credentials.properties
-[2025-06-22 19:59:45] [INFO] [main] ClientConnection constructor called
-[2025-06-22 19:59:45] [INFO] [main] Connecting to localhost:2222
-[2025-06-22 19:59:45] [INFO] [main] Connected successfully
-[2025-06-22 19:59:45] [INFO] [main] Starting key exchange...
-[2025-06-22 19:59:45] [INFO] [main] Generated DH key pair
-[2025-06-22 19:59:45] [INFO] [main] Created key exchange init message
-[2025-06-22 19:59:45] [INFO] [main] Sending message: KEY_EXCHANGE_INIT, length: 787
-[2025-06-22 19:59:45] [INFO] [main] Message sent successfully
-[2025-06-22 19:59:45] [INFO] [main] Sent key exchange init message
-[2025-06-22 19:59:45] [INFO] [main] Waiting for key exchange reply...
-[2025-06-22 19:59:45] [INFO] [main] Waiting to receive message...
-[2025-06-22 19:59:45] [INFO] [main] Read 4 bytes for message length
-[2025-06-22 19:59:45] [INFO] [main] Message length: 1196
-[2025-06-22 19:59:45] [INFO] [main] Read 1196 bytes for message body (expected 1196)
-[2025-06-22 19:59:45] [INFO] [main] Message body (first 20 bytes): 02 64 68 50 75 62 6C 69 63 4B 65 79 3A 4D 49 49 43 4B 44 43 
-[2025-06-22 19:59:45] [INFO] [main] Raw message type byte: 2
-[2025-06-22 19:59:45] [INFO] [main] Parsed message type: KEY_EXCHANGE_REPLY
-[2025-06-22 19:59:45] [INFO] [main] fromPacket: restLength = 1196
-[2025-06-22 19:59:45] [INFO] [main] fromPacket: parsed message type = KEY_EXCHANGE_REPLY
-[2025-06-22 19:59:45] [INFO] [main] fromPacket: payloadLength = 1191 (restLength=1196 - 5)
-[2025-06-22 19:59:45] [INFO] [main] fromPacket: checksum = -2121483453
-[2025-06-22 19:59:45] [INFO] [main] Received message: KEY_EXCHANGE_REPLY
-[2025-06-22 19:59:45] [INFO] [main] Received reply message: KEY_EXCHANGE_REPLY
-[2025-06-22 19:59:45] [INFO] [main] Set server's public key
-[2025-06-22 19:59:45] [INFO] [main] Computed shared secret, length: 256
-[2025-06-22 19:59:45] [INFO] [main] Initialized symmetric encryption
-[2025-06-22 19:59:45] [INFO] [main] Encryption enabled - subsequent messages will be encrypted/decrypted
-[2025-06-22 19:59:45] [INFO] [main] Enabled encryption in protocol handler
-[2025-06-22 19:59:45] [INFO] [main] Received session ID: 22cf2b29-e4b1-48da-a3e6-b8eb551334eb
-[2025-06-22 19:59:45] [INFO] [main] Starting authentication...
-[2025-06-22 19:59:45] [INFO] [main] Preparing auth for user: test, type: password
-[2025-06-22 19:59:45] [INFO] [main] Using password authentication
-[2025-06-22 19:59:45] [INFO] [main] Sending message: AUTH_REQUEST, length: 55
-[2025-06-22 19:59:45] [INFO] [main] Message encrypted, new length: 83
-[2025-06-22 19:59:45] [INFO] [main] Added length prefix for encrypted message, total length: 87
-[2025-06-22 19:59:45] [INFO] [main] Message sent successfully
-[2025-06-22 19:59:45] [INFO] [main] Sent authentication request
-[2025-06-22 19:59:45] [INFO] [main] Waiting to receive message...
-[2025-06-22 19:59:45] [INFO] [main] Reading encrypted message...
-[2025-06-22 19:59:45] [INFO] [main] Read 4 bytes for encrypted message length
-[2025-06-22 19:59:45] [INFO] [main] Encrypted message length: 84
-[2025-06-22 19:59:45] [INFO] [main] Read 84 bytes for encrypted message body
-[2025-06-22 19:59:45] [INFO] [main] Decrypting encrypted message, length: 84
-[2025-06-22 19:59:45] [INFO] [main] Message decrypted successfully, new length: 56
-[2025-06-22 19:59:45] [INFO] [main] fromPacket: restLength = 52
-[2025-06-22 19:59:45] [INFO] [main] fromPacket: parsed message type = AUTH_SUCCESS
-[2025-06-22 19:59:45] [INFO] [main] fromPacket: payloadLength = 47 (restLength=52 - 5)
-[2025-06-22 19:59:45] [INFO] [main] fromPacket: checksum = 773878918
-[2025-06-22 19:59:45] [INFO] [main] Received encrypted message: AUTH_SUCCESS
-[2025-06-22 19:59:45] [INFO] [main] Received auth response: AUTH_SUCCESS
-[2025-06-22 19:59:45] [INFO] [main] Authentication successful
-[2025-06-22 19:59:45] [INFO] [main] Sending service request for: shell
-[2025-06-22 19:59:45] [INFO] [main] Sending message: SERVICE_REQUEST, length: 14
-[2025-06-22 19:59:45] [INFO] [main] Message encrypted, new length: 42
-[2025-06-22 19:59:45] [INFO] [main] Added length prefix for encrypted message, total length: 46
-[2025-06-22 19:59:45] [INFO] [main] Message sent successfully
-[2025-06-22 19:59:45] [INFO] [main] Sent service request
-[2025-06-22 19:59:45] [INFO] [main] Waiting to receive message...
-[2025-06-22 19:59:45] [INFO] [main] Reading encrypted message...
-[2025-06-22 19:59:45] [INFO] [main] Read 4 bytes for encrypted message length
-[2025-06-22 19:59:45] [INFO] [main] Encrypted message length: 42
-[2025-06-22 19:59:45] [INFO] [main] Read 42 bytes for encrypted message body
-[2025-06-22 19:59:45] [INFO] [main] Decrypting encrypted message, length: 42
-[2025-06-22 19:59:45] [INFO] [main] Message decrypted successfully, new length: 14
-[2025-06-22 19:59:45] [INFO] [main] fromPacket: restLength = 10
-[2025-06-22 19:59:45] [INFO] [main] fromPacket: parsed message type = SERVICE_ACCEPT
-[2025-06-22 19:59:45] [INFO] [main] fromPacket: payloadLength = 5 (restLength=10 - 5)
-[2025-06-22 19:59:45] [INFO] [main] fromPacket: checksum = 1167241981
-[2025-06-22 19:59:45] [INFO] [main] Received encrypted message: SERVICE_ACCEPT
-[2025-06-22 19:59:45] [INFO] [main] Received service response: SERVICE_ACCEPT
-[2025-06-22 19:59:45] [INFO] [main] Service request accepted
-[2025-06-22 19:59:50] [INFO] [main] Sending message: SHELL_COMMAND, length: 51
-[2025-06-22 19:59:50] [INFO] [main] Message encrypted, new length: 79
-[2025-06-22 19:59:50] [INFO] [main] Added length prefix for encrypted message, total length: 83
-[2025-06-22 19:59:50] [INFO] [main] Message sent successfully
-[2025-06-22 19:59:50] [INFO] [main] Waiting to receive message...
-[2025-06-22 19:59:50] [INFO] [main] Reading encrypted message...
-[2025-06-22 19:59:50] [INFO] [main] Read 4 bytes for encrypted message length
-[2025-06-22 19:59:50] [INFO] [main] Encrypted message length: 207
-[2025-06-22 19:59:50] [INFO] [main] Read 207 bytes for encrypted message body
-[2025-06-22 19:59:50] [INFO] [main] Decrypting encrypted message, length: 207
-[2025-06-22 19:59:50] [INFO] [main] Message decrypted successfully, new length: 179
-[2025-06-22 19:59:50] [INFO] [main] fromPacket: restLength = 175
-[2025-06-22 19:59:50] [INFO] [main] fromPacket: parsed message type = SHELL_RESULT
-[2025-06-22 19:59:50] [INFO] [main] fromPacket: payloadLength = 170 (restLength=175 - 5)
-[2025-06-22 19:59:50] [INFO] [main] fromPacket: checksum = -207020665
-[2025-06-22 19:59:50] [INFO] [main] Received encrypted message: SHELL_RESULT
+[2025-06-23 00:49:13] [INFO] [main] Logger initialized - logging to: logs/client.log
+[2025-06-23 00:49:13] [INFO] [main] Credentials loaded from: config/credentials.properties
+[2025-06-23 00:49:13] [INFO] [main] Credentials loaded from: config/credentials.properties
+[2025-06-23 00:49:25] [INFO] [main] Credentials loaded from: config/credentials.properties
+[2025-06-23 00:49:30] [INFO] [main] Credentials loaded from: config/credentials.properties
+[2025-06-23 00:49:30] [INFO] [main] resolvePath: data/client/client_keys/test_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/test_rsa
+[2025-06-23 00:49:30] [INFO] [main]   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 00:49:30] [INFO] [main]   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 00:49:30] [INFO] [main] resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/test_rsa
+[2025-06-23 00:49:30] [INFO] [main] resolvePath: data/client/client_keys/test_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/test_rsa.pub
+[2025-06-23 00:49:30] [INFO] [main]   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 00:49:30] [INFO] [main]   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 00:49:30] [INFO] [main] resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/test_rsa.pub
+[2025-06-23 00:49:30] [INFO] [main] ClientConnection constructor called
+[2025-06-23 00:49:30] [INFO] [main] Connecting to localhost:2222
+[2025-06-23 00:49:30] [INFO] [main] Connected successfully
+[2025-06-23 00:49:30] [INFO] [main] Starting key exchange...
+[2025-06-23 00:49:31] [INFO] [main] Generated DH key pair
+[2025-06-23 00:49:31] [INFO] [main] Created key exchange init message
+[2025-06-23 00:49:31] [INFO] [main] Sending message: KEY_EXCHANGE_INIT, length: 791
+[2025-06-23 00:49:31] [INFO] [main] Message sent successfully
+[2025-06-23 00:49:31] [INFO] [main] Sent key exchange init message
+[2025-06-23 00:49:31] [INFO] [main] Waiting for key exchange reply...
+[2025-06-23 00:49:31] [INFO] [main] Waiting to receive message...
+[2025-06-23 00:49:31] [INFO] [main] Read 4 bytes for message length
+[2025-06-23 00:49:31] [INFO] [main] Message length: 1196
+[2025-06-23 00:49:31] [INFO] [main] Read 1196 bytes for message body (expected 1196)
+[2025-06-23 00:49:31] [INFO] [main] Message body (first 20 bytes): 02 64 68 50 75 62 6C 69 63 4B 65 79 3A 4D 49 49 43 4B 44 43 
+[2025-06-23 00:49:31] [INFO] [main] Raw message type byte: 2
+[2025-06-23 00:49:31] [INFO] [main] Parsed message type: KEY_EXCHANGE_REPLY
+[2025-06-23 00:49:31] [INFO] [main] fromPacket: restLength = 1196
+[2025-06-23 00:49:31] [INFO] [main] fromPacket: parsed message type = KEY_EXCHANGE_REPLY
+[2025-06-23 00:49:31] [INFO] [main] fromPacket: payloadLength = 1191 (restLength=1196 - 5)
+[2025-06-23 00:49:31] [INFO] [main] fromPacket: checksum = 1853700552
+[2025-06-23 00:49:31] [INFO] [main] Received message: KEY_EXCHANGE_REPLY
+[2025-06-23 00:49:31] [INFO] [main] Received reply message: KEY_EXCHANGE_REPLY
+[2025-06-23 00:49:31] [INFO] [main] Set server's public key
+[2025-06-23 00:49:31] [INFO] [main] Computed shared secret, length: 256
+[2025-06-23 00:49:31] [INFO] [main] Initialized symmetric encryption
+[2025-06-23 00:49:31] [INFO] [main] Encryption enabled - subsequent messages will be encrypted/decrypted
+[2025-06-23 00:49:31] [INFO] [main] Enabled encryption in protocol handler
+[2025-06-23 00:49:31] [INFO] [main] Received session ID: 62c7d9ad-122a-4046-b61e-2edefae64c80
+[2025-06-23 00:49:31] [INFO] [main] Starting authentication...
+[2025-06-23 00:49:31] [INFO] [main] Preparing auth for user: test, type: dual
+[2025-06-23 00:49:31] [INFO] [main] Using password authentication
+[2025-06-23 00:49:31] [INFO] [main] Using public key authentication, signed session ID.
+[2025-06-23 00:49:31] [INFO] [main] Sending message: AUTH_REQUEST, length: 809
+[2025-06-23 00:49:31] [INFO] [main] Message encrypted, new length: 837
+[2025-06-23 00:49:31] [INFO] [main] Added length prefix for encrypted message, total length: 841
+[2025-06-23 00:49:31] [INFO] [main] Message sent successfully
+[2025-06-23 00:49:31] [INFO] [main] Sent authentication request
+[2025-06-23 00:49:31] [INFO] [main] Waiting to receive message...
+[2025-06-23 00:49:31] [INFO] [main] Reading encrypted message...
+[2025-06-23 00:49:31] [INFO] [main] Read 4 bytes for encrypted message length
+[2025-06-23 00:49:31] [INFO] [main] Encrypted message length: 84
+[2025-06-23 00:49:31] [INFO] [main] Read 84 bytes for encrypted message body
+[2025-06-23 00:49:31] [INFO] [main] Decrypting encrypted message, length: 84
+[2025-06-23 00:49:31] [INFO] [main] Message decrypted successfully, new length: 56
+[2025-06-23 00:49:31] [INFO] [main] fromPacket: restLength = 52
+[2025-06-23 00:49:31] [INFO] [main] fromPacket: parsed message type = AUTH_SUCCESS
+[2025-06-23 00:49:31] [INFO] [main] fromPacket: payloadLength = 47 (restLength=52 - 5)
+[2025-06-23 00:49:31] [INFO] [main] fromPacket: checksum = 773878918
+[2025-06-23 00:49:31] [INFO] [main] Received encrypted message: AUTH_SUCCESS
+[2025-06-23 00:49:31] [INFO] [main] Received auth response: AUTH_SUCCESS
+[2025-06-23 00:49:31] [INFO] [main] Authentication successful: true
+[2025-06-23 00:49:41] [INFO] [main] Sending message: SHELL_COMMAND, length: 51
+[2025-06-23 00:49:41] [INFO] [main] Message encrypted, new length: 79
+[2025-06-23 00:49:41] [INFO] [main] Added length prefix for encrypted message, total length: 83
+[2025-06-23 00:49:41] [INFO] [main] Message sent successfully
+[2025-06-23 00:49:41] [INFO] [main] Waiting to receive message...
+[2025-06-23 00:49:41] [INFO] [main] Reading encrypted message...
+[2025-06-23 00:49:42] [INFO] [main] Read 4 bytes for encrypted message length
+[2025-06-23 00:49:42] [INFO] [main] Encrypted message length: 207
+[2025-06-23 00:49:42] [INFO] [main] Read 207 bytes for encrypted message body
+[2025-06-23 00:49:42] [INFO] [main] Decrypting encrypted message, length: 207
+[2025-06-23 00:49:42] [INFO] [main] Message decrypted successfully, new length: 179
+[2025-06-23 00:49:42] [INFO] [main] fromPacket: restLength = 175
+[2025-06-23 00:49:42] [INFO] [main] fromPacket: parsed message type = SHELL_RESULT
+[2025-06-23 00:49:42] [INFO] [main] fromPacket: payloadLength = 170 (restLength=175 - 5)
+[2025-06-23 00:49:42] [INFO] [main] fromPacket: checksum = -207020665
+[2025-06-23 00:49:42] [INFO] [main] Received encrypted message: SHELL_RESULT
+[2025-06-23 00:49:55] [INFO] [main] Sending message: SHELL_COMMAND, length: 61
+[2025-06-23 00:49:55] [INFO] [main] Message encrypted, new length: 89
+[2025-06-23 00:49:55] [INFO] [main] Added length prefix for encrypted message, total length: 93
+[2025-06-23 00:49:55] [INFO] [main] Message sent successfully
+[2025-06-23 00:49:55] [INFO] [main] Waiting to receive message...
+[2025-06-23 00:49:55] [INFO] [main] Reading encrypted message...
+[2025-06-23 00:49:55] [INFO] [main] Read 4 bytes for encrypted message length
+[2025-06-23 00:49:55] [INFO] [main] Encrypted message length: 105
+[2025-06-23 00:49:55] [INFO] [main] Read 105 bytes for encrypted message body
+[2025-06-23 00:49:55] [INFO] [main] Decrypting encrypted message, length: 105
+[2025-06-23 00:49:55] [INFO] [main] Message decrypted successfully, new length: 77
+[2025-06-23 00:49:55] [INFO] [main] fromPacket: restLength = 73
+[2025-06-23 00:49:55] [INFO] [main] fromPacket: parsed message type = SHELL_RESULT
+[2025-06-23 00:49:55] [INFO] [main] fromPacket: payloadLength = 68 (restLength=73 - 5)
+[2025-06-23 00:49:55] [INFO] [main] fromPacket: checksum = -1798935734
+[2025-06-23 00:49:55] [INFO] [main] Received encrypted message: SHELL_RESULT
+[2025-06-23 00:49:57] [INFO] [main] Sending message: SHELL_COMMAND, length: 61
+[2025-06-23 00:49:57] [INFO] [main] Message encrypted, new length: 89
+[2025-06-23 00:49:57] [INFO] [main] Added length prefix for encrypted message, total length: 93
+[2025-06-23 00:49:57] [INFO] [main] Message sent successfully
+[2025-06-23 00:49:57] [INFO] [main] Waiting to receive message...
+[2025-06-23 00:49:57] [INFO] [main] Reading encrypted message...
+[2025-06-23 00:49:59] [INFO] [main] Read 4 bytes for encrypted message length
+[2025-06-23 00:49:59] [INFO] [main] Encrypted message length: 435
+[2025-06-23 00:49:59] [INFO] [main] Read 435 bytes for encrypted message body
+[2025-06-23 00:49:59] [INFO] [main] Decrypting encrypted message, length: 435
+[2025-06-23 00:49:59] [INFO] [main] Message decrypted successfully, new length: 407
+[2025-06-23 00:49:59] [INFO] [main] fromPacket: restLength = 403
+[2025-06-23 00:49:59] [INFO] [main] fromPacket: parsed message type = SHELL_RESULT
+[2025-06-23 00:49:59] [INFO] [main] fromPacket: payloadLength = 398 (restLength=403 - 5)
+[2025-06-23 00:49:59] [INFO] [main] fromPacket: checksum = 604909297
+[2025-06-23 00:49:59] [INFO] [main] Received encrypted message: SHELL_RESULT
+[2025-06-23 00:50:09] [INFO] [main] Sending message: SHELL_COMMAND, length: 64
+[2025-06-23 00:50:09] [INFO] [main] Message encrypted, new length: 92
+[2025-06-23 00:50:09] [INFO] [main] Added length prefix for encrypted message, total length: 96
+[2025-06-23 00:50:09] [INFO] [main] Message sent successfully
+[2025-06-23 00:50:09] [INFO] [main] Waiting to receive message...
+[2025-06-23 00:50:09] [INFO] [main] Reading encrypted message...
+[2025-06-23 00:50:09] [INFO] [main] Read 4 bytes for encrypted message length
+[2025-06-23 00:50:09] [INFO] [main] Encrypted message length: 95
+[2025-06-23 00:50:09] [INFO] [main] Read 95 bytes for encrypted message body
+[2025-06-23 00:50:09] [INFO] [main] Decrypting encrypted message, length: 95
+[2025-06-23 00:50:09] [INFO] [main] Message decrypted successfully, new length: 67
+[2025-06-23 00:50:09] [INFO] [main] fromPacket: restLength = 63
+[2025-06-23 00:50:09] [INFO] [main] fromPacket: parsed message type = SHELL_RESULT
+[2025-06-23 00:50:09] [INFO] [main] fromPacket: payloadLength = 58 (restLength=63 - 5)
+[2025-06-23 00:50:09] [INFO] [main] fromPacket: checksum = -872243554
+[2025-06-23 00:50:09] [INFO] [main] Received encrypted message: SHELL_RESULT
+[2025-06-23 00:50:15] [INFO] [main] Sending message: SHELL_COMMAND, length: 51
+[2025-06-23 00:50:15] [INFO] [main] Message encrypted, new length: 79
+[2025-06-23 00:50:15] [INFO] [main] Added length prefix for encrypted message, total length: 83
+[2025-06-23 00:50:15] [INFO] [main] Message sent successfully
+[2025-06-23 00:50:15] [INFO] [main] Waiting to receive message...
+[2025-06-23 00:50:15] [INFO] [main] Reading encrypted message...
+[2025-06-23 00:50:15] [INFO] [main] Read 4 bytes for encrypted message length
+[2025-06-23 00:50:15] [INFO] [main] Encrypted message length: 207
+[2025-06-23 00:50:15] [INFO] [main] Read 207 bytes for encrypted message body
+[2025-06-23 00:50:15] [INFO] [main] Decrypting encrypted message, length: 207
+[2025-06-23 00:50:15] [INFO] [main] Message decrypted successfully, new length: 179
+[2025-06-23 00:50:15] [INFO] [main] fromPacket: restLength = 175
+[2025-06-23 00:50:15] [INFO] [main] fromPacket: parsed message type = SHELL_RESULT
+[2025-06-23 00:50:15] [INFO] [main] fromPacket: payloadLength = 170 (restLength=175 - 5)
+[2025-06-23 00:50:15] [INFO] [main] fromPacket: checksum = -207020665
+[2025-06-23 00:50:15] [INFO] [main] Received encrypted message: SHELL_RESULT
+[2025-06-23 00:50:23] [INFO] [main] Sending message: SHELL_COMMAND, length: 51
+[2025-06-23 00:50:23] [INFO] [main] Message encrypted, new length: 79
+[2025-06-23 00:50:23] [INFO] [main] Added length prefix for encrypted message, total length: 83
+[2025-06-23 00:50:23] [INFO] [main] Message sent successfully
+[2025-06-23 00:50:23] [INFO] [main] Waiting to receive message...
+[2025-06-23 00:50:23] [INFO] [main] Reading encrypted message...
+[2025-06-23 00:50:23] [INFO] [main] Read 4 bytes for encrypted message length
+[2025-06-23 00:50:23] [INFO] [main] Encrypted message length: 207
+[2025-06-23 00:50:23] [INFO] [main] Read 207 bytes for encrypted message body
+[2025-06-23 00:50:23] [INFO] [main] Decrypting encrypted message, length: 207
+[2025-06-23 00:50:23] [INFO] [main] Message decrypted successfully, new length: 179
+[2025-06-23 00:50:23] [INFO] [main] fromPacket: restLength = 175
+[2025-06-23 00:50:23] [INFO] [main] fromPacket: parsed message type = SHELL_RESULT
+[2025-06-23 00:50:23] [INFO] [main] fromPacket: payloadLength = 170 (restLength=175 - 5)
+[2025-06-23 00:50:23] [INFO] [main] fromPacket: checksum = -207020665
+[2025-06-23 00:50:23] [INFO] [main] Received encrypted message: SHELL_RESULT
+[2025-06-23 00:50:31] [INFO] [main] Sending message: DISCONNECT, length: 9
+[2025-06-23 00:50:31] [INFO] [main] Message encrypted, new length: 37
+[2025-06-23 00:50:31] [INFO] [main] Added length prefix for encrypted message, total length: 41
+[2025-06-23 00:50:31] [INFO] [main] Message sent successfully
+[2025-06-23 00:50:31] [INFO] [main] Sending message: DISCONNECT, length: 9
+[2025-06-23 00:50:31] [INFO] [main] Message encrypted, new length: 37
+[2025-06-23 00:50:31] [INFO] [main] Added length prefix for encrypted message, total length: 41
+[2025-06-23 00:50:31] [INFO] [main] Message sent successfully
+[2025-06-23 00:50:31] [INFO] [main] Protocol handler closed
+[2025-06-23 00:50:31] [INFO] [main] Disconnected from server
+[2025-06-23 00:51:56] [INFO] [main] Logger initialized - logging to: logs/client.log
+[2025-06-23 00:51:56] [INFO] [main] Credentials loaded from: config/credentials.properties
+[2025-06-23 00:51:56] [INFO] [main] Credentials loaded from: config/credentials.properties
+[2025-06-23 00:52:05] [INFO] [main] Credentials loaded from: config/credentials.properties
+[2025-06-23 00:52:07] [INFO] [main] Credentials loaded from: config/credentials.properties
+[2025-06-23 00:52:07] [INFO] [main] resolvePath: data/client/client_keys/admin_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/admin_rsa
+[2025-06-23 00:52:07] [INFO] [main]   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 00:52:07] [INFO] [main]   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 00:52:07] [INFO] [main] resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/admin_rsa
+[2025-06-23 00:52:07] [INFO] [main] resolvePath: data/client/client_keys/admin_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/admin_rsa.pub
+[2025-06-23 00:52:07] [INFO] [main]   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 00:52:07] [INFO] [main]   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 00:52:07] [INFO] [main] resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/admin_rsa.pub
+[2025-06-23 00:52:07] [INFO] [main] ClientConnection constructor called
+[2025-06-23 00:52:07] [INFO] [main] Connecting to localhost:2222
+[2025-06-23 00:52:07] [INFO] [main] Connected successfully
+[2025-06-23 00:52:07] [INFO] [main] Starting key exchange...
+[2025-06-23 00:52:07] [INFO] [main] Generated DH key pair
+[2025-06-23 00:52:07] [INFO] [main] Created key exchange init message
+[2025-06-23 00:52:07] [INFO] [main] Sending message: KEY_EXCHANGE_INIT, length: 791
+[2025-06-23 00:52:07] [INFO] [main] Message sent successfully
+[2025-06-23 00:52:07] [INFO] [main] Sent key exchange init message
+[2025-06-23 00:52:07] [INFO] [main] Waiting for key exchange reply...
+[2025-06-23 00:52:07] [INFO] [main] Waiting to receive message...
+[2025-06-23 00:52:07] [INFO] [main] Read 4 bytes for message length
+[2025-06-23 00:52:07] [INFO] [main] Message length: 1196
+[2025-06-23 00:52:07] [INFO] [main] Read 1196 bytes for message body (expected 1196)
+[2025-06-23 00:52:07] [INFO] [main] Message body (first 20 bytes): 02 64 68 50 75 62 6C 69 63 4B 65 79 3A 4D 49 49 43 4B 44 43 
+[2025-06-23 00:52:07] [INFO] [main] Raw message type byte: 2
+[2025-06-23 00:52:07] [INFO] [main] Parsed message type: KEY_EXCHANGE_REPLY
+[2025-06-23 00:52:07] [INFO] [main] fromPacket: restLength = 1196
+[2025-06-23 00:52:07] [INFO] [main] fromPacket: parsed message type = KEY_EXCHANGE_REPLY
+[2025-06-23 00:52:07] [INFO] [main] fromPacket: payloadLength = 1191 (restLength=1196 - 5)
+[2025-06-23 00:52:07] [INFO] [main] fromPacket: checksum = -846763825
+[2025-06-23 00:52:07] [INFO] [main] Received message: KEY_EXCHANGE_REPLY
+[2025-06-23 00:52:07] [INFO] [main] Received reply message: KEY_EXCHANGE_REPLY
+[2025-06-23 00:52:07] [INFO] [main] Set server's public key
+[2025-06-23 00:52:07] [INFO] [main] Computed shared secret, length: 256
+[2025-06-23 00:52:07] [INFO] [main] Initialized symmetric encryption
+[2025-06-23 00:52:07] [INFO] [main] Encryption enabled - subsequent messages will be encrypted/decrypted
+[2025-06-23 00:52:07] [INFO] [main] Enabled encryption in protocol handler
+[2025-06-23 00:52:07] [INFO] [main] Received session ID: 3f03287c-aef2-49e9-a1b8-8aeb2b1b5c73
+[2025-06-23 00:52:07] [INFO] [main] Starting authentication...
+[2025-06-23 00:52:07] [INFO] [main] Preparing auth for user: admin, type: dual
+[2025-06-23 00:52:07] [INFO] [main] Using password authentication
+[2025-06-23 00:52:07] [INFO] [main] Using public key authentication, signed session ID.
+[2025-06-23 00:52:07] [INFO] [main] Sending message: AUTH_REQUEST, length: 811
+[2025-06-23 00:52:07] [INFO] [main] Message encrypted, new length: 839
+[2025-06-23 00:52:07] [INFO] [main] Added length prefix for encrypted message, total length: 843
+[2025-06-23 00:52:07] [INFO] [main] Message sent successfully
+[2025-06-23 00:52:07] [INFO] [main] Sent authentication request
+[2025-06-23 00:52:07] [INFO] [main] Waiting to receive message...
+[2025-06-23 00:52:07] [INFO] [main] Reading encrypted message...
+[2025-06-23 00:52:07] [INFO] [main] Read 4 bytes for encrypted message length
+[2025-06-23 00:52:07] [INFO] [main] Encrypted message length: 84
+[2025-06-23 00:52:07] [INFO] [main] Read 84 bytes for encrypted message body
+[2025-06-23 00:52:07] [INFO] [main] Decrypting encrypted message, length: 84
+[2025-06-23 00:52:07] [INFO] [main] Message decrypted successfully, new length: 56
+[2025-06-23 00:52:07] [INFO] [main] fromPacket: restLength = 52
+[2025-06-23 00:52:07] [INFO] [main] fromPacket: parsed message type = AUTH_SUCCESS
+[2025-06-23 00:52:07] [INFO] [main] fromPacket: payloadLength = 47 (restLength=52 - 5)
+[2025-06-23 00:52:07] [INFO] [main] fromPacket: checksum = 773878918
+[2025-06-23 00:52:07] [INFO] [main] Received encrypted message: AUTH_SUCCESS
+[2025-06-23 00:52:07] [INFO] [main] Received auth response: AUTH_SUCCESS
+[2025-06-23 00:52:07] [INFO] [main] Authentication successful: true
+[2025-06-23 00:52:17] [INFO] [main] Sending message: DISCONNECT, length: 9
+[2025-06-23 00:52:17] [INFO] [main] Message encrypted, new length: 37
+[2025-06-23 00:52:17] [INFO] [main] Added length prefix for encrypted message, total length: 41
+[2025-06-23 00:52:17] [INFO] [main] Message sent successfully
+[2025-06-23 00:52:17] [INFO] [main] Sending message: DISCONNECT, length: 9
+[2025-06-23 00:52:17] [INFO] [main] Message encrypted, new length: 37
+[2025-06-23 00:52:17] [INFO] [main] Added length prefix for encrypted message, total length: 41
+[2025-06-23 00:52:17] [INFO] [main] Message sent successfully
+[2025-06-23 00:52:17] [INFO] [main] Protocol handler closed
+[2025-06-23 00:52:17] [INFO] [main] Disconnected from server
+[2025-06-23 00:55:43] [INFO] [main] Logger initialized - logging to: logs/client.log
+[2025-06-23 00:55:44] [INFO] [main] Credentials loaded from: config/credentials.properties
+[2025-06-23 00:55:44] [INFO] [main] Credentials loaded from: config/credentials.properties
+[2025-06-23 00:55:56] [INFO] [main] Credentials loaded from: config/credentials.properties
+[2025-06-23 00:56:01] [INFO] [main] Credentials loaded from: config/credentials.properties
+[2025-06-23 00:56:01] [INFO] [main] resolvePath: data/client/client_keys/tilman_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
+[2025-06-23 00:56:01] [INFO] [main]   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 00:56:01] [INFO] [main]   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 00:56:01] [INFO] [main] resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
+[2025-06-23 00:56:01] [INFO] [main] resolvePath: data/client/client_keys/tilman_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
+[2025-06-23 00:56:01] [INFO] [main]   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 00:56:01] [INFO] [main]   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 00:56:01] [INFO] [main] resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
+[2025-06-23 00:56:01] [INFO] [main] ClientConnection constructor called
+[2025-06-23 00:56:01] [INFO] [main] Connecting to localhost:2222
+[2025-06-23 00:56:01] [INFO] [main] Connected successfully
+[2025-06-23 00:56:01] [INFO] [main] Starting key exchange...
+[2025-06-23 00:56:01] [INFO] [main] Generated DH key pair
+[2025-06-23 00:56:01] [INFO] [main] Created key exchange init message
+[2025-06-23 00:56:01] [INFO] [main] Sending message: KEY_EXCHANGE_INIT, length: 791
+[2025-06-23 00:56:01] [INFO] [main] Message sent successfully
+[2025-06-23 00:56:01] [INFO] [main] Sent key exchange init message
+[2025-06-23 00:56:01] [INFO] [main] Waiting for key exchange reply...
+[2025-06-23 00:56:01] [INFO] [main] Waiting to receive message...
+[2025-06-23 00:56:01] [INFO] [main] Read 4 bytes for message length
+[2025-06-23 00:56:01] [INFO] [main] Message length: 1196
+[2025-06-23 00:56:01] [INFO] [main] Read 1196 bytes for message body (expected 1196)
+[2025-06-23 00:56:01] [INFO] [main] Message body (first 20 bytes): 02 64 68 50 75 62 6C 69 63 4B 65 79 3A 4D 49 49 43 4B 54 43 
+[2025-06-23 00:56:01] [INFO] [main] Raw message type byte: 2
+[2025-06-23 00:56:01] [INFO] [main] Parsed message type: KEY_EXCHANGE_REPLY
+[2025-06-23 00:56:01] [INFO] [main] fromPacket: restLength = 1196
+[2025-06-23 00:56:01] [INFO] [main] fromPacket: parsed message type = KEY_EXCHANGE_REPLY
+[2025-06-23 00:56:01] [INFO] [main] fromPacket: payloadLength = 1191 (restLength=1196 - 5)
+[2025-06-23 00:56:01] [INFO] [main] fromPacket: checksum = 9547267
+[2025-06-23 00:56:01] [INFO] [main] Received message: KEY_EXCHANGE_REPLY
+[2025-06-23 00:56:01] [INFO] [main] Received reply message: KEY_EXCHANGE_REPLY
+[2025-06-23 00:56:01] [INFO] [main] Set server's public key
+[2025-06-23 00:56:01] [INFO] [main] Computed shared secret, length: 256
+[2025-06-23 00:56:01] [INFO] [main] Initialized symmetric encryption
+[2025-06-23 00:56:01] [INFO] [main] Encryption enabled - subsequent messages will be encrypted/decrypted
+[2025-06-23 00:56:01] [INFO] [main] Enabled encryption in protocol handler
+[2025-06-23 00:56:01] [INFO] [main] Received session ID: 898f207b-874b-4c21-bbe5-fddb973f52b8
+[2025-06-23 00:56:01] [INFO] [main] Starting authentication...
+[2025-06-23 00:56:01] [INFO] [main] Preparing auth for user: tilman, type: dual
+[2025-06-23 00:56:01] [INFO] [main] Using password authentication
+[2025-06-23 00:56:01] [INFO] [main] Using public key authentication, signed session ID.
+[2025-06-23 00:56:01] [INFO] [main] Sending message: AUTH_REQUEST, length: 810
+[2025-06-23 00:56:01] [INFO] [main] Message encrypted, new length: 838
+[2025-06-23 00:56:01] [INFO] [main] Added length prefix for encrypted message, total length: 842
+[2025-06-23 00:56:01] [INFO] [main] Message sent successfully
+[2025-06-23 00:56:01] [INFO] [main] Sent authentication request
+[2025-06-23 00:56:01] [INFO] [main] Waiting to receive message...
+[2025-06-23 00:56:01] [INFO] [main] Reading encrypted message...
+[2025-06-23 00:56:01] [INFO] [main] Read 4 bytes for encrypted message length
+[2025-06-23 00:56:01] [INFO] [main] Encrypted message length: 84
+[2025-06-23 00:56:01] [INFO] [main] Read 84 bytes for encrypted message body
+[2025-06-23 00:56:01] [INFO] [main] Decrypting encrypted message, length: 84
+[2025-06-23 00:56:01] [INFO] [main] Message decrypted successfully, new length: 56
+[2025-06-23 00:56:01] [INFO] [main] fromPacket: restLength = 52
+[2025-06-23 00:56:01] [INFO] [main] fromPacket: parsed message type = AUTH_SUCCESS
+[2025-06-23 00:56:01] [INFO] [main] fromPacket: payloadLength = 47 (restLength=52 - 5)
+[2025-06-23 00:56:01] [INFO] [main] fromPacket: checksum = 773878918
+[2025-06-23 00:56:01] [INFO] [main] Received encrypted message: AUTH_SUCCESS
+[2025-06-23 00:56:01] [INFO] [main] Received auth response: AUTH_SUCCESS
+[2025-06-23 00:56:01] [INFO] [main] Authentication successful: true
+[2025-06-23 00:56:09] [INFO] [main] Sending message: SHELL_COMMAND, length: 51
+[2025-06-23 00:56:09] [INFO] [main] Message encrypted, new length: 79
+[2025-06-23 00:56:09] [INFO] [main] Added length prefix for encrypted message, total length: 83
+[2025-06-23 00:56:09] [INFO] [main] Message sent successfully
+[2025-06-23 00:56:09] [INFO] [main] Waiting to receive message...
+[2025-06-23 00:56:09] [INFO] [main] Reading encrypted message...
+[2025-06-23 00:56:09] [INFO] [main] Read 4 bytes for encrypted message length
+[2025-06-23 00:56:09] [INFO] [main] Encrypted message length: 207
+[2025-06-23 00:56:09] [INFO] [main] Read 207 bytes for encrypted message body
+[2025-06-23 00:56:09] [INFO] [main] Decrypting encrypted message, length: 207
+[2025-06-23 00:56:09] [INFO] [main] Message decrypted successfully, new length: 179
+[2025-06-23 00:56:09] [INFO] [main] fromPacket: restLength = 175
+[2025-06-23 00:56:09] [INFO] [main] fromPacket: parsed message type = SHELL_RESULT
+[2025-06-23 00:56:09] [INFO] [main] fromPacket: payloadLength = 170 (restLength=175 - 5)
+[2025-06-23 00:56:09] [INFO] [main] fromPacket: checksum = -207020665
+[2025-06-23 00:56:09] [INFO] [main] Received encrypted message: SHELL_RESULT
+[2025-06-23 00:56:16] [INFO] [main] Sending message: DISCONNECT, length: 9
+[2025-06-23 00:56:16] [INFO] [main] Message encrypted, new length: 37
+[2025-06-23 00:56:16] [INFO] [main] Added length prefix for encrypted message, total length: 41
+[2025-06-23 00:56:16] [INFO] [main] Message sent successfully
+[2025-06-23 00:56:16] [INFO] [main] Sending message: DISCONNECT, length: 9
+[2025-06-23 00:56:16] [INFO] [main] Message encrypted, new length: 37
+[2025-06-23 00:56:16] [INFO] [main] Added length prefix for encrypted message, total length: 41
+[2025-06-23 00:56:16] [INFO] [main] Message sent successfully
+[2025-06-23 00:56:16] [INFO] [main] Protocol handler closed
+[2025-06-23 00:56:16] [INFO] [main] Disconnected from server
