@@ -2,6 +2,7 @@ package ssh.server;
 
 import ssh.auth.AuthenticationManager;
 import ssh.crypto.DiffieHellmanKeyExchange;
+import ssh.crypto.RSAKeyGenerator;
 import ssh.crypto.SymmetricEncryption;
 import ssh.protocol.Message;
 import ssh.protocol.MessageType;
@@ -10,6 +11,8 @@ import ssh.protocol.messages.AuthMessage;
 import ssh.protocol.messages.KeyExchangeMessage;
 import ssh.server.ui.ServerConfig;
 import ssh.server.ui.ServerUI;
+import ssh.shell.ShellExecutor;
+import ssh.utils.Logger;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -31,6 +34,7 @@ public class ServerConnection implements Runnable {
     private String authenticatedUser;
     private DiffieHellmanKeyExchange keyExchange;
     private SymmetricEncryption encryption;
+    private ShellExecutor shellExecutor;
 
     public ServerConnection(Socket clientSocket, AuthenticationManager authManager, 
                           KeyPair serverKeyPair, ServerUI ui, ServerConfig config) {
@@ -41,6 +45,15 @@ public class ServerConnection implements Runnable {
         this.config = config;
         this.authenticated = false;
         this.authenticatedUser = null;
+        this.shellExecutor = new ShellExecutor();
+        
+        // Set socket timeouts to prevent hanging
+        try {
+            clientSocket.setSoTimeout(30000); // 30 second read timeout
+            clientSocket.setTcpNoDelay(true); // Disable Nagle's algorithm for better performance
+        } catch (Exception e) {
+            ui.displayError("Failed to set socket timeout: " + e.getMessage());
+        }
     }
 
     @Override
@@ -106,7 +119,7 @@ public class ServerConnection implements Runnable {
         replyMessage.setServerId("SSH-2.0-JavaSSH-Server");
 
         // Sign the DH public key with server's private key
-        byte[] signature = ssh.crypto.RSAKeyGenerator.sign(
+        byte[] signature = RSAKeyGenerator.sign(
             keyExchange.getPublicKeyBytes(), 
             serverKeyPair.getPrivate()
         );
@@ -178,9 +191,24 @@ public class ServerConnection implements Runnable {
      */
     private void handleServiceRequests() throws Exception {
         while (authenticated && !clientSocket.isClosed()) {
-            Message message = protocolHandler.receiveMessage();
-            
+            Message message = null;
+            try {
+                message = protocolHandler.receiveMessage();
+            } catch (IOException e) {
+                ui.displayError("Client disconnected or error: " + e.getMessage());
+                break;
+            } catch (Exception e) {
+                ui.displayError("Unexpected error: " + e.getMessage());
+                break;
+            }
+            if (message == null) {
+                ui.displayMessage("Client disconnected (null message)");
+                break;
+            }
             switch (message.getType()) {
+                case SERVICE_REQUEST:
+                    handleServiceRequest((ssh.protocol.messages.ServiceMessage) message);
+                    break;
                 case SHELL_COMMAND:
                     handleShellCommand((ssh.protocol.messages.ShellMessage) message);
                     break;
@@ -191,8 +219,11 @@ public class ServerConnection implements Runnable {
                     handleFileDownload((ssh.protocol.messages.FileTransferMessage) message);
                     break;
                 case DISCONNECT:
-                    ui.displayMessage("Client " + getClientInfo() + " disconnected");
+                    ui.displayMessage("Client " + getClientInfo() + " sent disconnect message.");
                     return;
+                case ERROR:
+                    ui.displayError("Received error message from client: " + ((ssh.protocol.messages.ErrorMessage) message).getErrorMessage());
+                    break;
                 default:
                     ui.displayError("Unknown message type: " + message.getType());
                     break;
@@ -201,24 +232,36 @@ public class ServerConnection implements Runnable {
     }
 
     /**
+     * Handle service request.
+     */
+    private void handleServiceRequest(ssh.protocol.messages.ServiceMessage message) throws Exception {
+        String service = message.getService();
+        ui.displayMessage("Service request from " + authenticatedUser + " for " + service);
+        
+        // Send service accept response
+        ssh.protocol.messages.ServiceMessage response = new ssh.protocol.messages.ServiceMessage(MessageType.SERVICE_ACCEPT);
+        response.setService(service);
+        
+        protocolHandler.sendMessage(response);
+        ui.displayMessage("Service " + service + " accepted for " + authenticatedUser);
+    }
+
+    /**
      * Handle shell command execution.
      */
     private void handleShellCommand(ssh.protocol.messages.ShellMessage message) throws Exception {
         String command = message.getCommand();
-        String workingDirectory = message.getWorkingDirectory();
-
         ui.showShellCommand(authenticatedUser, command);
 
-        // Execute command (basic implementation)
-        ssh.shell.ShellExecutor executor = new ssh.shell.ShellExecutor();
-        ssh.shell.CommandResult result = executor.execute(command, workingDirectory);
+        // Execute command using the session-specific executor
+        ssh.shell.CommandResult result = shellExecutor.execute(command);
 
         // Send result back to client
         ssh.protocol.messages.ShellMessage response = new ssh.protocol.messages.ShellMessage(MessageType.SHELL_RESULT);
         response.setExitCode(result.getExitCode());
         response.setStdout(result.getStdout());
         response.setStderr(result.getStderr());
-        response.setWorkingDirectory(workingDirectory);
+        response.setWorkingDirectory(shellExecutor.getCurrentWorkingDirectory());
 
         protocolHandler.sendMessage(response);
     }
@@ -232,17 +275,73 @@ public class ServerConnection implements Runnable {
         String targetPath = message.getTargetPath();
 
         ui.showFileTransferProgress(filename, 0, fileSize);
+        Logger.info("File upload request from " + authenticatedUser + ": " + filename + " (" + fileSize + " bytes)");
 
-        // Basic file upload implementation
-        // In a real implementation, you would receive file data chunks and save them
+        // Create file storage directory for the user
+        java.io.File userDir = new java.io.File("data/server/files/" + authenticatedUser);
+        userDir.mkdirs();
         
-        // Send acknowledgment
-        ssh.protocol.messages.FileTransferMessage ack = new ssh.protocol.messages.FileTransferMessage(MessageType.FILE_ACK);
-        ack.setSequenceNumber(1);
-        ack.setStatus("received");
-        ack.setMessage("File upload request received");
+        // Determine target file path
+        java.io.File targetFile;
+        if (targetPath != null && !targetPath.trim().isEmpty()) {
+            targetFile = new java.io.File(userDir, targetPath);
+        } else {
+            targetFile = new java.io.File(userDir, filename);
+        }
+        
+        // Create parent directories if they don't exist
+        targetFile.getParentFile().mkdirs();
 
+        // Send initial acknowledgment
+        ssh.protocol.messages.FileTransferMessage ack = new ssh.protocol.messages.FileTransferMessage(MessageType.FILE_ACK);
+        ack.setSequenceNumber(0);
+        ack.setStatus("ready");
+        ack.setMessage("Ready to receive file: " + filename);
         protocolHandler.sendMessage(ack);
+
+        // Receive file data in chunks
+        long bytesReceived = 0;
+        int sequenceNumber = 1;
+        boolean isLast = false;
+
+        try (java.io.FileOutputStream fos = new java.io.FileOutputStream(targetFile)) {
+            while (!isLast) {
+                // Receive file data message
+                Message dataMessage = protocolHandler.receiveMessage();
+                if (dataMessage.getType() != MessageType.FILE_DATA) {
+                    throw new IOException("Expected FILE_DATA, got " + dataMessage.getType());
+                }
+
+                ssh.protocol.messages.FileTransferMessage fileData = (ssh.protocol.messages.FileTransferMessage) dataMessage;
+                
+                // Get the file data
+                byte[] fileBytes = fileData.getDataBytes();
+                if (fileBytes != null && fileBytes.length > 0) {
+                    fos.write(fileBytes);
+                    bytesReceived += fileBytes.length;
+                }
+
+                isLast = fileData.isLast();
+                sequenceNumber++;
+                
+                // Update progress
+                int percentage = (int) ((bytesReceived * 100) / fileSize);
+                ui.showFileTransferProgress(filename, bytesReceived, fileSize);
+                
+                Logger.info("Received chunk " + (sequenceNumber - 1) + " from " + authenticatedUser + 
+                          ", bytes: " + bytesReceived + "/" + fileSize + ", last: " + isLast);
+            }
+        }
+
+        // Send final acknowledgment
+        ssh.protocol.messages.FileTransferMessage finalAck = new ssh.protocol.messages.FileTransferMessage(MessageType.FILE_ACK);
+        finalAck.setSequenceNumber(sequenceNumber - 1);
+        finalAck.setStatus("completed");
+        finalAck.setMessage("File upload completed: " + filename + " (" + bytesReceived + " bytes)");
+        protocolHandler.sendMessage(finalAck);
+
+        Logger.info("File upload completed for " + authenticatedUser + ": " + filename + " -> " + targetFile.getAbsolutePath());
+        ui.showFileTransferProgress(filename, fileSize, fileSize);
     }
 
     /**
@@ -250,20 +349,90 @@ public class ServerConnection implements Runnable {
      */
     private void handleFileDownload(ssh.protocol.messages.FileTransferMessage message) throws Exception {
         String filename = message.getFilename();
+        String targetPath = message.getTargetPath();
         
+        Logger.info("File download request from " + authenticatedUser + " for: " + filename);
         ui.displayMessage("File download request for: " + filename);
 
-        // Basic file download implementation
-        // In a real implementation, you would read the file and send data chunks
-        
-        // Send file info
-        ssh.protocol.messages.FileTransferMessage response = new ssh.protocol.messages.FileTransferMessage(MessageType.FILE_DATA);
-        response.setFilename(filename);
-        response.setFileSize(0); // In real implementation, this would be actual file size
-        response.setSequenceNumber(1);
-        response.setLast(true);
+        // Determine file path
+        java.io.File fileToSend;
+        if (targetPath != null && !targetPath.trim().isEmpty()) {
+            fileToSend = new java.io.File("data/server/files/" + authenticatedUser, targetPath);
+        } else {
+            fileToSend = new java.io.File("data/server/files/" + authenticatedUser, filename);
+        }
 
-        protocolHandler.sendMessage(response);
+        // Check if file exists and is readable
+        if (!fileToSend.exists()) {
+            Logger.error("File not found: " + fileToSend.getAbsolutePath());
+            throw new IOException("File not found: " + filename);
+        }
+        if (!fileToSend.canRead()) {
+            Logger.error("Cannot read file: " + fileToSend.getAbsolutePath());
+            throw new IOException("Cannot read file: " + filename);
+        }
+
+        long fileSize = fileToSend.length();
+        Logger.info("Sending file: " + filename + " (" + fileSize + " bytes)");
+        ui.showFileTransferProgress(filename, 0, fileSize);
+
+        // Send file info in first message
+        ssh.protocol.messages.FileTransferMessage fileInfo = new ssh.protocol.messages.FileTransferMessage(MessageType.FILE_DATA);
+        fileInfo.setFilename(filename);
+        fileInfo.setFileSize(fileSize);
+        fileInfo.setSequenceNumber(1);
+        fileInfo.setLast(false); // Not the last message yet
+        
+        protocolHandler.sendMessage(fileInfo);
+        Logger.info("Sent file info for: " + filename);
+
+        // Send file data in chunks
+        final int CHUNK_SIZE = 8192; // 8KB chunks
+        byte[] buffer = new byte[CHUNK_SIZE];
+        int sequenceNumber = 2; // Start from 2 since 1 was file info
+        long bytesSent = 0;
+
+        try (java.io.FileInputStream fis = new java.io.FileInputStream(fileToSend)) {
+            int bytesRead;
+            while ((bytesRead = fis.read(buffer)) != -1) {
+                // Create file data message
+                ssh.protocol.messages.FileTransferMessage dataMessage = new ssh.protocol.messages.FileTransferMessage(MessageType.FILE_DATA);
+                dataMessage.setFilename(filename);
+                dataMessage.setSequenceNumber(sequenceNumber);
+                dataMessage.setLast(bytesRead < CHUNK_SIZE); // Last chunk if we read less than buffer size
+                
+                // Set the actual data (only the bytes we read)
+                byte[] actualData = new byte[bytesRead];
+                System.arraycopy(buffer, 0, actualData, 0, bytesRead);
+                dataMessage.setData(actualData);
+
+                // Send the chunk
+                protocolHandler.sendMessage(dataMessage);
+                
+                bytesSent += bytesRead;
+                sequenceNumber++;
+                
+                // Update progress
+                int percentage = (int) ((bytesSent * 100) / fileSize);
+                ui.showFileTransferProgress(filename, bytesSent, fileSize);
+                
+                Logger.info("Sent chunk " + (sequenceNumber - 1) + " to " + authenticatedUser + 
+                          ", bytes: " + bytesSent + "/" + fileSize);
+                
+                // Small delay to prevent overwhelming the network
+                Thread.sleep(10);
+            }
+        }
+
+        // Wait for acknowledgment
+        Message ackResponse = protocolHandler.receiveMessage();
+        if (ackResponse.getType() != MessageType.FILE_ACK) {
+            throw new IOException("Expected FILE_ACK, got " + ackResponse.getType());
+        }
+
+        ssh.protocol.messages.FileTransferMessage ack = (ssh.protocol.messages.FileTransferMessage) ackResponse;
+        Logger.info("File download completed for " + authenticatedUser + ": " + filename + " (" + bytesSent + " bytes)");
+        ui.showFileTransferProgress(filename, fileSize, fileSize);
     }
 
     /**
@@ -278,12 +447,21 @@ public class ServerConnection implements Runnable {
      */
     private void cleanup() {
         try {
+            ui.displayMessage("Cleaning up connection for " + getClientInfo());
             if (protocolHandler != null) {
                 protocolHandler.close();
             }
             if (clientSocket != null && !clientSocket.isClosed()) {
                 clientSocket.close();
             }
+            // Null out large fields to help GC
+            shellExecutor = null;
+            protocolHandler = null;
+            keyExchange = null;
+            encryption = null;
+            authManager = null;
+            serverKeyPair = null;
+            config = null;
         } catch (IOException e) {
             ui.displayError("Error during cleanup: " + e.getMessage());
         }

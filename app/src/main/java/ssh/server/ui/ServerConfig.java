@@ -1,5 +1,9 @@
 package ssh.server.ui;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+
 /**
  * Configuration class for SSH server.
  */
@@ -88,6 +92,32 @@ public class ServerConfig {
 
     public void setLogLevel(String logLevel) {
         this.logLevel = logLevel;
+    }
+
+    /**
+     * Load configuration from a properties file.
+     *
+     * @param filename Path to the properties file
+     */
+    public void loadFromFile(String filename) {
+        Properties props = new Properties();
+        try (FileInputStream fis = new FileInputStream(filename)) {
+            props.load(fis);
+            
+            this.port = Integer.parseInt(props.getProperty("server.port", String.valueOf(this.port)));
+            this.host = props.getProperty("server.host", this.host);
+            this.keyDirectory = props.getProperty("server.key.directory", this.keyDirectory);
+            this.usersFile = props.getProperty("server.users.file", this.usersFile);
+            this.authorizedKeysDir = props.getProperty("server.authorized.keys.dir", this.authorizedKeysDir);
+            this.maxConnections = Integer.parseInt(props.getProperty("server.max.connections", String.valueOf(this.maxConnections)));
+            this.sessionTimeout = Long.parseLong(props.getProperty("server.session.timeout", String.valueOf(this.sessionTimeout)));
+            this.logLevel = props.getProperty("server.log.level", this.logLevel);
+
+        } catch (IOException e) {
+            System.err.println("Warning: Could not load configuration file " + filename + ". Using default values.");
+        } catch (NumberFormatException e) {
+            System.err.println("Warning: Invalid number format in configuration file. " + e.getMessage());
+        }
     }
 
     @Override

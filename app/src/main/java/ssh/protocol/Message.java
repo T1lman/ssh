@@ -122,6 +122,10 @@ public abstract class Message {
                 return new ssh.protocol.messages.AuthMessage(MessageType.AUTH_SUCCESS);
             case AUTH_FAILURE:
                 return new ssh.protocol.messages.AuthMessage(MessageType.AUTH_FAILURE);
+            case SERVICE_REQUEST:
+                return new ssh.protocol.messages.ServiceMessage(MessageType.SERVICE_REQUEST);
+            case SERVICE_ACCEPT:
+                return new ssh.protocol.messages.ServiceMessage(MessageType.SERVICE_ACCEPT);
             case SHELL_COMMAND:
                 return new ssh.protocol.messages.ShellMessage(MessageType.SHELL_COMMAND);
             case SHELL_RESULT:
@@ -135,6 +139,7 @@ public abstract class Message {
             case FILE_ACK:
                 return new ssh.protocol.messages.FileTransferMessage(MessageType.FILE_ACK);
             case ERROR:
+            case DISCONNECT:
                 return new ssh.protocol.messages.ErrorMessage();
             default:
                 throw new IllegalArgumentException("Unsupported message type: " + type);

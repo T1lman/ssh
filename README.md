@@ -298,4 +298,45 @@ This project is for educational purposes. Use at your own risk in production env
 - This is an educational implementation
 - Not recommended for production use
 - Missing some security features of real SSH implementations
-- Always use established SSH implementations for production systems 
+- Always use established SSH implementations for production systems
+
+## File Transfer
+
+The SSH client supports secure file transfer operations:
+
+### Upload Files
+Upload local files to the server:
+```bash
+# Start client and select file transfer service
+./gradlew runClient
+
+# Choose operation: upload
+# Enter local file path: /path/to/local/file.txt
+# Enter remote file path: remote_file.txt
+```
+
+### Download Files
+Download files from the server:
+```bash
+# Start client and select file transfer service
+./gradlew runClient
+
+# Choose operation: download
+# Enter remote file path: remote_file.txt
+# Enter local file path: /path/to/local/download.txt
+```
+
+### File Storage
+- **Server files**: Stored in `data/server/files/[username]/`
+- **Client downloads**: Stored in user-specified local path
+- **Progress tracking**: Real-time transfer progress display
+- **Chunked transfer**: Large files transferred in 8KB chunks
+- **Error handling**: Comprehensive error checking and reporting
+
+### Security Features
+- **User isolation**: Each user has separate file storage
+- **Path validation**: Prevents directory traversal attacks
+- **Encrypted transfer**: All file data encrypted using AES-GCM
+- **Authentication required**: File operations require successful authentication
+
+## Authentication Methods 

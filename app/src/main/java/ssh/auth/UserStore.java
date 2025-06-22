@@ -1,6 +1,7 @@
 package ssh.auth;
 
 import ssh.crypto.RSAKeyGenerator;
+import ssh.utils.Logger;
 
 import java.io.*;
 import java.security.MessageDigest;
@@ -121,10 +122,16 @@ public class UserStore {
     public boolean verifyPassword(String username, String password) {
         String storedHash = getUserPasswordHash(username);
         if (storedHash == null) {
+            Logger.error("UserStore: No stored hash found for user: " + username);
             return false;
         }
         String inputHash = hashPassword(password);
-        return storedHash.equals(inputHash);
+        boolean matches = storedHash.equals(inputHash);
+        Logger.info("UserStore: Password verification for " + username + 
+                   " - Stored hash: " + storedHash + 
+                   ", Input hash: " + inputHash + 
+                   ", Matches: " + matches);
+        return matches;
     }
 
     /**

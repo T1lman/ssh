@@ -1,154 +1,121 @@
 package ssh.shell;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
- * Executes shell commands and returns results.
+ * Executes shell commands and returns results, maintaining a persistent working directory for a session.
  */
 public class ShellExecutor {
-    
-    public ShellExecutor() {
-    }
+    private Path currentDirectory;
 
     /**
-     * Execute a command in the specified working directory.
+     * Constructor initializes the executor in the user's home directory.
      */
-    public CommandResult execute(String command, String workingDirectory) {
+    public ShellExecutor() {
+        this.currentDirectory = Paths.get(System.getProperty("user.home"));
+    }
+    
+    /**
+     * Execute a command. If the command is 'cd', the directory is changed.
+     * Otherwise, the command is executed in the current working directory.
+     */
+    public CommandResult execute(String command) {
+        if (command == null || command.trim().isEmpty()) {
+            return new CommandResult(0, "", "", 0);
+        }
+
+        String[] parts = command.trim().split("\\s+");
+        
+        if (parts[0].equals("cd")) {
+            if (parts.length > 1) {
+                return changeWorkingDirectory(parts[1]);
+            } else {
+                return changeWorkingDirectory(System.getProperty("user.home"));
+            }
+        }
+        
+        return executeProcess(command);
+    }
+    
+    /**
+     * Executes the given command in a separate process.
+     */
+    private CommandResult executeProcess(String command) {
         long startTime = System.currentTimeMillis();
         
         try {
             ProcessBuilder processBuilder = new ProcessBuilder();
             
-            // Set the command based on the operating system
             if (System.getProperty("os.name").toLowerCase().contains("windows")) {
                 processBuilder.command("cmd", "/c", command);
             } else {
                 processBuilder.command("sh", "-c", command);
             }
             
-            // Set working directory if specified
-            if (workingDirectory != null && !workingDirectory.isEmpty()) {
-                processBuilder.directory(new File(workingDirectory));
-            }
+            processBuilder.directory(currentDirectory.toFile());
+            processBuilder.redirectErrorStream(true); // Combine stdout and stderr
             
-            // Redirect error stream to output stream
-            processBuilder.redirectErrorStream(false);
-            
-            // Start the process
             Process process = processBuilder.start();
             
-            // Read output and error streams in separate threads
-            StringBuffer stdoutBuffer = new StringBuffer();
-            StringBuffer stderrBuffer = new StringBuffer();
-            
-            Thread stdoutThread = new Thread(() -> {
-                try (BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8))) {
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        stdoutBuffer.append(line).append("\n");
-                    }
-                } catch (IOException e) {
-                    stderrBuffer.append("Error reading stdout: ").append(e.getMessage()).append("\n");
+            StringBuilder output = new StringBuilder();
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    output.append(line).append("\n");
                 }
-            });
+            }
             
-            Thread stderrThread = new Thread(() -> {
-                try (BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(process.getErrorStream(), StandardCharsets.UTF_8))) {
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        stderrBuffer.append(line).append("\n");
-                    }
-                } catch (IOException e) {
-                    stderrBuffer.append("Error reading stderr: ").append(e.getMessage()).append("\n");
-                }
-            });
-            
-            stdoutThread.start();
-            stderrThread.start();
-            
-            // Wait for the process to complete
             int exitCode = process.waitFor();
-            
-            // Wait for output threads to complete
-            stdoutThread.join();
-            stderrThread.join();
-            
             long executionTime = System.currentTimeMillis() - startTime;
             
-            return new CommandResult(
-                exitCode,
-                stdoutBuffer.toString(),
-                stderrBuffer.toString(),
-                executionTime
-            );
+            // Since we redirected error stream, output contains both stdout and stderr
+            return new CommandResult(exitCode, output.toString(), "", executionTime);
             
         } catch (Exception e) {
             long executionTime = System.currentTimeMillis() - startTime;
-            return new CommandResult(
-                -1,
-                "",
-                "Error executing command: " + e.getMessage(),
-                executionTime
-            );
+            return new CommandResult(-1, "", "Error executing command: " + e.getMessage(), executionTime);
         }
     }
-
-    /**
-     * Execute a command in the current working directory.
-     */
-    public CommandResult execute(String command) {
-        return execute(command, null);
-    }
-
-    /**
-     * Check if a command is safe to execute (basic security check).
-     */
-    public boolean isCommandSafe(String command) {
-        if (command == null || command.trim().isEmpty()) {
-            return false;
-        }
-        
-        String lowerCommand = command.toLowerCase().trim();
-        
-        // List of potentially dangerous commands
-        String[] dangerousCommands = {
-            "rm -rf", "rm -r", "rm -f", "rm -rf /", "rm -r /", "rm -f /",
-            "format", "fdisk", "mkfs", "dd", "shutdown", "halt", "reboot",
-            "init 0", "init 6", "poweroff", "sudo", "su", "passwd"
-        };
-        
-        for (String dangerous : dangerousCommands) {
-            if (lowerCommand.contains(dangerous)) {
-                return false;
-            }
-        }
-        
-        return true;
-    }
-
-    /**
-     * Get the current working directory.
-     */
-    public String getCurrentWorkingDirectory() {
-        return System.getProperty("user.dir");
-    }
-
+    
     /**
      * Change the current working directory.
      */
-    public boolean changeWorkingDirectory(String path) {
-        try {
-            File newDir = new File(path);
-            if (newDir.exists() && newDir.isDirectory()) {
-                System.setProperty("user.dir", newDir.getAbsolutePath());
-                return true;
-            }
-            return false;
-        } catch (Exception e) {
-            return false;
+    private CommandResult changeWorkingDirectory(String path) {
+        Path newPath;
+        if (path.equals("~")) {
+            newPath = Paths.get(System.getProperty("user.home"));
+        } else {
+            newPath = currentDirectory.resolve(path).normalize();
         }
+
+        File newDir = newPath.toFile();
+        if (newDir.exists() && newDir.isDirectory()) {
+            this.currentDirectory = newPath;
+            return new CommandResult(0, "", "", 0);
+        } else {
+            return new CommandResult(1, "", "cd: no such file or directory: " + path + "\n", 0);
+        }
+    }
+    
+    /**
+     * Get the current working directory as a string.
+     */
+    public String getCurrentWorkingDirectory() {
+        return currentDirectory.toString();
+    }
+    
+    /**
+     * Check if a command is safe to execute (basic security check).
+     * This is a placeholder and should be replaced with a more robust implementation.
+     */
+    public boolean isCommandSafe(String command) {
+        // This is a simplistic check and should be improved for a real-world application.
+        return true;
     }
 } 

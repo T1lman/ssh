@@ -1,6 +1,7 @@
 package ssh.auth;
 
 import ssh.crypto.RSAKeyGenerator;
+import ssh.utils.Logger;
 
 import java.security.PublicKey;
 import java.util.Map;
@@ -23,16 +24,24 @@ public class AuthenticationManager {
      * Authenticate a user using the specified authentication type.
      */
     public boolean authenticate(String username, String authType, Map<String, String> credentials) {
+        Logger.info("Authentication attempt for user: " + username + ", type: " + authType);
+        
         if (!isValidUser(username)) {
+            Logger.error("User validation failed for: " + username);
             return false;
         }
+        
+        Logger.info("User validation passed for: " + username);
 
         switch (authType.toLowerCase()) {
             case "publickey":
+                Logger.info("Attempting public key authentication for: " + username);
                 return authenticatePublicKey(username, credentials);
             case "password":
+                Logger.info("Attempting password authentication for: " + username);
                 return authenticatePassword(username, credentials);
             default:
+                Logger.error("Unknown authentication type: " + authType);
                 return false;
         }
     }
@@ -67,17 +76,23 @@ public class AuthenticationManager {
     private boolean authenticatePassword(String username, Map<String, String> credentials) {
         String password = credentials.get("password");
         if (password == null) {
+            Logger.error("Password is null for user: " + username);
             return false;
         }
 
-        return passwordAuth.authenticate(username, password);
+        Logger.info("Verifying password for user: " + username);
+        boolean result = passwordAuth.authenticate(username, password);
+        Logger.info("Password authentication result for " + username + ": " + result);
+        return result;
     }
 
     /**
      * Check if a user is valid.
      */
     private boolean isValidUser(String username) {
-        return userStore.userExists(username);
+        boolean exists = userStore.userExists(username);
+        Logger.info("User existence check for '" + username + "': " + exists);
+        return exists;
     }
 
     /**

@@ -1,5 +1,7 @@
 package ssh.auth;
 
+import ssh.utils.Logger;
+
 /**
  * Handles password authentication.
  */
@@ -14,13 +16,18 @@ public class PasswordAuth {
      * Authenticate a user using password.
      */
     public boolean authenticate(String username, String password) {
+        Logger.info("PasswordAuth: Checking if user exists: " + username);
         // Check if user exists
         if (!userStore.userExists(username)) {
+            Logger.error("PasswordAuth: User does not exist: " + username);
             return false;
         }
 
+        Logger.info("PasswordAuth: User exists, verifying password for: " + username);
         // Verify password
-        return userStore.verifyPassword(username, password);
+        boolean result = userStore.verifyPassword(username, password);
+        Logger.info("PasswordAuth: Password verification result for " + username + ": " + result);
+        return result;
     }
 
     /**

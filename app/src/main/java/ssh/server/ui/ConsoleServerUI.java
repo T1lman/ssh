@@ -1,5 +1,7 @@
 package ssh.server.ui;
 
+import ssh.utils.ConsoleInterface;
+
 import java.io.Console;
 import java.util.Scanner;
 
@@ -19,12 +21,12 @@ public class ConsoleServerUI implements ServerUI {
 
     @Override
     public void displayMessage(String message) {
-        System.out.println("[INFO] " + message);
+        ConsoleInterface.info(message);
     }
 
     @Override
     public void displayError(String error) {
-        System.err.println("[ERROR] " + error);
+        ConsoleInterface.error(error);
     }
 
     @Override
@@ -47,51 +49,46 @@ public class ConsoleServerUI implements ServerUI {
 
     @Override
     public void showServerStatus(String status) {
-        System.out.println("[STATUS] " + status);
+        ConsoleInterface.status(status);
     }
 
     @Override
     public void showConnectionInfo(String clientAddress, int clientPort) {
-        System.out.println("[CONNECTION] Client connected from " + clientAddress + ":" + clientPort);
+        ConsoleInterface.connection("CONNECTED", clientAddress + ":" + clientPort);
     }
 
     @Override
     public void showAuthenticationResult(String username, boolean success, String message) {
-        String status = success ? "SUCCESS" : "FAILED";
-        System.out.println("[AUTH] " + username + " - " + status + ": " + message);
+        ConsoleInterface.auth(username, success);
     }
 
     @Override
     public void showServiceRequest(String username, String serviceType) {
-        System.out.println("[SERVICE] " + username + " requested " + serviceType + " service");
+        ConsoleInterface.info("Service request from " + username + " for " + serviceType);
     }
 
     @Override
     public void showFileTransferProgress(String filename, long bytesTransferred, long totalBytes) {
         int percentage = (int) ((bytesTransferred * 100) / totalBytes);
-        System.out.println("[FILE] " + filename + " - " + percentage + "% (" + 
+        ConsoleInterface.info("File transfer: " + filename + " - " + percentage + "% (" + 
                           bytesTransferred + "/" + totalBytes + " bytes)");
     }
 
     @Override
     public void showShellCommand(String username, String command) {
-        System.out.println("[SHELL] " + username + " executed: " + command);
+        ConsoleInterface.shell(username, command);
     }
 
     @Override
     public void showServerStartup(int port, String host) {
-        System.out.println("========================================");
-        System.out.println("SSH Server Starting...");
-        System.out.println("Host: " + host);
-        System.out.println("Port: " + port);
-        System.out.println("========================================");
+        ConsoleInterface.header("SSH Server Starting");
+        ConsoleInterface.info("Host: " + host);
+        ConsoleInterface.info("Port: " + port);
     }
 
     @Override
     public void showServerShutdown() {
-        System.out.println("========================================");
-        System.out.println("SSH Server Shutting Down...");
-        System.out.println("========================================");
+        ConsoleInterface.footer("SSH Server Shutting Down");
     }
 
     @Override

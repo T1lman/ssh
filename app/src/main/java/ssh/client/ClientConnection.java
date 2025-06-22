@@ -34,6 +34,7 @@ public class ClientConnection {
     private KeyPair clientKeyPair;
     private boolean connected;
     private boolean authenticated;
+    private String workingDirectory;
 
     public ClientConnection(ServerInfo serverInfo, AuthCredentials credentials, ClientUI ui) {
         Logger.info("ClientConnection constructor called");
@@ -42,6 +43,7 @@ public class ClientConnection {
         this.ui = ui;
         this.connected = false;
         this.authenticated = false;
+        this.workingDirectory = System.getProperty("user.home"); // Default to home directory
     }
 
     /**
@@ -51,6 +53,11 @@ public class ClientConnection {
         try {
             Logger.info("Connecting to " + serverInfo.getHost() + ":" + serverInfo.getPort());
             socket = new Socket(serverInfo.getHost(), serverInfo.getPort());
+            
+            // Set socket timeouts to prevent hanging
+            socket.setSoTimeout(30000); // 30 second read timeout
+            socket.setTcpNoDelay(true); // Disable Nagle's algorithm for better performance
+            
             protocolHandler = new ProtocolHandler(socket.getInputStream(), socket.getOutputStream());
             connected = true;
             Logger.info("Connected successfully");
@@ -173,6 +180,12 @@ public class ClientConnection {
             if (success) {
                 authenticated = true;
                 Logger.info("Authentication successful");
+                
+                // Send service request for shell
+                if (!sendServiceRequest("shell")) {
+                    Logger.error("Failed to send service request");
+                    return false;
+                }
             } else {
                 Logger.error("Authentication failed");
             }
@@ -188,6 +201,38 @@ public class ClientConnection {
     }
 
     /**
+     * Send a service request to the server.
+     */
+    public boolean sendServiceRequest(String service) {
+        try {
+            Logger.info("Sending service request for: " + service);
+            
+            ssh.protocol.messages.ServiceMessage serviceMessage = new ssh.protocol.messages.ServiceMessage(MessageType.SERVICE_REQUEST);
+            serviceMessage.setService(service);
+            
+            protocolHandler.sendMessage(serviceMessage);
+            Logger.info("Sent service request");
+            
+            // Receive service accept response
+            Message response = protocolHandler.receiveMessage();
+            Logger.info("Received service response: " + response.getType());
+            
+            if (response.getType() != MessageType.SERVICE_ACCEPT) {
+                Logger.error("Expected SERVICE_ACCEPT, got " + response.getType());
+                return false;
+            }
+            
+            Logger.info("Service request accepted");
+            return true;
+            
+        } catch (Exception e) {
+            Logger.error("Service request failed: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
      * Send a shell command to the server.
      */
     public void sendShellCommand(String command) throws Exception {
@@ -197,7 +242,7 @@ public class ClientConnection {
 
         ShellMessage shellMessage = new ShellMessage(MessageType.SHELL_COMMAND);
         shellMessage.setCommand(command);
-        shellMessage.setWorkingDirectory(System.getProperty("user.dir"));
+        shellMessage.setWorkingDirectory(this.workingDirectory);
 
         protocolHandler.sendMessage(shellMessage);
     }
@@ -206,26 +251,34 @@ public class ClientConnection {
      * Receive shell response from the server.
      */
     public String receiveShellResponse() throws Exception {
+        if (!authenticated) {
+            throw new IllegalStateException("Not authenticated");
+        }
+
         Message response = protocolHandler.receiveMessage();
         if (response.getType() != MessageType.SHELL_RESULT) {
             throw new IOException("Expected SHELL_RESULT, got " + response.getType());
         }
 
-        ShellMessage shellResponse = (ShellMessage) response;
+        ShellMessage shellResult = (ShellMessage) response;
         
-        StringBuilder result = new StringBuilder();
-        if (shellResponse.getStdout() != null && !shellResponse.getStdout().isEmpty()) {
-            result.append("STDOUT:\n").append(shellResponse.getStdout());
+        // Update the working directory
+        if (shellResult.getWorkingDirectory() != null && !shellResult.getWorkingDirectory().isEmpty()) {
+            this.workingDirectory = shellResult.getWorkingDirectory();
         }
-        if (shellResponse.getStderr() != null && !shellResponse.getStderr().isEmpty()) {
-            if (result.length() > 0) {
-                result.append("\n");
-            }
-            result.append("STDERR:\n").append(shellResponse.getStderr());
-        }
-        result.append("\nExit code: ").append(shellResponse.getExitCode());
 
-        return result.toString();
+        if (shellResult.getExitCode() == 0) {
+            return shellResult.getStdout();
+        } else {
+            return shellResult.getStderr();
+        }
+    }
+
+    /**
+     * Get the current working directory.
+     */
+    public String getWorkingDirectory() {
+        return workingDirectory;
     }
 
     /**
@@ -236,8 +289,82 @@ public class ClientConnection {
             throw new IllegalStateException("Not authenticated");
         }
 
-        // TODO: Implement file upload
-        throw new UnsupportedOperationException("File upload not yet implemented");
+        // Check if local file exists
+        java.io.File localFile = new java.io.File(localPath);
+        if (!localFile.exists()) {
+            throw new IOException("Local file does not exist: " + localPath);
+        }
+        if (!localFile.canRead()) {
+            throw new IOException("Cannot read local file: " + localPath);
+        }
+
+        long fileSize = localFile.length();
+        String filename = localFile.getName();
+        
+        Logger.info("Starting file upload: " + filename + " (" + fileSize + " bytes)");
+        ui.showFileTransferProgress(filename, 0);
+
+        // Send file upload request
+        ssh.protocol.messages.FileTransferMessage uploadRequest = new ssh.protocol.messages.FileTransferMessage(MessageType.FILE_UPLOAD_REQUEST);
+        uploadRequest.setFilename(filename);
+        uploadRequest.setFileSize(fileSize);
+        uploadRequest.setTargetPath(remotePath);
+        
+        protocolHandler.sendMessage(uploadRequest);
+        Logger.info("Sent file upload request");
+
+        // Wait for acknowledgment
+        Message response = protocolHandler.receiveMessage();
+        if (response.getType() != MessageType.FILE_ACK) {
+            throw new IOException("Expected FILE_ACK, got " + response.getType());
+        }
+
+        // Read and send file in chunks
+        final int CHUNK_SIZE = 8192; // 8KB chunks
+        byte[] buffer = new byte[CHUNK_SIZE];
+        int sequenceNumber = 1;
+        long bytesTransferred = 0;
+
+        try (java.io.FileInputStream fis = new java.io.FileInputStream(localFile)) {
+            int bytesRead;
+            while ((bytesRead = fis.read(buffer)) != -1) {
+                // Create file data message
+                ssh.protocol.messages.FileTransferMessage dataMessage = new ssh.protocol.messages.FileTransferMessage(MessageType.FILE_DATA);
+                dataMessage.setFilename(filename);
+                dataMessage.setSequenceNumber(sequenceNumber);
+                dataMessage.setLast(bytesRead < CHUNK_SIZE); // Last chunk if we read less than buffer size
+                
+                // Set the actual data (only the bytes we read)
+                byte[] actualData = new byte[bytesRead];
+                System.arraycopy(buffer, 0, actualData, 0, bytesRead);
+                dataMessage.setData(actualData);
+
+                // Send the chunk
+                protocolHandler.sendMessage(dataMessage);
+                
+                bytesTransferred += bytesRead;
+                sequenceNumber++;
+                
+                // Update progress
+                int percentage = (int) ((bytesTransferred * 100) / fileSize);
+                ui.showFileTransferProgress(filename, percentage);
+                
+                Logger.info("Sent chunk " + (sequenceNumber - 1) + ", bytes: " + bytesTransferred + "/" + fileSize);
+                
+                // Small delay to prevent overwhelming the network
+                Thread.sleep(10);
+            }
+        }
+
+        // Wait for final acknowledgment
+        response = protocolHandler.receiveMessage();
+        if (response.getType() != MessageType.FILE_ACK) {
+            throw new IOException("Expected final FILE_ACK, got " + response.getType());
+        }
+
+        ssh.protocol.messages.FileTransferMessage finalAck = (ssh.protocol.messages.FileTransferMessage) response;
+        Logger.info("File upload completed: " + finalAck.getMessage());
+        ui.showFileTransferProgress(filename, 100);
     }
 
     /**
@@ -248,8 +375,90 @@ public class ClientConnection {
             throw new IllegalStateException("Not authenticated");
         }
 
-        // TODO: Implement file download
-        throw new UnsupportedOperationException("File download not yet implemented");
+        String filename = new java.io.File(remotePath).getName();
+        Logger.info("Starting file download: " + filename);
+        ui.showFileTransferProgress(filename, 0);
+
+        // Send file download request
+        ssh.protocol.messages.FileTransferMessage downloadRequest = new ssh.protocol.messages.FileTransferMessage(MessageType.FILE_DOWNLOAD_REQUEST);
+        downloadRequest.setFilename(filename);
+        downloadRequest.setTargetPath(remotePath);
+        
+        protocolHandler.sendMessage(downloadRequest);
+        Logger.info("Sent file download request");
+
+        // Create local file
+        java.io.File localFile = new java.io.File(localPath);
+        localFile.getParentFile().mkdirs(); // Create parent directories if they don't exist
+
+        long totalBytes = 0;
+        long bytesReceived = 0;
+        int sequenceNumber = 1;
+
+        try (java.io.FileOutputStream fos = new java.io.FileOutputStream(localFile)) {
+            boolean isLast = false;
+            
+            while (!isLast) {
+                // Receive file data message
+                Message response = protocolHandler.receiveMessage();
+                if (response.getType() != MessageType.FILE_DATA) {
+                    throw new IOException("Expected FILE_DATA, got " + response.getType());
+                }
+
+                ssh.protocol.messages.FileTransferMessage dataMessage = (ssh.protocol.messages.FileTransferMessage) response;
+                
+                // Check if this is the first message (contains file info)
+                if (sequenceNumber == 1) {
+                    totalBytes = dataMessage.getFileSize();
+                    Logger.info("File size: " + totalBytes + " bytes");
+                }
+
+                // Get the file data
+                byte[] fileData = dataMessage.getDataBytes();
+                if (fileData != null && fileData.length > 0) {
+                    fos.write(fileData);
+                    bytesReceived += fileData.length;
+                }
+
+                isLast = dataMessage.isLast();
+                sequenceNumber++;
+                
+                // Update progress
+                if (totalBytes > 0) {
+                    int percentage = (int) ((bytesReceived * 100) / totalBytes);
+                    ui.showFileTransferProgress(filename, percentage);
+                }
+                
+                Logger.info("Received chunk " + (sequenceNumber - 1) + ", bytes: " + bytesReceived + "/" + totalBytes + ", last: " + isLast);
+            }
+        }
+
+        // Send acknowledgment
+        ssh.protocol.messages.FileTransferMessage ack = new ssh.protocol.messages.FileTransferMessage(MessageType.FILE_ACK);
+        ack.setSequenceNumber(sequenceNumber - 1);
+        ack.setStatus("completed");
+        ack.setMessage("File download completed successfully");
+        
+        protocolHandler.sendMessage(ack);
+        
+        Logger.info("File download completed: " + filename + " (" + bytesReceived + " bytes)");
+        ui.showFileTransferProgress(filename, 100);
+    }
+
+    /**
+     * Send a disconnect message to the server.
+     */
+    public void sendDisconnect() {
+        try {
+            if (protocolHandler != null) {
+                ssh.protocol.messages.ErrorMessage disconnectMsg = new ssh.protocol.messages.ErrorMessage();
+                disconnectMsg.setType(ssh.protocol.MessageType.DISCONNECT);
+                disconnectMsg.setErrorMessage("Client disconnecting");
+                protocolHandler.sendMessage(disconnectMsg);
+            }
+        } catch (Exception e) {
+            // Ignore errors on disconnect
+        }
     }
 
     /**
@@ -257,15 +466,34 @@ public class ClientConnection {
      */
     public void disconnect() {
         try {
+            sendDisconnect();
             if (protocolHandler != null) {
                 protocolHandler.close();
+                protocolHandler = null;
             }
             if (socket != null && !socket.isClosed()) {
                 socket.close();
+                socket = null;
             }
+            
+            // Clean up large objects to help with garbage collection
+            if (keyExchange != null) {
+                keyExchange = null;
+            }
+            if (encryption != null) {
+                encryption = null;
+            }
+            if (clientKeyPair != null) {
+                clientKeyPair = null;
+            }
+            
             connected = false;
             authenticated = false;
             Logger.info("Disconnected from server");
+            
+            // Force garbage collection
+            System.gc();
+            
         } catch (IOException e) {
             Logger.error("Error during disconnect: " + e.getMessage());
         }
