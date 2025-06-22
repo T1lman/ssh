@@ -31,6 +31,10 @@ public class JavaFXClientUI implements ClientUI {
     private ShellInputField commandInput;
     private SSHClient client;
     private String currentWorkingDirectory = "~";
+    
+    // Progress tracking for file transfers
+    private javafx.scene.control.ProgressBar activeProgressBar;
+    private Label activeStatusLabel;
 
     /**
      * Custom input field that behaves like a shell prompt
@@ -482,8 +486,18 @@ public class JavaFXClientUI implements ClientUI {
 
     @Override
     public void showFileTransferProgress(String filename, int percentage) {
-        // Would update a progress bar
-        System.out.println("GUI_FTP: " + filename + " - " + percentage + "%");
+        // Update progress bar if we have an active progress dialog
+        Platform.runLater(() -> {
+            System.out.println("GUI_FTP: " + filename + " - " + percentage + "%");
+            
+            if (activeProgressBar != null) {
+                activeProgressBar.setProgress(percentage / 100.0);
+            }
+            
+            if (activeStatusLabel != null) {
+                activeStatusLabel.setText("Transferring: " + percentage + "%");
+            }
+        });
     }
 
     @Override
@@ -606,13 +620,284 @@ public class JavaFXClientUI implements ClientUI {
     }
 
     private void handleFileTransfer() {
-        // Show file transfer dialog
-        javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
-        alert.setTitle("File Transfer");
-        alert.setHeaderText("File Transfer Feature");
-        alert.setContentText("File transfer functionality is available but not yet implemented in the GUI.\n\nUse the console client for file transfer operations.");
-        alert.initOwner(primaryStage);
-        alert.showAndWait();
+        System.out.println("DEBUG: File Transfer button clicked");
+        
+        // Create the main file transfer dialog
+        Dialog<Void> fileTransferDialog = new Dialog<>();
+        fileTransferDialog.setTitle("File Transfer");
+        fileTransferDialog.setHeaderText("Choose a file transfer operation");
+        
+        ButtonType uploadButtonType = new ButtonType("Upload File", ButtonData.LEFT);
+        ButtonType downloadButtonType = new ButtonType("Download File", ButtonData.OTHER);
+        ButtonType cancelButtonType = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
+        
+        // Clear existing buttons and add them in the desired order
+        fileTransferDialog.getDialogPane().getButtonTypes().clear();
+        fileTransferDialog.getDialogPane().getButtonTypes().addAll(
+            uploadButtonType, downloadButtonType, cancelButtonType
+        );
+        
+        VBox content = new VBox(15);
+        content.setPadding(new Insets(20));
+        
+        Label infoLabel = new Label("Select a file transfer operation:");
+        infoLabel.setWrapText(true);
+        infoLabel.setStyle("-fx-font-size: 12px;");
+        
+        content.getChildren().add(infoLabel);
+        
+        fileTransferDialog.getDialogPane().setContent(content);
+        fileTransferDialog.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+        if (primaryStage != null && primaryStage.getScene() != null) {
+            fileTransferDialog.initOwner(primaryStage);
+        }
+        
+        fileTransferDialog.setResultConverter(dialogButton -> {
+            if (dialogButton == uploadButtonType) {
+                handleFileUpload();
+                return null;
+            } else if (dialogButton == downloadButtonType) {
+                handleFileDownload();
+                return null;
+            } else if (dialogButton == cancelButtonType) {
+                return null;
+            }
+            return null;
+        });
+        
+        fileTransferDialog.showAndWait();
+    }
+    
+    private void handleFileUpload() {
+        System.out.println("DEBUG: File Upload selected");
+        
+        // Create file chooser for local file selection
+        javafx.stage.FileChooser fileChooser = new javafx.stage.FileChooser();
+        fileChooser.setTitle("Select File to Upload");
+        fileChooser.getExtensionFilters().addAll(
+            new javafx.stage.FileChooser.ExtensionFilter("All Files", "*.*"),
+            new javafx.stage.FileChooser.ExtensionFilter("Text Files", "*.txt", "*.log", "*.md"),
+            new javafx.stage.FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif"),
+            new javafx.stage.FileChooser.ExtensionFilter("Document Files", "*.pdf", "*.doc", "*.docx")
+        );
+        
+        java.io.File selectedFile = fileChooser.showOpenDialog(primaryStage);
+        if (selectedFile == null) {
+            return; // User cancelled
+        }
+        
+        // Create dialog to get remote path
+        Dialog<String> remotePathDialog = new Dialog<>();
+        remotePathDialog.setTitle("Upload File");
+        remotePathDialog.setHeaderText("Upload: " + selectedFile.getName());
+        
+        ButtonType uploadButtonType = new ButtonType("Upload", ButtonData.OK_DONE);
+        remotePathDialog.getDialogPane().getButtonTypes().addAll(uploadButtonType, ButtonType.CANCEL);
+        
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+        
+        TextField remotePathField = new TextField();
+        remotePathField.setPromptText("Remote filename (optional, defaults to original name)");
+        remotePathField.setText(selectedFile.getName());
+        
+        Label infoLabel = new Label("File: " + selectedFile.getName() + " (" + formatFileSize(selectedFile.length()) + ")");
+        infoLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #666;");
+        
+        grid.add(new Label("Remote Path:"), 0, 0);
+        grid.add(remotePathField, 1, 0);
+        grid.add(infoLabel, 0, 1, 2, 1);
+        
+        remotePathDialog.getDialogPane().setContent(grid);
+        remotePathDialog.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+        remotePathDialog.initOwner(primaryStage);
+        
+        Platform.runLater(remotePathField::requestFocus);
+        
+        remotePathDialog.setResultConverter(dialogButton -> {
+            if (dialogButton == uploadButtonType) {
+                return remotePathField.getText().trim();
+            }
+            return null;
+        });
+        
+        Optional<String> result = remotePathDialog.showAndWait();
+        result.ifPresent(remotePath -> {
+            // Show progress dialog
+            Dialog<Void> progressDialog = createProgressDialog("Uploading File", selectedFile.getName());
+            progressDialog.show();
+            
+            // Run upload in background thread
+            new Thread(() -> {
+                try {
+                    String finalRemotePath = remotePath.isEmpty() ? selectedFile.getName() : remotePath;
+                    client.getConnection().uploadFile(selectedFile.getAbsolutePath(), finalRemotePath);
+                    
+                    // Show success message on FX thread
+                    Platform.runLater(() -> {
+                        progressDialog.close();
+                        
+                        javafx.scene.control.Alert successAlert = new javafx.scene.control.Alert(
+                            javafx.scene.control.Alert.AlertType.INFORMATION);
+                        successAlert.setTitle("Upload Complete");
+                        successAlert.setHeaderText("File Uploaded Successfully");
+                        successAlert.setContentText("File '" + selectedFile.getName() + "' has been uploaded successfully!\n\n" +
+                                                   "Remote path: " + finalRemotePath + "\n" +
+                                                   "File size: " + formatFileSize(selectedFile.length()));
+                        
+                        successAlert.initOwner(primaryStage);
+                        successAlert.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+                        successAlert.showAndWait();
+                    });
+                    
+                } catch (Exception e) {
+                    // Show error message on FX thread
+                    Platform.runLater(() -> {
+                        progressDialog.close();
+                        showError("Upload failed: " + e.getMessage());
+                    });
+                }
+            }).start();
+        });
+    }
+    
+    private void handleFileDownload() {
+        System.out.println("DEBUG: File Download selected");
+        
+        // Create dialog to get remote file path
+        Dialog<String> remotePathDialog = new Dialog<>();
+        remotePathDialog.setTitle("Download File");
+        remotePathDialog.setHeaderText("Enter the remote file path to download");
+        
+        ButtonType downloadButtonType = new ButtonType("Download", ButtonData.OK_DONE);
+        remotePathDialog.getDialogPane().getButtonTypes().addAll(downloadButtonType, ButtonType.CANCEL);
+        
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+        
+        TextField remotePathField = new TextField();
+        remotePathField.setPromptText("e.g., myfile.txt or path/to/file.txt");
+        
+        grid.add(new Label("Remote File Path:"), 0, 0);
+        grid.add(remotePathField, 1, 0);
+        
+        remotePathDialog.getDialogPane().setContent(grid);
+        remotePathDialog.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+        remotePathDialog.initOwner(primaryStage);
+        
+        Platform.runLater(remotePathField::requestFocus);
+        
+        remotePathDialog.setResultConverter(dialogButton -> {
+            if (dialogButton == downloadButtonType) {
+                return remotePathField.getText().trim();
+            }
+            return null;
+        });
+        
+        Optional<String> result = remotePathDialog.showAndWait();
+        result.ifPresent(remotePath -> {
+            if (remotePath.isEmpty()) {
+                showError("Please enter a remote file path.");
+                return;
+            }
+            
+            // Create file chooser for local save location
+            javafx.stage.FileChooser fileChooser = new javafx.stage.FileChooser();
+            fileChooser.setTitle("Save File As");
+            fileChooser.setInitialFileName(new java.io.File(remotePath).getName());
+            
+            java.io.File saveFile = fileChooser.showSaveDialog(primaryStage);
+            if (saveFile == null) {
+                return; // User cancelled
+            }
+            
+            // Show progress dialog
+            Dialog<Void> progressDialog = createProgressDialog("Downloading File", new java.io.File(remotePath).getName());
+            progressDialog.show();
+            
+            // Run download in background thread
+            new Thread(() -> {
+                try {
+                    client.getConnection().downloadFile(remotePath, saveFile.getAbsolutePath());
+                    
+                    // Show success message on FX thread
+                    Platform.runLater(() -> {
+                        progressDialog.close();
+                        
+                        javafx.scene.control.Alert successAlert = new javafx.scene.control.Alert(
+                            javafx.scene.control.Alert.AlertType.INFORMATION);
+                        successAlert.setTitle("Download Complete");
+                        successAlert.setHeaderText("File Downloaded Successfully");
+                        successAlert.setContentText("File has been downloaded successfully!\n\n" +
+                                                   "Remote path: " + remotePath + "\n" +
+                                                   "Local path: " + saveFile.getAbsolutePath() + "\n" +
+                                                   "File size: " + formatFileSize(saveFile.length()));
+                        
+                        successAlert.initOwner(primaryStage);
+                        successAlert.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+                        successAlert.showAndWait();
+                    });
+                    
+                } catch (Exception e) {
+                    // Show error message on FX thread
+                    Platform.runLater(() -> {
+                        progressDialog.close();
+                        showError("Download failed: " + e.getMessage());
+                    });
+                }
+            }).start();
+        });
+    }
+    
+    private Dialog<Void> createProgressDialog(String title, String filename) {
+        Dialog<Void> progressDialog = new Dialog<>();
+        progressDialog.setTitle(title);
+        progressDialog.setHeaderText("Transferring: " + filename);
+        
+        // Remove default buttons
+        progressDialog.getDialogPane().getButtonTypes().clear();
+        
+        VBox content = new VBox(15);
+        content.setPadding(new Insets(20));
+        
+        javafx.scene.control.ProgressBar progressBar = new javafx.scene.control.ProgressBar();
+        progressBar.setPrefWidth(300);
+        progressBar.setProgress(0.0);
+        
+        Label statusLabel = new Label("Preparing transfer...");
+        statusLabel.setStyle("-fx-font-size: 12px;");
+        
+        content.getChildren().addAll(progressBar, statusLabel);
+        
+        progressDialog.getDialogPane().setContent(content);
+        progressDialog.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+        progressDialog.initOwner(primaryStage);
+        progressDialog.setResizable(false);
+        progressDialog.getDialogPane().setPrefWidth(400);
+        progressDialog.getDialogPane().setPrefHeight(150);
+        
+        // Store references for progress updates
+        this.activeProgressBar = progressBar;
+        this.activeStatusLabel = statusLabel;
+        
+        // Clear references when dialog is closed
+        progressDialog.setOnCloseRequest(event -> {
+            this.activeProgressBar = null;
+            this.activeStatusLabel = null;
+        });
+        
+        return progressDialog;
+    }
+    
+    private String formatFileSize(long bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return String.format("%.1f KB", bytes / 1024.0);
+        if (bytes < 1024 * 1024 * 1024) return String.format("%.1f MB", bytes / (1024.0 * 1024.0));
+        return String.format("%.1f GB", bytes / (1024.0 * 1024.0 * 1024.0));
     }
     
     private void handleDisconnect() {
@@ -646,11 +931,14 @@ public class JavaFXClientUI implements ClientUI {
         managementDialog.setTitle("Manage SSH Users");
         managementDialog.setHeaderText("Choose an action to manage SSH users");
         
-        ButtonType createButtonType = new ButtonType("Create New User", ButtonData.OK_DONE);
+        ButtonType createButtonType = new ButtonType("Create New User", ButtonData.LEFT);
         ButtonType deleteButtonType = new ButtonType("Delete User", ButtonData.OTHER);
         ButtonType viewButtonType = new ButtonType("View Users", ButtonData.OTHER);
         ButtonType cancelButtonType = new ButtonType("Abbrechen", ButtonData.CANCEL_CLOSE);
-        managementDialog.getDialogPane().getButtonTypes().setAll(
+        
+        // Clear existing buttons and add them in the desired order
+        managementDialog.getDialogPane().getButtonTypes().clear();
+        managementDialog.getDialogPane().getButtonTypes().addAll(
             createButtonType, deleteButtonType, viewButtonType, cancelButtonType
         );
         

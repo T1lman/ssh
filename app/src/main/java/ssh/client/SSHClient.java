@@ -312,6 +312,13 @@ public class SSHClient {
         }
     }
 
+    /**
+     * Get the client connection for direct access (used by GUI).
+     */
+    public ClientConnection getConnection() {
+        return connection;
+    }
+
     public void sendShellCommand(String command) {
         if (connection != null && connection.isActive()) {
             try {
