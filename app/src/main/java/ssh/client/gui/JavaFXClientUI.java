@@ -200,9 +200,9 @@ public class JavaFXClientUI implements ClientUI {
         javafx.scene.layout.HBox buttonBar = new javafx.scene.layout.HBox(10);
         buttonBar.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
         
-        javafx.scene.control.Button createUserButton = new javafx.scene.control.Button("Create New Verified User");
+        javafx.scene.control.Button createUserButton = new javafx.scene.control.Button("Manage SSH Users");
         createUserButton.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5px;");
-        createUserButton.setOnAction(e -> handleCreateNewUser());
+        createUserButton.setOnAction(e -> handleManageSSHUsers());
         
         javafx.scene.control.Button fileTransferButton = new javafx.scene.control.Button("File Transfer");
         fileTransferButton.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5px;");
@@ -638,8 +638,58 @@ public class JavaFXClientUI implements ClientUI {
         }
     }
 
+    private void handleManageSSHUsers() {
+        System.out.println("DEBUG: Manage SSH Users button clicked");
+        
+        // Create the main management dialog
+        Dialog<Void> managementDialog = new Dialog<>();
+        managementDialog.setTitle("Manage SSH Users");
+        managementDialog.setHeaderText("Choose an action to manage SSH users");
+        
+        ButtonType createButtonType = new ButtonType("Create New User", ButtonData.OK_DONE);
+        ButtonType deleteButtonType = new ButtonType("Delete User", ButtonData.OTHER);
+        ButtonType viewButtonType = new ButtonType("View Users", ButtonData.OTHER);
+        ButtonType cancelButtonType = new ButtonType("Abbrechen", ButtonData.CANCEL_CLOSE);
+        managementDialog.getDialogPane().getButtonTypes().setAll(
+            createButtonType, deleteButtonType, viewButtonType, cancelButtonType
+        );
+        
+        VBox content = new VBox(15);
+        content.setPadding(new Insets(20));
+        
+        Label infoLabel = new Label("Select an action to manage SSH users on both client and server:");
+        infoLabel.setWrapText(true);
+        infoLabel.setStyle("-fx-font-size: 12px;");
+        
+        content.getChildren().add(infoLabel);
+        
+        managementDialog.getDialogPane().setContent(content);
+        managementDialog.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+        if (primaryStage != null && primaryStage.getScene() != null) {
+            managementDialog.initOwner(primaryStage);
+        }
+        
+        managementDialog.setResultConverter(dialogButton -> {
+            if (dialogButton == createButtonType) {
+                handleCreateNewUser();
+                return null;
+            } else if (dialogButton == deleteButtonType) {
+                handleDeleteUser();
+                return null;
+            } else if (dialogButton == viewButtonType) {
+                handleViewUsers();
+                return null;
+            } else if (dialogButton == cancelButtonType) {
+                return null;
+            }
+            return null;
+        });
+        
+        managementDialog.showAndWait();
+    }
+    
     private void handleCreateNewUser() {
-        System.out.println("DEBUG: Create New Verified User button clicked");
+        System.out.println("DEBUG: Create New User selected");
         
         // Create a dialog to get user information
         Dialog<java.util.Map<String, String>> userDialog = new Dialog<>();
@@ -720,6 +770,12 @@ public class JavaFXClientUI implements ClientUI {
             progressAlert.setHeaderText("Creating new verified user: " + username);
             progressAlert.setContentText("Please wait while the user is being created...");
             progressAlert.initOwner(primaryStage);
+            progressAlert.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+            
+            // Set dialog size
+            progressAlert.setResizable(false);
+            progressAlert.getDialogPane().setPrefWidth(400);
+            progressAlert.getDialogPane().setPrefHeight(150);
             
             // Run the user creation in a background thread
             new Thread(() -> {
@@ -729,6 +785,8 @@ public class JavaFXClientUI implements ClientUI {
                     // Show success message on FX thread
                     Platform.runLater(() -> {
                         progressAlert.close();
+                        
+                        // Create a properly formatted success dialog
                         javafx.scene.control.Alert successAlert = new javafx.scene.control.Alert(
                             javafx.scene.control.Alert.AlertType.INFORMATION);
                         successAlert.setTitle("User Created Successfully");
@@ -740,7 +798,17 @@ public class JavaFXClientUI implements ClientUI {
                                                    "• Public key authentication enabled\n\n" +
                                                    "The server's user database has been automatically reloaded.\n" +
                                                    "You can now use the new user immediately without restarting the server.");
+                        
+                        // Set dialog properties
                         successAlert.initOwner(primaryStage);
+                        successAlert.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+                        
+                        // Set dialog size
+                        successAlert.setResizable(true);
+                        successAlert.getDialogPane().setPrefWidth(500);
+                        successAlert.getDialogPane().setPrefHeight(300);
+                        
+                        // Show the dialog
                         successAlert.showAndWait();
                     });
                     
@@ -757,6 +825,177 @@ public class JavaFXClientUI implements ClientUI {
         });
     }
     
+    private void handleDeleteUser() {
+        System.out.println("DEBUG: Delete User selected");
+        
+        try {
+            // Get available users
+            CredentialsManager credentialsManager = new CredentialsManager("config/credentials.properties");
+            String[] availableUsers = credentialsManager.getAvailableUsers();
+            
+            if (availableUsers.length == 0) {
+                showError("No users found to delete.");
+                return;
+            }
+            
+            // Create delete user dialog
+            Dialog<String> deleteDialog = new Dialog<>();
+            deleteDialog.setTitle("Delete SSH User");
+            deleteDialog.setHeaderText("Select a user to delete");
+            
+            ButtonType deleteButtonType = new ButtonType("Delete User", ButtonData.OK_DONE);
+            deleteDialog.getDialogPane().getButtonTypes().addAll(deleteButtonType, ButtonType.CANCEL);
+            
+            VBox content = new VBox(10);
+            content.setPadding(new Insets(20));
+            
+            Label infoLabel = new Label("Select a user to delete from both client and server:");
+            infoLabel.setWrapText(true);
+            infoLabel.setStyle("-fx-font-size: 12px;");
+            
+            ComboBox<String> userComboBox = new ComboBox<>();
+            userComboBox.getItems().addAll(availableUsers);
+            userComboBox.setPromptText("Select a user...");
+            
+            content.getChildren().addAll(infoLabel, userComboBox);
+            
+            deleteDialog.getDialogPane().setContent(content);
+            deleteDialog.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+            if (primaryStage != null && primaryStage.getScene() != null) {
+                deleteDialog.initOwner(primaryStage);
+            }
+            
+            Platform.runLater(userComboBox::requestFocus);
+            
+            deleteDialog.setResultConverter(dialogButton -> {
+                if (dialogButton == deleteButtonType) {
+                    return userComboBox.getValue();
+                }
+                return null;
+            });
+            
+            Optional<String> result = deleteDialog.showAndWait();
+            result.ifPresent(username -> {
+                if (username == null || username.trim().isEmpty()) {
+                    showError("Please select a user to delete.");
+                    return;
+                }
+                
+                // Show confirmation dialog
+                javafx.scene.control.Alert confirmDialog = new javafx.scene.control.Alert(
+                    javafx.scene.control.Alert.AlertType.CONFIRMATION);
+                confirmDialog.setTitle("Confirm Deletion");
+                confirmDialog.setHeaderText("Delete User: " + username);
+                confirmDialog.setContentText("Are you sure you want to delete user '" + username + "'?\n\n" +
+                                           "This will:\n" +
+                                           "• Remove the user from the server database\n" +
+                                           "• Remove the user from client credentials\n" +
+                                           "• Delete the user's SSH keys\n" +
+                                           "• Remove authorized keys from the server\n\n" +
+                                           "This action cannot be undone!");
+                confirmDialog.initOwner(primaryStage);
+                confirmDialog.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+                
+                Optional<javafx.scene.control.ButtonType> confirmResult = confirmDialog.showAndWait();
+                if (confirmResult.isPresent() && confirmResult.get() == javafx.scene.control.ButtonType.OK) {
+                    // Show progress dialog
+                    javafx.scene.control.Alert progressAlert = new javafx.scene.control.Alert(
+                        javafx.scene.control.Alert.AlertType.INFORMATION);
+                    progressAlert.setTitle("Deleting User");
+                    progressAlert.setHeaderText("Deleting user: " + username);
+                    progressAlert.setContentText("Please wait while the user is being deleted...");
+                    progressAlert.initOwner(primaryStage);
+                    progressAlert.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+                    progressAlert.setResizable(false);
+                    progressAlert.getDialogPane().setPrefWidth(400);
+                    progressAlert.getDialogPane().setPrefHeight(150);
+                    
+                    // Run the user deletion in a background thread
+                    new Thread(() -> {
+                        try {
+                            ssh.utils.DeleteVerifiedUser.deleteUser(username, client);
+                            
+                            // Show success message on FX thread
+                            Platform.runLater(() -> {
+                                progressAlert.close();
+                                
+                                javafx.scene.control.Alert successAlert = new javafx.scene.control.Alert(
+                                    javafx.scene.control.Alert.AlertType.INFORMATION);
+                                successAlert.setTitle("User Deleted Successfully");
+                                successAlert.setHeaderText("User Deleted");
+                                successAlert.setContentText("User '" + username + "' has been deleted successfully!\n\n" +
+                                                           "The following actions were completed:\n" +
+                                                           "• User removed from server database\n" +
+                                                           "• User removed from client credentials\n" +
+                                                           "• SSH keys deleted\n" +
+                                                           "• Authorized keys removed from server\n\n" +
+                                                           "The server's user database has been automatically reloaded.");
+                                
+                                successAlert.initOwner(primaryStage);
+                                successAlert.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+                                successAlert.setResizable(true);
+                                successAlert.getDialogPane().setPrefWidth(500);
+                                successAlert.getDialogPane().setPrefHeight(300);
+                                
+                                successAlert.showAndWait();
+                            });
+                            
+                        } catch (Exception e) {
+                            // Show error message on FX thread
+                            Platform.runLater(() -> {
+                                progressAlert.close();
+                                showError("Failed to delete user: " + e.getMessage());
+                            });
+                        }
+                    }).start();
+                    
+                    progressAlert.showAndWait();
+                }
+            });
+            
+        } catch (Exception e) {
+            showError("Failed to load users: " + e.getMessage());
+        }
+    }
+    
+    private void handleViewUsers() {
+        System.out.println("DEBUG: View Users selected");
+        
+        try {
+            // Get available users
+            CredentialsManager credentialsManager = new CredentialsManager("config/credentials.properties");
+            String[] availableUsers = credentialsManager.getAvailableUsers();
+            
+            // Create view users dialog
+            javafx.scene.control.Alert viewDialog = new javafx.scene.control.Alert(
+                javafx.scene.control.Alert.AlertType.INFORMATION);
+            viewDialog.setTitle("SSH Users");
+            viewDialog.setHeaderText("Current SSH Users");
+            
+            if (availableUsers.length == 0) {
+                viewDialog.setContentText("No users found.");
+            } else {
+                StringBuilder content = new StringBuilder("The following users are configured:\n\n");
+                for (String user : availableUsers) {
+                    content.append("• ").append(user).append("\n");
+                }
+                content.append("\nTotal users: ").append(availableUsers.length);
+                viewDialog.setContentText(content.toString());
+            }
+            
+            viewDialog.initOwner(primaryStage);
+            viewDialog.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+            viewDialog.setResizable(true);
+            viewDialog.getDialogPane().setPrefWidth(400);
+            viewDialog.getDialogPane().setPrefHeight(300);
+            
+            viewDialog.showAndWait();
+            
+        } catch (Exception e) {
+            showError("Failed to load users: " + e.getMessage());
+        }
+    }
+    
     private void showError(String message) {
         javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
             javafx.scene.control.Alert.AlertType.ERROR);
@@ -764,6 +1003,13 @@ public class JavaFXClientUI implements ClientUI {
         alert.setHeaderText("Error");
         alert.setContentText(message);
         alert.initOwner(primaryStage);
+        alert.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+        
+        // Set dialog size
+        alert.setResizable(true);
+        alert.getDialogPane().setPrefWidth(450);
+        alert.getDialogPane().setPrefHeight(200);
+        
         alert.showAndWait();
     }
 } 

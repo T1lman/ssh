@@ -228,4 +228,25 @@ public class CredentialsManager {
             Logger.info("Credentials saved to: " + credentialsFile.getAbsolutePath());
         }
     }
+
+    /**
+     * Remove a user from the credentials file.
+     */
+    public void removeUser(String username) {
+        // Find the user key that corresponds to this username
+        String userKey = findUserKeyByUsername(username);
+        if (userKey == null) {
+            Logger.warn("User not found in credentials: " + username);
+            return;
+        }
+        
+        // Remove all properties for this user
+        credentials.remove(userKey + ".username");
+        credentials.remove(userKey + ".password");
+        credentials.remove(userKey + ".auth.type");
+        credentials.remove(userKey + ".privateKey");
+        credentials.remove(userKey + ".publicKey");
+        
+        Logger.info("Removed user from credentials: " + username);
+    }
 } 
