@@ -13,6 +13,7 @@ public class KeyExchangeMessage extends Message {
     private String clientId;
     private String serverId;
     private String signature;
+    private String sessionId;
 
     public KeyExchangeMessage() {
         super(MessageType.KEY_EXCHANGE_INIT);
@@ -37,6 +38,9 @@ public class KeyExchangeMessage extends Message {
         if (signature != null) {
             sb.append("signature:").append(signature).append(";");
         }
+        if (sessionId != null) {
+            sb.append("sessionId:").append(sessionId).append(";");
+        }
         return sb.toString().getBytes();
     }
 
@@ -54,6 +58,8 @@ public class KeyExchangeMessage extends Message {
                 this.serverId = part.substring(9);
             } else if (part.startsWith("signature:")) {
                 this.signature = part.substring(10);
+            } else if (part.startsWith("sessionId:")) {
+                this.sessionId = part.substring(10);
             }
         }
     }
@@ -105,5 +111,13 @@ public class KeyExchangeMessage extends Message {
 
     public byte[] getSignatureBytes() {
         return Base64.getDecoder().decode(signature);
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 } 

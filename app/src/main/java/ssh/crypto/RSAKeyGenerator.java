@@ -157,4 +157,18 @@ public class RSAKeyGenerator {
         sig.update(data);
         return sig.verify(signature);
     }
+
+    /**
+     * Get signature as Base64 string.
+     */
+    public static String getSignatureString(byte[] signature) {
+        return Base64.getEncoder().encodeToString(signature);
+    }
+
+    /**
+     * Get signature from Base64 string.
+     */
+    public static byte[] getSignatureBytes(String signatureString) {
+        return Base64.getDecoder().decode(signatureString);
+    }
 } 

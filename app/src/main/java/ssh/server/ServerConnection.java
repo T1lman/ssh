@@ -19,6 +19,7 @@ import java.net.Socket;
 import java.security.KeyPair;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Handles a single client connection on the server side.
@@ -35,6 +36,7 @@ public class ServerConnection implements Runnable {
     private DiffieHellmanKeyExchange keyExchange;
     private SymmetricEncryption encryption;
     private ShellExecutor shellExecutor;
+    private String sessionId;
 
     public ServerConnection(Socket clientSocket, AuthenticationManager authManager, 
                           KeyPair serverKeyPair, ServerUI ui, ServerConfig config) {
@@ -46,10 +48,10 @@ public class ServerConnection implements Runnable {
         this.authenticated = false;
         this.authenticatedUser = null;
         this.shellExecutor = new ShellExecutor();
+        this.sessionId = UUID.randomUUID().toString();
         
         // Set socket timeouts to prevent hanging
         try {
-            clientSocket.setSoTimeout(30000); // 30 second read timeout
             clientSocket.setTcpNoDelay(true); // Disable Nagle's algorithm for better performance
         } catch (Exception e) {
             ui.displayError("Failed to set socket timeout: " + e.getMessage());
@@ -117,6 +119,7 @@ public class ServerConnection implements Runnable {
         KeyExchangeMessage replyMessage = new KeyExchangeMessage(MessageType.KEY_EXCHANGE_REPLY);
         replyMessage.setDhPublicKey(keyExchange.getPublicKeyBytes());
         replyMessage.setServerId("SSH-2.0-JavaSSH-Server");
+        replyMessage.setSessionId(this.sessionId);
 
         // Sign the DH public key with server's private key
         byte[] signature = RSAKeyGenerator.sign(
@@ -158,7 +161,7 @@ public class ServerConnection implements Runnable {
             credentials.put("publicKey", authMessage.getPublicKey());
             credentials.put("signature", authMessage.getSignature());
             // For public key auth, we need session data for signature verification
-            credentials.put("sessionData", "session_data_placeholder"); // In real implementation, this would be actual session data
+            credentials.put("sessionData", this.sessionId);
         } else if ("password".equals(authType)) {
             credentials.put("password", authMessage.getPassword());
         }
@@ -354,85 +357,73 @@ public class ServerConnection implements Runnable {
         Logger.info("File download request from " + authenticatedUser + " for: " + filename);
         ui.displayMessage("File download request for: " + filename);
 
-        // Determine file path
-        java.io.File fileToSend;
-        if (targetPath != null && !targetPath.trim().isEmpty()) {
-            fileToSend = new java.io.File("data/server/files/" + authenticatedUser, targetPath);
-        } else {
-            fileToSend = new java.io.File("data/server/files/" + authenticatedUser, filename);
-        }
-
-        // Check if file exists and is readable
-        if (!fileToSend.exists()) {
-            Logger.error("File not found: " + fileToSend.getAbsolutePath());
-            throw new IOException("File not found: " + filename);
-        }
-        if (!fileToSend.canRead()) {
-            Logger.error("Cannot read file: " + fileToSend.getAbsolutePath());
-            throw new IOException("Cannot read file: " + filename);
-        }
-
-        long fileSize = fileToSend.length();
-        Logger.info("Sending file: " + filename + " (" + fileSize + " bytes)");
-        ui.showFileTransferProgress(filename, 0, fileSize);
-
-        // Send file info in first message
-        ssh.protocol.messages.FileTransferMessage fileInfo = new ssh.protocol.messages.FileTransferMessage(MessageType.FILE_DATA);
-        fileInfo.setFilename(filename);
-        fileInfo.setFileSize(fileSize);
-        fileInfo.setSequenceNumber(1);
-        fileInfo.setLast(false); // Not the last message yet
-        
-        protocolHandler.sendMessage(fileInfo);
-        Logger.info("Sent file info for: " + filename);
-
-        // Send file data in chunks
-        final int CHUNK_SIZE = 8192; // 8KB chunks
-        byte[] buffer = new byte[CHUNK_SIZE];
-        int sequenceNumber = 2; // Start from 2 since 1 was file info
-        long bytesSent = 0;
-
-        try (java.io.FileInputStream fis = new java.io.FileInputStream(fileToSend)) {
-            int bytesRead;
-            while ((bytesRead = fis.read(buffer)) != -1) {
-                // Create file data message
-                ssh.protocol.messages.FileTransferMessage dataMessage = new ssh.protocol.messages.FileTransferMessage(MessageType.FILE_DATA);
-                dataMessage.setFilename(filename);
-                dataMessage.setSequenceNumber(sequenceNumber);
-                dataMessage.setLast(bytesRead < CHUNK_SIZE); // Last chunk if we read less than buffer size
-                
-                // Set the actual data (only the bytes we read)
-                byte[] actualData = new byte[bytesRead];
-                System.arraycopy(buffer, 0, actualData, 0, bytesRead);
-                dataMessage.setData(actualData);
-
-                // Send the chunk
-                protocolHandler.sendMessage(dataMessage);
-                
-                bytesSent += bytesRead;
-                sequenceNumber++;
-                
-                // Update progress
-                int percentage = (int) ((bytesSent * 100) / fileSize);
-                ui.showFileTransferProgress(filename, bytesSent, fileSize);
-                
-                Logger.info("Sent chunk " + (sequenceNumber - 1) + " to " + authenticatedUser + 
-                          ", bytes: " + bytesSent + "/" + fileSize);
-                
-                // Small delay to prevent overwhelming the network
-                Thread.sleep(10);
+        try {
+            // Determine file path
+            java.io.File fileToSend;
+            if (targetPath != null && !targetPath.trim().isEmpty()) {
+                fileToSend = new java.io.File("data/server/files/" + authenticatedUser, targetPath);
+            } else {
+                fileToSend = new java.io.File("data/server/files/" + authenticatedUser, filename);
             }
-        }
 
-        // Wait for acknowledgment
-        Message ackResponse = protocolHandler.receiveMessage();
-        if (ackResponse.getType() != MessageType.FILE_ACK) {
-            throw new IOException("Expected FILE_ACK, got " + ackResponse.getType());
-        }
+            // Check if file exists and is readable
+            if (!fileToSend.exists() || !fileToSend.canRead()) {
+                throw new IOException("File not found or is not readable: " + filename);
+            }
 
-        ssh.protocol.messages.FileTransferMessage ack = (ssh.protocol.messages.FileTransferMessage) ackResponse;
-        Logger.info("File download completed for " + authenticatedUser + ": " + filename + " (" + bytesSent + " bytes)");
-        ui.showFileTransferProgress(filename, fileSize, fileSize);
+            long fileSize = fileToSend.length();
+            Logger.info("Sending file: " + filename + " (" + fileSize + " bytes)");
+            ui.showFileTransferProgress(filename, 0, fileSize);
+
+            // Send file data in chunks
+            final int CHUNK_SIZE = 8192; // 8KB chunks
+            byte[] buffer = new byte[CHUNK_SIZE];
+            long bytesSent = 0;
+
+            try (java.io.FileInputStream fis = new java.io.FileInputStream(fileToSend)) {
+                int bytesRead;
+                boolean firstChunk = true;
+                while ((bytesRead = fis.read(buffer)) != -1) {
+                    // Create file data message
+                    ssh.protocol.messages.FileTransferMessage dataMessage = new ssh.protocol.messages.FileTransferMessage(MessageType.FILE_DATA);
+                    
+                    if (firstChunk) {
+                        dataMessage.setFilename(filename);
+                        dataMessage.setFileSize(fileSize);
+                        firstChunk = false;
+                    }
+                    
+                    // Set the actual data (only the bytes we read)
+                    byte[] actualData = new byte[bytesRead];
+                    System.arraycopy(buffer, 0, actualData, 0, bytesRead);
+                    dataMessage.setData(actualData);
+
+                    // Send the chunk
+                    protocolHandler.sendMessage(dataMessage);
+                    
+                    bytesSent += bytesRead;
+                    
+                    // Update progress
+                    int percentage = (int) ((bytesSent * 100) / fileSize);
+                    ui.showFileTransferProgress(filename, bytesSent, fileSize);
+                }
+            }
+
+            // Wait for acknowledgment from client
+            Message ackResponse = protocolHandler.receiveMessage();
+            if (ackResponse.getType() != MessageType.FILE_ACK) {
+                Logger.warn("Expected FILE_ACK after download, but got " + ackResponse.getType());
+            }
+
+            Logger.info("File download completed for " + authenticatedUser + ": " + filename);
+
+        } catch (IOException e) {
+            Logger.error("File download failed for user " + authenticatedUser + ": " + e.getMessage());
+            // Send a clear error message to the client
+            ssh.protocol.messages.ErrorMessage errorMsg = new ssh.protocol.messages.ErrorMessage();
+            errorMsg.setErrorMessage(e.getMessage());
+            protocolHandler.sendMessage(errorMsg);
+        }
     }
 
     /**

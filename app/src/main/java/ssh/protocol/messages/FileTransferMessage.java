@@ -29,6 +29,8 @@ public class FileTransferMessage extends Message {
     @Override
     public byte[] serialize() {
         StringBuilder sb = new StringBuilder();
+        MessageType type = getType();
+
         if (filename != null) {
             sb.append("filename:").append(filename).append(";");
         }
@@ -38,13 +40,13 @@ public class FileTransferMessage extends Message {
         if (targetPath != null) {
             sb.append("targetPath:").append(targetPath).append(";");
         }
-        if (sequenceNumber > 0) {
+        if (type == MessageType.FILE_DATA || type == MessageType.FILE_ACK) {
             sb.append("sequenceNumber:").append(sequenceNumber).append(";");
         }
         if (data != null) {
             sb.append("data:").append(data).append(";");
         }
-        if (getType() == MessageType.FILE_DATA) {
+        if (type == MessageType.FILE_DATA) {
             sb.append("isLast:").append(isLast).append(";");
         }
         if (status != null) {
@@ -57,28 +59,54 @@ public class FileTransferMessage extends Message {
     }
 
     @Override
-    public void deserialize(byte[] data) {
-        String dataStr = new String(data);
-        String[] parts = dataStr.split(";");
-        
-        for (String part : parts) {
-            if (part.startsWith("filename:")) {
-                this.filename = part.substring(9);
-            } else if (part.startsWith("fileSize:")) {
-                this.fileSize = Long.parseLong(part.substring(9));
-            } else if (part.startsWith("targetPath:")) {
-                this.targetPath = part.substring(11);
-            } else if (part.startsWith("sequenceNumber:")) {
-                this.sequenceNumber = Integer.parseInt(part.substring(14));
-            } else if (part.startsWith("data:")) {
-                this.data = part.substring(5);
-            } else if (part.startsWith("isLast:")) {
-                this.isLast = Boolean.parseBoolean(part.substring(7));
-            } else if (part.startsWith("status:")) {
-                this.status = part.substring(7);
-            } else if (part.startsWith("message:")) {
-                this.message = part.substring(8);
+    public void deserialize(byte[] dataBytes) {
+        String dataStr = new String(dataBytes);
+        int lastIndex = 0;
+        while (lastIndex < dataStr.length()) {
+            int keyEnd = dataStr.indexOf(':', lastIndex);
+            if (keyEnd == -1) {
+                break; // No more keys
             }
+
+            int valueEnd = dataStr.indexOf(';', keyEnd);
+            if (valueEnd == -1) {
+                valueEnd = dataStr.length(); // Last value
+            }
+
+            String key = dataStr.substring(lastIndex, keyEnd);
+            String value = dataStr.substring(keyEnd + 1, valueEnd);
+
+            switch (key) {
+                case "filename":
+                    this.filename = value;
+                    break;
+                case "fileSize":
+                    this.fileSize = Long.parseLong(value);
+                    break;
+                case "targetPath":
+                    this.targetPath = value;
+                    break;
+                case "sequenceNumber":
+                    this.sequenceNumber = Integer.parseInt(value);
+                    break;
+                case "data":
+                    this.data = value;
+                    break;
+                case "isLast":
+                    this.isLast = Boolean.parseBoolean(value);
+                    break;
+                case "status":
+                    this.status = value;
+                    break;
+                case "message":
+                    this.message = value;
+                    break;
+                default:
+                    // Unknown key, just ignore it
+                    break;
+            }
+
+            lastIndex = valueEnd + 1;
         }
     }
 
