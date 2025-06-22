@@ -1,248 +1,550 @@
-[2025-06-22 18:59:06] [INFO] [main] Logger initialized - logging to: logs/server.log
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] Waiting to receive message...
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] Read 4 bytes for message length
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] Message length: 787
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] Read 787 bytes for message body (expected 787)
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] Message body (first 20 bytes): 01 64 68 50 75 62 6C 69 63 4B 65 79 3A 4D 49 49 43 4B 44 43 
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] Raw message type byte: 1
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] Parsed message type: KEY_EXCHANGE_INIT
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] fromPacket: restLength = 787
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] fromPacket: parsed message type = KEY_EXCHANGE_INIT
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 782 (restLength=787 - 5)
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] fromPacket: checksum = 1002214975
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] Received message: KEY_EXCHANGE_INIT
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] Sending message: KEY_EXCHANGE_REPLY, length: 1200
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] Message sent successfully
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] Encryption enabled - subsequent messages will be encrypted/decrypted
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] Waiting to receive message...
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] Reading encrypted message...
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] Encrypted message length: 88
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] Read 88 bytes for encrypted message body
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 88
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 60
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] fromPacket: restLength = 56
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] fromPacket: parsed message type = AUTH_REQUEST
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 51 (restLength=56 - 5)
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] fromPacket: checksum = 1743321437
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] Received encrypted message: AUTH_REQUEST
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] Authentication attempt for user: user1, type: password
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] User existence check for 'user1': true
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] User validation passed for: user1
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] Attempting password authentication for: user1
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] Verifying password for user: user1
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] PasswordAuth: Checking if user exists: user1
-[2025-06-22 18:59:15] [INFO] [pool-1-thread-1] PasswordAuth: User exists, verifying password for: user1
-[2025-06-22 18:59:16] [INFO] [pool-1-thread-1] UserStore: Password verification for user1 - Stored hash: 5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8, Input hash: 5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8, Matches: true
-[2025-06-22 18:59:16] [INFO] [pool-1-thread-1] PasswordAuth: Password verification result for user1: true
-[2025-06-22 18:59:16] [INFO] [pool-1-thread-1] Password authentication result for user1: true
-[2025-06-22 18:59:16] [INFO] [pool-1-thread-1] Sending message: AUTH_SUCCESS, length: 56
-[2025-06-22 18:59:16] [INFO] [pool-1-thread-1] Message encrypted, new length: 84
-[2025-06-22 18:59:16] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 88
-[2025-06-22 18:59:16] [INFO] [pool-1-thread-1] Message sent successfully
-[2025-06-22 18:59:16] [INFO] [pool-1-thread-1] Waiting to receive message...
-[2025-06-22 18:59:16] [INFO] [pool-1-thread-1] Reading encrypted message...
-[2025-06-22 18:59:16] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
-[2025-06-22 18:59:16] [INFO] [pool-1-thread-1] Encrypted message length: 42
-[2025-06-22 18:59:16] [INFO] [pool-1-thread-1] Read 42 bytes for encrypted message body
-[2025-06-22 18:59:16] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 42
-[2025-06-22 18:59:16] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 14
-[2025-06-22 18:59:16] [INFO] [pool-1-thread-1] fromPacket: restLength = 10
-[2025-06-22 18:59:16] [INFO] [pool-1-thread-1] fromPacket: parsed message type = SERVICE_REQUEST
-[2025-06-22 18:59:16] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 5 (restLength=10 - 5)
-[2025-06-22 18:59:16] [INFO] [pool-1-thread-1] fromPacket: checksum = 1167241981
-[2025-06-22 18:59:16] [INFO] [pool-1-thread-1] Received encrypted message: SERVICE_REQUEST
-[2025-06-22 18:59:16] [INFO] [pool-1-thread-1] Sending message: SERVICE_ACCEPT, length: 14
-[2025-06-22 18:59:16] [INFO] [pool-1-thread-1] Message encrypted, new length: 42
-[2025-06-22 18:59:16] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 46
-[2025-06-22 18:59:16] [INFO] [pool-1-thread-1] Message sent successfully
-[2025-06-22 18:59:16] [INFO] [pool-1-thread-1] Waiting to receive message...
-[2025-06-22 18:59:16] [INFO] [pool-1-thread-1] Reading encrypted message...
-[2025-06-22 19:01:03] [INFO] [pool-1-thread-1] Read -1 bytes for encrypted message length
-[2025-06-22 19:01:03] [ERROR] [pool-1-thread-1] Failed to read encrypted message length. Expected 4 bytes, got -1
-[2025-06-22 19:01:03] [INFO] [pool-1-thread-1] Protocol handler closed
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Waiting to receive message...
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Read 4 bytes for message length
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Message length: 787
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Read 787 bytes for message body (expected 787)
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Message body (first 20 bytes): 01 64 68 50 75 62 6C 69 63 4B 65 79 3A 4D 49 49 43 4B 54 43 
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Raw message type byte: 1
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Parsed message type: KEY_EXCHANGE_INIT
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] fromPacket: restLength = 787
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] fromPacket: parsed message type = KEY_EXCHANGE_INIT
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] fromPacket: payloadLength = 782 (restLength=787 - 5)
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] fromPacket: checksum = 424534207
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Received message: KEY_EXCHANGE_INIT
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Sending message: KEY_EXCHANGE_REPLY, length: 1200
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Message sent successfully
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Encryption enabled - subsequent messages will be encrypted/decrypted
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Waiting to receive message...
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Reading encrypted message...
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Read 4 bytes for encrypted message length
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Encrypted message length: 85
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Read 85 bytes for encrypted message body
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Decrypting encrypted message, length: 85
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Message decrypted successfully, new length: 57
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] fromPacket: restLength = 53
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] fromPacket: parsed message type = AUTH_REQUEST
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] fromPacket: payloadLength = 48 (restLength=53 - 5)
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] fromPacket: checksum = -1075446496
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Received encrypted message: AUTH_REQUEST
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Authentication attempt for user: admin, type: password
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] User existence check for 'admin': true
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] User validation passed for: admin
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Attempting password authentication for: admin
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Verifying password for user: admin
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] PasswordAuth: Checking if user exists: admin
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] PasswordAuth: User exists, verifying password for: admin
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] UserStore: Password verification for admin - Stored hash: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918, Input hash: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918, Matches: true
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] PasswordAuth: Password verification result for admin: true
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Password authentication result for admin: true
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Sending message: AUTH_SUCCESS, length: 56
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Message encrypted, new length: 84
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Added length prefix for encrypted message, total length: 88
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Message sent successfully
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Waiting to receive message...
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Reading encrypted message...
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Read 4 bytes for encrypted message length
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Encrypted message length: 42
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Read 42 bytes for encrypted message body
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Decrypting encrypted message, length: 42
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Message decrypted successfully, new length: 14
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] fromPacket: restLength = 10
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] fromPacket: parsed message type = SERVICE_REQUEST
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] fromPacket: payloadLength = 5 (restLength=10 - 5)
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] fromPacket: checksum = 1167241981
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Received encrypted message: SERVICE_REQUEST
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Sending message: SERVICE_ACCEPT, length: 14
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Message encrypted, new length: 42
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Added length prefix for encrypted message, total length: 46
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Message sent successfully
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Waiting to receive message...
-[2025-06-22 19:01:09] [INFO] [pool-1-thread-2] Reading encrypted message...
-[2025-06-22 19:01:25] [INFO] [pool-1-thread-2] Read 4 bytes for encrypted message length
-[2025-06-22 19:01:25] [INFO] [pool-1-thread-2] Encrypted message length: 73
-[2025-06-22 19:01:25] [INFO] [pool-1-thread-2] Read 73 bytes for encrypted message body
-[2025-06-22 19:01:25] [INFO] [pool-1-thread-2] Decrypting encrypted message, length: 73
-[2025-06-22 19:01:25] [INFO] [pool-1-thread-2] Message decrypted successfully, new length: 45
-[2025-06-22 19:01:25] [INFO] [pool-1-thread-2] fromPacket: restLength = 41
-[2025-06-22 19:01:25] [INFO] [pool-1-thread-2] fromPacket: parsed message type = FILE_DOWNLOAD_REQUEST
-[2025-06-22 19:01:25] [INFO] [pool-1-thread-2] fromPacket: payloadLength = 36 (restLength=41 - 5)
-[2025-06-22 19:01:25] [INFO] [pool-1-thread-2] fromPacket: checksum = 1862792598
-[2025-06-22 19:01:25] [INFO] [pool-1-thread-2] Received encrypted message: FILE_DOWNLOAD_REQUEST
-[2025-06-22 19:01:25] [INFO] [pool-1-thread-2] File download request from admin for: lel.txt
-[2025-06-22 19:01:25] [INFO] [pool-1-thread-2] Sending file: lel.txt (43 bytes)
-[2025-06-22 19:01:25] [INFO] [pool-1-thread-2] Sending message: FILE_DATA, length: 134
-[2025-06-22 19:01:25] [INFO] [pool-1-thread-2] Message encrypted, new length: 162
-[2025-06-22 19:01:25] [INFO] [pool-1-thread-2] Added length prefix for encrypted message, total length: 166
-[2025-06-22 19:01:25] [INFO] [pool-1-thread-2] Message sent successfully
-[2025-06-22 19:01:25] [INFO] [pool-1-thread-2] Waiting to receive message...
-[2025-06-22 19:01:25] [INFO] [pool-1-thread-2] Reading encrypted message...
-[2025-06-22 19:04:50] [INFO] [pool-1-thread-2] Read -1 bytes for encrypted message length
-[2025-06-22 19:04:50] [ERROR] [pool-1-thread-2] Failed to read encrypted message length. Expected 4 bytes, got -1
-[2025-06-22 19:04:50] [ERROR] [pool-1-thread-2] File download failed for user admin: Failed to read encrypted message length
-[2025-06-22 19:04:50] [INFO] [pool-1-thread-2] Sending message: ERROR, length: 62
-[2025-06-22 19:04:50] [INFO] [pool-1-thread-2] Message encrypted, new length: 90
-[2025-06-22 19:04:50] [INFO] [pool-1-thread-2] Added length prefix for encrypted message, total length: 94
-[2025-06-22 19:04:50] [INFO] [pool-1-thread-2] Message sent successfully
-[2025-06-22 19:04:50] [INFO] [pool-1-thread-2] Waiting to receive message...
-[2025-06-22 19:04:50] [INFO] [pool-1-thread-2] Reading encrypted message...
-[2025-06-22 19:04:50] [INFO] [pool-1-thread-2] Read -1 bytes for encrypted message length
-[2025-06-22 19:04:50] [ERROR] [pool-1-thread-2] Failed to read encrypted message length. Expected 4 bytes, got -1
-[2025-06-22 19:04:50] [INFO] [pool-1-thread-2] Protocol handler closed
-[2025-06-22 19:04:50] [INFO] [Thread-0] Shutdown signal received
-[2025-06-22 19:05:25] [INFO] [main] Logger initialized - logging to: logs/server.log
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Waiting to receive message...
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Read 4 bytes for message length
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Message length: 787
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Read 787 bytes for message body (expected 787)
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Message body (first 20 bytes): 01 64 68 50 75 62 6C 69 63 4B 65 79 3A 4D 49 49 43 4B 44 43 
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Raw message type byte: 1
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Parsed message type: KEY_EXCHANGE_INIT
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] fromPacket: restLength = 787
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] fromPacket: parsed message type = KEY_EXCHANGE_INIT
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 782 (restLength=787 - 5)
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] fromPacket: checksum = -1539970467
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Received message: KEY_EXCHANGE_INIT
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Sending message: KEY_EXCHANGE_REPLY, length: 1200
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Message sent successfully
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Encryption enabled - subsequent messages will be encrypted/decrypted
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Waiting to receive message...
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Reading encrypted message...
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Encrypted message length: 85
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Read 85 bytes for encrypted message body
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 85
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 57
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] fromPacket: restLength = 53
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] fromPacket: parsed message type = AUTH_REQUEST
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 48 (restLength=53 - 5)
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] fromPacket: checksum = -1075446496
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Received encrypted message: AUTH_REQUEST
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Authentication attempt for user: admin, type: password
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] User existence check for 'admin': true
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] User validation passed for: admin
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Attempting password authentication for: admin
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Verifying password for user: admin
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] PasswordAuth: Checking if user exists: admin
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] PasswordAuth: User exists, verifying password for: admin
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] UserStore: Password verification for admin - Stored hash: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918, Input hash: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918, Matches: true
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] PasswordAuth: Password verification result for admin: true
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Password authentication result for admin: true
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Sending message: AUTH_SUCCESS, length: 56
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Message encrypted, new length: 84
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 88
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Message sent successfully
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Waiting to receive message...
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Reading encrypted message...
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Encrypted message length: 42
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Read 42 bytes for encrypted message body
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 42
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 14
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] fromPacket: restLength = 10
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] fromPacket: parsed message type = SERVICE_REQUEST
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 5 (restLength=10 - 5)
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] fromPacket: checksum = 1167241981
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Received encrypted message: SERVICE_REQUEST
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Sending message: SERVICE_ACCEPT, length: 14
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Message encrypted, new length: 42
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 46
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Message sent successfully
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Waiting to receive message...
-[2025-06-22 19:05:43] [INFO] [pool-1-thread-1] Reading encrypted message...
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] Encrypted message length: 73
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] Read 73 bytes for encrypted message body
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 73
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 45
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] fromPacket: restLength = 41
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] fromPacket: parsed message type = FILE_DOWNLOAD_REQUEST
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 36 (restLength=41 - 5)
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] fromPacket: checksum = 1862792598
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] Received encrypted message: FILE_DOWNLOAD_REQUEST
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] File download request from admin for: lel.txt
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] Sending file: lel.txt (43 bytes)
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] Sending message: FILE_DATA, length: 134
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] Message encrypted, new length: 162
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 166
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] Message sent successfully
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] Waiting to receive message...
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] Reading encrypted message...
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] Encrypted message length: 116
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] Read 116 bytes for encrypted message body
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 116
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 88
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] fromPacket: restLength = 84
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] fromPacket: parsed message type = FILE_ACK
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 79 (restLength=84 - 5)
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] fromPacket: checksum = 1609910521
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] Received encrypted message: FILE_ACK
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] File download completed for admin: lel.txt
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] Waiting to receive message...
-[2025-06-22 19:05:57] [INFO] [pool-1-thread-1] Reading encrypted message...
-[2025-06-22 19:33:12] [INFO] [pool-1-thread-1] Read -1 bytes for encrypted message length
-[2025-06-22 19:33:12] [ERROR] [pool-1-thread-1] Failed to read encrypted message length. Expected 4 bytes, got -1
-[2025-06-22 19:33:12] [INFO] [pool-1-thread-1] Protocol handler closed
-[2025-06-22 19:33:12] [INFO] [Thread-0] Shutdown signal received
+[2025-06-22 19:37:55] [INFO] [main] Logger initialized - logging to: logs/server.log
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Read 4 bytes for message length
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Message length: 787
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Read 787 bytes for message body (expected 787)
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Message body (first 20 bytes): 01 64 68 50 75 62 6C 69 63 4B 65 79 3A 4D 49 49 43 4B 54 43 
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Raw message type byte: 1
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Parsed message type: KEY_EXCHANGE_INIT
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] fromPacket: restLength = 787
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] fromPacket: parsed message type = KEY_EXCHANGE_INIT
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 782 (restLength=787 - 5)
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] fromPacket: checksum = -1470758157
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Received message: KEY_EXCHANGE_INIT
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Sending message: KEY_EXCHANGE_REPLY, length: 1200
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Message sent successfully
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Encryption enabled - subsequent messages will be encrypted/decrypted
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Encrypted message length: 85
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Read 85 bytes for encrypted message body
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 85
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 57
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] fromPacket: restLength = 53
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] fromPacket: parsed message type = AUTH_REQUEST
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 48 (restLength=53 - 5)
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] fromPacket: checksum = -1075446496
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Received encrypted message: AUTH_REQUEST
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Authentication attempt for user: admin, type: password
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] User existence check for 'admin': true
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] User validation passed for: admin
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Attempting password authentication for: admin
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Verifying password for user: admin
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] PasswordAuth: Checking if user exists: admin
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] PasswordAuth: User exists, verifying password for: admin
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] UserStore: Password verification for admin - Stored hash: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918, Input hash: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918, Matches: true
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] PasswordAuth: Password verification result for admin: true
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Password authentication result for admin: true
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Sending message: AUTH_SUCCESS, length: 56
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Message encrypted, new length: 84
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 88
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Message sent successfully
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Encrypted message length: 42
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Read 42 bytes for encrypted message body
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 42
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 14
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] fromPacket: restLength = 10
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] fromPacket: parsed message type = SERVICE_REQUEST
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 5 (restLength=10 - 5)
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] fromPacket: checksum = 1167241981
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Received encrypted message: SERVICE_REQUEST
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Sending message: SERVICE_ACCEPT, length: 14
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Message encrypted, new length: 42
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 46
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Message sent successfully
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:38:15] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:38:36] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:38:36] [INFO] [pool-1-thread-1] Encrypted message length: 86
+[2025-06-22 19:38:36] [INFO] [pool-1-thread-1] Read 86 bytes for encrypted message body
+[2025-06-22 19:38:36] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 86
+[2025-06-22 19:38:36] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 58
+[2025-06-22 19:38:36] [INFO] [pool-1-thread-1] fromPacket: restLength = 54
+[2025-06-22 19:38:36] [INFO] [pool-1-thread-1] fromPacket: parsed message type = SHELL_COMMAND
+[2025-06-22 19:38:36] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 49 (restLength=54 - 5)
+[2025-06-22 19:38:36] [INFO] [pool-1-thread-1] fromPacket: checksum = -829166184
+[2025-06-22 19:38:36] [INFO] [pool-1-thread-1] Received encrypted message: SHELL_COMMAND
+[2025-06-22 19:38:36] [INFO] [pool-1-thread-1] Sending message: SHELL_RESULT, length: 72
+[2025-06-22 19:38:36] [INFO] [pool-1-thread-1] Message encrypted, new length: 100
+[2025-06-22 19:38:36] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 104
+[2025-06-22 19:38:36] [INFO] [pool-1-thread-1] Message sent successfully
+[2025-06-22 19:38:36] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:38:36] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:38:47] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:38:47] [INFO] [pool-1-thread-1] Encrypted message length: 79
+[2025-06-22 19:38:47] [INFO] [pool-1-thread-1] Read 79 bytes for encrypted message body
+[2025-06-22 19:38:47] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 79
+[2025-06-22 19:38:47] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 51
+[2025-06-22 19:38:47] [INFO] [pool-1-thread-1] fromPacket: restLength = 47
+[2025-06-22 19:38:47] [INFO] [pool-1-thread-1] fromPacket: parsed message type = SHELL_COMMAND
+[2025-06-22 19:38:47] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 42 (restLength=47 - 5)
+[2025-06-22 19:38:47] [INFO] [pool-1-thread-1] fromPacket: checksum = 1807766422
+[2025-06-22 19:38:47] [INFO] [pool-1-thread-1] Received encrypted message: SHELL_COMMAND
+[2025-06-22 19:38:47] [INFO] [pool-1-thread-1] Sending message: SHELL_RESULT, length: 179
+[2025-06-22 19:38:47] [INFO] [pool-1-thread-1] Message encrypted, new length: 207
+[2025-06-22 19:38:47] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 211
+[2025-06-22 19:38:47] [INFO] [pool-1-thread-1] Message sent successfully
+[2025-06-22 19:38:47] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:38:47] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:38:56] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:38:56] [INFO] [pool-1-thread-1] Encrypted message length: 92
+[2025-06-22 19:38:56] [INFO] [pool-1-thread-1] Read 92 bytes for encrypted message body
+[2025-06-22 19:38:56] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 92
+[2025-06-22 19:38:56] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 64
+[2025-06-22 19:38:56] [INFO] [pool-1-thread-1] fromPacket: restLength = 60
+[2025-06-22 19:38:56] [INFO] [pool-1-thread-1] fromPacket: parsed message type = SHELL_COMMAND
+[2025-06-22 19:38:56] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 55 (restLength=60 - 5)
+[2025-06-22 19:38:56] [INFO] [pool-1-thread-1] fromPacket: checksum = -1268833807
+[2025-06-22 19:38:56] [INFO] [pool-1-thread-1] Received encrypted message: SHELL_COMMAND
+[2025-06-22 19:38:56] [INFO] [pool-1-thread-1] Sending message: SHELL_RESULT, length: 80
+[2025-06-22 19:38:56] [INFO] [pool-1-thread-1] Message encrypted, new length: 108
+[2025-06-22 19:38:56] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 112
+[2025-06-22 19:38:56] [INFO] [pool-1-thread-1] Message sent successfully
+[2025-06-22 19:38:56] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:38:56] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:38:58] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:38:58] [INFO] [pool-1-thread-1] Encrypted message length: 92
+[2025-06-22 19:38:58] [INFO] [pool-1-thread-1] Read 92 bytes for encrypted message body
+[2025-06-22 19:38:58] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 92
+[2025-06-22 19:38:58] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 64
+[2025-06-22 19:38:58] [INFO] [pool-1-thread-1] fromPacket: restLength = 60
+[2025-06-22 19:38:58] [INFO] [pool-1-thread-1] fromPacket: parsed message type = SHELL_COMMAND
+[2025-06-22 19:38:58] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 55 (restLength=60 - 5)
+[2025-06-22 19:38:58] [INFO] [pool-1-thread-1] fromPacket: checksum = -694253121
+[2025-06-22 19:38:58] [INFO] [pool-1-thread-1] Received encrypted message: SHELL_COMMAND
+[2025-06-22 19:38:58] [INFO] [pool-1-thread-1] Sending message: SHELL_RESULT, length: 103
+[2025-06-22 19:38:58] [INFO] [pool-1-thread-1] Message encrypted, new length: 131
+[2025-06-22 19:38:58] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 135
+[2025-06-22 19:38:58] [INFO] [pool-1-thread-1] Message sent successfully
+[2025-06-22 19:38:58] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:38:58] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:39:04] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:39:04] [INFO] [pool-1-thread-1] Encrypted message length: 95
+[2025-06-22 19:39:04] [INFO] [pool-1-thread-1] Read 95 bytes for encrypted message body
+[2025-06-22 19:39:04] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 95
+[2025-06-22 19:39:04] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 67
+[2025-06-22 19:39:04] [INFO] [pool-1-thread-1] fromPacket: restLength = 63
+[2025-06-22 19:39:04] [INFO] [pool-1-thread-1] fromPacket: parsed message type = SHELL_COMMAND
+[2025-06-22 19:39:04] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 58 (restLength=63 - 5)
+[2025-06-22 19:39:04] [INFO] [pool-1-thread-1] fromPacket: checksum = -1010772594
+[2025-06-22 19:39:04] [INFO] [pool-1-thread-1] Received encrypted message: SHELL_COMMAND
+[2025-06-22 19:39:04] [INFO] [pool-1-thread-1] Sending message: SHELL_RESULT, length: 129
+[2025-06-22 19:39:04] [INFO] [pool-1-thread-1] Message encrypted, new length: 157
+[2025-06-22 19:39:04] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 161
+[2025-06-22 19:39:04] [INFO] [pool-1-thread-1] Message sent successfully
+[2025-06-22 19:39:04] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:39:04] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:39:14] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:39:14] [INFO] [pool-1-thread-1] Encrypted message length: 95
+[2025-06-22 19:39:14] [INFO] [pool-1-thread-1] Read 95 bytes for encrypted message body
+[2025-06-22 19:39:14] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 95
+[2025-06-22 19:39:14] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 67
+[2025-06-22 19:39:14] [INFO] [pool-1-thread-1] fromPacket: restLength = 63
+[2025-06-22 19:39:14] [INFO] [pool-1-thread-1] fromPacket: parsed message type = SHELL_COMMAND
+[2025-06-22 19:39:14] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 58 (restLength=63 - 5)
+[2025-06-22 19:39:14] [INFO] [pool-1-thread-1] fromPacket: checksum = -301739955
+[2025-06-22 19:39:14] [INFO] [pool-1-thread-1] Received encrypted message: SHELL_COMMAND
+[2025-06-22 19:39:14] [INFO] [pool-1-thread-1] Sending message: SHELL_RESULT, length: 67
+[2025-06-22 19:39:14] [INFO] [pool-1-thread-1] Message encrypted, new length: 95
+[2025-06-22 19:39:14] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 99
+[2025-06-22 19:39:14] [INFO] [pool-1-thread-1] Message sent successfully
+[2025-06-22 19:39:14] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:39:14] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:39:16] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:39:16] [INFO] [pool-1-thread-1] Encrypted message length: 79
+[2025-06-22 19:39:16] [INFO] [pool-1-thread-1] Read 79 bytes for encrypted message body
+[2025-06-22 19:39:16] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 79
+[2025-06-22 19:39:16] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 51
+[2025-06-22 19:39:16] [INFO] [pool-1-thread-1] fromPacket: restLength = 47
+[2025-06-22 19:39:16] [INFO] [pool-1-thread-1] fromPacket: parsed message type = SHELL_COMMAND
+[2025-06-22 19:39:16] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 42 (restLength=47 - 5)
+[2025-06-22 19:39:16] [INFO] [pool-1-thread-1] fromPacket: checksum = 1807766422
+[2025-06-22 19:39:16] [INFO] [pool-1-thread-1] Received encrypted message: SHELL_COMMAND
+[2025-06-22 19:39:16] [INFO] [pool-1-thread-1] Sending message: SHELL_RESULT, length: 179
+[2025-06-22 19:39:16] [INFO] [pool-1-thread-1] Message encrypted, new length: 207
+[2025-06-22 19:39:16] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 211
+[2025-06-22 19:39:16] [INFO] [pool-1-thread-1] Message sent successfully
+[2025-06-22 19:39:16] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:39:16] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:39:43] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:39:43] [INFO] [pool-1-thread-1] Encrypted message length: 99
+[2025-06-22 19:39:43] [INFO] [pool-1-thread-1] Read 99 bytes for encrypted message body
+[2025-06-22 19:39:43] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 99
+[2025-06-22 19:39:43] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 71
+[2025-06-22 19:39:43] [INFO] [pool-1-thread-1] fromPacket: restLength = 67
+[2025-06-22 19:39:43] [INFO] [pool-1-thread-1] fromPacket: parsed message type = SHELL_COMMAND
+[2025-06-22 19:39:43] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 62 (restLength=67 - 5)
+[2025-06-22 19:39:43] [INFO] [pool-1-thread-1] fromPacket: checksum = -2070172927
+[2025-06-22 19:39:43] [INFO] [pool-1-thread-1] Received encrypted message: SHELL_COMMAND
+[2025-06-22 19:39:43] [INFO] [pool-1-thread-1] Sending message: SHELL_RESULT, length: 87
+[2025-06-22 19:39:43] [INFO] [pool-1-thread-1] Message encrypted, new length: 115
+[2025-06-22 19:39:43] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 119
+[2025-06-22 19:39:43] [INFO] [pool-1-thread-1] Message sent successfully
+[2025-06-22 19:39:43] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:39:43] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:39:45] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:39:45] [INFO] [pool-1-thread-1] Encrypted message length: 99
+[2025-06-22 19:39:45] [INFO] [pool-1-thread-1] Read 99 bytes for encrypted message body
+[2025-06-22 19:39:45] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 99
+[2025-06-22 19:39:45] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 71
+[2025-06-22 19:39:45] [INFO] [pool-1-thread-1] fromPacket: restLength = 67
+[2025-06-22 19:39:45] [INFO] [pool-1-thread-1] fromPacket: parsed message type = SHELL_COMMAND
+[2025-06-22 19:39:45] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 62 (restLength=67 - 5)
+[2025-06-22 19:39:45] [INFO] [pool-1-thread-1] fromPacket: checksum = -966006076
+[2025-06-22 19:39:45] [INFO] [pool-1-thread-1] Received encrypted message: SHELL_COMMAND
+[2025-06-22 19:39:45] [INFO] [pool-1-thread-1] Sending message: SHELL_RESULT, length: 192
+[2025-06-22 19:39:45] [INFO] [pool-1-thread-1] Message encrypted, new length: 220
+[2025-06-22 19:39:45] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 224
+[2025-06-22 19:39:45] [INFO] [pool-1-thread-1] Message sent successfully
+[2025-06-22 19:39:45] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:39:45] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:39:52] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:39:52] [INFO] [pool-1-thread-1] Encrypted message length: 112
+[2025-06-22 19:39:52] [INFO] [pool-1-thread-1] Read 112 bytes for encrypted message body
+[2025-06-22 19:39:52] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 112
+[2025-06-22 19:39:52] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 84
+[2025-06-22 19:39:52] [INFO] [pool-1-thread-1] fromPacket: restLength = 80
+[2025-06-22 19:39:52] [INFO] [pool-1-thread-1] fromPacket: parsed message type = SHELL_COMMAND
+[2025-06-22 19:39:52] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 75 (restLength=80 - 5)
+[2025-06-22 19:39:52] [INFO] [pool-1-thread-1] fromPacket: checksum = 1759423226
+[2025-06-22 19:39:52] [INFO] [pool-1-thread-1] Received encrypted message: SHELL_COMMAND
+[2025-06-22 19:39:52] [INFO] [pool-1-thread-1] Sending message: SHELL_RESULT, length: 100
+[2025-06-22 19:39:52] [INFO] [pool-1-thread-1] Message encrypted, new length: 128
+[2025-06-22 19:39:52] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 132
+[2025-06-22 19:39:52] [INFO] [pool-1-thread-1] Message sent successfully
+[2025-06-22 19:39:52] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:39:52] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:39:54] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:39:54] [INFO] [pool-1-thread-1] Encrypted message length: 112
+[2025-06-22 19:39:54] [INFO] [pool-1-thread-1] Read 112 bytes for encrypted message body
+[2025-06-22 19:39:54] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 112
+[2025-06-22 19:39:54] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 84
+[2025-06-22 19:39:54] [INFO] [pool-1-thread-1] fromPacket: restLength = 80
+[2025-06-22 19:39:54] [INFO] [pool-1-thread-1] fromPacket: parsed message type = SHELL_COMMAND
+[2025-06-22 19:39:54] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 75 (restLength=80 - 5)
+[2025-06-22 19:39:54] [INFO] [pool-1-thread-1] fromPacket: checksum = 1253288053
+[2025-06-22 19:39:54] [INFO] [pool-1-thread-1] Received encrypted message: SHELL_COMMAND
+[2025-06-22 19:39:54] [INFO] [pool-1-thread-1] Sending message: SHELL_RESULT, length: 117
+[2025-06-22 19:39:54] [INFO] [pool-1-thread-1] Message encrypted, new length: 145
+[2025-06-22 19:39:54] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 149
+[2025-06-22 19:39:54] [INFO] [pool-1-thread-1] Message sent successfully
+[2025-06-22 19:39:54] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:39:54] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:40:00] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:40:00] [INFO] [pool-1-thread-1] Encrypted message length: 129
+[2025-06-22 19:40:00] [INFO] [pool-1-thread-1] Read 129 bytes for encrypted message body
+[2025-06-22 19:40:00] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 129
+[2025-06-22 19:40:00] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 101
+[2025-06-22 19:40:00] [INFO] [pool-1-thread-1] fromPacket: restLength = 97
+[2025-06-22 19:40:00] [INFO] [pool-1-thread-1] fromPacket: parsed message type = SHELL_COMMAND
+[2025-06-22 19:40:00] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 92 (restLength=97 - 5)
+[2025-06-22 19:40:00] [INFO] [pool-1-thread-1] fromPacket: checksum = -1505975376
+[2025-06-22 19:40:00] [INFO] [pool-1-thread-1] Received encrypted message: SHELL_COMMAND
+[2025-06-22 19:40:00] [INFO] [pool-1-thread-1] Sending message: SHELL_RESULT, length: 117
+[2025-06-22 19:40:00] [INFO] [pool-1-thread-1] Message encrypted, new length: 145
+[2025-06-22 19:40:00] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 149
+[2025-06-22 19:40:00] [INFO] [pool-1-thread-1] Message sent successfully
+[2025-06-22 19:40:00] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:40:00] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:40:02] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:40:02] [INFO] [pool-1-thread-1] Encrypted message length: 129
+[2025-06-22 19:40:02] [INFO] [pool-1-thread-1] Read 129 bytes for encrypted message body
+[2025-06-22 19:40:02] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 129
+[2025-06-22 19:40:02] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 101
+[2025-06-22 19:40:02] [INFO] [pool-1-thread-1] fromPacket: restLength = 97
+[2025-06-22 19:40:02] [INFO] [pool-1-thread-1] fromPacket: parsed message type = SHELL_COMMAND
+[2025-06-22 19:40:02] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 92 (restLength=97 - 5)
+[2025-06-22 19:40:02] [INFO] [pool-1-thread-1] fromPacket: checksum = 1079034749
+[2025-06-22 19:40:02] [INFO] [pool-1-thread-1] Received encrypted message: SHELL_COMMAND
+[2025-06-22 19:40:02] [INFO] [pool-1-thread-1] Sending message: SHELL_RESULT, length: 310
+[2025-06-22 19:40:02] [INFO] [pool-1-thread-1] Message encrypted, new length: 338
+[2025-06-22 19:40:02] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 342
+[2025-06-22 19:40:02] [INFO] [pool-1-thread-1] Message sent successfully
+[2025-06-22 19:40:02] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:40:02] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:40:19] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:40:19] [INFO] [pool-1-thread-1] Encrypted message length: 151
+[2025-06-22 19:40:19] [INFO] [pool-1-thread-1] Read 151 bytes for encrypted message body
+[2025-06-22 19:40:19] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 151
+[2025-06-22 19:40:19] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 123
+[2025-06-22 19:40:19] [INFO] [pool-1-thread-1] fromPacket: restLength = 119
+[2025-06-22 19:40:19] [INFO] [pool-1-thread-1] fromPacket: parsed message type = SHELL_COMMAND
+[2025-06-22 19:40:19] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 114 (restLength=119 - 5)
+[2025-06-22 19:40:19] [INFO] [pool-1-thread-1] fromPacket: checksum = 1289220604
+[2025-06-22 19:40:19] [INFO] [pool-1-thread-1] Received encrypted message: SHELL_COMMAND
+[2025-06-22 19:40:19] [INFO] [pool-1-thread-1] Sending message: SHELL_RESULT, length: 30168
+[2025-06-22 19:40:19] [INFO] [pool-1-thread-1] Message encrypted, new length: 30196
+[2025-06-22 19:40:19] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 30200
+[2025-06-22 19:40:19] [INFO] [pool-1-thread-1] Message sent successfully
+[2025-06-22 19:40:19] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:40:19] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:40:36] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:40:36] [INFO] [pool-1-thread-1] Encrypted message length: 135
+[2025-06-22 19:40:36] [INFO] [pool-1-thread-1] Read 135 bytes for encrypted message body
+[2025-06-22 19:40:36] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 135
+[2025-06-22 19:40:36] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 107
+[2025-06-22 19:40:36] [INFO] [pool-1-thread-1] fromPacket: restLength = 103
+[2025-06-22 19:40:36] [INFO] [pool-1-thread-1] fromPacket: parsed message type = SHELL_COMMAND
+[2025-06-22 19:40:36] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 98 (restLength=103 - 5)
+[2025-06-22 19:40:36] [INFO] [pool-1-thread-1] fromPacket: checksum = 385818058
+[2025-06-22 19:40:36] [INFO] [pool-1-thread-1] Received encrypted message: SHELL_COMMAND
+[2025-06-22 19:40:36] [INFO] [pool-1-thread-1] Sending message: SHELL_RESULT, length: 154
+[2025-06-22 19:40:36] [INFO] [pool-1-thread-1] Message encrypted, new length: 182
+[2025-06-22 19:40:36] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 186
+[2025-06-22 19:40:36] [INFO] [pool-1-thread-1] Message sent successfully
+[2025-06-22 19:40:36] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:40:36] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:40:44] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:40:44] [INFO] [pool-1-thread-1] Encrypted message length: 136
+[2025-06-22 19:40:44] [INFO] [pool-1-thread-1] Read 136 bytes for encrypted message body
+[2025-06-22 19:40:44] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 136
+[2025-06-22 19:40:44] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 108
+[2025-06-22 19:40:44] [INFO] [pool-1-thread-1] fromPacket: restLength = 104
+[2025-06-22 19:40:44] [INFO] [pool-1-thread-1] fromPacket: parsed message type = SHELL_COMMAND
+[2025-06-22 19:40:44] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 99 (restLength=104 - 5)
+[2025-06-22 19:40:44] [INFO] [pool-1-thread-1] fromPacket: checksum = 1892228768
+[2025-06-22 19:40:44] [INFO] [pool-1-thread-1] Received encrypted message: SHELL_COMMAND
+[2025-06-22 19:40:44] [INFO] [pool-1-thread-1] Sending message: SHELL_RESULT, length: 155
+[2025-06-22 19:40:44] [INFO] [pool-1-thread-1] Message encrypted, new length: 183
+[2025-06-22 19:40:44] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 187
+[2025-06-22 19:40:44] [INFO] [pool-1-thread-1] Message sent successfully
+[2025-06-22 19:40:44] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:40:44] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:40:53] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:40:53] [INFO] [pool-1-thread-1] Encrypted message length: 142
+[2025-06-22 19:40:53] [INFO] [pool-1-thread-1] Read 142 bytes for encrypted message body
+[2025-06-22 19:40:53] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 142
+[2025-06-22 19:40:53] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 114
+[2025-06-22 19:40:53] [INFO] [pool-1-thread-1] fromPacket: restLength = 110
+[2025-06-22 19:40:53] [INFO] [pool-1-thread-1] fromPacket: parsed message type = SHELL_COMMAND
+[2025-06-22 19:40:53] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 105 (restLength=110 - 5)
+[2025-06-22 19:40:53] [INFO] [pool-1-thread-1] fromPacket: checksum = -1913599263
+[2025-06-22 19:40:53] [INFO] [pool-1-thread-1] Received encrypted message: SHELL_COMMAND
+[2025-06-22 19:40:53] [INFO] [pool-1-thread-1] Sending message: SHELL_RESULT, length: 161
+[2025-06-22 19:40:53] [INFO] [pool-1-thread-1] Message encrypted, new length: 189
+[2025-06-22 19:40:53] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 193
+[2025-06-22 19:40:53] [INFO] [pool-1-thread-1] Message sent successfully
+[2025-06-22 19:40:53] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:40:53] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:40:59] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:40:59] [INFO] [pool-1-thread-1] Encrypted message length: 133
+[2025-06-22 19:40:59] [INFO] [pool-1-thread-1] Read 133 bytes for encrypted message body
+[2025-06-22 19:40:59] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 133
+[2025-06-22 19:40:59] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 105
+[2025-06-22 19:40:59] [INFO] [pool-1-thread-1] fromPacket: restLength = 101
+[2025-06-22 19:40:59] [INFO] [pool-1-thread-1] fromPacket: parsed message type = SHELL_COMMAND
+[2025-06-22 19:40:59] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 96 (restLength=101 - 5)
+[2025-06-22 19:40:59] [INFO] [pool-1-thread-1] fromPacket: checksum = -493880518
+[2025-06-22 19:40:59] [INFO] [pool-1-thread-1] Received encrypted message: SHELL_COMMAND
+[2025-06-22 19:40:59] [INFO] [pool-1-thread-1] Sending message: SHELL_RESULT, length: 152
+[2025-06-22 19:40:59] [INFO] [pool-1-thread-1] Message encrypted, new length: 180
+[2025-06-22 19:40:59] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 184
+[2025-06-22 19:40:59] [INFO] [pool-1-thread-1] Message sent successfully
+[2025-06-22 19:40:59] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:40:59] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:41:02] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:41:02] [INFO] [pool-1-thread-1] Encrypted message length: 134
+[2025-06-22 19:41:02] [INFO] [pool-1-thread-1] Read 134 bytes for encrypted message body
+[2025-06-22 19:41:02] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 134
+[2025-06-22 19:41:02] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 106
+[2025-06-22 19:41:02] [INFO] [pool-1-thread-1] fromPacket: restLength = 102
+[2025-06-22 19:41:02] [INFO] [pool-1-thread-1] fromPacket: parsed message type = SHELL_COMMAND
+[2025-06-22 19:41:02] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 97 (restLength=102 - 5)
+[2025-06-22 19:41:02] [INFO] [pool-1-thread-1] fromPacket: checksum = -1849757810
+[2025-06-22 19:41:02] [INFO] [pool-1-thread-1] Received encrypted message: SHELL_COMMAND
+[2025-06-22 19:41:02] [INFO] [pool-1-thread-1] Sending message: SHELL_RESULT, length: 153
+[2025-06-22 19:41:02] [INFO] [pool-1-thread-1] Message encrypted, new length: 181
+[2025-06-22 19:41:02] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 185
+[2025-06-22 19:41:02] [INFO] [pool-1-thread-1] Message sent successfully
+[2025-06-22 19:41:02] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:41:02] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:41:05] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:41:05] [INFO] [pool-1-thread-1] Encrypted message length: 135
+[2025-06-22 19:41:05] [INFO] [pool-1-thread-1] Read 135 bytes for encrypted message body
+[2025-06-22 19:41:05] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 135
+[2025-06-22 19:41:05] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 107
+[2025-06-22 19:41:05] [INFO] [pool-1-thread-1] fromPacket: restLength = 103
+[2025-06-22 19:41:05] [INFO] [pool-1-thread-1] fromPacket: parsed message type = SHELL_COMMAND
+[2025-06-22 19:41:05] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 98 (restLength=103 - 5)
+[2025-06-22 19:41:05] [INFO] [pool-1-thread-1] fromPacket: checksum = -1585033388
+[2025-06-22 19:41:05] [INFO] [pool-1-thread-1] Received encrypted message: SHELL_COMMAND
+[2025-06-22 19:41:05] [INFO] [pool-1-thread-1] Sending message: SHELL_RESULT, length: 59
+[2025-06-22 19:41:05] [INFO] [pool-1-thread-1] Message encrypted, new length: 87
+[2025-06-22 19:41:05] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 91
+[2025-06-22 19:41:05] [INFO] [pool-1-thread-1] Message sent successfully
+[2025-06-22 19:41:05] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:41:05] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:41:07] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:41:07] [INFO] [pool-1-thread-1] Encrypted message length: 71
+[2025-06-22 19:41:07] [INFO] [pool-1-thread-1] Read 71 bytes for encrypted message body
+[2025-06-22 19:41:07] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 71
+[2025-06-22 19:41:07] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 43
+[2025-06-22 19:41:07] [INFO] [pool-1-thread-1] fromPacket: restLength = 39
+[2025-06-22 19:41:07] [INFO] [pool-1-thread-1] fromPacket: parsed message type = SHELL_COMMAND
+[2025-06-22 19:41:07] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 34 (restLength=39 - 5)
+[2025-06-22 19:41:07] [INFO] [pool-1-thread-1] fromPacket: checksum = 366157444
+[2025-06-22 19:41:07] [INFO] [pool-1-thread-1] Received encrypted message: SHELL_COMMAND
+[2025-06-22 19:41:10] [INFO] [pool-1-thread-1] Sending message: SHELL_RESULT, length: 59
+[2025-06-22 19:41:10] [INFO] [pool-1-thread-1] Message encrypted, new length: 87
+[2025-06-22 19:41:10] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 91
+[2025-06-22 19:41:10] [INFO] [pool-1-thread-1] Message sent successfully
+[2025-06-22 19:41:10] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:41:10] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:41:17] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:41:17] [INFO] [pool-1-thread-1] Encrypted message length: 74
+[2025-06-22 19:41:17] [INFO] [pool-1-thread-1] Read 74 bytes for encrypted message body
+[2025-06-22 19:41:17] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 74
+[2025-06-22 19:41:17] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 46
+[2025-06-22 19:41:17] [INFO] [pool-1-thread-1] fromPacket: restLength = 42
+[2025-06-22 19:41:17] [INFO] [pool-1-thread-1] fromPacket: parsed message type = SHELL_COMMAND
+[2025-06-22 19:41:17] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 37 (restLength=42 - 5)
+[2025-06-22 19:41:17] [INFO] [pool-1-thread-1] fromPacket: checksum = -1936301780
+[2025-06-22 19:41:17] [INFO] [pool-1-thread-1] Received encrypted message: SHELL_COMMAND
+[2025-06-22 19:41:17] [INFO] [pool-1-thread-1] Sending message: SHELL_RESULT, length: 55
+[2025-06-22 19:41:17] [INFO] [pool-1-thread-1] Message encrypted, new length: 83
+[2025-06-22 19:41:17] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 87
+[2025-06-22 19:41:17] [INFO] [pool-1-thread-1] Message sent successfully
+[2025-06-22 19:41:17] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:41:17] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:41:19] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:41:19] [INFO] [pool-1-thread-1] Encrypted message length: 67
+[2025-06-22 19:41:19] [INFO] [pool-1-thread-1] Read 67 bytes for encrypted message body
+[2025-06-22 19:41:19] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 67
+[2025-06-22 19:41:19] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 39
+[2025-06-22 19:41:19] [INFO] [pool-1-thread-1] fromPacket: restLength = 35
+[2025-06-22 19:41:19] [INFO] [pool-1-thread-1] fromPacket: parsed message type = SHELL_COMMAND
+[2025-06-22 19:41:19] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 30 (restLength=35 - 5)
+[2025-06-22 19:41:19] [INFO] [pool-1-thread-1] fromPacket: checksum = -322617808
+[2025-06-22 19:41:19] [INFO] [pool-1-thread-1] Received encrypted message: SHELL_COMMAND
+[2025-06-22 19:41:19] [INFO] [pool-1-thread-1] Sending message: SHELL_RESULT, length: 149
+[2025-06-22 19:41:19] [INFO] [pool-1-thread-1] Message encrypted, new length: 177
+[2025-06-22 19:41:19] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 181
+[2025-06-22 19:41:19] [INFO] [pool-1-thread-1] Message sent successfully
+[2025-06-22 19:41:19] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:41:19] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:41:26] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:41:26] [INFO] [pool-1-thread-1] Encrypted message length: 80
+[2025-06-22 19:41:26] [INFO] [pool-1-thread-1] Read 80 bytes for encrypted message body
+[2025-06-22 19:41:26] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 80
+[2025-06-22 19:41:26] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 52
+[2025-06-22 19:41:26] [INFO] [pool-1-thread-1] fromPacket: restLength = 48
+[2025-06-22 19:41:26] [INFO] [pool-1-thread-1] fromPacket: parsed message type = SHELL_COMMAND
+[2025-06-22 19:41:26] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 43 (restLength=48 - 5)
+[2025-06-22 19:41:26] [INFO] [pool-1-thread-1] fromPacket: checksum = -757463703
+[2025-06-22 19:41:26] [INFO] [pool-1-thread-1] Received encrypted message: SHELL_COMMAND
+[2025-06-22 19:41:26] [INFO] [pool-1-thread-1] Sending message: SHELL_RESULT, length: 67
+[2025-06-22 19:41:26] [INFO] [pool-1-thread-1] Message encrypted, new length: 95
+[2025-06-22 19:41:26] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 99
+[2025-06-22 19:41:26] [INFO] [pool-1-thread-1] Message sent successfully
+[2025-06-22 19:41:26] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:41:26] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:41:30] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:41:30] [INFO] [pool-1-thread-1] Encrypted message length: 79
+[2025-06-22 19:41:30] [INFO] [pool-1-thread-1] Read 79 bytes for encrypted message body
+[2025-06-22 19:41:30] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 79
+[2025-06-22 19:41:30] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 51
+[2025-06-22 19:41:30] [INFO] [pool-1-thread-1] fromPacket: restLength = 47
+[2025-06-22 19:41:30] [INFO] [pool-1-thread-1] fromPacket: parsed message type = SHELL_COMMAND
+[2025-06-22 19:41:30] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 42 (restLength=47 - 5)
+[2025-06-22 19:41:30] [INFO] [pool-1-thread-1] fromPacket: checksum = -712161981
+[2025-06-22 19:41:30] [INFO] [pool-1-thread-1] Received encrypted message: SHELL_COMMAND
+[2025-06-22 19:41:30] [INFO] [pool-1-thread-1] Sending message: SHELL_RESULT, length: 465
+[2025-06-22 19:41:30] [INFO] [pool-1-thread-1] Message encrypted, new length: 493
+[2025-06-22 19:41:30] [INFO] [pool-1-thread-1] Added length prefix for encrypted message, total length: 497
+[2025-06-22 19:41:30] [INFO] [pool-1-thread-1] Message sent successfully
+[2025-06-22 19:41:30] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:41:30] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:46:22] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:46:22] [INFO] [pool-1-thread-1] Encrypted message length: 71
+[2025-06-22 19:46:22] [INFO] [pool-1-thread-1] Read 71 bytes for encrypted message body
+[2025-06-22 19:46:22] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 71
+[2025-06-22 19:46:22] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 43
+[2025-06-22 19:46:22] [INFO] [pool-1-thread-1] fromPacket: restLength = 39
+[2025-06-22 19:46:22] [INFO] [pool-1-thread-1] fromPacket: parsed message type = DISCONNECT
+[2025-06-22 19:46:22] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 34 (restLength=39 - 5)
+[2025-06-22 19:46:22] [INFO] [pool-1-thread-1] fromPacket: checksum = -1860683713
+[2025-06-22 19:46:22] [INFO] [pool-1-thread-1] Received encrypted message: ERROR
+[2025-06-22 19:46:22] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:46:22] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:46:22] [INFO] [pool-1-thread-1] Read 4 bytes for encrypted message length
+[2025-06-22 19:46:22] [INFO] [pool-1-thread-1] Encrypted message length: 71
+[2025-06-22 19:46:22] [INFO] [pool-1-thread-1] Read 71 bytes for encrypted message body
+[2025-06-22 19:46:22] [INFO] [pool-1-thread-1] Decrypting encrypted message, length: 71
+[2025-06-22 19:46:22] [INFO] [pool-1-thread-1] Message decrypted successfully, new length: 43
+[2025-06-22 19:46:22] [INFO] [pool-1-thread-1] fromPacket: restLength = 39
+[2025-06-22 19:46:22] [INFO] [pool-1-thread-1] fromPacket: parsed message type = DISCONNECT
+[2025-06-22 19:46:22] [INFO] [pool-1-thread-1] fromPacket: payloadLength = 34 (restLength=39 - 5)
+[2025-06-22 19:46:22] [INFO] [pool-1-thread-1] fromPacket: checksum = -1860683713
+[2025-06-22 19:46:22] [INFO] [pool-1-thread-1] Received encrypted message: ERROR
+[2025-06-22 19:46:22] [INFO] [pool-1-thread-1] Waiting to receive message...
+[2025-06-22 19:46:22] [INFO] [pool-1-thread-1] Reading encrypted message...
+[2025-06-22 19:46:22] [INFO] [pool-1-thread-1] Read -1 bytes for encrypted message length
+[2025-06-22 19:46:22] [ERROR] [pool-1-thread-1] Failed to read encrypted message length. Expected 4 bytes, got -1
+[2025-06-22 19:46:22] [INFO] [pool-1-thread-1] Protocol handler closed
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Waiting to receive message...
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Read 4 bytes for message length
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Message length: 787
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Read 787 bytes for message body (expected 787)
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Message body (first 20 bytes): 01 64 68 50 75 62 6C 69 63 4B 65 79 3A 4D 49 49 43 4B 54 43 
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Raw message type byte: 1
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Parsed message type: KEY_EXCHANGE_INIT
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] fromPacket: restLength = 787
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] fromPacket: parsed message type = KEY_EXCHANGE_INIT
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] fromPacket: payloadLength = 782 (restLength=787 - 5)
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] fromPacket: checksum = 1858221939
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Received message: KEY_EXCHANGE_INIT
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Sending message: KEY_EXCHANGE_REPLY, length: 1200
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Message sent successfully
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Encryption enabled - subsequent messages will be encrypted/decrypted
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Waiting to receive message...
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Reading encrypted message...
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Read 4 bytes for encrypted message length
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Encrypted message length: 85
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Read 85 bytes for encrypted message body
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Decrypting encrypted message, length: 85
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Message decrypted successfully, new length: 57
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] fromPacket: restLength = 53
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] fromPacket: parsed message type = AUTH_REQUEST
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] fromPacket: payloadLength = 48 (restLength=53 - 5)
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] fromPacket: checksum = -1075446496
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Received encrypted message: AUTH_REQUEST
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Authentication attempt for user: admin, type: password
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] User existence check for 'admin': true
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] User validation passed for: admin
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Attempting password authentication for: admin
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Verifying password for user: admin
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] PasswordAuth: Checking if user exists: admin
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] PasswordAuth: User exists, verifying password for: admin
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] UserStore: Password verification for admin - Stored hash: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918, Input hash: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918, Matches: true
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] PasswordAuth: Password verification result for admin: true
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Password authentication result for admin: true
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Sending message: AUTH_SUCCESS, length: 56
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Message encrypted, new length: 84
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Added length prefix for encrypted message, total length: 88
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Message sent successfully
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Waiting to receive message...
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Reading encrypted message...
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Read 4 bytes for encrypted message length
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Encrypted message length: 42
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Read 42 bytes for encrypted message body
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Decrypting encrypted message, length: 42
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Message decrypted successfully, new length: 14
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] fromPacket: restLength = 10
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] fromPacket: parsed message type = SERVICE_REQUEST
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] fromPacket: payloadLength = 5 (restLength=10 - 5)
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] fromPacket: checksum = 1167241981
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Received encrypted message: SERVICE_REQUEST
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Sending message: SERVICE_ACCEPT, length: 14
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Message encrypted, new length: 42
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Added length prefix for encrypted message, total length: 46
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Message sent successfully
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Waiting to receive message...
+[2025-06-22 19:46:26] [INFO] [pool-1-thread-2] Reading encrypted message...
+[2025-06-22 19:46:32] [INFO] [pool-1-thread-2] Read -1 bytes for encrypted message length
+[2025-06-22 19:46:32] [ERROR] [pool-1-thread-2] Failed to read encrypted message length. Expected 4 bytes, got -1
+[2025-06-22 19:46:32] [INFO] [pool-1-thread-2] Protocol handler closed
+[2025-06-22 19:46:38] [INFO] [Thread-0] Shutdown signal received
