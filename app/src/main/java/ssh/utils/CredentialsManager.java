@@ -6,6 +6,8 @@ import ssh.client.ui.ServerInfo;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * Manages user credentials by reading from a standard credentials file.
@@ -43,36 +45,11 @@ public class CredentialsManager {
      * Create default credentials if the file doesn't exist.
      */
     private void createDefaultCredentials() {
-        credentials.setProperty("default.username", "admin");
-        credentials.setProperty("default.password", "admin");
-        credentials.setProperty("default.auth.type", "password");
-        credentials.setProperty("server.host", "localhost");
-        credentials.setProperty("server.port", "2222");
+        credentials.setProperty("default.user", "admin");
+        credentials.setProperty("admin.username", "admin");
+        credentials.setProperty("admin.password", "admin");
+        credentials.setProperty("admin.auth.type", "password");
         Logger.info("Using default credentials - admin/admin");
-    }
-
-    /**
-     * Get server information from credentials file.
-     */
-    public ServerInfo getServerInfo() {
-        ServerInfo serverInfo = new ServerInfo();
-        
-        String host = credentials.getProperty("server.host", "localhost");
-        String portStr = credentials.getProperty("server.port", "2222");
-        String username = credentials.getProperty("default.username", "admin");
-        
-        serverInfo.setHost(host);
-        try {
-            serverInfo.setPort(Integer.parseInt(portStr));
-        } catch (NumberFormatException e) {
-            Logger.error("Invalid port in credentials file: " + portStr);
-            serverInfo.setPort(2222);
-        }
-        serverInfo.setUsername(username);
-        
-        Logger.info("Server info - Host: " + host + ", Port: " + serverInfo.getPort() + ", Username: " + username);
-        
-        return serverInfo;
     }
 
     /**
@@ -85,33 +62,27 @@ public class CredentialsManager {
     /**
      * Get authentication credentials for a specific user.
      */
-    public AuthCredentials getAuthCredentials(String userKey) {
-        AuthCredentials authCredentials = new AuthCredentials();
-        
-        String username = credentials.getProperty(userKey + ".username", "admin");
-        String authType = credentials.getProperty(userKey + ".auth.type", "password");
-        String password = credentials.getProperty(userKey + ".password", "");
-        
-        authCredentials.setUsername(username);
-        authCredentials.setAuthType(authType);
-        authCredentials.setPassword(password);
-        
-        Logger.info("Auth credentials for " + userKey + " - Username: " + username + ", Type: " + authType);
-        
-        // For public key authentication
-        if ("publickey".equals(authType)) {
-            String privateKeyPath = credentials.getProperty(userKey + ".private.key.path");
-            String publicKeyPath = credentials.getProperty(userKey + ".public.key.path");
-            
-            if (privateKeyPath != null) {
-                authCredentials.setPrivateKeyPath(privateKeyPath);
+    public AuthCredentials getAuthCredentials(String user) {
+        String authType = credentials.getProperty(user + ".auth.type");
+        if (authType == null) {
+            if ("default".equals(user)) {
+                String defaultUser = credentials.getProperty("default.user", "admin");
+                return getAuthCredentials(defaultUser);
             }
-            if (publicKeyPath != null) {
-                authCredentials.setPublicKeyPath(publicKeyPath);
-            }
+            throw new IllegalArgumentException("Authentication type not configured for user: " + user);
         }
-        
-        return authCredentials;
+
+        AuthCredentials auth = new AuthCredentials(authType);
+        auth.setUsername(credentials.getProperty(user + ".username"));
+
+        if ("password".equals(authType)) {
+            auth.setPassword(credentials.getProperty(user + ".password"));
+        } else if ("publickey".equals(authType)) {
+            auth.setPrivateKeyPath(credentials.getProperty(user + ".privateKey"));
+            auth.setPublicKeyPath(credentials.getProperty(user + ".publicKey"));
+        }
+
+        return auth;
     }
 
     /**
@@ -119,30 +90,10 @@ public class CredentialsManager {
      */
     public String[] getAvailableUsers() {
         return credentials.stringPropertyNames().stream()
-                .filter(key -> key.endsWith(".username"))
-                .map(key -> key.substring(0, key.length() - 9)) // Remove ".username"
+                .filter(key -> key.endsWith(".auth.type"))
+                .map(key -> key.substring(0, key.indexOf(".")))
+                .distinct()
                 .toArray(String[]::new);
-    }
-
-    /**
-     * Check if a user exists in the credentials file.
-     */
-    public boolean userExists(String userKey) {
-        return credentials.containsKey(userKey + ".username");
-    }
-
-    /**
-     * Get server info with custom user.
-     */
-    public ServerInfo getServerInfo(String userKey) {
-        ServerInfo serverInfo = getServerInfo();
-        
-        if (userExists(userKey)) {
-            String username = credentials.getProperty(userKey + ".username");
-            serverInfo.setUsername(username);
-        }
-        
-        return serverInfo;
     }
 
     /**

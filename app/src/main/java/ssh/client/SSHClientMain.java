@@ -1,7 +1,11 @@
 package ssh.client;
 
+import ssh.client.ui.AuthCredentials;
+import ssh.client.ui.ClientUI;
 import ssh.client.ui.ConsoleClientUI;
+import ssh.client.ui.ServerInfo;
 import ssh.utils.ConsoleInterface;
+import ssh.utils.CredentialsManager;
 import ssh.utils.Logger;
 
 /**
@@ -17,13 +21,24 @@ public class SSHClientMain {
         
         try {
             ConsoleInterface.progress("Creating client interface");
-            // Create UI with credentials manager
             ConsoleClientUI ui = new ConsoleClientUI();
             ConsoleInterface.progressComplete();
             
             ConsoleInterface.progress("Initializing SSH client");
-            // Create and start client
-            SSHClient client = new SSHClient(ui);
+            CredentialsManager credentialsManager = new CredentialsManager("config/credentials.properties");
+            
+            // Get Server Info from user
+            ServerInfo serverInfo = ui.getServerInfoFromUser();
+            
+            // Get Auth Credentials from user
+            AuthCredentials authCredentials = ui.getAuthCredentials(credentialsManager);
+            
+            // Set username in serverInfo
+            if (authCredentials != null) {
+                serverInfo.setUsername(authCredentials.getUsername());
+            }
+
+            SSHClient client = new SSHClient(serverInfo, authCredentials, ui);
             ConsoleInterface.progressComplete();
             
             ConsoleInterface.progress("Starting SSH client");
@@ -32,11 +47,11 @@ public class SSHClientMain {
             
         } catch (OutOfMemoryError e) {
             ConsoleInterface.error("OutOfMemoryError occurred: " + e.getMessage());
-            Logger.error("OutOfMemoryError occurred: " + e.getMessage());
+            Logger.error("OOM error", e);
             System.exit(1);
         } catch (Exception e) {
             ConsoleInterface.error("Failed to start SSH client: " + e.getMessage());
-            Logger.error("Failed to start SSH client: " + e.getMessage());
+            Logger.error("Failed to start client", e);
             System.exit(1);
         } finally {
             Logger.close();

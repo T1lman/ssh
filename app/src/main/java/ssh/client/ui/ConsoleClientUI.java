@@ -145,40 +145,51 @@ public class ConsoleClientUI implements ClientUI {
 
     @Override
     public ServerInfo getServerInfo() {
-        // Check if user wants to select a different user
+        // This method is now handled by getServerInfoFromUser,
+        // but needs to exist to satisfy the interface.
+        // It should not be called directly.
+        return null;
+    }
+
+    public AuthCredentials getAuthCredentials(CredentialsManager credentialsManager) {
         String[] availableUsers = credentialsManager.getAvailableUsers();
-        
-        if (availableUsers.length > 1) {
+        String selectedUser = null;
+
+        if (availableUsers != null && availableUsers.length > 0) {
             ConsoleInterface.info("Available users:");
             for (int i = 0; i < availableUsers.length; i++) {
                 ConsoleInterface.info((i + 1) + ". " + availableUsers[i]);
             }
-            
-            String choice = getInput("Select user (1-" + availableUsers.length + ") or press Enter for default");
-            
-            if (!choice.trim().isEmpty()) {
-                try {
-                    int userIndex = Integer.parseInt(choice.trim()) - 1;
-                    if (userIndex >= 0 && userIndex < availableUsers.length) {
-                        selectedUser = availableUsers[userIndex]; // Store selected user
-                        return credentialsManager.getServerInfo(availableUsers[userIndex]);
+
+            while (selectedUser == null) {
+                String choice = getInput("Select user (1-" + availableUsers.length + ") or press Enter for default");
+                if (choice.trim().isEmpty()) {
+                    selectedUser = "default";
+                } else {
+                    try {
+                        int userIndex = Integer.parseInt(choice.trim()) - 1;
+                        if (userIndex >= 0 && userIndex < availableUsers.length) {
+                            selectedUser = availableUsers[userIndex];
+                        } else {
+                            displayError("Invalid user selection.");
+                        }
+                    } catch (NumberFormatException e) {
+                        displayError("Invalid input. Please enter a number.");
                     }
-                } catch (NumberFormatException e) {
-                    displayError("Invalid user selection, using default");
                 }
             }
+        } else {
+            selectedUser = "default"; // Fallback if no users are found
         }
         
-        // Return default server info from credentials file
-        selectedUser = "default"; // Store default user
-        return credentialsManager.getServerInfo();
+        return credentialsManager.getAuthCredentials(selectedUser);
     }
 
     @Override
     public AuthCredentials getAuthCredentials() {
-        // Use the selected user if available, otherwise use default
-        String userKey = (selectedUser != null) ? selectedUser : "default";
-        return credentialsManager.getAuthCredentials(userKey);
+        // This method is now handled by the version that takes a CredentialsManager.
+        // It should not be called directly.
+        return null;
     }
 
     @Override
@@ -200,5 +211,34 @@ public class ConsoleClientUI implements ClientUI {
 
     public void close() {
         stop();
+    }
+
+    @Override
+    public ServerInfo getServerInfoFromUser() {
+        ConsoleInterface.header("Server Connection Details");
+
+        String host = "";
+        while (host.trim().isEmpty()) {
+            host = getInput("Enter server host: ");
+            if (host.trim().isEmpty()) {
+                ConsoleInterface.error("Host cannot be empty.");
+            }
+        }
+
+        int port = -1;
+        while (port == -1) {
+            try {
+                String portStr = getInput("Enter server port: ");
+                if (portStr.trim().isEmpty()) {
+                    ConsoleInterface.error("Port cannot be empty.");
+                } else {
+                    port = Integer.parseInt(portStr.trim());
+                }
+            } catch (NumberFormatException e) {
+                ConsoleInterface.error("Invalid port. Please enter a number.");
+            }
+        }
+        
+        return new ServerInfo(host, port, null); // Username will be set later
     }
 } 

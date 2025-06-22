@@ -170,11 +170,11 @@ public class SSHServer {
         // Initialize logger
         Logger.initialize("logs/server.log");
         
-        // Parse command line arguments
-        ServerConfig config = parseCommandLineArgs(args);
-        
         // Create UI
         ServerUI ui = new ConsoleServerUI();
+        
+        // Get configuration from user
+        ServerConfig config = ui.getConfigFromUser();
         
         // Create and start server
         SSHServer server = new SSHServer(config, ui);
@@ -189,93 +189,9 @@ public class SSHServer {
         
         // Show startup header
         ConsoleInterface.header("SSH Server Starting");
-        ConsoleInterface.info("Host: " + config.getHost());
-        ConsoleInterface.info("Port: " + config.getPort());
         ConsoleInterface.info("Log file: " + Logger.getLogFile());
         
         // Start the server
         server.start();
-    }
-
-    /**
-     * Parse command line arguments.
-     */
-    private static ServerConfig parseCommandLineArgs(String[] args) {
-        ServerConfig config = new ServerConfig();
-        
-        for (int i = 0; i < args.length; i++) {
-            switch (args[i]) {
-                case "-p":
-                case "--port":
-                    if (i + 1 < args.length) {
-                        try {
-                            config.setPort(Integer.parseInt(args[++i]));
-                        } catch (NumberFormatException e) {
-                            System.err.println("Invalid port number: " + args[i]);
-                        }
-                    }
-                    break;
-                case "-h":
-                case "--host":
-                    if (i + 1 < args.length) {
-                        config.setHost(args[++i]);
-                    }
-                    break;
-                case "-k":
-                case "--key-dir":
-                    if (i + 1 < args.length) {
-                        config.setKeyDirectory(args[++i]);
-                    }
-                    break;
-                case "-u":
-                case "--users":
-                    if (i + 1 < args.length) {
-                        config.setUsersFile(args[++i]);
-                    }
-                    break;
-                case "-a":
-                case "--auth-keys":
-                    if (i + 1 < args.length) {
-                        config.setAuthorizedKeysDir(args[++i]);
-                    }
-                    break;
-                case "-m":
-                case "--max-connections":
-                    if (i + 1 < args.length) {
-                        try {
-                            config.setMaxConnections(Integer.parseInt(args[++i]));
-                        } catch (NumberFormatException e) {
-                            System.err.println("Invalid max connections: " + args[i]);
-                        }
-                    }
-                    break;
-                case "-c":
-                case "--config":
-                    if (i + 1 < args.length) {
-                        config.loadFromFile(args[++i]);
-                    }
-                    break;
-                default:
-                    System.err.println("Unknown option: " + args[i]);
-                    printUsage();
-                    System.exit(1);
-            }
-        }
-        return config;
-    }
-
-    /**
-     * Print usage information.
-     */
-    private static void printUsage() {
-        System.out.println("Usage: java ssh.server.SSHServer [options]");
-        System.out.println("Options:");
-        System.out.println("  -p, --port <port>              Port to listen on (default: 2222)");
-        System.out.println("  -h, --host <host>              Host to bind to (default: 0.0.0.0)");
-        System.out.println("  -k, --key-dir <dir>            Directory for server keys (default: data/server/server_keys)");
-        System.out.println("  -u, --users <file>             User properties file (default: data/server/users.properties)");
-        System.out.println("  -a, --auth-keys <dir>          Directory for authorized keys (default: data/server/authorized_keys)");
-        System.out.println("  -m, --max-connections <num>    Maximum concurrent connections (default: 10)");
-        System.out.println("  -c, --config <file>            Configuration file to use");
     }
 } 

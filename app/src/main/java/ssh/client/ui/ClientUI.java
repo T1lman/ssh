@@ -1,5 +1,9 @@
 package ssh.client.ui;
 
+import ssh.client.ui.ServerInfo;
+
+import java.util.List;
+
 /**
  * Interface for client user interface implementations.
  */
@@ -68,4 +72,10 @@ public interface ClientUI {
      * Check if the client should continue running.
      */
     boolean shouldContinue();
+
+    /**
+     * Get server connection details from the user.
+     * @return A ServerInfo object containing host and port.
+     */
+    ServerInfo getServerInfoFromUser();
 } 

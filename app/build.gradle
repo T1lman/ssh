@@ -59,6 +59,7 @@ tasks.register('runServer', JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'ssh.server.SSHServer'
     workingDir = project.rootDir
+    standardInput = System.in
     jvmArgs = ['-Xmx512m', '-Xms256m', '-XX:+UseG1GC', '-XX:MaxGCPauseMillis=200']
 }
 
@@ -68,6 +69,7 @@ tasks.register('runClient', JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'ssh.client.SSHClientMain'
     workingDir = project.rootDir
+    standardInput = System.in
     jvmArgs = ['-Xmx256m', '-Xms128m', '-XX:+UseG1GC', '-XX:MaxGCPauseMillis=200']
 }
 

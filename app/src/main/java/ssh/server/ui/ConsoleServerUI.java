@@ -97,72 +97,30 @@ public class ConsoleServerUI implements ServerUI {
     }
 
     @Override
-    public ServerConfig getServerConfig() {
+    public ServerConfig getConfigFromUser() {
+        ConsoleInterface.header("Server Configuration");
         ServerConfig config = new ServerConfig();
-        
-        System.out.println("SSH Server Configuration");
-        System.out.println("========================");
-        
-        // Get port
-        String portStr = getInput("Enter port number (default: 2222)");
-        if (!portStr.trim().isEmpty()) {
+
+        String host = getInput("Enter server host (default: localhost)");
+        if (host.trim().isEmpty()) {
+            host = "localhost";
+        }
+        config.setHost(host);
+
+        int port = -1;
+        while (port == -1) {
             try {
-                config.setPort(Integer.parseInt(portStr.trim()));
+                String portStr = getInput("Enter server port (default: 2222)");
+                if (portStr.trim().isEmpty()) {
+                    port = 2222;
+                } else {
+                    port = Integer.parseInt(portStr.trim());
+                }
             } catch (NumberFormatException e) {
-                displayError("Invalid port number, using default: 2222");
+                ConsoleInterface.error("Invalid port. Please enter a number.");
             }
         }
-        
-        // Get host
-        String host = getInput("Enter host (default: localhost)");
-        if (!host.trim().isEmpty()) {
-            config.setHost(host.trim());
-        }
-        
-        // Get key directory
-        String keyDir = getInput("Enter key directory (default: data/server/server_keys)");
-        if (!keyDir.trim().isEmpty()) {
-            config.setKeyDirectory(keyDir.trim());
-        }
-        
-        // Get users file
-        String usersFile = getInput("Enter users file (default: data/server/users.properties)");
-        if (!usersFile.trim().isEmpty()) {
-            config.setUsersFile(usersFile.trim());
-        }
-        
-        // Get authorized keys directory
-        String authKeysDir = getInput("Enter authorized keys directory (default: data/server/authorized_keys)");
-        if (!authKeysDir.trim().isEmpty()) {
-            config.setAuthorizedKeysDir(authKeysDir.trim());
-        }
-        
-        // Get max connections
-        String maxConnStr = getInput("Enter max connections (default: 10)");
-        if (!maxConnStr.trim().isEmpty()) {
-            try {
-                config.setMaxConnections(Integer.parseInt(maxConnStr.trim()));
-            } catch (NumberFormatException e) {
-                displayError("Invalid max connections, using default: 10");
-            }
-        }
-        
-        // Get session timeout
-        String timeoutStr = getInput("Enter session timeout in minutes (default: 30)");
-        if (!timeoutStr.trim().isEmpty()) {
-            try {
-                int minutes = Integer.parseInt(timeoutStr.trim());
-                config.setSessionTimeout(minutes * 60 * 1000L); // Convert to milliseconds
-            } catch (NumberFormatException e) {
-                displayError("Invalid timeout, using default: 30 minutes");
-            }
-        }
-        
-        // Get log level
-        String logLevel = getInput("Enter log level (default: INFO)");
-        if (!logLevel.trim().isEmpty()) {
-            config.setLogLevel(logLevel.trim().toUpperCase());
-        }
+        config.setPort(port);
         
         return config;
     }

@@ -19,8 +19,8 @@ public class ServerConfig {
 
     public ServerConfig() {
         // Default values
-        this.port = 2222;
-        this.host = "localhost";
+        this.port = 0; // Will be set by user
+        this.host = null; // Will be set by user
         this.keyDirectory = "data/server/server_keys";
         this.usersFile = "data/server/users.properties";
         this.authorizedKeysDir = "data/server/authorized_keys";

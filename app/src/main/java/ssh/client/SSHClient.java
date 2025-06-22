@@ -11,9 +11,18 @@ import ssh.utils.Logger;
 public class SSHClient {
     private ClientUI ui;
     private ClientConnection connection;
+    private ServerInfo serverInfo;
+    private AuthCredentials credentials;
     private boolean running;
 
     public SSHClient(ClientUI ui) {
+        this.ui = ui;
+        this.running = true;
+    }
+    
+    public SSHClient(ServerInfo serverInfo, AuthCredentials credentials, ClientUI ui) {
+        this.serverInfo = serverInfo;
+        this.credentials = credentials;
         this.ui = ui;
         this.running = true;
     }
@@ -23,11 +32,15 @@ public class SSHClient {
      */
     public void start() {
         try {
-            // Get server information
-            ServerInfo serverInfo = ui.getServerInfo();
+            // Get server information if not already provided
+            if (this.serverInfo == null) {
+                this.serverInfo = ui.getServerInfo();
+            }
             
-            // Get authentication credentials
-            AuthCredentials credentials = ui.getAuthCredentials();
+            // Get authentication credentials if not already provided
+            if (this.credentials == null) {
+                this.credentials = ui.getAuthCredentials();
+            }
             
             // Create connection
             connection = new ClientConnection(serverInfo, credentials, ui);

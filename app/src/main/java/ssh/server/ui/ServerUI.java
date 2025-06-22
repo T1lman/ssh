@@ -1,5 +1,7 @@
 package ssh.server.ui;
 
+import ssh.server.ui.ServerConfig;
+
 /**
  * Interface for server user interface implementations.
  */
@@ -70,7 +72,9 @@ public interface ServerUI {
     boolean shouldContinue();
 
     /**
-     * Get server configuration from user.
+     * Get server configuration details from the user.
+     * This can be implemented with a terminal prompt or a GUI dialog.
+     * @return A ServerConfig object with the user-provided details.
      */
-    ServerConfig getServerConfig();
+    ServerConfig getConfigFromUser();
 } 
