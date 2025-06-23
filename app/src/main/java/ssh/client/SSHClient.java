@@ -36,6 +36,39 @@ public class SSHClient {
     public void start() {
         try {
             System.out.println("DEBUG: SSHClient.start() called");
+            
+            // For GUI clients, don't start the connection process immediately
+            // The GUI will handle user input and call startConnection() when ready
+            if (ui instanceof ssh.client.gui.JavaFXClientUI) {
+                System.out.println("DEBUG: GUI client - waiting for user input before starting connection");
+                return;
+            }
+            
+            // For console clients, proceed with the normal flow
+            startConnection();
+            
+        } catch (OutOfMemoryError e) {
+            Logger.error("OutOfMemoryError occurred: " + e.getMessage());
+            ui.displayError("OutOfMemoryError: " + e.getMessage());
+            System.gc(); // Force garbage collection
+            e.printStackTrace();
+        } catch (Exception e) {
+            ui.displayError("Client error: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            // Don't cleanup immediately for GUI clients
+            if (!(ui instanceof ssh.client.gui.JavaFXClientUI)) {
+                cleanup();
+            }
+        }
+    }
+    
+    /**
+     * Start the connection process (called by GUI after user input).
+     */
+    public void startConnection() {
+        try {
+            System.out.println("DEBUG: startConnection() called");
             ui.showConnectionProgress("Requesting user credentials...");
             // Use a temporary manager to get available users before full connection
             CredentialsManager tempManager = new CredentialsManager("config/credentials.properties");
@@ -73,7 +106,6 @@ public class SSHClient {
             
             System.out.println("DEBUG: Connection successful");
             ui.showConnectionStatus(true);
-            ui.displayMessage("Connected to server successfully");
             
             // Perform key exchange
             ui.showConnectionProgress("Performing key exchange...");
@@ -109,19 +141,9 @@ public class SSHClient {
             System.out.println("DEBUG: Starting main client loop");
             mainLoop();
             
-        } catch (OutOfMemoryError e) {
-            Logger.error("OutOfMemoryError occurred: " + e.getMessage());
-            ui.displayError("OutOfMemoryError: " + e.getMessage());
-            System.gc(); // Force garbage collection
-            e.printStackTrace();
         } catch (Exception e) {
             ui.displayError("Client error: " + e.getMessage());
             e.printStackTrace();
-        } finally {
-            // Don't cleanup immediately for GUI clients
-            if (!(ui instanceof ssh.client.gui.JavaFXClientUI)) {
-                cleanup();
-            }
         }
     }
 

@@ -23,6 +23,9 @@ import ssh.utils.CredentialsManager;
 
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 
 public class JavaFXClientUI implements ClientUI {
 
@@ -35,6 +38,22 @@ public class JavaFXClientUI implements ClientUI {
     // Progress tracking for file transfers
     private javafx.scene.control.ProgressBar activeProgressBar;
     private Label activeStatusLabel;
+    private Dialog<Void> reusableDialog;
+    private VBox reusableContent;
+
+    // Startup scene references
+    private javafx.scene.control.Label startupStatusLabel;
+    private javafx.scene.control.ProgressIndicator startupProgressIndicator;
+    private VBox startupConnectionForm;
+    private VBox startupUsernameForm;
+    private TextField startupHostField;
+    private TextField startupPortField;
+    private javafx.scene.control.Button startupConnectButton;
+    private javafx.scene.control.Button startupCancelButton;
+    private ComboBox<String> startupUsernameComboBox;
+    private javafx.scene.control.Button startupLoginButton;
+    private ServerInfo pendingServerInfo;
+    private String[] availableUsers;
 
     /**
      * Custom input field that behaves like a shell prompt
@@ -152,27 +171,274 @@ public class JavaFXClientUI implements ClientUI {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("SSH Client");
         
-        // Initialize with a better looking scene to prevent null pointer exceptions
+        // Initialize with animated startup scene
+        createStartupScene();
+        
+        // Show the stage immediately with the startup scene
+        this.primaryStage.show();
+    }
+    
+    private void createStartupScene() {
         VBox root = new VBox(20);
-        root.setPadding(new Insets(20));
+        root.setPadding(new Insets(30));
         root.setStyle("-fx-background-color: #2c3e50; -fx-alignment: center;");
         
+        // Title with nice styling
         javafx.scene.control.Label titleLabel = new javafx.scene.control.Label("SSH Client");
-        titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #ecf0f1;");
+        titleLabel.setStyle("-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #ecf0f1;");
         
-        javafx.scene.control.Label statusLabel = new javafx.scene.control.Label("Initializing connection...");
-        statusLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #bdc3c7;");
+        // Subtitle
+        javafx.scene.control.Label subtitleLabel = new javafx.scene.control.Label("Secure Shell Connection");
+        subtitleLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #bdc3c7; -fx-font-style: italic;");
         
+        // Progress indicator for animation
         javafx.scene.control.ProgressIndicator progressIndicator = new javafx.scene.control.ProgressIndicator();
         progressIndicator.setStyle("-fx-progress-color: #3498db;");
+        progressIndicator.setPrefSize(40, 40);
         
-        root.getChildren().addAll(titleLabel, progressIndicator, statusLabel);
+        // Status label that will be updated
+        javafx.scene.control.Label statusLabel = new javafx.scene.control.Label("Initializing...");
+        statusLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #bdc3c7;");
         
-        this.primaryStage.setScene(new javafx.scene.Scene(root, 400, 300));
-        this.primaryStage.setMinWidth(400);
-        this.primaryStage.setMinHeight(300);
+        // Connection form (initially hidden)
+        VBox connectionForm = new VBox(15);
+        connectionForm.setVisible(false);
+        connectionForm.setManaged(false);
         
-        // We don't show the stage until a connection is attempted
+        javafx.scene.control.Label formTitle = new javafx.scene.control.Label("Server Connection");
+        formTitle.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #ecf0f1;");
+        
+        GridPane grid = new GridPane();
+        grid.setHgap(15);
+        grid.setVgap(10);
+        grid.setAlignment(javafx.geometry.Pos.CENTER);
+        
+        TextField hostField = new TextField();
+        hostField.setPromptText("localhost");
+        hostField.setPrefWidth(200);
+        hostField.setStyle("-fx-background-color: #34495e; -fx-text-fill: #ecf0f1; -fx-border-color: #3498db; -fx-border-radius: 3px;");
+        
+        TextField portField = new TextField();
+        portField.setPromptText("2222");
+        portField.setPrefWidth(200);
+        portField.setStyle("-fx-background-color: #34495e; -fx-text-fill: #ecf0f1; -fx-border-color: #3498db; -fx-border-radius: 3px;");
+        
+        javafx.scene.control.Label hostLabel = new javafx.scene.control.Label("Host:");
+        hostLabel.setStyle("-fx-text-fill: #ecf0f1; -fx-font-weight: bold;");
+        
+        javafx.scene.control.Label portLabel = new javafx.scene.control.Label("Port:");
+        portLabel.setStyle("-fx-text-fill: #ecf0f1; -fx-font-weight: bold;");
+        
+        grid.add(hostLabel, 0, 0);
+        grid.add(hostField, 1, 0);
+        grid.add(portLabel, 0, 1);
+        grid.add(portField, 1, 1);
+        
+        // Connect button
+        javafx.scene.control.Button connectButton = new javafx.scene.control.Button("Connect");
+        connectButton.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-padding: 10 20;");
+        connectButton.setPrefWidth(120);
+        
+        // Cancel button
+        javafx.scene.control.Button cancelButton = new javafx.scene.control.Button("Cancel");
+        cancelButton.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-padding: 10 20;");
+        cancelButton.setPrefWidth(120);
+        
+        javafx.scene.layout.HBox buttonBox = new javafx.scene.layout.HBox(15);
+        buttonBox.setAlignment(javafx.geometry.Pos.CENTER);
+        buttonBox.getChildren().addAll(cancelButton, connectButton);
+        
+        connectionForm.getChildren().addAll(formTitle, grid, buttonBox);
+        
+        // Username selection form (initially hidden)
+        VBox usernameForm = new VBox(15);
+        usernameForm.setVisible(false);
+        usernameForm.setManaged(false);
+        usernameForm.setAlignment(javafx.geometry.Pos.CENTER);
+        
+        ComboBox<String> usernameComboBox = new ComboBox<>();
+        usernameComboBox.setPrefWidth(200);
+        usernameComboBox.setStyle("-fx-background-color: #34495e; -fx-text-fill: #ecf0f1; -fx-border-color: #3498db; -fx-border-radius: 3px;");
+        
+        // Back button for username form
+        javafx.scene.control.Button backButton = new javafx.scene.control.Button("Back");
+        backButton.setStyle("-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-padding: 10 20;");
+        backButton.setPrefWidth(120);
+        
+        // Login button
+        javafx.scene.control.Button loginButton = new javafx.scene.control.Button("Login");
+        loginButton.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-padding: 10 20;");
+        loginButton.setPrefWidth(120);
+        
+        javafx.scene.layout.HBox usernameButtonBox = new javafx.scene.layout.HBox(15);
+        usernameButtonBox.setAlignment(javafx.geometry.Pos.CENTER);
+        usernameButtonBox.getChildren().addAll(backButton, loginButton);
+        
+        usernameForm.getChildren().addAll(usernameComboBox, usernameButtonBox);
+        
+        // Add all elements to root
+        root.getChildren().addAll(titleLabel, subtitleLabel, progressIndicator, statusLabel, connectionForm, usernameForm);
+        
+        // Set up the scene
+        this.primaryStage.setScene(new javafx.scene.Scene(root, 450, 400));
+        this.primaryStage.setMinWidth(450);
+        this.primaryStage.setMinHeight(400);
+        this.primaryStage.setResizable(false);
+        
+        // Store references for later use
+        this.startupStatusLabel = statusLabel;
+        this.startupProgressIndicator = progressIndicator;
+        this.startupConnectionForm = connectionForm;
+        this.startupUsernameForm = usernameForm;
+        this.startupHostField = hostField;
+        this.startupPortField = portField;
+        this.startupConnectButton = connectButton;
+        this.startupCancelButton = cancelButton;
+        this.startupUsernameComboBox = usernameComboBox;
+        this.startupLoginButton = loginButton;
+        
+        // Set up button actions
+        connectButton.setOnAction(e -> handleConnect());
+        cancelButton.setOnAction(e -> Platform.exit());
+        loginButton.setOnAction(e -> handleLogin());
+        backButton.setOnAction(e -> showConnectionForm());
+        
+        // Start the animation sequence
+        startStartupAnimation();
+    }
+    
+    private void startStartupAnimation() {
+        // Animate the progress indicator and status messages
+        Timeline timeline = new Timeline();
+        
+        timeline.getKeyFrames().addAll(
+            new KeyFrame(Duration.seconds(0), e -> {
+                startupStatusLabel.setText("Initializing SSH Client...");
+                startupProgressIndicator.setProgress(0.1);
+            }),
+            new KeyFrame(Duration.seconds(1), e -> {
+                startupStatusLabel.setText("Loading configuration...");
+                startupProgressIndicator.setProgress(0.3);
+            }),
+            new KeyFrame(Duration.seconds(2), e -> {
+                startupStatusLabel.setText("Preparing connection...");
+                startupProgressIndicator.setProgress(0.6);
+            }),
+            new KeyFrame(Duration.seconds(3), e -> {
+                startupStatusLabel.setText("Ready to connect");
+                startupProgressIndicator.setProgress(1.0);
+            }),
+            new KeyFrame(Duration.seconds(3.5), e -> {
+                // Show connection form
+                startupConnectionForm.setVisible(true);
+                startupConnectionForm.setManaged(true);
+                startupStatusLabel.setText("Enter server details to connect");
+                startupProgressIndicator.setVisible(false);
+                startupProgressIndicator.setManaged(false);
+                
+                // Focus on host field
+                Platform.runLater(startupHostField::requestFocus);
+            })
+        );
+        
+        timeline.play();
+    }
+    
+    private void handleConnect() {
+        String host = startupHostField.getText().isEmpty() ? "localhost" : startupHostField.getText();
+        int port;
+        
+        try {
+            port = startupPortField.getText().isEmpty() ? 2222 : Integer.parseInt(startupPortField.getText());
+        } catch (NumberFormatException e) {
+            showError("Invalid port number. Please enter a valid number.");
+            return;
+        }
+        
+        // Create ServerInfo and store it for later use
+        this.pendingServerInfo = new ServerInfo(host, port, null);
+        
+        // Show username selection form
+        showUsernameForm();
+    }
+    
+    private void showUsernameForm() {
+        // Load available users
+        try {
+            CredentialsManager credentialsManager = new CredentialsManager("config/credentials.properties");
+            this.availableUsers = credentialsManager.getAvailableUsers();
+            
+            // Populate username combo box
+            startupUsernameComboBox.getItems().clear();
+            for (String user : availableUsers) {
+                startupUsernameComboBox.getItems().add(user);
+            }
+            if (availableUsers.length > 0) {
+                startupUsernameComboBox.setValue(availableUsers[0]);
+            }
+            
+            // Hide connection form and show username form
+            startupConnectionForm.setVisible(false);
+            startupConnectionForm.setManaged(false);
+            startupUsernameForm.setVisible(true);
+            startupUsernameForm.setManaged(true);
+            
+            startupStatusLabel.setText("Select your username to connect");
+            
+            // Focus on username combo box
+            Platform.runLater(startupUsernameComboBox::requestFocus);
+            
+        } catch (Exception e) {
+            showError("Failed to load user credentials: " + e.getMessage());
+        }
+    }
+    
+    private void showConnectionForm() {
+        // Hide username form and show connection form
+        startupUsernameForm.setVisible(false);
+        startupUsernameForm.setManaged(false);
+        startupConnectionForm.setVisible(true);
+        startupConnectionForm.setManaged(true);
+        
+        startupStatusLabel.setText("Enter server details to connect");
+        
+        // Focus on host field
+        Platform.runLater(startupHostField::requestFocus);
+    }
+    
+    private void handleLogin() {
+        String selectedUser = startupUsernameComboBox.getValue();
+        if (selectedUser == null || selectedUser.trim().isEmpty()) {
+            showError("Please select a username.");
+            return;
+        }
+        
+        // Update UI to show connecting state
+        startupStatusLabel.setText("Connecting to " + pendingServerInfo.getHost() + ":" + pendingServerInfo.getPort() + " as " + selectedUser + "...");
+        startupUsernameForm.setVisible(false);
+        startupUsernameForm.setManaged(false);
+        startupProgressIndicator.setVisible(true);
+        startupProgressIndicator.setManaged(true);
+        startupProgressIndicator.setProgress(-1); // Indeterminate progress
+        
+        // Set the username in the pending server info
+        pendingServerInfo.setUsername(selectedUser);
+        
+        // Start the connection process in a background thread
+        new Thread(() -> {
+            try {
+                client.startConnection();
+            } catch (Exception e) {
+                Platform.runLater(() -> {
+                    showError("Connection failed: " + e.getMessage());
+                    // Reset to username form on error
+                    startupProgressIndicator.setVisible(false);
+                    startupProgressIndicator.setManaged(false);
+                    startupUsernameForm.setVisible(true);
+                    startupUsernameForm.setManaged(true);
+                });
+            }
+        }).start();
     }
 
     public void setClient(SSHClient client) {
@@ -333,43 +599,15 @@ public class JavaFXClientUI implements ClientUI {
 
     @Override
     public ServerInfo getServerInfoFromUser() {
-        Dialog<ServerInfo> dialog = new Dialog<>();
-        dialog.setTitle("Connect to Server");
-        dialog.setHeaderText("Enter the server's connection details.");
-
-        ButtonType connectButtonType = new ButtonType("Connect", ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(connectButtonType, ButtonType.CANCEL);
-
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(20, 150, 10, 10));
-
-        TextField hostField = new TextField();
-        hostField.setPromptText("localhost");
-        TextField portField = new TextField();
-        portField.setPromptText("2222");
-
-        grid.add(new Label("Host:"), 0, 0);
-        grid.add(hostField, 1, 0);
-        grid.add(new Label("Port:"), 0, 1);
-        grid.add(portField, 1, 1);
-
-        dialog.getDialogPane().setContent(grid);
-
-        Platform.runLater(hostField::requestFocus);
-
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == connectButtonType) {
-                String host = hostField.getText().isEmpty() ? "localhost" : hostField.getText();
-                int port = portField.getText().isEmpty() ? 2222 : Integer.parseInt(portField.getText());
-                return new ServerInfo(host, port, null); // Username set later
-            }
-            return null;
-        });
-
-        Optional<ServerInfo> result = dialog.showAndWait();
-        return result.orElse(null);
+        // Return the pending server info that was set during the startup process
+        if (pendingServerInfo != null) {
+            ServerInfo info = pendingServerInfo;
+            pendingServerInfo = null; // Clear it after use
+            return info;
+        }
+        
+        // Fallback: if somehow we don't have pending info, return default
+        return new ServerInfo("localhost", 2222, null);
     }
 
     @Override
@@ -516,101 +754,34 @@ public class JavaFXClientUI implements ClientUI {
     public AuthCredentials getAuthCredentials(String[] availableUsers) {
         System.out.println("DEBUG: getAuthCredentials called with " + (availableUsers != null ? availableUsers.length : 0) + " users");
         
-        // Ensure this runs on the JavaFX application thread
-        if (!Platform.isFxApplicationThread()) {
-            System.out.println("DEBUG: Not on FX thread, using Platform.runLater");
-            // If we're not on the FX thread, we need to handle this differently
-            // For now, we'll use a simple approach with Platform.runLater
-            final AuthCredentials[] result = new AuthCredentials[1];
-            final CountDownLatch latch = new CountDownLatch(1);
-            
-            Platform.runLater(() -> {
-                System.out.println("DEBUG: Creating auth dialog on FX thread");
-                result[0] = createAuthDialog(availableUsers);
-                latch.countDown();
-            });
-            
+        // Return credentials for the user selected in the startup window
+        if (pendingServerInfo != null && pendingServerInfo.getUsername() != null) {
+            String selectedUser = pendingServerInfo.getUsername();
             try {
-                latch.await();
-                System.out.println("DEBUG: Auth dialog result: " + (result[0] != null ? "success" : "cancelled"));
-                return result[0];
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                System.out.println("DEBUG: Auth dialog interrupted");
-                return null;
-            }
-        } else {
-            System.out.println("DEBUG: Already on FX thread, creating dialog directly");
-            AuthCredentials result = createAuthDialog(availableUsers);
-            System.out.println("DEBUG: Auth dialog result: " + (result != null ? "success" : "cancelled"));
-            return result;
-        }
-    }
-
-    private AuthCredentials createAuthDialog(String[] availableUsers) {
-        System.out.println("DEBUG: Creating authentication dialog");
-        Dialog<AuthCredentials> dialog = new Dialog<>();
-        dialog.setTitle("Authentication");
-        dialog.setHeaderText("Please enter your credentials.");
-
-        ButtonType loginButtonType = new ButtonType("Login", ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
-
-        // Username selection
-        ComboBox<String> userComboBox = new ComboBox<>();
-        for (String user : availableUsers) {
-            userComboBox.getItems().add(user);
-        }
-        userComboBox.setValue(availableUsers.length > 0 ? availableUsers[0] : "");
-
-        // (Optional) Authentication type selection (hidden or fixed to 'dual')
-        // ComboBox<String> authTypeComboBox = new ComboBox<>();
-        // authTypeComboBox.getItems().addAll("dual");
-        // authTypeComboBox.setValue("dual");
-
-        // Layout
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(20, 150, 10, 10));
-        grid.add(new Label("Username:"), 0, 0);
-        grid.add(userComboBox, 1, 0);
-        // grid.add(new Label("Auth Type:"), 0, 1);
-        // grid.add(authTypeComboBox, 1, 1);
-
-        dialog.getDialogPane().setContent(grid);
-
-        // Result converter: load credentials for selected user
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == loginButtonType) {
-                String selectedUser = userComboBox.getValue();
                 CredentialsManager credentialsManager = new CredentialsManager("config/credentials.properties");
-                return credentialsManager.getAuthCredentials(selectedUser);
-            } else {
+                AuthCredentials credentials = credentialsManager.getAuthCredentials(selectedUser);
+                System.out.println("DEBUG: Returning credentials for user: " + selectedUser);
+                return credentials;
+            } catch (Exception e) {
+                System.out.println("DEBUG: Error getting credentials for user " + selectedUser + ": " + e.getMessage());
                 return null;
             }
-        });
-
-        // Set the dialog to be modal and block the application
-        dialog.initModality(javafx.stage.Modality.APPLICATION_MODAL);
-        
-        // Only set the owner if the stage has a scene
-        if (primaryStage != null && primaryStage.getScene() != null) {
-            dialog.initOwner(primaryStage);
         }
-
-        Platform.runLater(userComboBox::requestFocus);
-
-        System.out.println("DEBUG: Showing authentication dialog");
-        Optional<AuthCredentials> result = dialog.showAndWait();
-        System.out.println("DEBUG: Dialog closed, result: " + (result.isPresent() ? "present" : "empty"));
-        return result.orElse(null);
+        
+        // Fallback: if somehow we don't have a selected user, return null
+        System.out.println("DEBUG: No user selected, returning null");
+        return null;
     }
 
     @Override
     public void showConnectionProgress(String step) {
-        // We could show a progress indicator dialog here in the future
-        System.out.println("GUI_PROGRESS: " + step);
+        // Update the startup status label if we're still in startup phase
+        Platform.runLater(() -> {
+            if (startupStatusLabel != null) {
+                startupStatusLabel.setText(step);
+            }
+            System.out.println("GUI_PROGRESS: " + step);
+        });
     }
 
     @Override
@@ -622,37 +793,60 @@ public class JavaFXClientUI implements ClientUI {
     private void handleFileTransfer() {
         System.out.println("DEBUG: File Transfer button clicked");
         
-        // Create the main file transfer dialog
-        Dialog<Void> fileTransferDialog = new Dialog<>();
-        fileTransferDialog.setTitle("File Transfer");
-        fileTransferDialog.setHeaderText("Choose a file transfer operation");
+        // Initialize reusable dialog if not already done
+        if (reusableDialog == null) {
+            initializeReusableDialog();
+        }
+        
+        // Update dialog for file transfer selection
+        updateDialogForFileTransferSelection();
+        reusableDialog.showAndWait();
+    }
+    
+    private void initializeReusableDialog() {
+        reusableDialog = new Dialog<>();
+        reusableDialog.setTitle("File Transfer");
+        
+        // Remove default buttons - we'll add them dynamically
+        reusableDialog.getDialogPane().getButtonTypes().clear();
+        
+        reusableContent = new VBox(15);
+        reusableContent.setPadding(new Insets(20));
+        
+        reusableDialog.getDialogPane().setContent(reusableContent);
+        reusableDialog.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+        if (primaryStage != null && primaryStage.getScene() != null) {
+            reusableDialog.initOwner(primaryStage);
+        }
+        reusableDialog.setResizable(false);
+        reusableDialog.getDialogPane().setPrefWidth(450);
+        reusableDialog.getDialogPane().setPrefHeight(200);
+    }
+    
+    private void updateDialogForFileTransferSelection() {
+        reusableDialog.setHeaderText("Choose a file transfer operation");
+        
+        // Clear existing content
+        reusableContent.getChildren().clear();
+        
+        // Clear existing buttons
+        reusableDialog.getDialogPane().getButtonTypes().clear();
         
         ButtonType uploadButtonType = new ButtonType("Upload File", ButtonData.LEFT);
         ButtonType downloadButtonType = new ButtonType("Download File", ButtonData.OTHER);
         ButtonType cancelButtonType = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
         
-        // Clear existing buttons and add them in the desired order
-        fileTransferDialog.getDialogPane().getButtonTypes().clear();
-        fileTransferDialog.getDialogPane().getButtonTypes().addAll(
+        reusableDialog.getDialogPane().getButtonTypes().addAll(
             uploadButtonType, downloadButtonType, cancelButtonType
         );
-        
-        VBox content = new VBox(15);
-        content.setPadding(new Insets(20));
         
         Label infoLabel = new Label("Select a file transfer operation:");
         infoLabel.setWrapText(true);
         infoLabel.setStyle("-fx-font-size: 12px;");
         
-        content.getChildren().add(infoLabel);
+        reusableContent.getChildren().add(infoLabel);
         
-        fileTransferDialog.getDialogPane().setContent(content);
-        fileTransferDialog.initModality(javafx.stage.Modality.APPLICATION_MODAL);
-        if (primaryStage != null && primaryStage.getScene() != null) {
-            fileTransferDialog.initOwner(primaryStage);
-        }
-        
-        fileTransferDialog.setResultConverter(dialogButton -> {
+        reusableDialog.setResultConverter(dialogButton -> {
             if (dialogButton == uploadButtonType) {
                 handleFileUpload();
                 return null;
@@ -664,8 +858,6 @@ public class JavaFXClientUI implements ClientUI {
             }
             return null;
         });
-        
-        fileTransferDialog.showAndWait();
     }
     
     private void handleFileUpload() {
@@ -686,13 +878,27 @@ public class JavaFXClientUI implements ClientUI {
             return; // User cancelled
         }
         
-        // Create dialog to get remote path
-        Dialog<String> remotePathDialog = new Dialog<>();
-        remotePathDialog.setTitle("Upload File");
-        remotePathDialog.setHeaderText("Upload: " + selectedFile.getName());
+        // Update dialog for remote path input
+        updateDialogForUploadPath(selectedFile);
+        reusableDialog.showAndWait();
+    }
+    
+    private void updateDialogForUploadPath(java.io.File selectedFile) {
+        reusableDialog.setHeaderText("Upload: " + selectedFile.getName());
+        
+        // Clear existing content
+        reusableContent.getChildren().clear();
+        
+        // Clear existing buttons
+        reusableDialog.getDialogPane().getButtonTypes().clear();
         
         ButtonType uploadButtonType = new ButtonType("Upload", ButtonData.OK_DONE);
-        remotePathDialog.getDialogPane().getButtonTypes().addAll(uploadButtonType, ButtonType.CANCEL);
+        ButtonType backButtonType = new ButtonType("Back", ButtonData.OTHER);
+        ButtonType cancelButtonType = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
+        
+        reusableDialog.getDialogPane().getButtonTypes().addAll(
+            uploadButtonType, backButtonType, cancelButtonType
+        );
         
         GridPane grid = new GridPane();
         grid.setHgap(10);
@@ -710,69 +916,150 @@ public class JavaFXClientUI implements ClientUI {
         grid.add(remotePathField, 1, 0);
         grid.add(infoLabel, 0, 1, 2, 1);
         
-        remotePathDialog.getDialogPane().setContent(grid);
-        remotePathDialog.initModality(javafx.stage.Modality.APPLICATION_MODAL);
-        remotePathDialog.initOwner(primaryStage);
+        reusableContent.getChildren().add(grid);
         
         Platform.runLater(remotePathField::requestFocus);
         
-        remotePathDialog.setResultConverter(dialogButton -> {
+        reusableDialog.setResultConverter(dialogButton -> {
             if (dialogButton == uploadButtonType) {
-                return remotePathField.getText().trim();
+                String remotePath = remotePathField.getText().trim();
+                performFileUpload(selectedFile, remotePath);
+                return null;
+            } else if (dialogButton == backButtonType) {
+                updateDialogForFileTransferSelection();
+                reusableDialog.showAndWait();
+                return null;
             }
             return null;
         });
+    }
+    
+    private void performFileUpload(java.io.File selectedFile, String remotePath) {
+        // Update dialog for progress
+        updateDialogForProgress("Uploading File", selectedFile.getName());
+        reusableDialog.show();
         
-        Optional<String> result = remotePathDialog.showAndWait();
-        result.ifPresent(remotePath -> {
-            // Show progress dialog
-            Dialog<Void> progressDialog = createProgressDialog("Uploading File", selectedFile.getName());
-            progressDialog.show();
-            
-            // Run upload in background thread
-            new Thread(() -> {
-                try {
-                    String finalRemotePath = remotePath.isEmpty() ? selectedFile.getName() : remotePath;
-                    client.getConnection().uploadFile(selectedFile.getAbsolutePath(), finalRemotePath);
-                    
-                    // Show success message on FX thread
-                    Platform.runLater(() -> {
-                        progressDialog.close();
-                        
-                        javafx.scene.control.Alert successAlert = new javafx.scene.control.Alert(
-                            javafx.scene.control.Alert.AlertType.INFORMATION);
-                        successAlert.setTitle("Upload Complete");
-                        successAlert.setHeaderText("File Uploaded Successfully");
-                        successAlert.setContentText("File '" + selectedFile.getName() + "' has been uploaded successfully!\n\n" +
-                                                   "Remote path: " + finalRemotePath + "\n" +
-                                                   "File size: " + formatFileSize(selectedFile.length()));
-                        
-                        successAlert.initOwner(primaryStage);
-                        successAlert.initModality(javafx.stage.Modality.APPLICATION_MODAL);
-                        successAlert.showAndWait();
-                    });
-                    
-                } catch (Exception e) {
-                    // Show error message on FX thread
-                    Platform.runLater(() -> {
-                        progressDialog.close();
-                        showError("Upload failed: " + e.getMessage());
-                    });
-                }
-            }).start();
-        });
+        // Run upload in background thread
+        new Thread(() -> {
+            try {
+                String finalRemotePath = remotePath.isEmpty() ? selectedFile.getName() : remotePath;
+                client.getConnection().uploadFile(selectedFile.getAbsolutePath(), finalRemotePath);
+                
+                // Show success message on FX thread
+                Platform.runLater(() -> {
+                    updateDialogForSuccess("Upload Complete", 
+                        "File '" + selectedFile.getName() + "' has been uploaded successfully!\n\n" +
+                        "Remote path: " + finalRemotePath + "\n" +
+                        "File size: " + formatFileSize(selectedFile.length()));
+                    reusableDialog.showAndWait();
+                });
+                
+            } catch (Exception e) {
+                // Show error message on FX thread
+                Platform.runLater(() -> {
+                    updateDialogForError("Upload failed: " + e.getMessage());
+                    reusableDialog.showAndWait();
+                });
+            }
+        }).start();
+    }
+    
+    private void updateDialogForProgress(String title, String filename) {
+        reusableDialog.setTitle(title);
+        reusableDialog.setHeaderText("Transferring: " + filename);
+        
+        // Clear existing content
+        reusableContent.getChildren().clear();
+        
+        // Clear existing buttons
+        reusableDialog.getDialogPane().getButtonTypes().clear();
+        
+        javafx.scene.control.ProgressBar progressBar = new javafx.scene.control.ProgressBar();
+        progressBar.setPrefWidth(300);
+        progressBar.setProgress(0.0);
+        
+        Label statusLabel = new Label("Preparing transfer...");
+        statusLabel.setStyle("-fx-font-size: 12px;");
+        
+        reusableContent.getChildren().addAll(progressBar, statusLabel);
+        
+        // Store references for progress updates
+        this.activeProgressBar = progressBar;
+        this.activeStatusLabel = statusLabel;
+    }
+    
+    private void updateDialogForSuccess(String title, String message) {
+        reusableDialog.setTitle(title);
+        reusableDialog.setHeaderText("Success");
+        
+        // Clear existing content
+        reusableContent.getChildren().clear();
+        
+        // Clear existing buttons
+        reusableDialog.getDialogPane().getButtonTypes().clear();
+        
+        ButtonType okButtonType = new ButtonType("OK", ButtonData.OK_DONE);
+        reusableDialog.getDialogPane().getButtonTypes().add(okButtonType);
+        
+        Label messageLabel = new Label(message);
+        messageLabel.setWrapText(true);
+        messageLabel.setStyle("-fx-font-size: 12px;");
+        
+        reusableContent.getChildren().add(messageLabel);
+        
+        // Clear progress references
+        this.activeProgressBar = null;
+        this.activeStatusLabel = null;
+    }
+    
+    private void updateDialogForError(String errorMessage) {
+        reusableDialog.setTitle("Error");
+        reusableDialog.setHeaderText("Error");
+        
+        // Clear existing content
+        reusableContent.getChildren().clear();
+        
+        // Clear existing buttons
+        reusableDialog.getDialogPane().getButtonTypes().clear();
+        
+        ButtonType okButtonType = new ButtonType("OK", ButtonData.OK_DONE);
+        reusableDialog.getDialogPane().getButtonTypes().add(okButtonType);
+        
+        Label errorLabel = new Label(errorMessage);
+        errorLabel.setWrapText(true);
+        errorLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #d32f2f;");
+        
+        reusableContent.getChildren().add(errorLabel);
+        
+        // Clear progress references
+        this.activeProgressBar = null;
+        this.activeStatusLabel = null;
     }
     
     private void handleFileDownload() {
         System.out.println("DEBUG: File Download selected");
         
-        // Create dialog to get remote file path
-        Dialog<String> remotePathDialog = new Dialog<>();
-        remotePathDialog.setTitle("Download File");
-        remotePathDialog.setHeaderText("Enter the remote file path to download");
+        // Update dialog for remote path input
+        updateDialogForDownloadPath();
+        reusableDialog.showAndWait();
+    }
+    
+    private void updateDialogForDownloadPath() {
+        reusableDialog.setHeaderText("Enter the remote file path to download");
+        
+        // Clear existing content
+        reusableContent.getChildren().clear();
+        
+        // Clear existing buttons
+        reusableDialog.getDialogPane().getButtonTypes().clear();
         
         ButtonType downloadButtonType = new ButtonType("Download", ButtonData.OK_DONE);
-        remotePathDialog.getDialogPane().getButtonTypes().addAll(downloadButtonType, ButtonType.CANCEL);
+        ButtonType backButtonType = new ButtonType("Back", ButtonData.OTHER);
+        ButtonType cancelButtonType = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
+        
+        reusableDialog.getDialogPane().getButtonTypes().addAll(
+            downloadButtonType, backButtonType, cancelButtonType
+        );
         
         GridPane grid = new GridPane();
         grid.setHgap(10);
@@ -785,112 +1072,67 @@ public class JavaFXClientUI implements ClientUI {
         grid.add(new Label("Remote File Path:"), 0, 0);
         grid.add(remotePathField, 1, 0);
         
-        remotePathDialog.getDialogPane().setContent(grid);
-        remotePathDialog.initModality(javafx.stage.Modality.APPLICATION_MODAL);
-        remotePathDialog.initOwner(primaryStage);
+        reusableContent.getChildren().add(grid);
         
         Platform.runLater(remotePathField::requestFocus);
         
-        remotePathDialog.setResultConverter(dialogButton -> {
+        reusableDialog.setResultConverter(dialogButton -> {
             if (dialogButton == downloadButtonType) {
-                return remotePathField.getText().trim();
+                String remotePath = remotePathField.getText().trim();
+                if (remotePath.isEmpty()) {
+                    updateDialogForError("Please enter a remote file path.");
+                    reusableDialog.showAndWait();
+                    return null;
+                }
+                performFileDownload(remotePath);
+                return null;
+            } else if (dialogButton == backButtonType) {
+                updateDialogForFileTransferSelection();
+                reusableDialog.showAndWait();
+                return null;
             }
             return null;
         });
-        
-        Optional<String> result = remotePathDialog.showAndWait();
-        result.ifPresent(remotePath -> {
-            if (remotePath.isEmpty()) {
-                showError("Please enter a remote file path.");
-                return;
-            }
-            
-            // Create file chooser for local save location
-            javafx.stage.FileChooser fileChooser = new javafx.stage.FileChooser();
-            fileChooser.setTitle("Save File As");
-            fileChooser.setInitialFileName(new java.io.File(remotePath).getName());
-            
-            java.io.File saveFile = fileChooser.showSaveDialog(primaryStage);
-            if (saveFile == null) {
-                return; // User cancelled
-            }
-            
-            // Show progress dialog
-            Dialog<Void> progressDialog = createProgressDialog("Downloading File", new java.io.File(remotePath).getName());
-            progressDialog.show();
-            
-            // Run download in background thread
-            new Thread(() -> {
-                try {
-                    client.getConnection().downloadFile(remotePath, saveFile.getAbsolutePath());
-                    
-                    // Show success message on FX thread
-                    Platform.runLater(() -> {
-                        progressDialog.close();
-                        
-                        javafx.scene.control.Alert successAlert = new javafx.scene.control.Alert(
-                            javafx.scene.control.Alert.AlertType.INFORMATION);
-                        successAlert.setTitle("Download Complete");
-                        successAlert.setHeaderText("File Downloaded Successfully");
-                        successAlert.setContentText("File has been downloaded successfully!\n\n" +
-                                                   "Remote path: " + remotePath + "\n" +
-                                                   "Local path: " + saveFile.getAbsolutePath() + "\n" +
-                                                   "File size: " + formatFileSize(saveFile.length()));
-                        
-                        successAlert.initOwner(primaryStage);
-                        successAlert.initModality(javafx.stage.Modality.APPLICATION_MODAL);
-                        successAlert.showAndWait();
-                    });
-                    
-                } catch (Exception e) {
-                    // Show error message on FX thread
-                    Platform.runLater(() -> {
-                        progressDialog.close();
-                        showError("Download failed: " + e.getMessage());
-                    });
-                }
-            }).start();
-        });
     }
     
-    private Dialog<Void> createProgressDialog(String title, String filename) {
-        Dialog<Void> progressDialog = new Dialog<>();
-        progressDialog.setTitle(title);
-        progressDialog.setHeaderText("Transferring: " + filename);
+    private void performFileDownload(String remotePath) {
+        // Create file chooser for local save location
+        javafx.stage.FileChooser fileChooser = new javafx.stage.FileChooser();
+        fileChooser.setTitle("Save File As");
+        fileChooser.setInitialFileName(new java.io.File(remotePath).getName());
         
-        // Remove default buttons
-        progressDialog.getDialogPane().getButtonTypes().clear();
+        java.io.File saveFile = fileChooser.showSaveDialog(primaryStage);
+        if (saveFile == null) {
+            return; // User cancelled
+        }
         
-        VBox content = new VBox(15);
-        content.setPadding(new Insets(20));
+        // Update dialog for progress
+        updateDialogForProgress("Downloading File", new java.io.File(remotePath).getName());
+        reusableDialog.show();
         
-        javafx.scene.control.ProgressBar progressBar = new javafx.scene.control.ProgressBar();
-        progressBar.setPrefWidth(300);
-        progressBar.setProgress(0.0);
-        
-        Label statusLabel = new Label("Preparing transfer...");
-        statusLabel.setStyle("-fx-font-size: 12px;");
-        
-        content.getChildren().addAll(progressBar, statusLabel);
-        
-        progressDialog.getDialogPane().setContent(content);
-        progressDialog.initModality(javafx.stage.Modality.APPLICATION_MODAL);
-        progressDialog.initOwner(primaryStage);
-        progressDialog.setResizable(false);
-        progressDialog.getDialogPane().setPrefWidth(400);
-        progressDialog.getDialogPane().setPrefHeight(150);
-        
-        // Store references for progress updates
-        this.activeProgressBar = progressBar;
-        this.activeStatusLabel = statusLabel;
-        
-        // Clear references when dialog is closed
-        progressDialog.setOnCloseRequest(event -> {
-            this.activeProgressBar = null;
-            this.activeStatusLabel = null;
-        });
-        
-        return progressDialog;
+        // Run download in background thread
+        new Thread(() -> {
+            try {
+                client.getConnection().downloadFile(remotePath, saveFile.getAbsolutePath());
+                
+                // Show success message on FX thread
+                Platform.runLater(() -> {
+                    updateDialogForSuccess("Download Complete", 
+                        "File has been downloaded successfully!\n\n" +
+                        "Remote path: " + remotePath + "\n" +
+                        "Local path: " + saveFile.getAbsolutePath() + "\n" +
+                        "File size: " + formatFileSize(saveFile.length()));
+                    reusableDialog.showAndWait();
+                });
+                
+            } catch (Exception e) {
+                // Show error message on FX thread
+                Platform.runLater(() -> {
+                    updateDialogForError("Download failed: " + e.getMessage());
+                    reusableDialog.showAndWait();
+                });
+            }
+        }).start();
     }
     
     private String formatFileSize(long bytes) {
@@ -901,26 +1143,16 @@ public class JavaFXClientUI implements ClientUI {
     }
     
     private void handleDisconnect() {
-        // Show confirmation dialog
-        javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Disconnect");
-        alert.setHeaderText("Disconnect from Server");
-        alert.setContentText("Are you sure you want to disconnect from the server?");
-        alert.initOwner(primaryStage);
-        
-        Optional<javafx.scene.control.ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == javafx.scene.control.ButtonType.OK) {
-            if (client != null) {
-                // Send proper disconnect message to server
-                try {
-                    client.sendDisconnect();
-                } catch (Exception e) {
-                    System.out.println("DEBUG: Error sending disconnect message: " + e.getMessage());
-                }
-                client.stop();
+        if (client != null) {
+            // Send proper disconnect message to server
+            try {
+                client.sendDisconnect();
+            } catch (Exception e) {
+                System.out.println("DEBUG: Error sending disconnect message: " + e.getMessage());
             }
-            Platform.exit();
+            client.stop();
         }
+        Platform.exit();
     }
 
     private void handleManageSSHUsers() {
