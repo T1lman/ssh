@@ -5,28 +5,65 @@ import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.zip.CRC32;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
 
 /**
  * Abstract base class for all SSH protocol messages.
  */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "typeName"
+)
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = ssh.protocol.messages.ShellMessage.class, name = "ShellMessage"),
+    @JsonSubTypes.Type(value = ssh.protocol.messages.ServiceMessage.class, name = "ServiceMessage"),
+    @JsonSubTypes.Type(value = ssh.protocol.messages.ErrorMessage.class, name = "ErrorMessage"),
+    @JsonSubTypes.Type(value = ssh.protocol.messages.KeyExchangeMessage.class, name = "KeyExchangeMessage"),
+    @JsonSubTypes.Type(value = ssh.protocol.messages.FileTransferMessage.class, name = "FileTransferMessage"),
+    @JsonSubTypes.Type(value = ssh.protocol.messages.AuthMessage.class, name = "AuthMessage")
+})
 public abstract class Message {
     private MessageType type;
     private byte[] payload;
     private int checksum;
+
+    @JsonIgnore
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public Message(MessageType type) {
         this.type = type;
     }
 
     /**
-     * Serialize the message to bytes for transmission.
+     * Serialize the message to bytes for transmission (default: JSON).
      */
-    public abstract byte[] serialize();
+    public byte[] serialize() {
+        try {
+            return objectMapper.writeValueAsBytes(this);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to serialize message to JSON", e);
+        }
+    }
 
     /**
-     * Deserialize the message from bytes.
+     * Deserialize the message from bytes (default: JSON).
      */
-    public abstract void deserialize(byte[] data);
+    public void deserialize(byte[] data) {
+        try {
+            Message m = objectMapper.readValue(data, this.getClass());
+            // Copy all fields from m to this
+            for (java.lang.reflect.Field field : this.getClass().getDeclaredFields()) {
+                field.setAccessible(true);
+                field.set(this, field.get(m));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to deserialize message from JSON", e);
+        }
+    }
 
     /**
      * Calculate the checksum of the payload.

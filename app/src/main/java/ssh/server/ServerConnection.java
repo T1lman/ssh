@@ -265,21 +265,38 @@ public class ServerConnection implements Runnable {
     /**
      * Handle shell command execution.
      */
-    private void handleShellCommand(ssh.protocol.messages.ShellMessage message) throws Exception {
-        String command = message.getCommand();
-        ui.showShellCommand(authenticatedUser, command);
+    private void handleShellCommand(ssh.protocol.messages.ShellMessage message) {
+        try {
+            String command = message.getCommand();
+            ui.showShellCommand(authenticatedUser, command);
+            Logger.info("Executing shell command: '" + command + "' for user: " + authenticatedUser);
 
-        // Execute command using the session-specific executor
-        ssh.shell.CommandResult result = shellExecutor.execute(command);
+            // Execute command using the session-specific executor
+            ssh.shell.CommandResult result = shellExecutor.execute(command);
+            Logger.info("Command result: exitCode=" + result.getExitCode() + ", stdout='" + result.getStdout() + "', stderr='" + result.getStderr() + "'");
 
-        // Send result back to client
-        ssh.protocol.messages.ShellMessage response = new ssh.protocol.messages.ShellMessage(MessageType.SHELL_RESULT);
-        response.setExitCode(result.getExitCode());
-        response.setStdout(result.getStdout());
-        response.setStderr(result.getStderr());
-        response.setWorkingDirectory(shellExecutor.getCurrentWorkingDirectory());
+            // Send result back to client
+            ssh.protocol.messages.ShellMessage response = new ssh.protocol.messages.ShellMessage(MessageType.SHELL_RESULT);
+            response.setExitCode(result.getExitCode());
+            response.setStdout(result.getStdout());
+            response.setStderr(result.getStderr());
+            response.setWorkingDirectory(shellExecutor.getCurrentWorkingDirectory());
 
-        protocolHandler.sendMessage(response);
+            protocolHandler.sendMessage(response);
+            Logger.info("Sent SHELL_RESULT message to client.");
+        } catch (Exception e) {
+            ui.displayError("Shell command error: " + e.getMessage());
+            Logger.error("Exception in handleShellCommand: " + e.getMessage(), e);
+            try {
+                ssh.protocol.messages.ErrorMessage errorMsg = new ssh.protocol.messages.ErrorMessage();
+                errorMsg.setErrorMessage("Server error: " + e.getMessage());
+                protocolHandler.sendMessage(errorMsg);
+                Logger.info("Sent ErrorMessage to client: " + e.getMessage());
+            } catch (Exception ex) {
+                ui.displayError("Failed to send error message to client: " + ex.getMessage());
+                Logger.error("Failed to send ErrorMessage to client: " + ex.getMessage(), ex);
+            }
+        }
     }
 
     /**

@@ -144,32 +144,8 @@ public class StartupScene {
     }
     
     private void startAnimation() {
-        Timeline timeline = new Timeline();
-        
-        timeline.getKeyFrames().addAll(
-            new KeyFrame(Duration.seconds(0), e -> {
-                statusLabel.setText("Initializing SSH Client...");
-                progressIndicator.setProgress(0.1);
-            }),
-            new KeyFrame(Duration.seconds(1), e -> {
-                statusLabel.setText("Loading configuration...");
-                progressIndicator.setProgress(0.3);
-            }),
-            new KeyFrame(Duration.seconds(2), e -> {
-                statusLabel.setText("Preparing connection...");
-                progressIndicator.setProgress(0.6);
-            }),
-            new KeyFrame(Duration.seconds(3), e -> {
-                statusLabel.setText("Ready to connect");
-                progressIndicator.setProgress(1.0);
-            }),
-            new KeyFrame(Duration.seconds(3.5), e -> {
-                showConnectionForm();
-                Platform.runLater(hostField::requestFocus);
-            })
-        );
-        
-        timeline.play();
+        showConnectionForm();
+        Platform.runLater(hostField::requestFocus);
     }
     
     private void handleConnect() {

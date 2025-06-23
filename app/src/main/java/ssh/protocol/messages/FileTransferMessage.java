@@ -2,6 +2,7 @@ package ssh.protocol.messages;
 
 import ssh.protocol.Message;
 import ssh.protocol.MessageType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Base64;
 
@@ -28,86 +29,12 @@ public class FileTransferMessage extends Message {
 
     @Override
     public byte[] serialize() {
-        StringBuilder sb = new StringBuilder();
-        MessageType type = getType();
-
-        if (filename != null) {
-            sb.append("filename:").append(filename).append(";");
-        }
-        if (fileSize > 0) {
-            sb.append("fileSize:").append(fileSize).append(";");
-        }
-        if (targetPath != null) {
-            sb.append("targetPath:").append(targetPath).append(";");
-        }
-        if (type == MessageType.FILE_DATA || type == MessageType.FILE_ACK) {
-            sb.append("sequenceNumber:").append(sequenceNumber).append(";");
-        }
-        if (data != null) {
-            sb.append("data:").append(data).append(";");
-        }
-        if (type == MessageType.FILE_DATA) {
-            sb.append("isLast:").append(isLast).append(";");
-        }
-        if (status != null) {
-            sb.append("status:").append(status).append(";");
-        }
-        if (message != null) {
-            sb.append("message:").append(message).append(";");
-        }
-        return sb.toString().getBytes();
+        return super.serialize();
     }
 
     @Override
-    public void deserialize(byte[] dataBytes) {
-        String dataStr = new String(dataBytes);
-        int lastIndex = 0;
-        while (lastIndex < dataStr.length()) {
-            int keyEnd = dataStr.indexOf(':', lastIndex);
-            if (keyEnd == -1) {
-                break; // No more keys
-            }
-
-            int valueEnd = dataStr.indexOf(';', keyEnd);
-            if (valueEnd == -1) {
-                valueEnd = dataStr.length(); // Last value
-            }
-
-            String key = dataStr.substring(lastIndex, keyEnd);
-            String value = dataStr.substring(keyEnd + 1, valueEnd);
-
-            switch (key) {
-                case "filename":
-                    this.filename = value;
-                    break;
-                case "fileSize":
-                    this.fileSize = Long.parseLong(value);
-                    break;
-                case "targetPath":
-                    this.targetPath = value;
-                    break;
-                case "sequenceNumber":
-                    this.sequenceNumber = Integer.parseInt(value);
-                    break;
-                case "data":
-                    this.data = value;
-                    break;
-                case "isLast":
-                    this.isLast = Boolean.parseBoolean(value);
-                    break;
-                case "status":
-                    this.status = value;
-                    break;
-                case "message":
-                    this.message = value;
-                    break;
-                default:
-                    // Unknown key, just ignore it
-                    break;
-            }
-
-            lastIndex = valueEnd + 1;
-        }
+    public void deserialize(byte[] data) {
+        super.deserialize(data);
     }
 
     // Getters and setters
@@ -155,6 +82,7 @@ public class FileTransferMessage extends Message {
         this.data = Base64.getEncoder().encodeToString(dataBytes);
     }
 
+    @JsonIgnore
     public byte[] getDataBytes() {
         return Base64.getDecoder().decode(data);
     }

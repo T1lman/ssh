@@ -23,33 +23,12 @@ public class ErrorMessage extends Message {
 
     @Override
     public byte[] serialize() {
-        StringBuilder sb = new StringBuilder();
-        if (errorCode != null) {
-            sb.append("errorCode:").append(errorCode).append(";");
-        }
-        if (errorMessage != null) {
-            sb.append("errorMessage:").append(errorMessage).append(";");
-        }
-        if (details != null) {
-            sb.append("details:").append(details).append(";");
-        }
-        return sb.toString().getBytes();
+        return super.serialize();
     }
 
     @Override
     public void deserialize(byte[] data) {
-        String dataStr = new String(data);
-        String[] parts = dataStr.split(";");
-        
-        for (String part : parts) {
-            if (part.startsWith("errorCode:")) {
-                this.errorCode = part.substring(10);
-            } else if (part.startsWith("errorMessage:")) {
-                this.errorMessage = part.substring(13);
-            } else if (part.startsWith("details:")) {
-                this.details = part.substring(8);
-            }
-        }
+        super.deserialize(data);
     }
 
     // Getters and setters

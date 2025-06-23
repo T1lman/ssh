@@ -15,26 +15,18 @@ public class ServiceMessage extends Message {
         super(type);
     }
 
+    public ServiceMessage() {
+        super(MessageType.SERVICE_REQUEST);
+    }
+
     @Override
     public byte[] serialize() {
-        if (service == null) {
-            service = "";
-        }
-        
-        byte[] serviceBytes = service.getBytes();
-        ByteBuffer buffer = ByteBuffer.allocate(serviceBytes.length);
-        buffer.put(serviceBytes);
-        
-        return buffer.array();
+        return super.serialize();
     }
 
     @Override
     public void deserialize(byte[] data) {
-        if (data != null && data.length > 0) {
-            this.service = new String(data);
-        } else {
-            this.service = "";
-        }
+        super.deserialize(data);
     }
 
     public String getService() {

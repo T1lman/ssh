@@ -2,6 +2,7 @@ package ssh.protocol.messages;
 
 import ssh.protocol.Message;
 import ssh.protocol.MessageType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Base64;
 
@@ -25,43 +26,12 @@ public class KeyExchangeMessage extends Message {
 
     @Override
     public byte[] serialize() {
-        StringBuilder sb = new StringBuilder();
-        if (dhPublicKey != null) {
-            sb.append("dhPublicKey:").append(dhPublicKey).append(";");
-        }
-        if (clientId != null) {
-            sb.append("clientId:").append(clientId).append(";");
-        }
-        if (serverId != null) {
-            sb.append("serverId:").append(serverId).append(";");
-        }
-        if (signature != null) {
-            sb.append("signature:").append(signature).append(";");
-        }
-        if (sessionId != null) {
-            sb.append("sessionId:").append(sessionId).append(";");
-        }
-        return sb.toString().getBytes();
+        return super.serialize();
     }
 
     @Override
     public void deserialize(byte[] data) {
-        String dataStr = new String(data);
-        String[] parts = dataStr.split(";");
-        
-        for (String part : parts) {
-            if (part.startsWith("dhPublicKey:")) {
-                this.dhPublicKey = part.substring(12);
-            } else if (part.startsWith("clientId:")) {
-                this.clientId = part.substring(9);
-            } else if (part.startsWith("serverId:")) {
-                this.serverId = part.substring(9);
-            } else if (part.startsWith("signature:")) {
-                this.signature = part.substring(10);
-            } else if (part.startsWith("sessionId:")) {
-                this.sessionId = part.substring(10);
-            }
-        }
+        super.deserialize(data);
     }
 
     // Getters and setters
@@ -77,6 +47,7 @@ public class KeyExchangeMessage extends Message {
         this.dhPublicKey = Base64.getEncoder().encodeToString(dhPublicKeyBytes);
     }
 
+    @JsonIgnore
     public byte[] getDhPublicKeyBytes() {
         return Base64.getDecoder().decode(dhPublicKey);
     }
@@ -109,6 +80,7 @@ public class KeyExchangeMessage extends Message {
         this.signature = Base64.getEncoder().encodeToString(signatureBytes);
     }
 
+    @JsonIgnore
     public byte[] getSignatureBytes() {
         return Base64.getDecoder().decode(signature);
     }

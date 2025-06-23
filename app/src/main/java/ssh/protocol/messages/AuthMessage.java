@@ -2,6 +2,7 @@ package ssh.protocol.messages;
 
 import ssh.protocol.Message;
 import ssh.protocol.MessageType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Base64;
 
@@ -27,53 +28,12 @@ public class AuthMessage extends Message {
 
     @Override
     public byte[] serialize() {
-        StringBuilder sb = new StringBuilder();
-        if (username != null) {
-            sb.append("username:").append(username).append(";");
-        }
-        if (authType != null) {
-            sb.append("authType:").append(authType).append(";");
-        }
-        if (publicKey != null) {
-            sb.append("publicKey:").append(publicKey).append(";");
-        }
-        if (password != null) {
-            sb.append("password:").append(password).append(";");
-        }
-        if (signature != null) {
-            sb.append("signature:").append(signature).append(";");
-        }
-        if (getType() == MessageType.AUTH_SUCCESS || getType() == MessageType.AUTH_FAILURE) {
-            sb.append("success:").append(success).append(";");
-            if (message != null) {
-                sb.append("message:").append(message).append(";");
-            }
-        }
-        return sb.toString().getBytes();
+        return super.serialize();
     }
 
     @Override
     public void deserialize(byte[] data) {
-        String dataStr = new String(data);
-        String[] parts = dataStr.split(";");
-        
-        for (String part : parts) {
-            if (part.startsWith("username:")) {
-                this.username = part.substring(9);
-            } else if (part.startsWith("authType:")) {
-                this.authType = part.substring(9);
-            } else if (part.startsWith("publicKey:")) {
-                this.publicKey = part.substring(10);
-            } else if (part.startsWith("password:")) {
-                this.password = part.substring(9);
-            } else if (part.startsWith("signature:")) {
-                this.signature = part.substring(10);
-            } else if (part.startsWith("success:")) {
-                this.success = Boolean.parseBoolean(part.substring(8));
-            } else if (part.startsWith("message:")) {
-                this.message = part.substring(8);
-            }
-        }
+        super.deserialize(data);
     }
 
     // Getters and setters
@@ -105,6 +65,7 @@ public class AuthMessage extends Message {
         this.publicKey = Base64.getEncoder().encodeToString(publicKeyBytes);
     }
 
+    @JsonIgnore
     public byte[] getPublicKeyBytes() {
         return Base64.getDecoder().decode(publicKey);
     }
@@ -129,6 +90,7 @@ public class AuthMessage extends Message {
         this.signature = Base64.getEncoder().encodeToString(signatureBytes);
     }
 
+    @JsonIgnore
     public byte[] getSignatureBytes() {
         return Base64.getDecoder().decode(signature);
     }

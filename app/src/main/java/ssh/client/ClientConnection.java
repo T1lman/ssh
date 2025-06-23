@@ -276,6 +276,11 @@ public class ClientConnection {
         }
 
         Message response = protocolHandler.receiveMessage();
+        if (response.getType() == MessageType.ERROR) {
+            ssh.protocol.messages.ErrorMessage errorMsg = (ssh.protocol.messages.ErrorMessage) response;
+            ui.displayError("Server error: " + errorMsg.getErrorMessage());
+            return "[SERVER ERROR] " + errorMsg.getErrorMessage();
+        }
         if (response.getType() != MessageType.SHELL_RESULT) {
             throw new IOException("Expected SHELL_RESULT, got " + response.getType());
         }
