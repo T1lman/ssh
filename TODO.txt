@@ -1,4 +1,4 @@
 Hübscheres Design beim Terminal
 Port Forwarding 
 Raspberry PI kompatibler Server
-fix fileTransfer Exceptions
+fix fileTransfer Exceptions DONE

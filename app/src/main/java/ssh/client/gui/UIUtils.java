@@ -21,9 +21,9 @@ public class UIUtils {
     public static final String SUBTITLE_STYLE = "-fx-font-size: 14px; -fx-text-fill: #bdc3c7; -fx-font-style: italic;";
     public static final String LABEL_STYLE = "-fx-text-fill: #ecf0f1; -fx-font-weight: bold;";
     public static final String TEXT_FIELD_STYLE = "-fx-background-color: #34495e; -fx-text-fill: #ecf0f1; -fx-border-color: #3498db; -fx-border-radius: 3px;";
-    public static final String PRIMARY_BUTTON_STYLE = "-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-padding: 10 20;";
-    public static final String SECONDARY_BUTTON_STYLE = "-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-padding: 10 20;";
-    public static final String RED_BUTTON_STYLE = "-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5px; -fx-padding: 10 20;";
+    public static final String PRIMARY_BUTTON_STYLE = "-fx-background-color: linear-gradient(to right, #3498db, #2980b9); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 12px; -fx-padding: 12 28; -fx-font-size: 16px; -fx-effect: dropshadow(gaussian, #2980b955, 4, 0.2, 0, 2);";
+    public static final String SECONDARY_BUTTON_STYLE = "-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 12px; -fx-padding: 12 28; -fx-font-size: 16px; -fx-effect: dropshadow(gaussian, #95a5a655, 4, 0.2, 0, 2);";
+    public static final String RED_BUTTON_STYLE = "-fx-background-color: linear-gradient(to right, #e74c3c, #c0392b); -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 12px; -fx-padding: 12 28; -fx-font-size: 16px; -fx-effect: dropshadow(gaussian, #c0392b55, 4, 0.2, 0, 2);";
     public static final String PROGRESS_COLOR_STYLE = "-fx-progress-color: #3498db;";
     
     /**
@@ -158,5 +158,28 @@ public class UIUtils {
         }
         
         return path;
+    }
+    
+    /**
+     * Create an icon button with tooltip and modern style.
+     */
+    public static Button createIconButton(String emoji, String tooltip) {
+        Button button = new Button(emoji);
+        button.setStyle("-fx-background-color: #23272e; -fx-text-fill: #e0e6ed; -fx-font-size: 20px; -fx-background-radius: 50%; -fx-min-width: 44px; -fx-min-height: 44px; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, #00000033, 4, 0.2, 0, 2);");
+        button.setTooltip(new javafx.scene.control.Tooltip(tooltip));
+        button.setFocusTraversable(false);
+        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 20px; -fx-background-radius: 50%; -fx-min-width: 44px; -fx-min-height: 44px; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, #3498db55, 6, 0.3, 0, 2);"));
+        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: #23272e; -fx-text-fill: #e0e6ed; -fx-font-size: 20px; -fx-background-radius: 50%; -fx-min-width: 44px; -fx-min-height: 44px; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, #00000033, 4, 0.2, 0, 2);"));
+        return button;
+    }
+
+    /**
+     * Create a card-like VBox with shadow and rounded corners.
+     */
+    public static VBox createCardVBox(double spacing) {
+        VBox vbox = new VBox(spacing);
+        vbox.setPadding(new Insets(18, 18, 12, 18));
+        vbox.setStyle("-fx-background-color: #23272e; -fx-background-radius: 16; -fx-effect: dropshadow(gaussian, #00000033, 12, 0.2, 0, 4);");
+        return vbox;
     }
 } 

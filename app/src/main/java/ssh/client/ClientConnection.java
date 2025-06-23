@@ -563,4 +563,12 @@ public class ClientConnection {
     public boolean isActive() {
         return isConnected() && isAuthenticated();
     }
+
+    public ServerInfo getServerInfo() {
+        return serverInfo;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
 } 

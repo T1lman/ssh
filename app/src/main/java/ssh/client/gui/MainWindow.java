@@ -9,6 +9,14 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import ssh.client.SSHClient;
 import ssh.client.ui.ClientUI;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 
 /**
  * Handles the main SSH terminal interface.
@@ -43,82 +51,118 @@ public class MainWindow {
     private void createMainWindow() {
         System.out.println("DEBUG: Creating main window on FX thread");
         
-        // Create the main layout
-        BorderPane mainLayout = new BorderPane();
-        mainLayout.setStyle("-fx-background-color: #2c3e50;");
-        
-        // Create terminal output area
+        // Header bar
+        HBox headerBar = new HBox();
+        headerBar.setPadding(new Insets(0, 32, 0, 32));
+        headerBar.setStyle("-fx-background-color: linear-gradient(to right, #232526, #414345); -fx-min-height: 54px; -fx-max-height: 54px;");
+        headerBar.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+        Label appName = new Label("SSH Client");
+        appName.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #ecf0f1;");
+        String sessionId = (client.getConnection() != null) ? client.getConnection().getSessionId() : "-";
+        // Green status dot
+        Label statusDot = new Label("●");
+        statusDot.setStyle("-fx-font-size: 16px; -fx-text-fill: #2ecc71; -fx-padding: 0 8 0 18;");
+        Label userLabel = new Label("User: " + (client.getConnection() != null && client.getConnection().getServerInfo() != null ? client.getConnection().getServerInfo().getUsername() : "-") + "  |  Session: " + sessionId);
+        userLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #bdc3c7; -fx-padding: 0 0 0 0;");
+        // Custom burger menu without arrow
+        MenuItem fileTransferMenuItem = new MenuItem("File Transfer");
+        fileTransferMenuItem.setOnAction(e -> handleFileTransfer());
+        MenuItem manageUsersMenuItem = new MenuItem("Manage Users");
+        manageUsersMenuItem.setOnAction(e -> handleManageSSHUsers());
+        MenuItem disconnectMenuItem = new MenuItem("Disconnect");
+        disconnectMenuItem.setOnAction(e -> handleDisconnect());
+        Button burgerButton = new Button("≡");
+        burgerButton.setStyle("-fx-background-color: transparent; -fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #fff; -fx-cursor: hand; -fx-padding: 0 0 0 32;");
+        burgerButton.setTooltip(new Tooltip("Actions"));
+        ContextMenu burgerMenu = new ContextMenu(fileTransferMenuItem, manageUsersMenuItem, disconnectMenuItem);
+        burgerButton.setOnAction(e -> {
+            burgerMenu.show(burgerButton, javafx.geometry.Side.BOTTOM, 0, 0);
+        });
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        headerBar.getChildren().clear();
+        headerBar.getChildren().addAll(appName, statusDot, userLabel, spacer, burgerButton);
+        headerBar.setSpacing(0);
+
+        // Terminal output area: direct, edge-to-edge
         terminalOutput = new TextArea();
         terminalOutput.setEditable(false);
         terminalOutput.setWrapText(true);
-        terminalOutput.setStyle("-fx-control-inner-background: #34495e; -fx-text-fill: #ecf0f1; -fx-font-family: 'Monaco', 'Consolas', monospace; -fx-font-size: 12px;");
-        terminalOutput.setPrefRowCount(20);
-        
-        // Add initial welcome message
+        terminalOutput.setStyle("-fx-control-inner-background: #181c22; -fx-text-fill: #e0e6ed; -fx-font-family: 'JetBrains Mono', 'Fira Mono', 'Consolas', monospace; -fx-font-size: 15px; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-width: 1px; -fx-border-color: #22262c; -fx-padding: 18 18 18 18; -fx-line-spacing: 4px; -fx-background-insets: 0; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;");
+        terminalOutput.setFocusTraversable(false);
         terminalOutput.appendText("SSH Terminal Connected\n");
         terminalOutput.appendText("Type commands to execute on the server.\n\n");
-        
-        // Create command input field
+
+        // Command input area (full width, flat)
+        HBox inputBar = new HBox(0);
+        inputBar.setPadding(new Insets(0));
+        inputBar.setStyle("-fx-background-color: #23272e; -fx-background-radius: 0;");
         commandInput = new ShellInputField();
-        commandInput.setStyle("-fx-control-inner-background: #34495e; -fx-text-fill: #ecf0f1; -fx-font-family: 'Monaco', 'Consolas', monospace; -fx-font-size: 12px; -fx-border-color: #3498db; -fx-border-radius: 3px;");
+        commandInput.setStyle("-fx-control-inner-background: #23272e; -fx-text-fill: #e0e6ed; -fx-font-family: 'JetBrains Mono', 'Fira Mono', 'Consolas', monospace; -fx-font-size: 15px; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-width: 1px; -fx-border-color: #22262c; -fx-padding: 16 16 16 16;");
+        commandInput.setPrefWidth(0);
         commandInput.setPrompt(formatShellPrompt(currentWorkingDirectory));
-        
-        // Set up command input behavior
-        commandInput.setOnAction(e -> {
-            String command = commandInput.getCommand();
-            if (!command.trim().isEmpty()) {
-                try {
-                    client.sendShellCommand(command);
-                    commandInput.clearCommand();
-                } catch (Exception ex) {
-                    displayError("Failed to send command: " + ex.getMessage());
-                }
+        Button sendButton = new Button("▶");
+        sendButton.setTooltip(new Tooltip("Send Command (Enter)"));
+        sendButton.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 22px; -fx-background-radius: 0; -fx-cursor: hand; -fx-min-width: 64px; -fx-min-height: 54px; -fx-border-radius: 0;");
+        sendButton.setOnAction(e -> sendCommand());
+        HBox.setHgrow(commandInput, Priority.ALWAYS);
+        inputBar.getChildren().addAll(commandInput, sendButton);
+
+        // Main layout
+        BorderPane mainLayout = new BorderPane();
+        mainLayout.setTop(headerBar);
+        mainLayout.setCenter(terminalOutput);
+        mainLayout.setBottom(inputBar);
+        mainLayout.setStyle("-fx-background-color: #181c22;");
+
+        // Set up the scene
+        javafx.scene.Scene scene = new javafx.scene.Scene(mainLayout, 900, 600);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("SSH Client - Terminal");
+        primaryStage.setMinWidth(700);
+        primaryStage.setMinHeight(500);
+
+        // Keyboard shortcuts
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.isControlDown() && event.getCode() == KeyCode.L) {
+                terminalOutput.clear();
+                event.consume();
+            } else if (event.isControlDown() && event.getCode() == KeyCode.U) {
+                handleFileTransfer();
+                event.consume();
+            } else if (event.isControlDown() && event.getCode() == KeyCode.M) {
+                handleManageSSHUsers();
+                event.consume();
+            } else if (event.isControlDown() && event.getCode() == KeyCode.D) {
+                handleDisconnect();
+                event.consume();
+            } else if (event.getCode() == KeyCode.ENTER && commandInput.isFocused()) {
+                sendCommand();
+                event.consume();
             }
         });
-        
-        // Create action buttons
-        createActionButtons();
-        
-        // Create button panel
-        HBox buttonPanel = new HBox(10);
-        buttonPanel.setPadding(new Insets(10));
-        buttonPanel.setStyle("-fx-background-color: #34495e;");
-        buttonPanel.getChildren().addAll(fileTransferButton, manageUsersButton, disconnectButton);
-        
-        // Assemble the layout
-        VBox terminalPanel = new VBox(5);
-        terminalPanel.setPadding(new Insets(10));
-        terminalPanel.getChildren().addAll(terminalOutput, commandInput);
-        
-        mainLayout.setCenter(terminalPanel);
-        mainLayout.setBottom(buttonPanel);
-        
-        // Set up the scene
-        primaryStage.setScene(new javafx.scene.Scene(mainLayout, 800, 600));
-        primaryStage.setTitle("SSH Client - Terminal");
-        primaryStage.setMinWidth(600);
-        primaryStage.setMinHeight(400);
-        
+
         // Focus on command input
         Platform.runLater(commandInput::requestFocus);
-        
-        System.out.println("DEBUG: Main window created, ensuring stage is visible");
         primaryStage.show();
         primaryStage.toFront();
-        
-        System.out.println("DEBUG: Requesting focus on command input");
-        Platform.runLater(commandInput::requestFocus);
     }
     
-    private void createActionButtons() {
-        fileTransferButton = UIUtils.createPrimaryButton("File Transfer");
-        fileTransferButton.setOnAction(e -> handleFileTransfer());
-        
-        manageUsersButton = UIUtils.createSecondaryButton("Manage SSH Users");
-        manageUsersButton.setOnAction(e -> handleManageSSHUsers());
-        
-        disconnectButton = UIUtils.createRedButton("Disconnect");
-        disconnectButton.setOnAction(e -> handleDisconnect());
+    private void sendCommand() {
+        String command = commandInput.getCommand();
+        if (!command.trim().isEmpty()) {
+            if (command.trim().equalsIgnoreCase("cls")) {
+                terminalOutput.clear();
+                commandInput.clearCommand();
+                return;
+            }
+            try {
+                client.sendShellCommand(command);
+                commandInput.clearCommand();
+            } catch (Exception ex) {
+                displayError("Failed to send command: " + ex.getMessage());
+            }
+        }
     }
     
     private void handleFileTransfer() {
