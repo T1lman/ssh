@@ -11,6 +11,9 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import ssh.model.shell.ShellExecutor;
+import ssh.model.shell.CommandResult;
+
 public class ShellExecutorTest {
 
     private ShellExecutor shellExecutor;

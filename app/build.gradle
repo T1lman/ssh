@@ -54,13 +54,12 @@ javafx {
 }
 
 application {
-    // Define the main class for the application.
-    mainClass = 'ssh.client.gui.SSHClientGuiMain'
+    // Define the main class for the application (default: GUI client)
+    mainClass = 'ssh.client.SSHClientGuiMain'
 }
 
 tasks.named('run') {
     // This task will now run the GUI client by default
-    // We can rename it for clarity if desired, but for now, let's keep it simple
     workingDir = project.rootDir
 }
 
@@ -68,7 +67,7 @@ tasks.register('runServer', JavaExec) {
     group = 'application'
     description = 'Run the SSH Server'
     classpath = sourceSets.main.runtimeClasspath
-    mainClass = 'ssh.server.SSHServer'
+    mainClass = 'ssh.server.controller.SSHServer'
     workingDir = project.rootDir
     standardInput = System.in
     jvmArgs = ['-Xmx512m', '-Xms256m', '-XX:+UseG1GC', '-XX:MaxGCPauseMillis=200']
@@ -95,6 +94,42 @@ task clientJar(type: Jar) {
         attributes 'Main-Class': 'ssh.client.SSHClientMain'
     }
     archiveBaseName = 'ssh-client'
+    archiveClassifier = 'all'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+// Fat JAR for GUI client
+task clientGuiJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'ssh.client.SSHClientGuiMain'
+    }
+    archiveBaseName = 'ssh-client-gui'
+    archiveClassifier = 'all'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+// Fat JAR for Console client
+task clientConsoleJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'ssh.client.SSHClientMain'
+    }
+    archiveBaseName = 'ssh-client-console'
+    archiveClassifier = 'all'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+// Fat JAR for Server
+task serverJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'ssh.server.controller.SSHServer'
+    }
+    archiveBaseName = 'ssh-server'
     archiveClassifier = 'all'
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }

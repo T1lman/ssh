@@ -3,8 +3,10 @@ package ssh.auth;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import ssh.crypto.RSAKeyGenerator;
-import ssh.utils.KeyManager;
+import ssh.model.crypto.RSAKeyGenerator;
+import ssh.model.utils.KeyManager;
+import ssh.model.auth.UserStore;
+import ssh.model.auth.AuthenticationManager;
 
 import java.io.File;
 import java.nio.file.Files;

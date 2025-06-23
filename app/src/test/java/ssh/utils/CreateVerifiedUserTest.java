@@ -11,6 +11,10 @@ import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import ssh.model.utils.KeyManager;
+import ssh.model.auth.UserStore;
+import ssh.model.utils.CredentialsManager;
+
 /**
  * Test for CreateVerifiedUser utility.
  */
@@ -89,18 +93,9 @@ public class CreateVerifiedUserTest {
         String username = "testuser2";
         String password = "testpass2";
         
-        // Create a mock client for testing (we can't easily test the network communication in unit tests)
-        ssh.client.SSHClient mockClient = new ssh.client.SSHClient(null) {
-            @Override
-            public void reloadServerUsers() {
-                // Mock implementation - just log that it was called
-                System.out.println("Mock client reloadServerUsers() called");
-            }
-        };
-        
         // Test that the method doesn't throw an exception when client is provided
         try {
-            createTestUserWithReload(username, password, mockClient);
+            createTestUserWithReload(username, password);
             System.out.println("✓ CreateUser with reload test passed");
         } catch (Exception e) {
             fail("CreateUser with reload should not throw exception: " + e.getMessage());
@@ -118,7 +113,7 @@ public class CreateVerifiedUserTest {
         KeyManager.generateKeyPair(keyName, testClientKeysDir);
         
         // 2. Add user to server's user database
-        ssh.auth.UserStore userStore = new ssh.auth.UserStore(testServerUsersFile, testServerKeysDir);
+        UserStore userStore = new UserStore(testServerUsersFile, testServerKeysDir);
         userStore.addUser(username, password);
         userStore.saveUsers();
         
@@ -132,7 +127,7 @@ public class CreateVerifiedUserTest {
         credentialsManager.saveCredentials();
     }
     
-    private void createTestUserWithReload(String username, String password, ssh.client.SSHClient client) throws Exception {
+    private void createTestUserWithReload(String username, String password) throws Exception {
         // Create directories
         new File(testClientKeysDir).mkdirs();
         new File(testServerKeysDir).mkdirs();
@@ -143,7 +138,7 @@ public class CreateVerifiedUserTest {
         KeyManager.generateKeyPair(keyName, testClientKeysDir);
         
         // 2. Add user to server's user database
-        ssh.auth.UserStore userStore = new ssh.auth.UserStore(testServerUsersFile, testServerKeysDir);
+        UserStore userStore = new UserStore(testServerUsersFile, testServerKeysDir);
         userStore.addUser(username, password);
         userStore.saveUsers();
         
@@ -155,17 +150,6 @@ public class CreateVerifiedUserTest {
         CredentialsManager credentialsManager = new CredentialsManager(testClientCredentialsFile);
         credentialsManager.addUser(username, password);
         credentialsManager.saveCredentials();
-        
-        // 5. Reload server's user database if client is provided
-        if (client != null) {
-            System.out.println("  Reloading server's user database...");
-            try {
-                client.reloadServerUsers();
-                System.out.println("  ✓ Server user database reloaded successfully");
-            } catch (Exception e) {
-                System.out.println("  ⚠ Warning: Failed to reload server user database: " + e.getMessage());
-            }
-        }
     }
     
     private void deleteDirectory(File dir) {

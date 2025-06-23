@@ -3,7 +3,8 @@ package ssh.utils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import ssh.crypto.RSAKeyGenerator;
+import ssh.model.crypto.RSAKeyGenerator;
+import ssh.model.utils.KeyManager;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -165,7 +166,7 @@ public class KeyManagerTest {
             
             // Try to load it as a public key
             try {
-                ssh.crypto.RSAKeyGenerator.loadPublicKey(keyFile.getAbsolutePath());
+                ssh.model.crypto.RSAKeyGenerator.loadPublicKey(keyFile.getAbsolutePath());
                 System.out.println("✓ Authorized key can be loaded successfully");
             } catch (Exception e) {
                 System.err.println("Failed to load authorized key: " + e.getMessage());

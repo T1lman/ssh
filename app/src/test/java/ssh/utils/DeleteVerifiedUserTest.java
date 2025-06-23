@@ -11,6 +11,10 @@ import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import ssh.model.utils.KeyManager;
+import ssh.model.auth.UserStore;
+import ssh.model.utils.CredentialsManager;
+
 /**
  * Test for DeleteVerifiedUser utility.
  */
@@ -92,7 +96,7 @@ public class DeleteVerifiedUserTest {
         KeyManager.generateKeyPair(keyName, testClientKeysDir);
         
         // 2. Add user to server's user database
-        ssh.auth.UserStore userStore = new ssh.auth.UserStore(testServerUsersFile, testServerKeysDir);
+        UserStore userStore = new UserStore(testServerUsersFile, testServerKeysDir);
         userStore.addUser(username, password);
         userStore.saveUsers();
         
@@ -114,7 +118,7 @@ public class DeleteVerifiedUserTest {
         String clientCredentialsFile = testClientCredentialsFile;
         
         // 1. Remove user from server's user database
-        ssh.auth.UserStore userStore = new ssh.auth.UserStore(serverUsersFile, serverKeysDir);
+        UserStore userStore = new UserStore(serverUsersFile, serverKeysDir);
         userStore.removeUser(username);
         userStore.saveUsers();
         

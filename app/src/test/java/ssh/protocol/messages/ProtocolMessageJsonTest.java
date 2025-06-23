@@ -2,8 +2,14 @@ package ssh.protocol.messages;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import ssh.protocol.MessageType;
-import ssh.protocol.Message;
+import ssh.model.protocol.MessageType;
+import ssh.model.protocol.Message;
+import ssh.model.protocol.messages.ShellMessage;
+import ssh.model.protocol.messages.ServiceMessage;
+import ssh.model.protocol.messages.ErrorMessage;
+import ssh.model.protocol.messages.KeyExchangeMessage;
+import ssh.model.protocol.messages.FileTransferMessage;
+import ssh.model.protocol.messages.AuthMessage;
 
 import static org.junit.jupiter.api.Assertions.*;
 
