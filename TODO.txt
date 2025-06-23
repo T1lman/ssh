@@ -1,3 +1,4 @@
 Hübscheres Design beim Terminal
 Port Forwarding 
-Raspberry PIU kompatibler Server
+Raspberry PI kompatibler Server
+fix fileTransfer Exceptions

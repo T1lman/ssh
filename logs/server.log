@@ -540,3 +540,224 @@
 [2025-06-23 12:44:55] [INFO] [pool-1-thread-7] Read -1 bytes for encrypted message length
 [2025-06-23 12:44:55] [INFO] [pool-1-thread-7] Client disconnected gracefully (end of stream)
 [2025-06-23 12:44:55] [INFO] [pool-1-thread-7] Protocol handler closed
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Waiting to receive message...
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Read 4 bytes for message length
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Message length: 787
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Read 787 bytes for message body (expected 787)
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Message body (first 20 bytes): 01 64 68 50 75 62 6C 69 63 4B 65 79 3A 4D 49 49 43 4B 54 43 
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Raw message type byte: 1
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Parsed message type: KEY_EXCHANGE_INIT
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] fromPacket: restLength = 787
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] fromPacket: parsed message type = KEY_EXCHANGE_INIT
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] fromPacket: payloadLength = 782 (restLength=787 - 5)
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] fromPacket: checksum = 1252318131
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Received message: KEY_EXCHANGE_INIT
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Sending message: KEY_EXCHANGE_REPLY, length: 1200
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Message sent successfully
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Encryption enabled - subsequent messages will be encrypted/decrypted
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Waiting to receive message...
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Reading encrypted message...
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Read 4 bytes for encrypted message length
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Encrypted message length: 838
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Read 838 bytes for encrypted message body
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Decrypting encrypted message, length: 838
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Message decrypted successfully, new length: 810
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] fromPacket: restLength = 806
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] fromPacket: parsed message type = AUTH_REQUEST
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] fromPacket: payloadLength = 801 (restLength=806 - 5)
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] fromPacket: checksum = -460234650
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Received encrypted message: AUTH_REQUEST
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Authentication attempt for user: tilman, type: dual
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] User existence check for 'tilman': true
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] User validation passed for: tilman
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Attempting dual authentication (password + public key) for: tilman
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Verifying password for user: tilman
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] PasswordAuth: Checking if user exists: tilman
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] PasswordAuth: User exists, verifying password for: tilman
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] UserStore: Password verification for tilman - Stored hash: 571d5b2882b8df135b9f3b50ab4fb722ba82b1f6bebe7b91163ab3208291f0ca, Input hash: 571d5b2882b8df135b9f3b50ab4fb722ba82b1f6bebe7b91163ab3208291f0ca, Matches: true
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] PasswordAuth: Password verification result for tilman: true
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Password authentication result for tilman: true
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Dual authentication successful for user: tilman
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Sending message: AUTH_SUCCESS, length: 56
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Message encrypted, new length: 84
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Added length prefix for encrypted message, total length: 88
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Message sent successfully
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Waiting to receive message...
+[2025-06-23 12:48:32] [INFO] [pool-1-thread-8] Reading encrypted message...
+[2025-06-23 12:52:03] [INFO] [pool-1-thread-8] Read -1 bytes for encrypted message length
+[2025-06-23 12:52:03] [INFO] [pool-1-thread-8] Client disconnected gracefully (end of stream)
+[2025-06-23 12:52:03] [INFO] [pool-1-thread-8] Protocol handler closed
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Waiting to receive message...
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Read 4 bytes for message length
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Message length: 787
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Read 787 bytes for message body (expected 787)
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Message body (first 20 bytes): 01 64 68 50 75 62 6C 69 63 4B 65 79 3A 4D 49 49 43 4B 44 43 
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Raw message type byte: 1
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Parsed message type: KEY_EXCHANGE_INIT
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] fromPacket: restLength = 787
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] fromPacket: parsed message type = KEY_EXCHANGE_INIT
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] fromPacket: payloadLength = 782 (restLength=787 - 5)
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] fromPacket: checksum = 2124154283
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Received message: KEY_EXCHANGE_INIT
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Sending message: KEY_EXCHANGE_REPLY, length: 1200
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Message sent successfully
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Encryption enabled - subsequent messages will be encrypted/decrypted
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Waiting to receive message...
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Reading encrypted message...
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Read 4 bytes for encrypted message length
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Encrypted message length: 838
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Read 838 bytes for encrypted message body
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Decrypting encrypted message, length: 838
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Message decrypted successfully, new length: 810
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] fromPacket: restLength = 806
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] fromPacket: parsed message type = AUTH_REQUEST
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] fromPacket: payloadLength = 801 (restLength=806 - 5)
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] fromPacket: checksum = -1288434736
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Received encrypted message: AUTH_REQUEST
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Authentication attempt for user: tilman, type: dual
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] User existence check for 'tilman': true
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] User validation passed for: tilman
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Attempting dual authentication (password + public key) for: tilman
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Verifying password for user: tilman
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] PasswordAuth: Checking if user exists: tilman
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] PasswordAuth: User exists, verifying password for: tilman
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] UserStore: Password verification for tilman - Stored hash: 571d5b2882b8df135b9f3b50ab4fb722ba82b1f6bebe7b91163ab3208291f0ca, Input hash: 571d5b2882b8df135b9f3b50ab4fb722ba82b1f6bebe7b91163ab3208291f0ca, Matches: true
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] PasswordAuth: Password verification result for tilman: true
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Password authentication result for tilman: true
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Dual authentication successful for user: tilman
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Sending message: AUTH_SUCCESS, length: 56
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Message encrypted, new length: 84
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Added length prefix for encrypted message, total length: 88
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Message sent successfully
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Waiting to receive message...
+[2025-06-23 12:52:25] [INFO] [pool-1-thread-9] Reading encrypted message...
+[2025-06-23 12:52:41] [INFO] [pool-1-thread-9] Read 4 bytes for encrypted message length
+[2025-06-23 12:52:41] [INFO] [pool-1-thread-9] Encrypted message length: 37
+[2025-06-23 12:52:41] [INFO] [pool-1-thread-9] Read 37 bytes for encrypted message body
+[2025-06-23 12:52:41] [INFO] [pool-1-thread-9] Decrypting encrypted message, length: 37
+[2025-06-23 12:52:41] [INFO] [pool-1-thread-9] Message decrypted successfully, new length: 9
+[2025-06-23 12:52:41] [INFO] [pool-1-thread-9] fromPacket: restLength = 5
+[2025-06-23 12:52:41] [INFO] [pool-1-thread-9] fromPacket: parsed message type = RELOAD_USERS
+[2025-06-23 12:52:41] [INFO] [pool-1-thread-9] fromPacket: payloadLength = 0 (restLength=5 - 5)
+[2025-06-23 12:52:41] [INFO] [pool-1-thread-9] fromPacket: checksum = 0
+[2025-06-23 12:52:41] [INFO] [pool-1-thread-9] Received encrypted message: RELOAD_USERS
+[2025-06-23 12:52:41] [INFO] [pool-1-thread-9] Reloading user database...
+[2025-06-23 12:52:41] [INFO] [pool-1-thread-9] User database reloaded successfully
+[2025-06-23 12:52:41] [INFO] [pool-1-thread-9] Sending message: SERVICE_ACCEPT, length: 21
+[2025-06-23 12:52:41] [INFO] [pool-1-thread-9] Message encrypted, new length: 49
+[2025-06-23 12:52:41] [INFO] [pool-1-thread-9] Added length prefix for encrypted message, total length: 53
+[2025-06-23 12:52:41] [INFO] [pool-1-thread-9] Message sent successfully
+[2025-06-23 12:52:41] [INFO] [pool-1-thread-9] Waiting to receive message...
+[2025-06-23 12:52:41] [INFO] [pool-1-thread-9] Reading encrypted message...
+[2025-06-23 12:52:50] [INFO] [pool-1-thread-9] Read 4 bytes for encrypted message length
+[2025-06-23 12:52:50] [INFO] [pool-1-thread-9] Encrypted message length: 37
+[2025-06-23 12:52:50] [INFO] [pool-1-thread-9] Read 37 bytes for encrypted message body
+[2025-06-23 12:52:50] [INFO] [pool-1-thread-9] Decrypting encrypted message, length: 37
+[2025-06-23 12:52:50] [INFO] [pool-1-thread-9] Message decrypted successfully, new length: 9
+[2025-06-23 12:52:50] [INFO] [pool-1-thread-9] fromPacket: restLength = 5
+[2025-06-23 12:52:50] [INFO] [pool-1-thread-9] fromPacket: parsed message type = RELOAD_USERS
+[2025-06-23 12:52:50] [INFO] [pool-1-thread-9] fromPacket: payloadLength = 0 (restLength=5 - 5)
+[2025-06-23 12:52:50] [INFO] [pool-1-thread-9] fromPacket: checksum = 0
+[2025-06-23 12:52:50] [INFO] [pool-1-thread-9] Received encrypted message: RELOAD_USERS
+[2025-06-23 12:52:50] [INFO] [pool-1-thread-9] Reloading user database...
+[2025-06-23 12:52:50] [INFO] [pool-1-thread-9] User database reloaded successfully
+[2025-06-23 12:52:50] [INFO] [pool-1-thread-9] Sending message: SERVICE_ACCEPT, length: 21
+[2025-06-23 12:52:50] [INFO] [pool-1-thread-9] Message encrypted, new length: 49
+[2025-06-23 12:52:50] [INFO] [pool-1-thread-9] Added length prefix for encrypted message, total length: 53
+[2025-06-23 12:52:50] [INFO] [pool-1-thread-9] Message sent successfully
+[2025-06-23 12:52:50] [INFO] [pool-1-thread-9] Waiting to receive message...
+[2025-06-23 12:52:50] [INFO] [pool-1-thread-9] Reading encrypted message...
+[2025-06-23 12:53:42] [INFO] [pool-1-thread-9] Read 4 bytes for encrypted message length
+[2025-06-23 12:53:42] [INFO] [pool-1-thread-9] Encrypted message length: 37
+[2025-06-23 12:53:42] [INFO] [pool-1-thread-9] Read 37 bytes for encrypted message body
+[2025-06-23 12:53:42] [INFO] [pool-1-thread-9] Decrypting encrypted message, length: 37
+[2025-06-23 12:53:42] [INFO] [pool-1-thread-9] Message decrypted successfully, new length: 9
+[2025-06-23 12:53:42] [INFO] [pool-1-thread-9] fromPacket: restLength = 5
+[2025-06-23 12:53:42] [INFO] [pool-1-thread-9] fromPacket: parsed message type = RELOAD_USERS
+[2025-06-23 12:53:42] [INFO] [pool-1-thread-9] fromPacket: payloadLength = 0 (restLength=5 - 5)
+[2025-06-23 12:53:42] [INFO] [pool-1-thread-9] fromPacket: checksum = 0
+[2025-06-23 12:53:42] [INFO] [pool-1-thread-9] Received encrypted message: RELOAD_USERS
+[2025-06-23 12:53:42] [INFO] [pool-1-thread-9] Reloading user database...
+[2025-06-23 12:53:42] [INFO] [pool-1-thread-9] User database reloaded successfully
+[2025-06-23 12:53:42] [INFO] [pool-1-thread-9] Sending message: SERVICE_ACCEPT, length: 21
+[2025-06-23 12:53:42] [INFO] [pool-1-thread-9] Message encrypted, new length: 49
+[2025-06-23 12:53:42] [INFO] [pool-1-thread-9] Added length prefix for encrypted message, total length: 53
+[2025-06-23 12:53:42] [INFO] [pool-1-thread-9] Message sent successfully
+[2025-06-23 12:53:42] [INFO] [pool-1-thread-9] Waiting to receive message...
+[2025-06-23 12:53:42] [INFO] [pool-1-thread-9] Reading encrypted message...
+[2025-06-23 12:55:48] [INFO] [pool-1-thread-9] Read -1 bytes for encrypted message length
+[2025-06-23 12:55:48] [INFO] [pool-1-thread-9] Client disconnected gracefully (end of stream)
+[2025-06-23 12:55:48] [INFO] [pool-1-thread-9] Protocol handler closed
+[2025-06-23 12:56:08] [INFO] [pool-1-thread-10] Waiting to receive message...
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Read 4 bytes for message length
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Message length: 787
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Read 787 bytes for message body (expected 787)
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Message body (first 20 bytes): 01 64 68 50 75 62 6C 69 63 4B 65 79 3A 4D 49 49 43 4B 44 43 
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Raw message type byte: 1
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Parsed message type: KEY_EXCHANGE_INIT
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] fromPacket: restLength = 787
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] fromPacket: parsed message type = KEY_EXCHANGE_INIT
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] fromPacket: payloadLength = 782 (restLength=787 - 5)
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] fromPacket: checksum = 571123133
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Received message: KEY_EXCHANGE_INIT
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Sending message: KEY_EXCHANGE_REPLY, length: 1200
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Message sent successfully
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Encryption enabled - subsequent messages will be encrypted/decrypted
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Waiting to receive message...
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Reading encrypted message...
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Read 4 bytes for encrypted message length
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Encrypted message length: 839
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Read 839 bytes for encrypted message body
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Decrypting encrypted message, length: 839
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Message decrypted successfully, new length: 811
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] fromPacket: restLength = 807
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] fromPacket: parsed message type = AUTH_REQUEST
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] fromPacket: payloadLength = 802 (restLength=807 - 5)
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] fromPacket: checksum = 267534925
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Received encrypted message: AUTH_REQUEST
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Authentication attempt for user: admin, type: dual
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] User existence check for 'admin': true
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] User validation passed for: admin
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Attempting dual authentication (password + public key) for: admin
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Verifying password for user: admin
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] PasswordAuth: Checking if user exists: admin
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] PasswordAuth: User exists, verifying password for: admin
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] UserStore: Password verification for admin - Stored hash: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918, Input hash: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918, Matches: true
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] PasswordAuth: Password verification result for admin: true
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Password authentication result for admin: true
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Dual authentication successful for user: admin
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Sending message: AUTH_SUCCESS, length: 56
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Message encrypted, new length: 84
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Added length prefix for encrypted message, total length: 88
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Message sent successfully
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Waiting to receive message...
+[2025-06-23 12:56:09] [INFO] [pool-1-thread-10] Reading encrypted message...
+[2025-06-23 12:56:13] [INFO] [pool-1-thread-10] Read 4 bytes for encrypted message length
+[2025-06-23 12:56:13] [INFO] [pool-1-thread-10] Encrypted message length: 37
+[2025-06-23 12:56:13] [INFO] [pool-1-thread-10] Read 37 bytes for encrypted message body
+[2025-06-23 12:56:13] [INFO] [pool-1-thread-10] Decrypting encrypted message, length: 37
+[2025-06-23 12:56:13] [INFO] [pool-1-thread-10] Message decrypted successfully, new length: 9
+[2025-06-23 12:56:13] [INFO] [pool-1-thread-10] fromPacket: restLength = 5
+[2025-06-23 12:56:13] [INFO] [pool-1-thread-10] fromPacket: parsed message type = RELOAD_USERS
+[2025-06-23 12:56:13] [INFO] [pool-1-thread-10] fromPacket: payloadLength = 0 (restLength=5 - 5)
+[2025-06-23 12:56:13] [INFO] [pool-1-thread-10] fromPacket: checksum = 0
+[2025-06-23 12:56:13] [INFO] [pool-1-thread-10] Received encrypted message: RELOAD_USERS
+[2025-06-23 12:56:13] [INFO] [pool-1-thread-10] Reloading user database...
+[2025-06-23 12:56:13] [INFO] [pool-1-thread-10] User database reloaded successfully
+[2025-06-23 12:56:13] [INFO] [pool-1-thread-10] Sending message: SERVICE_ACCEPT, length: 21
+[2025-06-23 12:56:13] [INFO] [pool-1-thread-10] Message encrypted, new length: 49
+[2025-06-23 12:56:13] [INFO] [pool-1-thread-10] Added length prefix for encrypted message, total length: 53
+[2025-06-23 12:56:13] [INFO] [pool-1-thread-10] Message sent successfully
+[2025-06-23 12:56:13] [INFO] [pool-1-thread-10] Waiting to receive message...
+[2025-06-23 12:56:13] [INFO] [pool-1-thread-10] Reading encrypted message...
+[2025-06-23 12:56:17] [INFO] [pool-1-thread-10] Read 4 bytes for encrypted message length
+[2025-06-23 12:56:17] [INFO] [pool-1-thread-10] Encrypted message length: 37
+[2025-06-23 12:56:17] [INFO] [pool-1-thread-10] Read 37 bytes for encrypted message body
+[2025-06-23 12:56:17] [INFO] [pool-1-thread-10] Decrypting encrypted message, length: 37
+[2025-06-23 12:56:17] [INFO] [pool-1-thread-10] Message decrypted successfully, new length: 9
+[2025-06-23 12:56:17] [INFO] [pool-1-thread-10] fromPacket: restLength = 5
+[2025-06-23 12:56:17] [INFO] [pool-1-thread-10] fromPacket: parsed message type = DISCONNECT
+[2025-06-23 12:56:17] [INFO] [pool-1-thread-10] fromPacket: payloadLength = 0 (restLength=5 - 5)
+[2025-06-23 12:56:17] [INFO] [pool-1-thread-10] fromPacket: checksum = 0
+[2025-06-23 12:56:17] [INFO] [pool-1-thread-10] Received encrypted message: DISCONNECT
+[2025-06-23 12:56:18] [INFO] [pool-1-thread-10] Protocol handler closed

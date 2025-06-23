@@ -19,6 +19,8 @@ import java.util.Optional;
 public class UserManagementDialog {
     private final Stage primaryStage;
     private final SSHClient client;
+    private Dialog<ButtonType> dialog;
+    private VBox content;
     
     public UserManagementDialog(Stage primaryStage, SSHClient client) {
         this.primaryStage = primaryStage;
@@ -26,301 +28,242 @@ public class UserManagementDialog {
     }
     
     public void show() {
-        System.out.println("DEBUG: Manage SSH Users button clicked");
-        
-        Dialog<Void> managementDialog = new Dialog<>();
-        managementDialog.setTitle("Manage SSH Users");
-        managementDialog.setHeaderText("Choose an action to manage SSH users");
-        
+        dialog = new Dialog<>();
+        dialog.setTitle("Manage SSH Users");
+        dialog.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+        dialog.initOwner(primaryStage);
+        dialog.setResizable(true);
+        dialog.getDialogPane().setPrefWidth(500);
+        dialog.getDialogPane().setPrefHeight(350);
+        content = new VBox(15);
+        content.setPadding(new Insets(20));
+        dialog.getDialogPane().setContent(content);
+        showMainMenu();
+        dialog.showAndWait();
+    }
+    
+    private void showMainMenu() {
+        dialog.setHeaderText("Choose an action to manage SSH users");
+        content.getChildren().clear();
+        dialog.getDialogPane().getButtonTypes().clear();
         ButtonType createButtonType = new ButtonType("Create New User", ButtonBar.ButtonData.LEFT);
         ButtonType deleteButtonType = new ButtonType("Delete User", ButtonBar.ButtonData.OTHER);
         ButtonType viewButtonType = new ButtonType("View Users", ButtonBar.ButtonData.OTHER);
         ButtonType cancelButtonType = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-        
-        managementDialog.getDialogPane().getButtonTypes().clear();
-        managementDialog.getDialogPane().getButtonTypes().addAll(
-            createButtonType, deleteButtonType, viewButtonType, cancelButtonType
-        );
-        
-        VBox content = new VBox(15);
-        content.setPadding(new Insets(20));
-        
+        dialog.getDialogPane().getButtonTypes().addAll(createButtonType, deleteButtonType, viewButtonType, cancelButtonType);
         Label infoLabel = new Label("Select an action to manage SSH users on both client and server:");
         infoLabel.setWrapText(true);
         infoLabel.setStyle("-fx-font-size: 12px;");
-        
         content.getChildren().add(infoLabel);
-        
-        managementDialog.getDialogPane().setContent(content);
-        managementDialog.initModality(javafx.stage.Modality.APPLICATION_MODAL);
-        managementDialog.initOwner(primaryStage);
-        
-        managementDialog.setResultConverter(dialogButton -> {
-            if (dialogButton == createButtonType) {
-                handleCreateNewUser();
-                return null;
-            } else if (dialogButton == deleteButtonType) {
-                handleDeleteUser();
-                return null;
-            } else if (dialogButton == viewButtonType) {
-                handleViewUsers();
-                return null;
-            }
-            return null;
+        Platform.runLater(() -> {
+            Button createButton = (Button) dialog.getDialogPane().lookupButton(createButtonType);
+            createButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+                event.consume();
+                showCreateUserForm();
+            });
+            Button deleteButton = (Button) dialog.getDialogPane().lookupButton(deleteButtonType);
+            deleteButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+                event.consume();
+                showDeleteUserForm();
+            });
+            Button viewButton = (Button) dialog.getDialogPane().lookupButton(viewButtonType);
+            viewButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+                event.consume();
+                showViewUsers();
+            });
         });
-        
-        managementDialog.showAndWait();
     }
     
-    private void handleCreateNewUser() {
-        System.out.println("DEBUG: Create New User selected");
-        
-        Dialog<Map<String, String>> userDialog = new Dialog<>();
-        userDialog.setTitle("Create New Verified User");
-        userDialog.setHeaderText("Enter details for the new user");
-        
+    private void showCreateUserForm() {
+        dialog.setHeaderText("Create New Verified User");
+        content.getChildren().clear();
+        dialog.getDialogPane().getButtonTypes().clear();
         ButtonType createButtonType = new ButtonType("Create User", ButtonBar.ButtonData.OK_DONE);
-        userDialog.getDialogPane().getButtonTypes().addAll(createButtonType, ButtonType.CANCEL);
-        
+        ButtonType backButtonType = new ButtonType("Back", ButtonBar.ButtonData.OTHER);
+        ButtonType cancelButtonType = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().addAll(createButtonType, backButtonType, cancelButtonType);
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setPadding(new Insets(20, 150, 10, 10));
-        
         TextField usernameField = new TextField();
         usernameField.setPromptText("e.g., newuser");
-        
         PasswordField passwordField = new PasswordField();
         passwordField.setPromptText("Enter password");
-        
         PasswordField confirmPasswordField = new PasswordField();
         confirmPasswordField.setPromptText("Confirm password");
-        
         grid.add(new Label("Username:"), 0, 0);
         grid.add(usernameField, 1, 0);
         grid.add(new Label("Password:"), 0, 1);
         grid.add(passwordField, 1, 1);
         grid.add(new Label("Confirm Password:"), 0, 2);
         grid.add(confirmPasswordField, 1, 2);
-        
-        userDialog.getDialogPane().setContent(grid);
-        userDialog.initModality(javafx.stage.Modality.APPLICATION_MODAL);
-        userDialog.initOwner(primaryStage);
-        
-        Platform.runLater(usernameField::requestFocus);
-        
-        userDialog.setResultConverter(dialogButton -> {
-            if (dialogButton == createButtonType) {
+        content.getChildren().add(grid);
+        Platform.runLater(() -> {
+            usernameField.requestFocus();
+            Button createButton = (Button) dialog.getDialogPane().lookupButton(createButtonType);
+            createButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+                event.consume();
                 String username = usernameField.getText().trim();
                 String password = passwordField.getText();
                 String confirmPassword = confirmPasswordField.getText();
-                
                 if (username.isEmpty()) {
-                    showError("Username cannot be empty");
-                    return null;
+                    showErrorInline("Username cannot be empty");
+                    return;
                 }
-                
                 if (password.isEmpty()) {
-                    showError("Password cannot be empty");
-                    return null;
+                    showErrorInline("Password cannot be empty");
+                    return;
                 }
-                
                 if (!password.equals(confirmPassword)) {
-                    showError("Passwords do not match");
-                    return null;
+                    showErrorInline("Passwords do not match");
+                    return;
                 }
-                
-                Map<String, String> result = Map.of("username", username, "password", password);
-                return result;
-            }
-            return null;
-        });
-        
-        Optional<Map<String, String>> result = userDialog.showAndWait();
-        result.ifPresent(userData -> {
-            String username = userData.get("username");
-            String password = userData.get("password");
-            showProgressDialog("Creating User", "Creating new verified user: " + username, () -> {
-                try {
-                    ssh.utils.CreateVerifiedUser.createUser(username, password, client);
-                    Platform.runLater(() -> showSuccessDialog("User Created Successfully", "New Verified User Created",
-                        "User '" + username + "' has been created successfully!\n\n" +
-                        "The user is now available for authentication with:\n" +
-                        "• Username: " + username + "\n" +
-                        "• Password: " + password + "\n" +
-                        "• Public key authentication enabled\n\n" +
-                        "The server's user database has been automatically reloaded.\n" +
-                        "You can now use the new user immediately without restarting the server."));
-                } catch (Exception e) {
-                    Platform.runLater(() -> showError("Failed to create user: " + e.getMessage()));
-                }
+                showProgressInline("Creating User", "Creating new verified user: " + username);
+                new Thread(() -> {
+                    try {
+                        ssh.utils.CreateVerifiedUser.createUser(username, password, client);
+                        Platform.runLater(() -> showResultInline(true, "User '" + username + "' has been created successfully!\n\n" +
+                            "The user is now available for authentication with:\n" +
+                            "• Username: " + username + "\n" +
+                            "• Password: " + password + "\n" +
+                            "• Public key authentication enabled\n\n" +
+                            "The server's user database has been automatically reloaded.\n" +
+                            "You can now use the new user immediately without restarting the server."));
+                    } catch (Exception e) {
+                        Platform.runLater(() -> showResultInline(false, "Failed to create user: " + e.getMessage()));
+                    }
+                }).start();
+            });
+            Button backButton = (Button) dialog.getDialogPane().lookupButton(backButtonType);
+            backButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+                event.consume();
+                showMainMenu();
             });
         });
     }
     
-    private void handleDeleteUser() {
-        System.out.println("DEBUG: Delete User selected");
-        
+    private void showDeleteUserForm() {
+        dialog.setHeaderText("Delete SSH User");
+        content.getChildren().clear();
+        dialog.getDialogPane().getButtonTypes().clear();
+        ButtonType deleteButtonType = new ButtonType("Delete User", ButtonBar.ButtonData.OK_DONE);
+        ButtonType backButtonType = new ButtonType("Back", ButtonBar.ButtonData.OTHER);
+        ButtonType cancelButtonType = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().addAll(deleteButtonType, backButtonType, cancelButtonType);
+        ComboBox<String> userComboBox = new ComboBox<>();
         try {
             CredentialsManager credentialsManager = new CredentialsManager("config/credentials.properties");
             String[] availableUsers = credentialsManager.getAvailableUsers();
-            
-            if (availableUsers.length == 0) {
-                showError("No users found to delete.");
-                return;
-            }
-            
-            Dialog<String> deleteDialog = new Dialog<>();
-            deleteDialog.setTitle("Delete SSH User");
-            deleteDialog.setHeaderText("Select a user to delete");
-            
-            ButtonType deleteButtonType = new ButtonType("Delete", ButtonBar.ButtonData.OK_DONE);
-            deleteDialog.getDialogPane().getButtonTypes().addAll(deleteButtonType, ButtonType.CANCEL);
-            
-            VBox content = new VBox(15);
-            content.setPadding(new Insets(20));
-            
-            Label infoLabel = new Label("Select a user to delete from both client and server:");
-            infoLabel.setWrapText(true);
-            infoLabel.setStyle("-fx-font-size: 12px;");
-            
-            ComboBox<String> userComboBox = new ComboBox<>();
             userComboBox.getItems().addAll(availableUsers);
             if (availableUsers.length > 0) {
                 userComboBox.setValue(availableUsers[0]);
             }
-            
-            content.getChildren().addAll(infoLabel, userComboBox);
-            deleteDialog.getDialogPane().setContent(content);
-            deleteDialog.initModality(javafx.stage.Modality.APPLICATION_MODAL);
-            deleteDialog.initOwner(primaryStage);
-            
-            deleteDialog.setResultConverter(dialogButton -> {
-                if (dialogButton == deleteButtonType) {
-                    return userComboBox.getValue();
-                }
-                return null;
-            });
-            
-            Optional<String> result = deleteDialog.showAndWait();
-            result.ifPresent(username -> {
-                // Show confirmation dialog
-                Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
-                confirmDialog.setTitle("Confirm Deletion");
-                confirmDialog.setHeaderText("Delete User: " + username);
-                confirmDialog.setContentText("Are you sure you want to delete user '" + username + "'?\n\n" +
-                    "This will:\n" +
-                    "• Remove the user from the server database\n" +
-                    "• Delete the user's SSH keys\n" +
-                    "• Remove the user from client credentials\n" +
-                    "• Reload the server's user database\n\n" +
-                    "This action cannot be undone!");
-                confirmDialog.initOwner(primaryStage);
-                
-                Optional<ButtonType> confirmResult = confirmDialog.showAndWait();
-                if (confirmResult.isPresent() && confirmResult.get() == ButtonType.OK) {
-                    showProgressDialog("Deleting User", "Deleting verified user: " + username, () -> {
-                        try {
-                            ssh.utils.DeleteVerifiedUser.deleteUser(username, client);
-                            Platform.runLater(() -> showSuccessDialog("User Deleted Successfully", "User Deleted",
-                                "User '" + username + "' has been deleted successfully!\n\n" +
-                                "The user has been removed from:\n" +
-                                "• Server user database\n" +
-                                "• Client credentials\n" +
-                                "• SSH key files\n\n" +
-                                "The server's user database has been automatically reloaded."));
-                        } catch (Exception e) {
-                            Platform.runLater(() -> showError("Failed to delete user: " + e.getMessage()));
-                        }
-                    });
-                }
-            });
-            
         } catch (Exception e) {
-            showError("Failed to load users: " + e.getMessage());
+            showErrorInline("Failed to load users: " + e.getMessage());
         }
+        VBox vbox = new VBox(10);
+        vbox.getChildren().addAll(new Label("Select a user to delete from both client and server:"), userComboBox);
+        content.getChildren().add(vbox);
+        Platform.runLater(() -> {
+            userComboBox.requestFocus();
+            Button deleteButton = (Button) dialog.getDialogPane().lookupButton(deleteButtonType);
+            deleteButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+                event.consume();
+                String username = userComboBox.getValue();
+                if (username == null || username.trim().isEmpty()) {
+                    showErrorInline("Please select a user to delete.");
+                    return;
+                }
+                showProgressInline("Deleting User", "Deleting verified user: " + username);
+                new Thread(() -> {
+                    try {
+                        ssh.utils.DeleteVerifiedUser.deleteUser(username, client);
+                        Platform.runLater(() -> showResultInline(true, "User '" + username + "' has been deleted successfully!\n\n" +
+                            "The user has been removed from:\n" +
+                            "• Server user database\n" +
+                            "• Client credentials\n" +
+                            "• SSH key files\n\n" +
+                            "The server's user database has been automatically reloaded."));
+                    } catch (Exception e) {
+                        Platform.runLater(() -> showResultInline(false, "Failed to delete user: " + e.getMessage()));
+                    }
+                }).start();
+            });
+            Button backButton = (Button) dialog.getDialogPane().lookupButton(backButtonType);
+            backButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+                event.consume();
+                showMainMenu();
+            });
+        });
     }
     
-    private void handleViewUsers() {
-        System.out.println("DEBUG: View Users selected");
-        
+    private void showViewUsers() {
+        dialog.setHeaderText("Current SSH Users");
+        content.getChildren().clear();
+        dialog.getDialogPane().getButtonTypes().clear();
+        ButtonType backButtonType = new ButtonType("Back", ButtonBar.ButtonData.OTHER);
+        ButtonType cancelButtonType = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().addAll(backButtonType, cancelButtonType);
         try {
             CredentialsManager credentialsManager = new CredentialsManager("config/credentials.properties");
             String[] availableUsers = credentialsManager.getAvailableUsers();
-            
-            Alert viewDialog = new Alert(Alert.AlertType.INFORMATION);
-            viewDialog.setTitle("SSH Users");
-            viewDialog.setHeaderText("Current SSH Users");
-            
+            StringBuilder usersList = new StringBuilder();
             if (availableUsers.length == 0) {
-                viewDialog.setContentText("No users found.");
+                usersList.append("No users found.");
             } else {
-                StringBuilder content = new StringBuilder("The following users are configured:\n\n");
+                usersList.append("The following users are configured:\n\n");
                 for (String user : availableUsers) {
-                    content.append("• ").append(user).append("\n");
+                    usersList.append("• ").append(user).append("\n");
                 }
-                content.append("\nTotal users: ").append(availableUsers.length);
-                viewDialog.setContentText(content.toString());
+                usersList.append("\nTotal users: ").append(availableUsers.length);
             }
-            
-            viewDialog.initOwner(primaryStage);
-            viewDialog.initModality(javafx.stage.Modality.APPLICATION_MODAL);
-            viewDialog.setResizable(true);
-            viewDialog.getDialogPane().setPrefWidth(400);
-            viewDialog.getDialogPane().setPrefHeight(300);
-            
-            viewDialog.showAndWait();
-            
+            Label usersLabel = new Label(usersList.toString());
+            usersLabel.setWrapText(true);
+            usersLabel.setStyle("-fx-font-size: 12px;");
+            content.getChildren().add(usersLabel);
         } catch (Exception e) {
-            showError("Failed to load users: " + e.getMessage());
+            showErrorInline("Failed to load users: " + e.getMessage());
         }
+        Platform.runLater(() -> {
+            Button backButton = (Button) dialog.getDialogPane().lookupButton(backButtonType);
+            backButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+                event.consume();
+                showMainMenu();
+            });
+        });
     }
     
-    private void showProgressDialog(String title, String message, Runnable task) {
-        Alert progressAlert = new Alert(Alert.AlertType.INFORMATION);
-        progressAlert.setTitle(title);
-        progressAlert.setHeaderText(message);
-        progressAlert.setContentText("Please wait while the operation is being performed...");
-        progressAlert.initOwner(primaryStage);
-        progressAlert.initModality(javafx.stage.Modality.APPLICATION_MODAL);
-        progressAlert.setResizable(false);
-        progressAlert.getDialogPane().setPrefWidth(400);
-        progressAlert.getDialogPane().setPrefHeight(150);
-        
-        new Thread(() -> {
-            try {
-                task.run();
-                Platform.runLater(progressAlert::close);
-            } catch (Exception e) {
-                Platform.runLater(() -> {
-                    progressAlert.close();
-                    showError("Operation failed: " + e.getMessage());
-                });
-            }
-        }).start();
-        
-        progressAlert.showAndWait();
+    private void showProgressInline(String title, String message) {
+        dialog.setHeaderText(title);
+        content.getChildren().clear();
+        Label msgLabel = new Label(message);
+        msgLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: bold;");
+        ProgressBar progressBar = new ProgressBar();
+        progressBar.setPrefWidth(300);
+        progressBar.setProgress(-1);
+        content.getChildren().addAll(msgLabel, progressBar);
+        dialog.getDialogPane().getButtonTypes().clear();
     }
     
-    private void showSuccessDialog(String title, String header, String message) {
-        Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-        successAlert.setTitle(title);
-        successAlert.setHeaderText(header);
-        successAlert.setContentText(message);
-        successAlert.initOwner(primaryStage);
-        successAlert.initModality(javafx.stage.Modality.APPLICATION_MODAL);
-        successAlert.setResizable(true);
-        successAlert.getDialogPane().setPrefWidth(500);
-        successAlert.getDialogPane().setPrefHeight(300);
-        successAlert.showAndWait();
+    private void showResultInline(boolean success, String message) {
+        content.getChildren().clear();
+        Label resultLabel = new Label(message);
+        resultLabel.setWrapText(true);
+        resultLabel.setStyle("-fx-font-size: 12px; " + (success ? "-fx-text-fill: #27ae60;" : "-fx-text-fill: #e74c3c;"));
+        content.getChildren().add(resultLabel);
+        ButtonType okButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().setAll(okButtonType);
     }
     
-    private void showError(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText("Operation Failed");
-        alert.setContentText(message);
-        alert.initOwner(primaryStage);
-        alert.showAndWait();
+    private void showErrorInline(String message) {
+        Label errorLabel = new Label(message);
+        errorLabel.setWrapText(true);
+        errorLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #e74c3c;");
+        if (content.getChildren().isEmpty() || !(content.getChildren().get(content.getChildren().size() - 1) instanceof Label)) {
+            content.getChildren().add(errorLabel);
+        } else {
+            content.getChildren().set(content.getChildren().size() - 1, errorLabel);
+        }
     }
 } 
