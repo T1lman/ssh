@@ -1,0 +1,692 @@
+[2025-06-23 11:58:14] [INFO] [JavaFX Application Thread] Logger initialized - logging to: logs/client_gui.log
+[2025-06-23 11:58:23] [INFO] [JavaFX Application Thread] Credentials loaded from: config/credentials.properties
+[2025-06-23 11:58:24] [INFO] [Thread-4] Credentials loaded from: config/credentials.properties
+[2025-06-23 11:58:24] [INFO] [Thread-4] Credentials loaded from: config/credentials.properties
+[2025-06-23 11:58:24] [INFO] [Thread-4] resolvePath: data/client/client_keys/tilman_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
+[2025-06-23 11:58:24] [INFO] [Thread-4]   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 11:58:24] [INFO] [Thread-4]   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 11:58:24] [INFO] [Thread-4] resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
+[2025-06-23 11:58:24] [INFO] [Thread-4] resolvePath: data/client/client_keys/tilman_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
+[2025-06-23 11:58:24] [INFO] [Thread-4]   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 11:58:24] [INFO] [Thread-4]   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 11:58:24] [INFO] [Thread-4] resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
+[2025-06-23 11:58:24] [INFO] [Thread-4] ClientConnection constructor called
+[2025-06-23 11:58:24] [INFO] [Thread-4] Connecting to localhost:2222
+[2025-06-23 11:58:24] [INFO] [Thread-4] Connected successfully
+[2025-06-23 11:58:24] [INFO] [Thread-4] Starting key exchange...
+[2025-06-23 11:58:24] [INFO] [Thread-4] Generated DH key pair
+[2025-06-23 11:58:24] [INFO] [Thread-4] Created key exchange init message
+[2025-06-23 11:58:24] [INFO] [Thread-4] Sending message: KEY_EXCHANGE_INIT, length: 791
+[2025-06-23 11:58:24] [INFO] [Thread-4] Message sent successfully
+[2025-06-23 11:58:24] [INFO] [Thread-4] Sent key exchange init message
+[2025-06-23 11:58:24] [INFO] [Thread-4] Waiting for key exchange reply...
+[2025-06-23 11:58:24] [INFO] [Thread-4] Waiting to receive message...
+[2025-06-23 11:58:25] [INFO] [Thread-4] Read 4 bytes for message length
+[2025-06-23 11:58:25] [INFO] [Thread-4] Message length: 1196
+[2025-06-23 11:58:25] [INFO] [Thread-4] Read 1196 bytes for message body (expected 1196)
+[2025-06-23 11:58:25] [INFO] [Thread-4] Message body (first 20 bytes): 02 64 68 50 75 62 6C 69 63 4B 65 79 3A 4D 49 49 43 4B 54 43 
+[2025-06-23 11:58:25] [INFO] [Thread-4] Raw message type byte: 2
+[2025-06-23 11:58:25] [INFO] [Thread-4] Parsed message type: KEY_EXCHANGE_REPLY
+[2025-06-23 11:58:25] [INFO] [Thread-4] fromPacket: restLength = 1196
+[2025-06-23 11:58:25] [INFO] [Thread-4] fromPacket: parsed message type = KEY_EXCHANGE_REPLY
+[2025-06-23 11:58:25] [INFO] [Thread-4] fromPacket: payloadLength = 1191 (restLength=1196 - 5)
+[2025-06-23 11:58:25] [INFO] [Thread-4] fromPacket: checksum = 1512233600
+[2025-06-23 11:58:25] [INFO] [Thread-4] Received message: KEY_EXCHANGE_REPLY
+[2025-06-23 11:58:25] [INFO] [Thread-4] Received reply message: KEY_EXCHANGE_REPLY
+[2025-06-23 11:58:25] [INFO] [Thread-4] Set server's public key
+[2025-06-23 11:58:25] [INFO] [Thread-4] Computed shared secret, length: 256
+[2025-06-23 11:58:25] [INFO] [Thread-4] Initialized symmetric encryption
+[2025-06-23 11:58:25] [INFO] [Thread-4] Encryption enabled - subsequent messages will be encrypted/decrypted
+[2025-06-23 11:58:25] [INFO] [Thread-4] Enabled encryption in protocol handler
+[2025-06-23 11:58:25] [INFO] [Thread-4] Received session ID: 61046678-d43f-49b2-961c-9096e4be5611
+[2025-06-23 11:58:25] [INFO] [Thread-4] Starting authentication...
+[2025-06-23 11:58:25] [INFO] [Thread-4] Preparing auth for user: tilman, type: dual
+[2025-06-23 11:58:25] [INFO] [Thread-4] Using password authentication
+[2025-06-23 11:58:25] [INFO] [Thread-4] Using public key authentication, signed session ID.
+[2025-06-23 11:58:25] [INFO] [Thread-4] Sending message: AUTH_REQUEST, length: 810
+[2025-06-23 11:58:25] [INFO] [Thread-4] Message encrypted, new length: 838
+[2025-06-23 11:58:25] [INFO] [Thread-4] Added length prefix for encrypted message, total length: 842
+[2025-06-23 11:58:25] [INFO] [Thread-4] Message sent successfully
+[2025-06-23 11:58:25] [INFO] [Thread-4] Sent authentication request
+[2025-06-23 11:58:25] [INFO] [Thread-4] Waiting to receive message...
+[2025-06-23 11:58:25] [INFO] [Thread-4] Reading encrypted message...
+[2025-06-23 11:58:25] [INFO] [Thread-4] Read 4 bytes for encrypted message length
+[2025-06-23 11:58:25] [INFO] [Thread-4] Encrypted message length: 84
+[2025-06-23 11:58:25] [INFO] [Thread-4] Read 84 bytes for encrypted message body
+[2025-06-23 11:58:25] [INFO] [Thread-4] Decrypting encrypted message, length: 84
+[2025-06-23 11:58:25] [INFO] [Thread-4] Message decrypted successfully, new length: 56
+[2025-06-23 11:58:25] [INFO] [Thread-4] fromPacket: restLength = 52
+[2025-06-23 11:58:25] [INFO] [Thread-4] fromPacket: parsed message type = AUTH_SUCCESS
+[2025-06-23 11:58:25] [INFO] [Thread-4] fromPacket: payloadLength = 47 (restLength=52 - 5)
+[2025-06-23 11:58:25] [INFO] [Thread-4] fromPacket: checksum = 773878918
+[2025-06-23 11:58:25] [INFO] [Thread-4] Received encrypted message: AUTH_SUCCESS
+[2025-06-23 11:58:25] [INFO] [Thread-4] Received auth response: AUTH_SUCCESS
+[2025-06-23 11:58:25] [INFO] [Thread-4] Authentication successful: true
+[2025-06-23 12:04:45] [INFO] [JavaFX Application Thread] Logger initialized - logging to: logs/client_gui.log
+[2025-06-23 12:04:53] [INFO] [JavaFX Application Thread] Credentials loaded from: config/credentials.properties
+[2025-06-23 12:04:54] [INFO] [Thread-4] Credentials loaded from: config/credentials.properties
+[2025-06-23 12:04:54] [INFO] [Thread-4] Credentials loaded from: config/credentials.properties
+[2025-06-23 12:04:54] [INFO] [Thread-4] resolvePath: data/client/client_keys/tilman_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
+[2025-06-23 12:04:54] [INFO] [Thread-4]   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 12:04:54] [INFO] [Thread-4]   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 12:04:54] [INFO] [Thread-4] resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
+[2025-06-23 12:04:54] [INFO] [Thread-4] resolvePath: data/client/client_keys/tilman_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
+[2025-06-23 12:04:54] [INFO] [Thread-4]   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 12:04:54] [INFO] [Thread-4]   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 12:04:54] [INFO] [Thread-4] resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
+[2025-06-23 12:04:54] [INFO] [Thread-4] ClientConnection constructor called
+[2025-06-23 12:04:54] [INFO] [Thread-4] Connecting to localhost:2222
+[2025-06-23 12:04:54] [INFO] [Thread-4] Connected successfully
+[2025-06-23 12:04:54] [INFO] [Thread-4] Starting key exchange...
+[2025-06-23 12:04:54] [INFO] [Thread-4] Generated DH key pair
+[2025-06-23 12:04:54] [INFO] [Thread-4] Created key exchange init message
+[2025-06-23 12:04:54] [INFO] [Thread-4] Sending message: KEY_EXCHANGE_INIT, length: 791
+[2025-06-23 12:04:54] [INFO] [Thread-4] Message sent successfully
+[2025-06-23 12:04:54] [INFO] [Thread-4] Sent key exchange init message
+[2025-06-23 12:04:54] [INFO] [Thread-4] Waiting for key exchange reply...
+[2025-06-23 12:04:54] [INFO] [Thread-4] Waiting to receive message...
+[2025-06-23 12:04:54] [INFO] [Thread-4] Read 4 bytes for message length
+[2025-06-23 12:04:54] [INFO] [Thread-4] Message length: 1196
+[2025-06-23 12:04:54] [INFO] [Thread-4] Read 1196 bytes for message body (expected 1196)
+[2025-06-23 12:04:54] [INFO] [Thread-4] Message body (first 20 bytes): 02 64 68 50 75 62 6C 69 63 4B 65 79 3A 4D 49 49 43 4B 44 43 
+[2025-06-23 12:04:54] [INFO] [Thread-4] Raw message type byte: 2
+[2025-06-23 12:04:54] [INFO] [Thread-4] Parsed message type: KEY_EXCHANGE_REPLY
+[2025-06-23 12:04:54] [INFO] [Thread-4] fromPacket: restLength = 1196
+[2025-06-23 12:04:54] [INFO] [Thread-4] fromPacket: parsed message type = KEY_EXCHANGE_REPLY
+[2025-06-23 12:04:54] [INFO] [Thread-4] fromPacket: payloadLength = 1191 (restLength=1196 - 5)
+[2025-06-23 12:04:54] [INFO] [Thread-4] fromPacket: checksum = 1948820067
+[2025-06-23 12:04:54] [INFO] [Thread-4] Received message: KEY_EXCHANGE_REPLY
+[2025-06-23 12:04:54] [INFO] [Thread-4] Received reply message: KEY_EXCHANGE_REPLY
+[2025-06-23 12:04:54] [INFO] [Thread-4] Set server's public key
+[2025-06-23 12:04:54] [INFO] [Thread-4] Computed shared secret, length: 256
+[2025-06-23 12:04:54] [INFO] [Thread-4] Initialized symmetric encryption
+[2025-06-23 12:04:54] [INFO] [Thread-4] Encryption enabled - subsequent messages will be encrypted/decrypted
+[2025-06-23 12:04:54] [INFO] [Thread-4] Enabled encryption in protocol handler
+[2025-06-23 12:04:54] [INFO] [Thread-4] Received session ID: 4c79140d-89be-4b75-ae8b-e0b5cff568f0
+[2025-06-23 12:04:54] [INFO] [Thread-4] Starting authentication...
+[2025-06-23 12:04:54] [INFO] [Thread-4] Preparing auth for user: tilman, type: dual
+[2025-06-23 12:04:54] [INFO] [Thread-4] Using password authentication
+[2025-06-23 12:04:54] [INFO] [Thread-4] Using public key authentication, signed session ID.
+[2025-06-23 12:04:54] [INFO] [Thread-4] Sending message: AUTH_REQUEST, length: 810
+[2025-06-23 12:04:54] [INFO] [Thread-4] Message encrypted, new length: 838
+[2025-06-23 12:04:54] [INFO] [Thread-4] Added length prefix for encrypted message, total length: 842
+[2025-06-23 12:04:54] [INFO] [Thread-4] Message sent successfully
+[2025-06-23 12:04:54] [INFO] [Thread-4] Sent authentication request
+[2025-06-23 12:04:54] [INFO] [Thread-4] Waiting to receive message...
+[2025-06-23 12:04:54] [INFO] [Thread-4] Reading encrypted message...
+[2025-06-23 12:04:54] [INFO] [Thread-4] Read 4 bytes for encrypted message length
+[2025-06-23 12:04:54] [INFO] [Thread-4] Encrypted message length: 84
+[2025-06-23 12:04:54] [INFO] [Thread-4] Read 84 bytes for encrypted message body
+[2025-06-23 12:04:54] [INFO] [Thread-4] Decrypting encrypted message, length: 84
+[2025-06-23 12:04:54] [INFO] [Thread-4] Message decrypted successfully, new length: 56
+[2025-06-23 12:04:54] [INFO] [Thread-4] fromPacket: restLength = 52
+[2025-06-23 12:04:54] [INFO] [Thread-4] fromPacket: parsed message type = AUTH_SUCCESS
+[2025-06-23 12:04:54] [INFO] [Thread-4] fromPacket: payloadLength = 47 (restLength=52 - 5)
+[2025-06-23 12:04:54] [INFO] [Thread-4] fromPacket: checksum = 773878918
+[2025-06-23 12:04:54] [INFO] [Thread-4] Received encrypted message: AUTH_SUCCESS
+[2025-06-23 12:04:54] [INFO] [Thread-4] Received auth response: AUTH_SUCCESS
+[2025-06-23 12:04:54] [INFO] [Thread-4] Authentication successful: true
+[2025-06-23 12:05:11] [INFO] [Thread-6] Starting file upload: lel_lel.txt (43 bytes)
+[2025-06-23 12:05:11] [INFO] [Thread-6] Sending message: FILE_UPLOAD_REQUEST, length: 71
+[2025-06-23 12:05:11] [INFO] [Thread-6] Message encrypted, new length: 99
+[2025-06-23 12:05:11] [INFO] [Thread-6] Added length prefix for encrypted message, total length: 103
+[2025-06-23 12:05:11] [INFO] [Thread-6] Message sent successfully
+[2025-06-23 12:05:11] [INFO] [Thread-6] Sent file upload request
+[2025-06-23 12:05:11] [INFO] [Thread-6] Waiting to receive message...
+[2025-06-23 12:05:11] [INFO] [Thread-6] Reading encrypted message...
+[2025-06-23 12:05:11] [INFO] [Thread-6] Read 4 bytes for encrypted message length
+[2025-06-23 12:05:11] [INFO] [Thread-6] Encrypted message length: 110
+[2025-06-23 12:05:11] [INFO] [Thread-6] Read 110 bytes for encrypted message body
+[2025-06-23 12:05:11] [INFO] [Thread-6] Decrypting encrypted message, length: 110
+[2025-06-23 12:05:11] [INFO] [Thread-6] Message decrypted successfully, new length: 82
+[2025-06-23 12:05:11] [INFO] [Thread-6] fromPacket: restLength = 78
+[2025-06-23 12:05:11] [INFO] [Thread-6] fromPacket: parsed message type = FILE_ACK
+[2025-06-23 12:05:11] [INFO] [Thread-6] fromPacket: payloadLength = 73 (restLength=78 - 5)
+[2025-06-23 12:05:11] [INFO] [Thread-6] fromPacket: checksum = 1966690304
+[2025-06-23 12:05:11] [INFO] [Thread-6] Received encrypted message: FILE_ACK
+[2025-06-23 12:05:11] [INFO] [Thread-6] Sending message: FILE_DATA, length: 125
+[2025-06-23 12:05:11] [INFO] [Thread-6] Message encrypted, new length: 153
+[2025-06-23 12:05:11] [INFO] [Thread-6] Added length prefix for encrypted message, total length: 157
+[2025-06-23 12:05:11] [INFO] [Thread-6] Message sent successfully
+[2025-06-23 12:05:11] [INFO] [Thread-6] Sent chunk 1, bytes: 43/43
+[2025-06-23 12:05:11] [INFO] [Thread-6] Waiting to receive message...
+[2025-06-23 12:05:11] [INFO] [Thread-6] Reading encrypted message...
+[2025-06-23 12:05:11] [INFO] [Thread-6] Read 4 bytes for encrypted message length
+[2025-06-23 12:05:11] [INFO] [Thread-6] Encrypted message length: 125
+[2025-06-23 12:05:11] [INFO] [Thread-6] Read 125 bytes for encrypted message body
+[2025-06-23 12:05:11] [INFO] [Thread-6] Decrypting encrypted message, length: 125
+[2025-06-23 12:05:11] [INFO] [Thread-6] Message decrypted successfully, new length: 97
+[2025-06-23 12:05:11] [INFO] [Thread-6] fromPacket: restLength = 93
+[2025-06-23 12:05:11] [INFO] [Thread-6] fromPacket: parsed message type = FILE_ACK
+[2025-06-23 12:05:11] [INFO] [Thread-6] fromPacket: payloadLength = 88 (restLength=93 - 5)
+[2025-06-23 12:05:11] [INFO] [Thread-6] fromPacket: checksum = -529994501
+[2025-06-23 12:05:11] [INFO] [Thread-6] Received encrypted message: FILE_ACK
+[2025-06-23 12:05:11] [INFO] [Thread-6] File upload completed: File upload completed: lel_lel.txt (43 bytes)
+[2025-06-23 12:09:57] [INFO] [JavaFX Application Thread] Logger initialized - logging to: logs/client_gui.log
+[2025-06-23 12:10:08] [INFO] [JavaFX Application Thread] Credentials loaded from: config/credentials.properties
+[2025-06-23 12:10:09] [INFO] [Thread-4] Credentials loaded from: config/credentials.properties
+[2025-06-23 12:10:09] [INFO] [Thread-4] Credentials loaded from: config/credentials.properties
+[2025-06-23 12:10:09] [INFO] [Thread-4] resolvePath: data/client/client_keys/tilman_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
+[2025-06-23 12:10:09] [INFO] [Thread-4]   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 12:10:09] [INFO] [Thread-4]   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 12:10:09] [INFO] [Thread-4] resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
+[2025-06-23 12:10:09] [INFO] [Thread-4] resolvePath: data/client/client_keys/tilman_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
+[2025-06-23 12:10:09] [INFO] [Thread-4]   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 12:10:09] [INFO] [Thread-4]   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 12:10:09] [INFO] [Thread-4] resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
+[2025-06-23 12:10:09] [INFO] [Thread-4] ClientConnection constructor called
+[2025-06-23 12:10:09] [INFO] [Thread-4] Connecting to localhost:2222
+[2025-06-23 12:10:09] [INFO] [Thread-4] Connected successfully
+[2025-06-23 12:10:09] [INFO] [Thread-4] Starting key exchange...
+[2025-06-23 12:10:09] [INFO] [Thread-4] Generated DH key pair
+[2025-06-23 12:10:09] [INFO] [Thread-4] Created key exchange init message
+[2025-06-23 12:10:09] [INFO] [Thread-4] Sending message: KEY_EXCHANGE_INIT, length: 791
+[2025-06-23 12:10:09] [INFO] [Thread-4] Message sent successfully
+[2025-06-23 12:10:09] [INFO] [Thread-4] Sent key exchange init message
+[2025-06-23 12:10:09] [INFO] [Thread-4] Waiting for key exchange reply...
+[2025-06-23 12:10:09] [INFO] [Thread-4] Waiting to receive message...
+[2025-06-23 12:10:09] [INFO] [Thread-4] Read 4 bytes for message length
+[2025-06-23 12:10:09] [INFO] [Thread-4] Message length: 1196
+[2025-06-23 12:10:09] [INFO] [Thread-4] Read 1196 bytes for message body (expected 1196)
+[2025-06-23 12:10:09] [INFO] [Thread-4] Message body (first 20 bytes): 02 64 68 50 75 62 6C 69 63 4B 65 79 3A 4D 49 49 43 4B 44 43 
+[2025-06-23 12:10:09] [INFO] [Thread-4] Raw message type byte: 2
+[2025-06-23 12:10:09] [INFO] [Thread-4] Parsed message type: KEY_EXCHANGE_REPLY
+[2025-06-23 12:10:09] [INFO] [Thread-4] fromPacket: restLength = 1196
+[2025-06-23 12:10:09] [INFO] [Thread-4] fromPacket: parsed message type = KEY_EXCHANGE_REPLY
+[2025-06-23 12:10:09] [INFO] [Thread-4] fromPacket: payloadLength = 1191 (restLength=1196 - 5)
+[2025-06-23 12:10:09] [INFO] [Thread-4] fromPacket: checksum = -455430663
+[2025-06-23 12:10:09] [INFO] [Thread-4] Received message: KEY_EXCHANGE_REPLY
+[2025-06-23 12:10:09] [INFO] [Thread-4] Received reply message: KEY_EXCHANGE_REPLY
+[2025-06-23 12:10:09] [INFO] [Thread-4] Set server's public key
+[2025-06-23 12:10:09] [INFO] [Thread-4] Computed shared secret, length: 256
+[2025-06-23 12:10:09] [INFO] [Thread-4] Initialized symmetric encryption
+[2025-06-23 12:10:09] [INFO] [Thread-4] Encryption enabled - subsequent messages will be encrypted/decrypted
+[2025-06-23 12:10:09] [INFO] [Thread-4] Enabled encryption in protocol handler
+[2025-06-23 12:10:09] [INFO] [Thread-4] Received session ID: a74b7753-ba72-4229-a6d6-a9ec91ff8886
+[2025-06-23 12:10:09] [INFO] [Thread-4] Starting authentication...
+[2025-06-23 12:10:09] [INFO] [Thread-4] Preparing auth for user: tilman, type: dual
+[2025-06-23 12:10:09] [INFO] [Thread-4] Using password authentication
+[2025-06-23 12:10:09] [INFO] [Thread-4] Using public key authentication, signed session ID.
+[2025-06-23 12:10:09] [INFO] [Thread-4] Sending message: AUTH_REQUEST, length: 810
+[2025-06-23 12:10:09] [INFO] [Thread-4] Message encrypted, new length: 838
+[2025-06-23 12:10:09] [INFO] [Thread-4] Added length prefix for encrypted message, total length: 842
+[2025-06-23 12:10:09] [INFO] [Thread-4] Message sent successfully
+[2025-06-23 12:10:09] [INFO] [Thread-4] Sent authentication request
+[2025-06-23 12:10:09] [INFO] [Thread-4] Waiting to receive message...
+[2025-06-23 12:10:09] [INFO] [Thread-4] Reading encrypted message...
+[2025-06-23 12:10:09] [INFO] [Thread-4] Read 4 bytes for encrypted message length
+[2025-06-23 12:10:09] [INFO] [Thread-4] Encrypted message length: 84
+[2025-06-23 12:10:09] [INFO] [Thread-4] Read 84 bytes for encrypted message body
+[2025-06-23 12:10:09] [INFO] [Thread-4] Decrypting encrypted message, length: 84
+[2025-06-23 12:10:09] [INFO] [Thread-4] Message decrypted successfully, new length: 56
+[2025-06-23 12:10:09] [INFO] [Thread-4] fromPacket: restLength = 52
+[2025-06-23 12:10:09] [INFO] [Thread-4] fromPacket: parsed message type = AUTH_SUCCESS
+[2025-06-23 12:10:09] [INFO] [Thread-4] fromPacket: payloadLength = 47 (restLength=52 - 5)
+[2025-06-23 12:10:09] [INFO] [Thread-4] fromPacket: checksum = 773878918
+[2025-06-23 12:10:09] [INFO] [Thread-4] Received encrypted message: AUTH_SUCCESS
+[2025-06-23 12:10:09] [INFO] [Thread-4] Received auth response: AUTH_SUCCESS
+[2025-06-23 12:10:09] [INFO] [Thread-4] Authentication successful: true
+[2025-06-23 12:13:28] [INFO] [JavaFX Application Thread] Logger initialized - logging to: logs/client_gui.log
+[2025-06-23 12:13:35] [INFO] [JavaFX Application Thread] Credentials loaded from: config/credentials.properties
+[2025-06-23 12:13:35] [INFO] [Thread-4] Credentials loaded from: config/credentials.properties
+[2025-06-23 12:13:35] [INFO] [Thread-4] Credentials loaded from: config/credentials.properties
+[2025-06-23 12:13:35] [INFO] [Thread-4] resolvePath: data/client/client_keys/tilman_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
+[2025-06-23 12:13:35] [INFO] [Thread-4]   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 12:13:35] [INFO] [Thread-4]   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 12:13:35] [INFO] [Thread-4] resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
+[2025-06-23 12:13:35] [INFO] [Thread-4] resolvePath: data/client/client_keys/tilman_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
+[2025-06-23 12:13:35] [INFO] [Thread-4]   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 12:13:35] [INFO] [Thread-4]   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 12:13:35] [INFO] [Thread-4] resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
+[2025-06-23 12:13:35] [INFO] [Thread-4] ClientConnection constructor called
+[2025-06-23 12:13:35] [INFO] [Thread-4] Connecting to localhost:2222
+[2025-06-23 12:13:35] [INFO] [Thread-4] Connected successfully
+[2025-06-23 12:13:35] [INFO] [Thread-4] Starting key exchange...
+[2025-06-23 12:13:35] [INFO] [Thread-4] Generated DH key pair
+[2025-06-23 12:13:35] [INFO] [Thread-4] Created key exchange init message
+[2025-06-23 12:13:35] [INFO] [Thread-4] Sending message: KEY_EXCHANGE_INIT, length: 791
+[2025-06-23 12:13:35] [INFO] [Thread-4] Message sent successfully
+[2025-06-23 12:13:35] [INFO] [Thread-4] Sent key exchange init message
+[2025-06-23 12:13:35] [INFO] [Thread-4] Waiting for key exchange reply...
+[2025-06-23 12:13:35] [INFO] [Thread-4] Waiting to receive message...
+[2025-06-23 12:13:35] [INFO] [Thread-4] Read 4 bytes for message length
+[2025-06-23 12:13:35] [INFO] [Thread-4] Message length: 1196
+[2025-06-23 12:13:35] [INFO] [Thread-4] Read 1196 bytes for message body (expected 1196)
+[2025-06-23 12:13:35] [INFO] [Thread-4] Message body (first 20 bytes): 02 64 68 50 75 62 6C 69 63 4B 65 79 3A 4D 49 49 43 4B 44 43 
+[2025-06-23 12:13:35] [INFO] [Thread-4] Raw message type byte: 2
+[2025-06-23 12:13:35] [INFO] [Thread-4] Parsed message type: KEY_EXCHANGE_REPLY
+[2025-06-23 12:13:35] [INFO] [Thread-4] fromPacket: restLength = 1196
+[2025-06-23 12:13:35] [INFO] [Thread-4] fromPacket: parsed message type = KEY_EXCHANGE_REPLY
+[2025-06-23 12:13:35] [INFO] [Thread-4] fromPacket: payloadLength = 1191 (restLength=1196 - 5)
+[2025-06-23 12:13:35] [INFO] [Thread-4] fromPacket: checksum = 1233390716
+[2025-06-23 12:13:35] [INFO] [Thread-4] Received message: KEY_EXCHANGE_REPLY
+[2025-06-23 12:13:35] [INFO] [Thread-4] Received reply message: KEY_EXCHANGE_REPLY
+[2025-06-23 12:13:35] [INFO] [Thread-4] Set server's public key
+[2025-06-23 12:13:36] [INFO] [Thread-4] Computed shared secret, length: 256
+[2025-06-23 12:13:36] [INFO] [Thread-4] Initialized symmetric encryption
+[2025-06-23 12:13:36] [INFO] [Thread-4] Encryption enabled - subsequent messages will be encrypted/decrypted
+[2025-06-23 12:13:36] [INFO] [Thread-4] Enabled encryption in protocol handler
+[2025-06-23 12:13:36] [INFO] [Thread-4] Received session ID: 826e0909-2e31-46ba-b180-cd525e8467ee
+[2025-06-23 12:13:36] [INFO] [Thread-4] Starting authentication...
+[2025-06-23 12:13:36] [INFO] [Thread-4] Preparing auth for user: tilman, type: dual
+[2025-06-23 12:13:36] [INFO] [Thread-4] Using password authentication
+[2025-06-23 12:13:36] [INFO] [Thread-4] Using public key authentication, signed session ID.
+[2025-06-23 12:13:36] [INFO] [Thread-4] Sending message: AUTH_REQUEST, length: 810
+[2025-06-23 12:13:36] [INFO] [Thread-4] Message encrypted, new length: 838
+[2025-06-23 12:13:36] [INFO] [Thread-4] Added length prefix for encrypted message, total length: 842
+[2025-06-23 12:13:36] [INFO] [Thread-4] Message sent successfully
+[2025-06-23 12:13:36] [INFO] [Thread-4] Sent authentication request
+[2025-06-23 12:13:36] [INFO] [Thread-4] Waiting to receive message...
+[2025-06-23 12:13:36] [INFO] [Thread-4] Reading encrypted message...
+[2025-06-23 12:13:36] [INFO] [Thread-4] Read 4 bytes for encrypted message length
+[2025-06-23 12:13:36] [INFO] [Thread-4] Encrypted message length: 84
+[2025-06-23 12:13:36] [INFO] [Thread-4] Read 84 bytes for encrypted message body
+[2025-06-23 12:13:36] [INFO] [Thread-4] Decrypting encrypted message, length: 84
+[2025-06-23 12:13:36] [INFO] [Thread-4] Message decrypted successfully, new length: 56
+[2025-06-23 12:13:36] [INFO] [Thread-4] fromPacket: restLength = 52
+[2025-06-23 12:13:36] [INFO] [Thread-4] fromPacket: parsed message type = AUTH_SUCCESS
+[2025-06-23 12:13:36] [INFO] [Thread-4] fromPacket: payloadLength = 47 (restLength=52 - 5)
+[2025-06-23 12:13:36] [INFO] [Thread-4] fromPacket: checksum = 773878918
+[2025-06-23 12:13:36] [INFO] [Thread-4] Received encrypted message: AUTH_SUCCESS
+[2025-06-23 12:13:36] [INFO] [Thread-4] Received auth response: AUTH_SUCCESS
+[2025-06-23 12:13:36] [INFO] [Thread-4] Authentication successful: true
+[2025-06-23 12:13:48] [INFO] [Thread-6] Starting file upload: test_lel.txt (35 bytes)
+[2025-06-23 12:13:48] [INFO] [Thread-6] Sending message: FILE_UPLOAD_REQUEST, length: 77
+[2025-06-23 12:13:48] [INFO] [Thread-6] Message encrypted, new length: 105
+[2025-06-23 12:13:48] [INFO] [Thread-6] Added length prefix for encrypted message, total length: 109
+[2025-06-23 12:13:48] [INFO] [Thread-6] Message sent successfully
+[2025-06-23 12:13:48] [INFO] [Thread-6] Sent file upload request
+[2025-06-23 12:13:48] [INFO] [Thread-6] Waiting to receive message...
+[2025-06-23 12:13:48] [INFO] [Thread-6] Reading encrypted message...
+[2025-06-23 12:13:48] [INFO] [Thread-6] Read 4 bytes for encrypted message length
+[2025-06-23 12:13:48] [INFO] [Thread-6] Encrypted message length: 111
+[2025-06-23 12:13:48] [INFO] [Thread-6] Read 111 bytes for encrypted message body
+[2025-06-23 12:13:48] [INFO] [Thread-6] Decrypting encrypted message, length: 111
+[2025-06-23 12:13:48] [INFO] [Thread-6] Message decrypted successfully, new length: 83
+[2025-06-23 12:13:48] [INFO] [Thread-6] fromPacket: restLength = 79
+[2025-06-23 12:13:48] [INFO] [Thread-6] fromPacket: parsed message type = FILE_ACK
+[2025-06-23 12:13:48] [INFO] [Thread-6] fromPacket: payloadLength = 74 (restLength=79 - 5)
+[2025-06-23 12:13:48] [INFO] [Thread-6] fromPacket: checksum = -1631696496
+[2025-06-23 12:13:48] [INFO] [Thread-6] Received encrypted message: FILE_ACK
+[2025-06-23 12:13:48] [INFO] [Thread-6] Sending message: FILE_DATA, length: 114
+[2025-06-23 12:13:48] [INFO] [Thread-6] Message encrypted, new length: 142
+[2025-06-23 12:13:48] [INFO] [Thread-6] Added length prefix for encrypted message, total length: 146
+[2025-06-23 12:13:48] [INFO] [Thread-6] Message sent successfully
+[2025-06-23 12:13:48] [INFO] [Thread-6] Sent chunk 1, bytes: 35/35
+[2025-06-23 12:13:48] [INFO] [Thread-6] Waiting to receive message...
+[2025-06-23 12:13:48] [INFO] [Thread-6] Reading encrypted message...
+[2025-06-23 12:13:48] [INFO] [Thread-6] Read 4 bytes for encrypted message length
+[2025-06-23 12:13:48] [INFO] [Thread-6] Encrypted message length: 126
+[2025-06-23 12:13:48] [INFO] [Thread-6] Read 126 bytes for encrypted message body
+[2025-06-23 12:13:48] [INFO] [Thread-6] Decrypting encrypted message, length: 126
+[2025-06-23 12:13:48] [INFO] [Thread-6] Message decrypted successfully, new length: 98
+[2025-06-23 12:13:48] [INFO] [Thread-6] fromPacket: restLength = 94
+[2025-06-23 12:13:48] [INFO] [Thread-6] fromPacket: parsed message type = FILE_ACK
+[2025-06-23 12:13:48] [INFO] [Thread-6] fromPacket: payloadLength = 89 (restLength=94 - 5)
+[2025-06-23 12:13:48] [INFO] [Thread-6] fromPacket: checksum = -4423699
+[2025-06-23 12:13:48] [INFO] [Thread-6] Received encrypted message: FILE_ACK
+[2025-06-23 12:13:48] [INFO] [Thread-6] File upload completed: File upload completed: test_lel.txt (35 bytes)
+[2025-06-23 12:17:34] [INFO] [JavaFX Application Thread] Logger initialized - logging to: logs/client_gui.log
+[2025-06-23 12:17:39] [INFO] [JavaFX Application Thread] Credentials loaded from: config/credentials.properties
+[2025-06-23 12:17:40] [INFO] [Thread-4] Credentials loaded from: config/credentials.properties
+[2025-06-23 12:17:40] [INFO] [Thread-4] Credentials loaded from: config/credentials.properties
+[2025-06-23 12:17:40] [INFO] [Thread-4] resolvePath: data/client/client_keys/tilman_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
+[2025-06-23 12:17:40] [INFO] [Thread-4]   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 12:17:40] [INFO] [Thread-4]   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 12:17:40] [INFO] [Thread-4] resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
+[2025-06-23 12:17:40] [INFO] [Thread-4] resolvePath: data/client/client_keys/tilman_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
+[2025-06-23 12:17:40] [INFO] [Thread-4]   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 12:17:40] [INFO] [Thread-4]   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 12:17:40] [INFO] [Thread-4] resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
+[2025-06-23 12:17:40] [INFO] [Thread-4] ClientConnection constructor called
+[2025-06-23 12:17:40] [INFO] [Thread-4] Connecting to localhost:2222
+[2025-06-23 12:17:40] [INFO] [Thread-4] Connected successfully
+[2025-06-23 12:17:40] [INFO] [Thread-4] Starting key exchange...
+[2025-06-23 12:17:40] [INFO] [Thread-4] Generated DH key pair
+[2025-06-23 12:17:40] [INFO] [Thread-4] Created key exchange init message
+[2025-06-23 12:17:40] [INFO] [Thread-4] Sending message: KEY_EXCHANGE_INIT, length: 791
+[2025-06-23 12:17:40] [INFO] [Thread-4] Message sent successfully
+[2025-06-23 12:17:40] [INFO] [Thread-4] Sent key exchange init message
+[2025-06-23 12:17:40] [INFO] [Thread-4] Waiting for key exchange reply...
+[2025-06-23 12:17:40] [INFO] [Thread-4] Waiting to receive message...
+[2025-06-23 12:17:40] [INFO] [Thread-4] Read 4 bytes for message length
+[2025-06-23 12:17:40] [INFO] [Thread-4] Message length: 1196
+[2025-06-23 12:17:40] [INFO] [Thread-4] Read 1196 bytes for message body (expected 1196)
+[2025-06-23 12:17:40] [INFO] [Thread-4] Message body (first 20 bytes): 02 64 68 50 75 62 6C 69 63 4B 65 79 3A 4D 49 49 43 4B 54 43 
+[2025-06-23 12:17:40] [INFO] [Thread-4] Raw message type byte: 2
+[2025-06-23 12:17:40] [INFO] [Thread-4] Parsed message type: KEY_EXCHANGE_REPLY
+[2025-06-23 12:17:40] [INFO] [Thread-4] fromPacket: restLength = 1196
+[2025-06-23 12:17:40] [INFO] [Thread-4] fromPacket: parsed message type = KEY_EXCHANGE_REPLY
+[2025-06-23 12:17:40] [INFO] [Thread-4] fromPacket: payloadLength = 1191 (restLength=1196 - 5)
+[2025-06-23 12:17:40] [INFO] [Thread-4] fromPacket: checksum = 1735892799
+[2025-06-23 12:17:40] [INFO] [Thread-4] Received message: KEY_EXCHANGE_REPLY
+[2025-06-23 12:17:40] [INFO] [Thread-4] Received reply message: KEY_EXCHANGE_REPLY
+[2025-06-23 12:17:40] [INFO] [Thread-4] Set server's public key
+[2025-06-23 12:17:40] [INFO] [Thread-4] Computed shared secret, length: 256
+[2025-06-23 12:17:40] [INFO] [Thread-4] Initialized symmetric encryption
+[2025-06-23 12:17:40] [INFO] [Thread-4] Encryption enabled - subsequent messages will be encrypted/decrypted
+[2025-06-23 12:17:40] [INFO] [Thread-4] Enabled encryption in protocol handler
+[2025-06-23 12:17:40] [INFO] [Thread-4] Received session ID: cee7d67e-f4b8-4733-8955-0c2dfdbb391a
+[2025-06-23 12:17:40] [INFO] [Thread-4] Starting authentication...
+[2025-06-23 12:17:40] [INFO] [Thread-4] Preparing auth for user: tilman, type: dual
+[2025-06-23 12:17:40] [INFO] [Thread-4] Using password authentication
+[2025-06-23 12:17:40] [INFO] [Thread-4] Using public key authentication, signed session ID.
+[2025-06-23 12:17:40] [INFO] [Thread-4] Sending message: AUTH_REQUEST, length: 810
+[2025-06-23 12:17:40] [INFO] [Thread-4] Message encrypted, new length: 838
+[2025-06-23 12:17:40] [INFO] [Thread-4] Added length prefix for encrypted message, total length: 842
+[2025-06-23 12:17:40] [INFO] [Thread-4] Message sent successfully
+[2025-06-23 12:17:40] [INFO] [Thread-4] Sent authentication request
+[2025-06-23 12:17:40] [INFO] [Thread-4] Waiting to receive message...
+[2025-06-23 12:17:40] [INFO] [Thread-4] Reading encrypted message...
+[2025-06-23 12:17:40] [INFO] [Thread-4] Read 4 bytes for encrypted message length
+[2025-06-23 12:17:40] [INFO] [Thread-4] Encrypted message length: 84
+[2025-06-23 12:17:40] [INFO] [Thread-4] Read 84 bytes for encrypted message body
+[2025-06-23 12:17:40] [INFO] [Thread-4] Decrypting encrypted message, length: 84
+[2025-06-23 12:17:40] [INFO] [Thread-4] Message decrypted successfully, new length: 56
+[2025-06-23 12:17:40] [INFO] [Thread-4] fromPacket: restLength = 52
+[2025-06-23 12:17:40] [INFO] [Thread-4] fromPacket: parsed message type = AUTH_SUCCESS
+[2025-06-23 12:17:40] [INFO] [Thread-4] fromPacket: payloadLength = 47 (restLength=52 - 5)
+[2025-06-23 12:17:40] [INFO] [Thread-4] fromPacket: checksum = 773878918
+[2025-06-23 12:17:40] [INFO] [Thread-4] Received encrypted message: AUTH_SUCCESS
+[2025-06-23 12:17:40] [INFO] [Thread-4] Received auth response: AUTH_SUCCESS
+[2025-06-23 12:17:40] [INFO] [Thread-4] Authentication successful: true
+[2025-06-23 12:17:51] [INFO] [Thread-6] Starting file upload: test_lel.txt (35 bytes)
+[2025-06-23 12:17:51] [INFO] [Thread-6] Sending message: FILE_UPLOAD_REQUEST, length: 70
+[2025-06-23 12:17:51] [INFO] [Thread-6] Message encrypted, new length: 98
+[2025-06-23 12:17:51] [INFO] [Thread-6] Added length prefix for encrypted message, total length: 102
+[2025-06-23 12:17:51] [INFO] [Thread-6] Message sent successfully
+[2025-06-23 12:17:51] [INFO] [Thread-6] Sent file upload request
+[2025-06-23 12:17:51] [INFO] [Thread-6] Waiting to receive message...
+[2025-06-23 12:17:51] [INFO] [Thread-6] Reading encrypted message...
+[2025-06-23 12:17:51] [INFO] [Thread-6] Read 4 bytes for encrypted message length
+[2025-06-23 12:17:51] [INFO] [Thread-6] Encrypted message length: 111
+[2025-06-23 12:17:51] [INFO] [Thread-6] Read 111 bytes for encrypted message body
+[2025-06-23 12:17:51] [INFO] [Thread-6] Decrypting encrypted message, length: 111
+[2025-06-23 12:17:51] [INFO] [Thread-6] Message decrypted successfully, new length: 83
+[2025-06-23 12:17:51] [INFO] [Thread-6] fromPacket: restLength = 79
+[2025-06-23 12:17:51] [INFO] [Thread-6] fromPacket: parsed message type = FILE_ACK
+[2025-06-23 12:17:51] [INFO] [Thread-6] fromPacket: payloadLength = 74 (restLength=79 - 5)
+[2025-06-23 12:17:51] [INFO] [Thread-6] fromPacket: checksum = -1631696496
+[2025-06-23 12:17:51] [INFO] [Thread-6] Received encrypted message: FILE_ACK
+[2025-06-23 12:17:51] [INFO] [Thread-6] Sending message: FILE_DATA, length: 114
+[2025-06-23 12:17:51] [INFO] [Thread-6] Message encrypted, new length: 142
+[2025-06-23 12:17:51] [INFO] [Thread-6] Added length prefix for encrypted message, total length: 146
+[2025-06-23 12:17:51] [INFO] [Thread-6] Message sent successfully
+[2025-06-23 12:17:51] [INFO] [Thread-6] Sent chunk 1, bytes: 35/35
+[2025-06-23 12:17:51] [INFO] [Thread-6] Waiting to receive message...
+[2025-06-23 12:17:51] [INFO] [Thread-6] Reading encrypted message...
+[2025-06-23 12:17:51] [INFO] [Thread-6] Read 4 bytes for encrypted message length
+[2025-06-23 12:17:51] [INFO] [Thread-6] Encrypted message length: 126
+[2025-06-23 12:17:51] [INFO] [Thread-6] Read 126 bytes for encrypted message body
+[2025-06-23 12:17:51] [INFO] [Thread-6] Decrypting encrypted message, length: 126
+[2025-06-23 12:17:51] [INFO] [Thread-6] Message decrypted successfully, new length: 98
+[2025-06-23 12:17:51] [INFO] [Thread-6] fromPacket: restLength = 94
+[2025-06-23 12:17:51] [INFO] [Thread-6] fromPacket: parsed message type = FILE_ACK
+[2025-06-23 12:17:51] [INFO] [Thread-6] fromPacket: payloadLength = 89 (restLength=94 - 5)
+[2025-06-23 12:17:51] [INFO] [Thread-6] fromPacket: checksum = -4423699
+[2025-06-23 12:17:51] [INFO] [Thread-6] Received encrypted message: FILE_ACK
+[2025-06-23 12:17:51] [INFO] [Thread-6] File upload completed: File upload completed: test_lel.txt (35 bytes)
+[2025-06-23 12:22:04] [INFO] [JavaFX Application Thread] Logger initialized - logging to: logs/client_gui.log
+[2025-06-23 12:22:09] [INFO] [JavaFX Application Thread] Credentials loaded from: config/credentials.properties
+[2025-06-23 12:22:11] [INFO] [Thread-4] Credentials loaded from: config/credentials.properties
+[2025-06-23 12:22:11] [INFO] [Thread-4] Credentials loaded from: config/credentials.properties
+[2025-06-23 12:22:11] [INFO] [Thread-4] resolvePath: data/client/client_keys/tilman_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
+[2025-06-23 12:22:11] [INFO] [Thread-4]   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 12:22:11] [INFO] [Thread-4]   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 12:22:11] [INFO] [Thread-4] resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
+[2025-06-23 12:22:11] [INFO] [Thread-4] resolvePath: data/client/client_keys/tilman_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
+[2025-06-23 12:22:11] [INFO] [Thread-4]   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 12:22:11] [INFO] [Thread-4]   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 12:22:11] [INFO] [Thread-4] resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
+[2025-06-23 12:22:11] [INFO] [Thread-4] ClientConnection constructor called
+[2025-06-23 12:22:11] [INFO] [Thread-4] Connecting to localhost:2222
+[2025-06-23 12:22:11] [INFO] [Thread-4] Connected successfully
+[2025-06-23 12:22:11] [INFO] [Thread-4] Starting key exchange...
+[2025-06-23 12:22:11] [INFO] [Thread-4] Generated DH key pair
+[2025-06-23 12:22:11] [INFO] [Thread-4] Created key exchange init message
+[2025-06-23 12:22:11] [INFO] [Thread-4] Sending message: KEY_EXCHANGE_INIT, length: 791
+[2025-06-23 12:22:11] [INFO] [Thread-4] Message sent successfully
+[2025-06-23 12:22:11] [INFO] [Thread-4] Sent key exchange init message
+[2025-06-23 12:22:11] [INFO] [Thread-4] Waiting for key exchange reply...
+[2025-06-23 12:22:11] [INFO] [Thread-4] Waiting to receive message...
+[2025-06-23 12:22:11] [INFO] [Thread-4] Read 4 bytes for message length
+[2025-06-23 12:22:11] [INFO] [Thread-4] Message length: 1196
+[2025-06-23 12:22:11] [INFO] [Thread-4] Read 1196 bytes for message body (expected 1196)
+[2025-06-23 12:22:11] [INFO] [Thread-4] Message body (first 20 bytes): 02 64 68 50 75 62 6C 69 63 4B 65 79 3A 4D 49 49 43 4B 44 43 
+[2025-06-23 12:22:11] [INFO] [Thread-4] Raw message type byte: 2
+[2025-06-23 12:22:11] [INFO] [Thread-4] Parsed message type: KEY_EXCHANGE_REPLY
+[2025-06-23 12:22:11] [INFO] [Thread-4] fromPacket: restLength = 1196
+[2025-06-23 12:22:11] [INFO] [Thread-4] fromPacket: parsed message type = KEY_EXCHANGE_REPLY
+[2025-06-23 12:22:11] [INFO] [Thread-4] fromPacket: payloadLength = 1191 (restLength=1196 - 5)
+[2025-06-23 12:22:11] [INFO] [Thread-4] fromPacket: checksum = -682563850
+[2025-06-23 12:22:11] [INFO] [Thread-4] Received message: KEY_EXCHANGE_REPLY
+[2025-06-23 12:22:11] [INFO] [Thread-4] Received reply message: KEY_EXCHANGE_REPLY
+[2025-06-23 12:22:11] [INFO] [Thread-4] Set server's public key
+[2025-06-23 12:22:11] [INFO] [Thread-4] Computed shared secret, length: 256
+[2025-06-23 12:22:11] [INFO] [Thread-4] Initialized symmetric encryption
+[2025-06-23 12:22:11] [INFO] [Thread-4] Encryption enabled - subsequent messages will be encrypted/decrypted
+[2025-06-23 12:22:11] [INFO] [Thread-4] Enabled encryption in protocol handler
+[2025-06-23 12:22:11] [INFO] [Thread-4] Received session ID: c3da3403-2a56-42cc-b957-0c3b5334c0c1
+[2025-06-23 12:22:11] [INFO] [Thread-4] Starting authentication...
+[2025-06-23 12:22:11] [INFO] [Thread-4] Preparing auth for user: tilman, type: dual
+[2025-06-23 12:22:11] [INFO] [Thread-4] Using password authentication
+[2025-06-23 12:22:12] [INFO] [Thread-4] Using public key authentication, signed session ID.
+[2025-06-23 12:22:12] [INFO] [Thread-4] Sending message: AUTH_REQUEST, length: 810
+[2025-06-23 12:22:12] [INFO] [Thread-4] Message encrypted, new length: 838
+[2025-06-23 12:22:12] [INFO] [Thread-4] Added length prefix for encrypted message, total length: 842
+[2025-06-23 12:22:12] [INFO] [Thread-4] Message sent successfully
+[2025-06-23 12:22:12] [INFO] [Thread-4] Sent authentication request
+[2025-06-23 12:22:12] [INFO] [Thread-4] Waiting to receive message...
+[2025-06-23 12:22:12] [INFO] [Thread-4] Reading encrypted message...
+[2025-06-23 12:22:12] [INFO] [Thread-4] Read 4 bytes for encrypted message length
+[2025-06-23 12:22:12] [INFO] [Thread-4] Encrypted message length: 84
+[2025-06-23 12:22:12] [INFO] [Thread-4] Read 84 bytes for encrypted message body
+[2025-06-23 12:22:12] [INFO] [Thread-4] Decrypting encrypted message, length: 84
+[2025-06-23 12:22:12] [INFO] [Thread-4] Message decrypted successfully, new length: 56
+[2025-06-23 12:22:12] [INFO] [Thread-4] fromPacket: restLength = 52
+[2025-06-23 12:22:12] [INFO] [Thread-4] fromPacket: parsed message type = AUTH_SUCCESS
+[2025-06-23 12:22:12] [INFO] [Thread-4] fromPacket: payloadLength = 47 (restLength=52 - 5)
+[2025-06-23 12:22:12] [INFO] [Thread-4] fromPacket: checksum = 773878918
+[2025-06-23 12:22:12] [INFO] [Thread-4] Received encrypted message: AUTH_SUCCESS
+[2025-06-23 12:22:12] [INFO] [Thread-4] Received auth response: AUTH_SUCCESS
+[2025-06-23 12:22:12] [INFO] [Thread-4] Authentication successful: true
+[2025-06-23 12:22:23] [INFO] [Thread-6] Starting file upload: test_lelHey.txt (35 bytes)
+[2025-06-23 12:22:23] [INFO] [Thread-6] Sending message: FILE_UPLOAD_REQUEST, length: 66
+[2025-06-23 12:22:23] [INFO] [Thread-6] Message encrypted, new length: 94
+[2025-06-23 12:22:23] [INFO] [Thread-6] Added length prefix for encrypted message, total length: 98
+[2025-06-23 12:22:23] [INFO] [Thread-6] Message sent successfully
+[2025-06-23 12:22:23] [INFO] [Thread-6] Sent file upload request
+[2025-06-23 12:22:23] [INFO] [Thread-6] Waiting to receive message...
+[2025-06-23 12:22:23] [INFO] [Thread-6] Reading encrypted message...
+[2025-06-23 12:22:23] [INFO] [Thread-6] Read 4 bytes for encrypted message length
+[2025-06-23 12:22:23] [INFO] [Thread-6] Encrypted message length: 114
+[2025-06-23 12:22:23] [INFO] [Thread-6] Read 114 bytes for encrypted message body
+[2025-06-23 12:22:23] [INFO] [Thread-6] Decrypting encrypted message, length: 114
+[2025-06-23 12:22:23] [INFO] [Thread-6] Message decrypted successfully, new length: 86
+[2025-06-23 12:22:23] [INFO] [Thread-6] fromPacket: restLength = 82
+[2025-06-23 12:22:23] [INFO] [Thread-6] fromPacket: parsed message type = FILE_ACK
+[2025-06-23 12:22:23] [INFO] [Thread-6] fromPacket: payloadLength = 77 (restLength=82 - 5)
+[2025-06-23 12:22:23] [INFO] [Thread-6] fromPacket: checksum = 36640103
+[2025-06-23 12:22:23] [INFO] [Thread-6] Received encrypted message: FILE_ACK
+[2025-06-23 12:22:23] [INFO] [Thread-6] Sending message: FILE_DATA, length: 117
+[2025-06-23 12:22:23] [INFO] [Thread-6] Message encrypted, new length: 145
+[2025-06-23 12:22:23] [INFO] [Thread-6] Added length prefix for encrypted message, total length: 149
+[2025-06-23 12:22:23] [INFO] [Thread-6] Message sent successfully
+[2025-06-23 12:22:23] [INFO] [Thread-6] Sent chunk 1, bytes: 35/35
+[2025-06-23 12:22:23] [INFO] [Thread-6] Waiting to receive message...
+[2025-06-23 12:22:23] [INFO] [Thread-6] Reading encrypted message...
+[2025-06-23 12:22:23] [INFO] [Thread-6] Read 4 bytes for encrypted message length
+[2025-06-23 12:22:23] [INFO] [Thread-6] Encrypted message length: 129
+[2025-06-23 12:22:23] [INFO] [Thread-6] Read 129 bytes for encrypted message body
+[2025-06-23 12:22:23] [INFO] [Thread-6] Decrypting encrypted message, length: 129
+[2025-06-23 12:22:23] [INFO] [Thread-6] Message decrypted successfully, new length: 101
+[2025-06-23 12:22:23] [INFO] [Thread-6] fromPacket: restLength = 97
+[2025-06-23 12:22:23] [INFO] [Thread-6] fromPacket: parsed message type = FILE_ACK
+[2025-06-23 12:22:23] [INFO] [Thread-6] fromPacket: payloadLength = 92 (restLength=97 - 5)
+[2025-06-23 12:22:23] [INFO] [Thread-6] fromPacket: checksum = -435860905
+[2025-06-23 12:22:23] [INFO] [Thread-6] Received encrypted message: FILE_ACK
+[2025-06-23 12:22:23] [INFO] [Thread-6] File upload completed: File upload completed: test_lelHey.txt (35 bytes)
+[2025-06-23 12:23:33] [INFO] [Thread-7] Generating new RSA key pair: hey1_rsa
+[2025-06-23 12:23:33] [INFO] [Thread-7] Key pair generated successfully:
+[2025-06-23 12:23:33] [INFO] [Thread-7]   Private key: data/client/client_keys/hey1_rsa
+[2025-06-23 12:23:33] [INFO] [Thread-7]   Public key: data/client/client_keys/hey1_rsa.pub
+[2025-06-23 12:23:33] [INFO] [Thread-7] Adding authorized key for user: hey1
+[2025-06-23 12:23:33] [INFO] [Thread-7] Authorized key added successfully: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/server/authorized_keys/hey1/key_1750674213626.pub
+[2025-06-23 12:23:33] [INFO] [Thread-7] Credentials loaded from: config/credentials.properties
+[2025-06-23 12:23:33] [INFO] [Thread-7] Added user to credentials: hey1
+[2025-06-23 12:23:33] [INFO] [Thread-7] Credentials saved to: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/config/credentials.properties
+[2025-06-23 12:23:33] [INFO] [Thread-7] Sending message: RELOAD_USERS, length: 9
+[2025-06-23 12:23:33] [INFO] [Thread-7] Message encrypted, new length: 37
+[2025-06-23 12:23:33] [INFO] [Thread-7] Added length prefix for encrypted message, total length: 41
+[2025-06-23 12:23:33] [INFO] [Thread-7] Message sent successfully
+[2025-06-23 12:23:33] [INFO] [Thread-7] Waiting to receive message...
+[2025-06-23 12:23:33] [INFO] [Thread-7] Reading encrypted message...
+[2025-06-23 12:23:33] [INFO] [Thread-7] Read 4 bytes for encrypted message length
+[2025-06-23 12:23:33] [INFO] [Thread-7] Encrypted message length: 49
+[2025-06-23 12:23:33] [INFO] [Thread-7] Read 49 bytes for encrypted message body
+[2025-06-23 12:23:33] [INFO] [Thread-7] Decrypting encrypted message, length: 49
+[2025-06-23 12:23:33] [INFO] [Thread-7] Message decrypted successfully, new length: 21
+[2025-06-23 12:23:33] [INFO] [Thread-7] fromPacket: restLength = 17
+[2025-06-23 12:23:33] [INFO] [Thread-7] fromPacket: parsed message type = SERVICE_ACCEPT
+[2025-06-23 12:23:33] [INFO] [Thread-7] fromPacket: payloadLength = 12 (restLength=17 - 5)
+[2025-06-23 12:23:33] [INFO] [Thread-7] fromPacket: checksum = -1763218960
+[2025-06-23 12:23:33] [INFO] [Thread-7] Received encrypted message: SERVICE_ACCEPT
+[2025-06-23 12:23:33] [INFO] [Thread-7] Server acknowledged user database reload
+[2025-06-23 12:23:33] [INFO] [Thread-7] Key pair validation: PASSED
+[2025-06-23 12:23:33] [INFO] [Thread-7] Credentials loaded from: config/credentials.properties
+[2025-06-23 12:43:37] [INFO] [JavaFX Application Thread] Logger initialized - logging to: logs/client_gui.log
+[2025-06-23 12:43:45] [INFO] [JavaFX Application Thread] Credentials loaded from: config/credentials.properties
+[2025-06-23 12:43:46] [INFO] [Thread-4] Credentials loaded from: config/credentials.properties
+[2025-06-23 12:43:46] [INFO] [Thread-4] Credentials loaded from: config/credentials.properties
+[2025-06-23 12:43:46] [INFO] [Thread-4] resolvePath: data/client/client_keys/tilman_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
+[2025-06-23 12:43:46] [INFO] [Thread-4]   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 12:43:46] [INFO] [Thread-4]   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 12:43:46] [INFO] [Thread-4] resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
+[2025-06-23 12:43:46] [INFO] [Thread-4] resolvePath: data/client/client_keys/tilman_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
+[2025-06-23 12:43:46] [INFO] [Thread-4]   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 12:43:46] [INFO] [Thread-4]   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+[2025-06-23 12:43:46] [INFO] [Thread-4] resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
+[2025-06-23 12:43:46] [INFO] [Thread-4] ClientConnection constructor called
+[2025-06-23 12:43:46] [INFO] [Thread-4] Connecting to localhost:2222
+[2025-06-23 12:43:46] [INFO] [Thread-4] Connected successfully
+[2025-06-23 12:43:46] [INFO] [Thread-4] Starting key exchange...
+[2025-06-23 12:43:46] [INFO] [Thread-4] Generated DH key pair
+[2025-06-23 12:43:46] [INFO] [Thread-4] Created key exchange init message
+[2025-06-23 12:43:46] [INFO] [Thread-4] Sending message: KEY_EXCHANGE_INIT, length: 791
+[2025-06-23 12:43:46] [INFO] [Thread-4] Message sent successfully
+[2025-06-23 12:43:46] [INFO] [Thread-4] Sent key exchange init message
+[2025-06-23 12:43:46] [INFO] [Thread-4] Waiting for key exchange reply...
+[2025-06-23 12:43:46] [INFO] [Thread-4] Waiting to receive message...
+[2025-06-23 12:43:46] [INFO] [Thread-4] Read 4 bytes for message length
+[2025-06-23 12:43:46] [INFO] [Thread-4] Message length: 1196
+[2025-06-23 12:43:46] [INFO] [Thread-4] Read 1196 bytes for message body (expected 1196)
+[2025-06-23 12:43:46] [INFO] [Thread-4] Message body (first 20 bytes): 02 64 68 50 75 62 6C 69 63 4B 65 79 3A 4D 49 49 43 4B 54 43 
+[2025-06-23 12:43:46] [INFO] [Thread-4] Raw message type byte: 2
+[2025-06-23 12:43:46] [INFO] [Thread-4] Parsed message type: KEY_EXCHANGE_REPLY
+[2025-06-23 12:43:46] [INFO] [Thread-4] fromPacket: restLength = 1196
+[2025-06-23 12:43:46] [INFO] [Thread-4] fromPacket: parsed message type = KEY_EXCHANGE_REPLY
+[2025-06-23 12:43:46] [INFO] [Thread-4] fromPacket: payloadLength = 1191 (restLength=1196 - 5)
+[2025-06-23 12:43:46] [INFO] [Thread-4] fromPacket: checksum = -2028230546
+[2025-06-23 12:43:46] [INFO] [Thread-4] Received message: KEY_EXCHANGE_REPLY
+[2025-06-23 12:43:46] [INFO] [Thread-4] Received reply message: KEY_EXCHANGE_REPLY
+[2025-06-23 12:43:46] [INFO] [Thread-4] Set server's public key
+[2025-06-23 12:43:46] [INFO] [Thread-4] Computed shared secret, length: 256
+[2025-06-23 12:43:46] [INFO] [Thread-4] Initialized symmetric encryption
+[2025-06-23 12:43:46] [INFO] [Thread-4] Encryption enabled - subsequent messages will be encrypted/decrypted
+[2025-06-23 12:43:46] [INFO] [Thread-4] Enabled encryption in protocol handler
+[2025-06-23 12:43:46] [INFO] [Thread-4] Received session ID: 0438ccba-2eec-4484-8813-3c3df49f001d
+[2025-06-23 12:43:46] [INFO] [Thread-4] Starting authentication...
+[2025-06-23 12:43:46] [INFO] [Thread-4] Preparing auth for user: tilman, type: dual
+[2025-06-23 12:43:46] [INFO] [Thread-4] Using password authentication
+[2025-06-23 12:43:46] [INFO] [Thread-4] Using public key authentication, signed session ID.
+[2025-06-23 12:43:46] [INFO] [Thread-4] Sending message: AUTH_REQUEST, length: 810
+[2025-06-23 12:43:46] [INFO] [Thread-4] Message encrypted, new length: 838
+[2025-06-23 12:43:46] [INFO] [Thread-4] Added length prefix for encrypted message, total length: 842
+[2025-06-23 12:43:46] [INFO] [Thread-4] Message sent successfully
+[2025-06-23 12:43:46] [INFO] [Thread-4] Sent authentication request
+[2025-06-23 12:43:46] [INFO] [Thread-4] Waiting to receive message...
+[2025-06-23 12:43:46] [INFO] [Thread-4] Reading encrypted message...
+[2025-06-23 12:43:46] [INFO] [Thread-4] Read 4 bytes for encrypted message length
+[2025-06-23 12:43:46] [INFO] [Thread-4] Encrypted message length: 84
+[2025-06-23 12:43:46] [INFO] [Thread-4] Read 84 bytes for encrypted message body
+[2025-06-23 12:43:46] [INFO] [Thread-4] Decrypting encrypted message, length: 84
+[2025-06-23 12:43:46] [INFO] [Thread-4] Message decrypted successfully, new length: 56
+[2025-06-23 12:43:46] [INFO] [Thread-4] fromPacket: restLength = 52
+[2025-06-23 12:43:46] [INFO] [Thread-4] fromPacket: parsed message type = AUTH_SUCCESS
+[2025-06-23 12:43:46] [INFO] [Thread-4] fromPacket: payloadLength = 47 (restLength=52 - 5)
+[2025-06-23 12:43:46] [INFO] [Thread-4] fromPacket: checksum = 773878918
+[2025-06-23 12:43:46] [INFO] [Thread-4] Received encrypted message: AUTH_SUCCESS
+[2025-06-23 12:43:46] [INFO] [Thread-4] Received auth response: AUTH_SUCCESS
+[2025-06-23 12:43:46] [INFO] [Thread-4] Authentication successful: true
+[2025-06-23 12:43:59] [INFO] [Thread-6] Generating new RSA key pair: lello_rsa
+[2025-06-23 12:43:59] [INFO] [Thread-6] Key pair generated successfully:
+[2025-06-23 12:43:59] [INFO] [Thread-6]   Private key: data/client/client_keys/lello_rsa
+[2025-06-23 12:43:59] [INFO] [Thread-6]   Public key: data/client/client_keys/lello_rsa.pub
+[2025-06-23 12:43:59] [INFO] [Thread-6] Adding authorized key for user: lello
+[2025-06-23 12:43:59] [INFO] [Thread-6] Authorized key added successfully: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/server/authorized_keys/lello/key_1750675439246.pub
+[2025-06-23 12:43:59] [INFO] [Thread-6] Credentials loaded from: config/credentials.properties
+[2025-06-23 12:43:59] [INFO] [Thread-6] Added user to credentials: lello
+[2025-06-23 12:43:59] [INFO] [Thread-6] Credentials saved to: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/config/credentials.properties
+[2025-06-23 12:43:59] [INFO] [Thread-6] Sending message: RELOAD_USERS, length: 9
+[2025-06-23 12:43:59] [INFO] [Thread-6] Message encrypted, new length: 37
+[2025-06-23 12:43:59] [INFO] [Thread-6] Added length prefix for encrypted message, total length: 41
+[2025-06-23 12:43:59] [INFO] [Thread-6] Message sent successfully
+[2025-06-23 12:43:59] [INFO] [Thread-6] Waiting to receive message...
+[2025-06-23 12:43:59] [INFO] [Thread-6] Reading encrypted message...
+[2025-06-23 12:43:59] [INFO] [Thread-6] Read 4 bytes for encrypted message length
+[2025-06-23 12:43:59] [INFO] [Thread-6] Encrypted message length: 49
+[2025-06-23 12:43:59] [INFO] [Thread-6] Read 49 bytes for encrypted message body
+[2025-06-23 12:43:59] [INFO] [Thread-6] Decrypting encrypted message, length: 49
+[2025-06-23 12:43:59] [INFO] [Thread-6] Message decrypted successfully, new length: 21
+[2025-06-23 12:43:59] [INFO] [Thread-6] fromPacket: restLength = 17
+[2025-06-23 12:43:59] [INFO] [Thread-6] fromPacket: parsed message type = SERVICE_ACCEPT
+[2025-06-23 12:43:59] [INFO] [Thread-6] fromPacket: payloadLength = 12 (restLength=17 - 5)
+[2025-06-23 12:43:59] [INFO] [Thread-6] fromPacket: checksum = -1763218960
+[2025-06-23 12:43:59] [INFO] [Thread-6] Received encrypted message: SERVICE_ACCEPT
+[2025-06-23 12:43:59] [INFO] [Thread-6] Server acknowledged user database reload
+[2025-06-23 12:43:59] [INFO] [Thread-6] Key pair validation: PASSED
+[2025-06-23 12:43:59] [INFO] [Thread-6] Credentials loaded from: config/credentials.properties
+[2025-06-23 12:44:27] [INFO] [JavaFX Application Thread] Credentials loaded from: config/credentials.properties
+[2025-06-23 12:44:32] [INFO] [Thread-7] Credentials loaded from: config/credentials.properties
+[2025-06-23 12:44:32] [INFO] [Thread-7] Removed user from credentials: lello
+[2025-06-23 12:44:32] [INFO] [Thread-7] Credentials saved to: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/config/credentials.properties
+[2025-06-23 12:44:32] [INFO] [Thread-7] Sending message: RELOAD_USERS, length: 9
+[2025-06-23 12:44:32] [INFO] [Thread-7] Message encrypted, new length: 37
+[2025-06-23 12:44:32] [INFO] [Thread-7] Added length prefix for encrypted message, total length: 41
+[2025-06-23 12:44:32] [INFO] [Thread-7] Message sent successfully
+[2025-06-23 12:44:32] [INFO] [Thread-7] Waiting to receive message...
+[2025-06-23 12:44:32] [INFO] [Thread-7] Reading encrypted message...
+[2025-06-23 12:44:32] [INFO] [Thread-7] Read 4 bytes for encrypted message length
+[2025-06-23 12:44:32] [INFO] [Thread-7] Encrypted message length: 49
+[2025-06-23 12:44:32] [INFO] [Thread-7] Read 49 bytes for encrypted message body
+[2025-06-23 12:44:32] [INFO] [Thread-7] Decrypting encrypted message, length: 49
+[2025-06-23 12:44:32] [INFO] [Thread-7] Message decrypted successfully, new length: 21
+[2025-06-23 12:44:32] [INFO] [Thread-7] fromPacket: restLength = 17
+[2025-06-23 12:44:32] [INFO] [Thread-7] fromPacket: parsed message type = SERVICE_ACCEPT
+[2025-06-23 12:44:32] [INFO] [Thread-7] fromPacket: payloadLength = 12 (restLength=17 - 5)
+[2025-06-23 12:44:32] [INFO] [Thread-7] fromPacket: checksum = -1763218960
+[2025-06-23 12:44:32] [INFO] [Thread-7] Received encrypted message: SERVICE_ACCEPT
+[2025-06-23 12:44:32] [INFO] [Thread-7] Server acknowledged user database reload
+[2025-06-23 12:44:32] [INFO] [Thread-7] Credentials loaded from: config/credentials.properties
+[2025-06-23 12:44:37] [INFO] [JavaFX Application Thread] Credentials loaded from: config/credentials.properties
+[2025-06-23 12:44:42] [INFO] [Thread-8] Credentials loaded from: config/credentials.properties
+[2025-06-23 12:44:42] [INFO] [Thread-8] Removed user from credentials: hey1
+[2025-06-23 12:44:42] [INFO] [Thread-8] Credentials saved to: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/config/credentials.properties
+[2025-06-23 12:44:42] [INFO] [Thread-8] Sending message: RELOAD_USERS, length: 9
+[2025-06-23 12:44:42] [INFO] [Thread-8] Message encrypted, new length: 37
+[2025-06-23 12:44:42] [INFO] [Thread-8] Added length prefix for encrypted message, total length: 41
+[2025-06-23 12:44:42] [INFO] [Thread-8] Message sent successfully
+[2025-06-23 12:44:42] [INFO] [Thread-8] Waiting to receive message...
+[2025-06-23 12:44:42] [INFO] [Thread-8] Reading encrypted message...
+[2025-06-23 12:44:42] [INFO] [Thread-8] Read 4 bytes for encrypted message length
+[2025-06-23 12:44:42] [INFO] [Thread-8] Encrypted message length: 49
+[2025-06-23 12:44:42] [INFO] [Thread-8] Read 49 bytes for encrypted message body
+[2025-06-23 12:44:42] [INFO] [Thread-8] Decrypting encrypted message, length: 49
+[2025-06-23 12:44:42] [INFO] [Thread-8] Message decrypted successfully, new length: 21
+[2025-06-23 12:44:42] [INFO] [Thread-8] fromPacket: restLength = 17
+[2025-06-23 12:44:42] [INFO] [Thread-8] fromPacket: parsed message type = SERVICE_ACCEPT
+[2025-06-23 12:44:42] [INFO] [Thread-8] fromPacket: payloadLength = 12 (restLength=17 - 5)
+[2025-06-23 12:44:42] [INFO] [Thread-8] fromPacket: checksum = -1763218960
+[2025-06-23 12:44:42] [INFO] [Thread-8] Received encrypted message: SERVICE_ACCEPT
+[2025-06-23 12:44:42] [INFO] [Thread-8] Server acknowledged user database reload
+[2025-06-23 12:44:42] [INFO] [Thread-8] Credentials loaded from: config/credentials.properties

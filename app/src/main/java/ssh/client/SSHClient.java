@@ -7,6 +7,7 @@ import ssh.utils.CredentialsManager;
 import ssh.utils.Logger;
 import ssh.protocol.messages.ShellMessage;
 import ssh.protocol.messages.ServiceMessage;
+import java.io.IOException;
 
 /**
  * Main SSH client class that manages the client lifecycle.
@@ -130,10 +131,14 @@ public class SSHClient {
             System.out.println("DEBUG: Authentication successful");
             ui.showAuthenticationResult(true, "Authentication successful");
             
-            // For GUI clients, we don't enter the main loop immediately
-            // The GUI will handle user interaction through the UI
+            // For GUI clients, transition to main window after authentication
             if (ui instanceof ssh.client.gui.JavaFXClientUI) {
-                System.out.println("DEBUG: GUI client - not entering main loop, waiting for user interaction");
+                System.out.println("DEBUG: GUI client - authentication successful, showing main window");
+                
+                // Start message handling thread for GUI clients
+                handleIncomingMessages();
+                
+                ((ssh.client.gui.JavaFXClientUI) ui).showMainWindow();
                 return;
             }
             
@@ -351,7 +356,11 @@ public class SSHClient {
                     new Thread(() -> {
                         try {
                             String response = connection.receiveShellResponse();
-                            ui.displayShellOutput(response);
+                            
+                            // Pass both command and response to the GUI
+                            if (ui instanceof ssh.client.gui.JavaFXClientUI) {
+                                ((ssh.client.gui.JavaFXClientUI) ui).displayShellCommand(command, response);
+                            }
                             
                             // Update the working directory display in the GUI
                             String newWorkingDirectory = connection.getWorkingDirectory();
@@ -374,7 +383,23 @@ public class SSHClient {
     private void handleIncomingMessages() {
         new Thread(() -> {
             try {
-                // ... existing code ...
+                while (running && connection != null && connection.isActive()) {
+                    try {
+                        // For GUI clients, we'll use the existing receiveShellResponse method
+                        // which handles the message receiving internally
+                        // This method will be called when we send a shell command
+                        
+                        // Just keep the thread alive to handle responses
+                        Thread.sleep(100);
+                        
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        break;
+                    } catch (Exception e) {
+                        Logger.error("Unexpected error in message handling: " + e.getMessage());
+                        break;
+                    }
+                }
             } catch (Exception e) {
                 Logger.error("Error in handleIncomingMessages: " + e.getMessage());
                 e.printStackTrace();
