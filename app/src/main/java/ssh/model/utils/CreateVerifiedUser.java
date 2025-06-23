@@ -31,6 +31,7 @@ public class CreateVerifiedUser {
             Logger.info("  Adding user to server database: " + username);
             UserStore userStore = new UserStore("data/server/users.properties", "data/server/authorized_keys");
             userStore.addUser(username, password); // Use provided password
+            userStore.saveUsers(); // Save to disk immediately
             
             // Step 3: Add public key to server for the user
             Logger.info("  Adding public key to server for user: " + username);
@@ -42,9 +43,23 @@ public class CreateVerifiedUser {
             Logger.info("  Adding user to client credentials: " + username);
             CredentialsManager credentialsManager = new CredentialsManager("config/credentials.properties");
             credentialsManager.addUser(username, password); // Use provided password
+            Logger.info("  User added to credentials manager, saving to disk...");
+            try {
+                credentialsManager.saveCredentials(); // Save to disk immediately
+                Logger.info("  Credentials saved successfully");
+            } catch (Exception e) {
+                Logger.error("  Failed to save credentials: " + e.getMessage());
+                throw e;
+            }
             
             // Step 5: Validate the setup
             Logger.info("  Validating user setup...");
+            // Small delay to ensure file system sync
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
             boolean isValid = validateUserSetup(username);
             
             if (isValid) {
@@ -95,6 +110,7 @@ public class CreateVerifiedUser {
             // Validate user exists in client credentials
             CredentialsManager credentialsManager = new CredentialsManager("config/credentials.properties");
             String[] availableUsers = credentialsManager.getAvailableUsers();
+            Logger.info("  Available users in credentials: " + String.join(", ", availableUsers));
             boolean foundInClient = false;
             for (String user : availableUsers) {
                 if (username.equals(user)) {

@@ -158,11 +158,4 @@ public class SSHServerController {
     public boolean shouldContinue() {
         return running && view.shouldContinue();
     }
-
-    /**
-     * Get the model for direct access (used by legacy code during transition).
-     */
-    public SSHServerModel getModel() {
-        return model;
-    }
 } 

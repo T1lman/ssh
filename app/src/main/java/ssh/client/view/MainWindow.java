@@ -50,6 +50,9 @@ public class MainWindow {
     private Runnable onDisconnect;
     private java.util.function.Supplier<String> workingDirectoryProvider;
     
+    // Controller reference for business logic
+    private ssh.client.controller.SSHClientController controller;
+    
     // Add fields for file transfer and user management consumers
     private Consumer<File> onFileUploadRequested;
     private Consumer<String> onFileDownloadRequested;
@@ -276,10 +279,12 @@ public class MainWindow {
     }
     
     private void handleManageSSHUsers() {
-        if (userManagementDialog == null) {
-            userManagementDialog = new UserManagementDialog(primaryStage, onUserCreateRequested, onUserDeleteRequested, onUserViewRequested);
+        if (userManagementDialog == null && controller != null) {
+            userManagementDialog = new UserManagementDialog(primaryStage, controller, onUserCreateRequested, onUserDeleteRequested, onUserViewRequested);
         }
-        userManagementDialog.show();
+        if (userManagementDialog != null) {
+            userManagementDialog.show();
+        }
     }
     
     private void handleDisconnect() {
@@ -408,5 +413,12 @@ public class MainWindow {
     }
     public void setOnFileDownloadRequested(Consumer<String> onFileDownloadRequested) {
         this.onFileDownloadRequested = onFileDownloadRequested;
+    }
+
+    /**
+     * Set the controller for business logic operations.
+     */
+    public void setController(ssh.client.controller.SSHClientController controller) {
+        this.controller = controller;
     }
 } 

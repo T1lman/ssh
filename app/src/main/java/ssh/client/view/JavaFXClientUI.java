@@ -40,72 +40,64 @@ public class JavaFXClientUI implements ClientUI {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("SSH Client");
         
+        // Create the controller first
+        this.controller = new ssh.client.controller.SSHClientController(this);
+        
         // Initialize startup scene
         createStartupScene();
         
         // Show the stage immediately with the startup scene
         this.primaryStage.show();
     }
-    
+
     private void createStartupScene() {
-        startupScene = new StartupScene(primaryStage);
+        // Create startup scene with controller reference
+        startupScene = new StartupScene(primaryStage, controller);
         
         // Set up callbacks
-        startupScene.setOnLoginRequested(this::handleLogin);
-        startupScene.setOnCancelRequested(Platform::exit);
+        startupScene.setOnConnectionRequested(serverInfo -> {
+            // This is handled by the login flow
+        });
         
-        // Set the scene
-        primaryStage.setScene(new javafx.scene.Scene(startupScene.getRoot(), 450, 400));
-        primaryStage.setMinWidth(450);
-        primaryStage.setMinHeight(400);
-        primaryStage.setResizable(false);
+        startupScene.setOnLoginRequested(this::handleLogin);
+        
+        startupScene.setOnCancelRequested(() -> {
+            Logger.info("User cancelled connection");
+            Platform.exit();
+        });
+        
+        // Create a Scene and set it on the Stage
+        javafx.scene.Scene scene = new javafx.scene.Scene(startupScene.getRoot());
+        primaryStage.setScene(scene);
     }
-    
-    private void handleLogin(String selectedUser) {
-        pendingServerInfo = startupScene.getPendingServerInfo();
-        pendingServerInfo.setUsername(selectedUser);
-        // Show connecting state
-        startupScene.showConnectingState("Connecting to " + pendingServerInfo.getHost() + ":" + pendingServerInfo.getPort() + " as " + selectedUser + "...");
-        // Start the connection process in a background thread
-        new Thread(() -> {
-            try {
-                // Create the SSH client controller
-                controller = new ssh.client.controller.SSHClientController(this);
-                // For GUI, call startConnectionFlow() directly
-                controller.startConnectionFlow();
-                // Only show main window if connection/auth succeeds
-                Platform.runLater(this::showMainWindow);
-            } catch (Exception e) {
-                Platform.runLater(() -> {
-                    startupScene.showError("Login failed: " + e.getMessage());
-                    Platform.exit();
-                    System.exit(1);
-                });
-            }
-        }).start();
+
+    private void handleLogin(ServerInfo serverInfo) {
+        try {
+            Logger.debug("handleLogin called with user: " + (serverInfo != null ? serverInfo.getUsername() : "null"));
+            this.pendingServerInfo = serverInfo;
+            // Controller is already created in constructor
+            // Start the connection process
+            controller.startConnectionFlow();
+        } catch (Exception e) {
+            Logger.error("Failed to handle login: " + e.getMessage());
+            startupScene.showError("Failed to start connection: " + e.getMessage());
+        }
     }
 
     public void showMainWindow() {
-        Logger.debug("Authentication successful, showing main window");
-        
-        if (!Platform.isFxApplicationThread()) {
-            Logger.debug("Not on FX thread, using Platform.runLater");
-            Platform.runLater(this::showMainWindowDirectly);
-            return;
-        }
-        
-        showMainWindowDirectly();
-    }
-    
-    private void showMainWindowDirectly() {
         Logger.debug("showMainWindow() called");
         
-        // Create main window
+        // Create main window (this will handle its own scene creation)
         mainWindow = new MainWindow(primaryStage);
+        
+        // Set the controller for business logic operations
+        if (controller != null) {
+            mainWindow.setController(controller);
+        }
         
         // Set up working directory provider
         if (controller != null) {
-            mainWindow.setWorkingDirectoryProvider(() -> controller.getModel().getWorkingDirectory());
+            mainWindow.setWorkingDirectoryProvider(() -> controller.getWorkingDirectory());
         }
         
         // Propagate the command handler if it was already set
@@ -220,15 +212,10 @@ public class JavaFXClientUI implements ClientUI {
         if (startupScene != null && pendingServerInfo != null) {
             String selectedUser = pendingServerInfo.getUsername();
             if (selectedUser != null && !selectedUser.isEmpty()) {
-                try {
-                    CredentialsManager credentialsManager = new CredentialsManager("config/credentials.properties");
-                    AuthCredentials credentials = credentialsManager.getAuthCredentials(selectedUser);
-                    Logger.debug("Returning credentials for user: " + selectedUser);
-                    return credentials;
-                } catch (Exception e) {
-                    Logger.debug("Error getting credentials for user " + selectedUser + ": " + e.getMessage());
-                    return null;
-                }
+                // Delegate to controller for business logic
+                AuthCredentials credentials = controller.getAuthCredentials(selectedUser);
+                Logger.debug("Returning credentials for user: " + selectedUser);
+                return credentials;
             } else {
                 Logger.debug("No user selected, returning null");
                 return null;

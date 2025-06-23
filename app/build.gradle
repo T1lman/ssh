@@ -48,6 +48,9 @@ java {
     }
 }
 
+// Configure console output to be plain by default
+gradle.startParameter.consoleOutput = org.gradle.api.logging.configuration.ConsoleOutput.Plain
+
 javafx {
     version = "21"
     modules = [ 'javafx.controls', 'javafx.fxml' ]

@@ -22,13 +22,10 @@ public class SSHClientGuiMain extends Application {
             // Create the GUI implementation of the UI
             JavaFXClientUI gui = new JavaFXClientUI(primaryStage);
             
-            // Create the MVC controller
-            SSHClientController controller = new SSHClientController(gui);
-            
             // Set up stage close handler to prevent premature exit
             primaryStage.setOnCloseRequest(event -> {
                 Logger.info("Main window closing");
-                controller.stop();
+                // The controller is managed internally by JavaFXClientUI
                 Logger.close();
             });
             

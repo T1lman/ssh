@@ -22,6 +22,7 @@ public class SSHClientModel {
     private Consumer<String> onError;
     private Consumer<String> onStatus;
     private Consumer<String> onWorkingDirectoryChanged;
+    private Consumer<String> onServiceRequested;
 
     public SSHClientModel() {
         Logger.info("SSHClientModel: Created new model instance");
@@ -85,6 +86,7 @@ public class SSHClientModel {
         }
         
         Logger.info("SSHClientModel: Service request successful");
+        notifyServiceRequested(service);
     }
 
     /**
@@ -235,6 +237,12 @@ public class SSHClientModel {
         }
     }
 
+    private void notifyServiceRequested(String service) {
+        if (onServiceRequested != null) {
+            onServiceRequested.accept(service);
+        }
+    }
+
     private void handleError(String error) {
         if (onError != null) {
             onError.accept(error);
@@ -274,5 +282,9 @@ public class SSHClientModel {
 
     public void setOnWorkingDirectoryChanged(Consumer<String> onWorkingDirectoryChanged) {
         this.onWorkingDirectoryChanged = onWorkingDirectoryChanged;
+    }
+
+    public void setOnServiceRequested(Consumer<String> onServiceRequested) {
+        this.onServiceRequested = onServiceRequested;
     }
 } 

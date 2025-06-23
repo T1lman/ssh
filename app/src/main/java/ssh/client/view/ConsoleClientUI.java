@@ -21,6 +21,9 @@ public class ConsoleClientUI implements ClientUI {
     private String selectedUser;
     private Consumer<String> onCommandEntered;
     private Runnable onDisconnect;
+    
+    // Controller reference for business logic
+    private ssh.client.controller.SSHClientController controller;
 
     public ConsoleClientUI() {
         this.scanner = new Scanner(System.in);
@@ -159,9 +162,13 @@ public class ConsoleClientUI implements ClientUI {
             return null; // User cancelled or invalid selection
         }
         
-        // Get credentials from the credentials manager
-        CredentialsManager credentialsManager = new CredentialsManager("config/credentials.properties");
-        return credentialsManager.getAuthCredentials(selectedUser);
+        // Get credentials from the controller (MVC compliance)
+        if (controller != null) {
+            return controller.getAuthCredentials(selectedUser);
+        } else {
+            // Fallback to direct access if controller is not available
+            return credentialsManager.getAuthCredentials(selectedUser);
+        }
     }
 
     /**
@@ -254,5 +261,12 @@ public class ConsoleClientUI implements ClientUI {
 
     public void setOnDisconnect(Runnable onDisconnect) {
         this.onDisconnect = onDisconnect;
+    }
+
+    /**
+     * Set the controller for business logic operations.
+     */
+    public void setController(ssh.client.controller.SSHClientController controller) {
+        this.controller = controller;
     }
 } 

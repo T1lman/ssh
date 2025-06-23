@@ -40,14 +40,21 @@ public class StartupScene {
     private ServerInfo pendingServerInfo;
     private String[] availableUsers;
     
+    // Controller reference for business logic
+    private ssh.client.controller.SSHClientController controller;
+    
     // Callbacks
     private Consumer<ServerInfo> onConnectionRequested;
-    private Consumer<String> onLoginRequested;
+    private Consumer<ServerInfo> onLoginRequested;
     private Runnable onCancelRequested;
     
-    public StartupScene(Stage primaryStage) {
+    public StartupScene(Stage primaryStage, ssh.client.controller.SSHClientController controller) {
         this.primaryStage = primaryStage;
-        this.root = UIUtils.createVBox(20);
+        this.controller = controller;
+        this.root = new VBox(20);
+        this.root.setAlignment(javafx.geometry.Pos.CENTER);
+        this.root.setStyle("-fx-background-color: linear-gradient(to bottom right, #232526, #414345); -fx-padding: 40px;");
+        
         createUI();
         startAnimation();
     }
@@ -165,8 +172,8 @@ public class StartupScene {
     
     private void showUsernameForm() {
         try {
-            CredentialsManager credentialsManager = new CredentialsManager("config/credentials.properties");
-            availableUsers = credentialsManager.getAvailableUsers();
+            // Get available users from the controller (MVC compliance)
+            String[] availableUsers = controller != null ? controller.getAvailableUsers() : new String[0];
             
             usernameComboBox.getItems().clear();
             for (String user : availableUsers) {
@@ -208,7 +215,7 @@ public class StartupScene {
         
         if (onLoginRequested != null) {
             pendingServerInfo.setUsername(selectedUser);
-            onLoginRequested.accept(selectedUser);
+            onLoginRequested.accept(pendingServerInfo);
         }
     }
     
@@ -243,7 +250,7 @@ public class StartupScene {
         this.onConnectionRequested = callback;
     }
     
-    public void setOnLoginRequested(Consumer<String> callback) {
+    public void setOnLoginRequested(Consumer<ServerInfo> callback) {
         this.onLoginRequested = callback;
     }
     

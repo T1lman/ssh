@@ -38,6 +38,7 @@ public class SSHClientController {
         model.setOnError(view::displayError);
         model.setOnStatus(view::displayMessage);
         model.setOnWorkingDirectoryChanged(this::handleWorkingDirectoryChanged);
+        model.setOnServiceRequested(this::handleServiceRequested);
         
         // View events -> Model actions (mediated by controller)
         if (view instanceof ssh.client.view.JavaFXClientUI) {
@@ -285,13 +286,6 @@ public class SSHClientController {
     }
 
     /**
-     * Get the model for direct access (used by legacy code during transition).
-     */
-    public SSHClientModel getModel() {
-        return model;
-    }
-
-    /**
      * Get the current session ID.
      */
     public String getSessionId() {
@@ -299,9 +293,100 @@ public class SSHClientController {
     }
 
     /**
+     * Get the current working directory.
+     */
+    public String getWorkingDirectory() {
+        return model.getWorkingDirectory();
+    }
+
+    /**
      * Check if the client should continue running.
      */
     public boolean shouldContinue() {
         return running && view.shouldContinue();
+    }
+
+    /**
+     * Get authentication credentials for the specified user.
+     * This moves business logic from the view to the controller.
+     */
+    public AuthCredentials getAuthCredentials(String username) {
+        try {
+            CredentialsManager credentialsManager = new CredentialsManager("config/credentials.properties");
+            return credentialsManager.getAuthCredentials(username);
+        } catch (Exception e) {
+            Logger.error("SSHClientController: Failed to get credentials for user " + username + ": " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Get available users for authentication.
+     */
+    public String[] getAvailableUsers() {
+        try {
+            CredentialsManager credentialsManager = new CredentialsManager("config/credentials.properties");
+            return credentialsManager.getAvailableUsers();
+        } catch (Exception e) {
+            Logger.error("SSHClientController: Failed to get available users: " + e.getMessage());
+            return new String[0];
+        }
+    }
+
+    /**
+     * Check if the client is connected.
+     */
+    public boolean isConnected() {
+        return model.isConnected();
+    }
+
+    /**
+     * Check if the client is authenticated.
+     */
+    public boolean isAuthenticated() {
+        return model.isAuthenticated();
+    }
+
+    /**
+     * Create a new verified user.
+     * This moves business logic from the view to the controller.
+     */
+    public boolean createUser(String username, String password) {
+        try {
+            Logger.info("SSHClientController: Creating user: " + username);
+            ssh.model.utils.CreateVerifiedUser.createUser(username, password);
+            return true;
+        } catch (Exception e) {
+            Logger.error("SSHClientController: Failed to create user " + username + ": " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Delete a verified user.
+     * This moves business logic from the view to the controller.
+     */
+    public boolean deleteUser(String username) {
+        try {
+            Logger.info("SSHClientController: Deleting user: " + username);
+            ssh.model.utils.DeleteVerifiedUser.deleteUser(username);
+            return true;
+        } catch (Exception e) {
+            Logger.error("SSHClientController: Failed to delete user " + username + ": " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Handle service requested from model.
+     */
+    private void handleServiceRequested(String service) {
+        Logger.info("SSHClientController: Service requested: " + service);
+        
+        // For GUI clients, transition to main window after service is requested
+        if (view instanceof ssh.client.view.JavaFXClientUI) {
+            ssh.client.view.JavaFXClientUI guiView = (ssh.client.view.JavaFXClientUI) view;
+            guiView.showMainWindow();
+        }
     }
 } 

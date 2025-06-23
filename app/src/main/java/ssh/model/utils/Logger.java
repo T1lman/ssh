@@ -77,14 +77,36 @@ public class Logger {
      * Log an info message.
      */
     public static void info(String message) {
-        log(LogLevel.INFO, message);
+        if (initialized) {
+            try (FileWriter writer = new FileWriter(logFile, true)) {
+                String timestamp = getTimestamp();
+                writer.write(timestamp + " INFO: " + message + "\n");
+            } catch (IOException e) {
+                // Use System.err only for logger failures
+                System.err.println("INFO: " + message);
+            }
+        } else {
+            // Use System.err only when logger is not initialized
+            System.err.println("INFO: " + message);
+        }
     }
 
     /**
      * Log a warning message.
      */
     public static void warn(String message) {
-        log(LogLevel.WARN, message);
+        if (initialized) {
+            try (FileWriter writer = new FileWriter(logFile, true)) {
+                String timestamp = getTimestamp();
+                writer.write(timestamp + " WARN: " + message + "\n");
+            } catch (IOException e) {
+                // Use System.err only for logger failures
+                System.err.println("WARN: " + message);
+            }
+        } else {
+            // Use System.err only when logger is not initialized
+            System.err.println("WARN: " + message);
+        }
     }
 
     /**

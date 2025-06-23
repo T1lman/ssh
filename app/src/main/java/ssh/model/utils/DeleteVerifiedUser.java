@@ -24,6 +24,7 @@ public class DeleteVerifiedUser {
             Logger.info("  Removing user from server database: " + username);
             UserStore userStore = new UserStore("data/server/users.properties", "data/server/authorized_keys");
             userStore.removeUser(username);
+            userStore.saveUsers();
             
             // Step 2: Remove authorized keys from server for the user
             Logger.info("  Removing authorized keys from server for user: " + username);

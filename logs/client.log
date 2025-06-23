@@ -1,6 +1,0 @@
-2025-06-24 00:14:33 ERROR: Authentication failed: Cannot invoke "String.getBytes(java.nio.charset.Charset)" because "this.sessionId" is null
-2025-06-24 00:14:33 ERROR: SSHClientController: Failed to start client: Authentication failed
-2025-06-24 00:15:36 ERROR: Authentication failed: Cannot invoke "String.getBytes(java.nio.charset.Charset)" because "this.sessionId" is null
-2025-06-24 00:15:36 ERROR: SSHClientController: Failed to start client: Authentication failed
-2025-06-24 00:16:02 ERROR: Authentication failed: Client disconnected gracefully
-2025-06-24 00:16:02 ERROR: SSHClientController: Failed to start client: Authentication failed

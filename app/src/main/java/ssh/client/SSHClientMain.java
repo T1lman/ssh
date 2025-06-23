@@ -10,10 +10,13 @@ public class SSHClientMain {
         Logger.initialize("logs/client.log");
         try {
             // Create the console UI
-            ClientUI ui = new ConsoleClientUI();
+            ConsoleClientUI ui = new ConsoleClientUI();
             
             // Create the MVC controller
             SSHClientController controller = new SSHClientController(ui);
+            
+            // Set the controller in the UI for business logic operations
+            ui.setController(controller);
             
             // Start the client
             controller.start();

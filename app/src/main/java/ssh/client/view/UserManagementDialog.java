@@ -6,36 +6,44 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import ssh.client.controller.SSHClientController;
 
-import java.util.Map;
-import java.util.Optional;
 import java.util.function.Consumer;
 
-import ssh.model.utils.CredentialsManager;
-import ssh.model.utils.CreateVerifiedUser;
-import ssh.model.utils.DeleteVerifiedUser;
-
 /**
- * Handles SSH user management operations.
- * Manages user creation, deletion, and viewing with dialogs.
+ * Dialog for managing SSH users (create, delete, view).
+ * Pure view class - delegates all business logic to the controller.
  */
 public class UserManagementDialog {
     private final Stage primaryStage;
     private Dialog<ButtonType> dialog;
     private VBox content;
     
+    // Controller reference for business logic
+    private SSHClientController controller;
+
+    // Callbacks for user actions
     private Consumer<String> onUserCreateRequested;
     private Consumer<String> onUserDeleteRequested;
     private Consumer<String> onUserViewRequested;
-    
-    public UserManagementDialog(Stage primaryStage, Consumer<String> onUserCreateRequested, Consumer<String> onUserDeleteRequested, Consumer<String> onUserViewRequested) {
+
+    public UserManagementDialog(Stage primaryStage, SSHClientController controller, 
+                              Consumer<String> onUserCreateRequested, Consumer<String> onUserDeleteRequested, Consumer<String> onUserViewRequested) {
         this.primaryStage = primaryStage;
+        this.controller = controller;
         this.onUserCreateRequested = onUserCreateRequested;
         this.onUserDeleteRequested = onUserDeleteRequested;
         this.onUserViewRequested = onUserViewRequested;
+        
+        initializeDialog();
     }
     
     public void show() {
+        showMainMenu(); // Always reset to main menu
+        dialog.showAndWait();
+    }
+    
+    private void initializeDialog() {
         dialog = new Dialog<>();
         dialog.setTitle("Manage SSH Users");
         dialog.initModality(javafx.stage.Modality.APPLICATION_MODAL);
@@ -47,7 +55,6 @@ public class UserManagementDialog {
         content.setPadding(new Insets(20));
         dialog.getDialogPane().setContent(content);
         showMainMenu();
-        dialog.showAndWait();
     }
     
     private void showMainMenu() {
@@ -65,20 +72,26 @@ public class UserManagementDialog {
         content.getChildren().add(infoLabel);
         Platform.runLater(() -> {
             Button createButton = (Button) dialog.getDialogPane().lookupButton(createButtonType);
-            createButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
-                event.consume();
-                showCreateUserForm();
-            });
+            if (createButton != null) {
+                createButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+                    event.consume();
+                    showCreateUserForm();
+                });
+            }
             Button deleteButton = (Button) dialog.getDialogPane().lookupButton(deleteButtonType);
-            deleteButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
-                event.consume();
-                showDeleteUserForm();
-            });
+            if (deleteButton != null) {
+                deleteButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+                    event.consume();
+                    showDeleteUserForm();
+                });
+            }
             Button viewButton = (Button) dialog.getDialogPane().lookupButton(viewButtonType);
-            viewButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
-                event.consume();
-                showViewUsers();
-            });
+            if (viewButton != null) {
+                viewButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+                    event.consume();
+                    showViewUsers();
+                });
+            }
         });
     }
     
@@ -110,44 +123,48 @@ public class UserManagementDialog {
         Platform.runLater(() -> {
             usernameField.requestFocus();
             Button createButton = (Button) dialog.getDialogPane().lookupButton(createButtonType);
-            createButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
-                event.consume();
-                String username = usernameField.getText().trim();
-                String password = passwordField.getText();
-                String confirmPassword = confirmPasswordField.getText();
-                if (username.isEmpty()) {
-                    showErrorInline("Username cannot be empty");
-                    return;
-                }
-                if (password.isEmpty()) {
-                    showErrorInline("Password cannot be empty");
-                    return;
-                }
-                if (!password.equals(confirmPassword)) {
-                    showErrorInline("Passwords do not match");
-                    return;
-                }
-                showProgressInline("Creating User", "Creating new verified user: " + username);
-                new Thread(() -> {
-                    try {
-                        CreateVerifiedUser.createUser(username, password);
-                        Platform.runLater(() -> showResultInline(true, "User '" + username + "' has been created successfully!\n\n" +
-                            "The user is now available for authentication with:\n" +
-                            "• Username: " + username + "\n" +
-                            "• Password: " + password + "\n" +
-                            "• Public key authentication enabled\n\n" +
-                            "The server's user database has been automatically reloaded.\n" +
-                            "You can now use the new user immediately without restarting the server."));
-                    } catch (Exception e) {
-                        Platform.runLater(() -> showResultInline(false, "Failed to create user: " + e.getMessage()));
+            if (createButton != null) {
+                createButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+                    event.consume();
+                    String username = usernameField.getText().trim();
+                    String password = passwordField.getText();
+                    String confirmPassword = confirmPasswordField.getText();
+                    if (username.isEmpty()) {
+                        showErrorInline("Username cannot be empty");
+                        return;
                     }
-                }).start();
-            });
+                    if (password.isEmpty()) {
+                        showErrorInline("Password cannot be empty");
+                        return;
+                    }
+                    if (!password.equals(confirmPassword)) {
+                        showErrorInline("Passwords do not match");
+                        return;
+                    }
+                    showProgressInline("Creating User", "Creating new verified user: " + username);
+                    new Thread(() -> {
+                        try {
+                            controller.createUser(username, password);
+                            Platform.runLater(() -> showResultInline(true, "User '" + username + "' has been created successfully!\n\n" +
+                                "The user is now available for authentication with:\n" +
+                                "• Username: " + username + "\n" +
+                                "• Password: " + password + "\n" +
+                                "• Public key authentication enabled\n\n" +
+                                "The server's user database has been automatically reloaded.\n" +
+                                "You can now use the new user immediately without restarting the server."));
+                        } catch (Exception e) {
+                            Platform.runLater(() -> showResultInline(false, "Failed to create user: " + e.getMessage()));
+                        }
+                    }).start();
+                });
+            }
             Button backButton = (Button) dialog.getDialogPane().lookupButton(backButtonType);
-            backButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
-                event.consume();
-                showMainMenu();
-            });
+            if (backButton != null) {
+                backButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+                    event.consume();
+                    showMainMenu();
+                });
+            }
         });
     }
     
@@ -161,8 +178,7 @@ public class UserManagementDialog {
         dialog.getDialogPane().getButtonTypes().addAll(deleteButtonType, backButtonType, cancelButtonType);
         ComboBox<String> userComboBox = new ComboBox<>();
         try {
-            CredentialsManager credentialsManager = new CredentialsManager("config/credentials.properties");
-            String[] availableUsers = credentialsManager.getAvailableUsers();
+            String[] availableUsers = controller.getAvailableUsers();
             userComboBox.getItems().addAll(availableUsers);
             if (availableUsers.length > 0) {
                 userComboBox.setValue(availableUsers[0]);
@@ -176,33 +192,37 @@ public class UserManagementDialog {
         Platform.runLater(() -> {
             userComboBox.requestFocus();
             Button deleteButton = (Button) dialog.getDialogPane().lookupButton(deleteButtonType);
-            deleteButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
-                event.consume();
-                String username = userComboBox.getValue();
-                if (username == null || username.trim().isEmpty()) {
-                    showErrorInline("Please select a user to delete.");
-                    return;
-                }
-                showProgressInline("Deleting User", "Deleting verified user: " + username);
-                new Thread(() -> {
-                    try {
-                        DeleteVerifiedUser.deleteUser(username);
-                        Platform.runLater(() -> showResultInline(true, "User '" + username + "' has been deleted successfully!\n\n" +
-                            "The user has been removed from:\n" +
-                            "• Server user database\n" +
-                            "• Client credentials\n" +
-                            "• SSH key files\n\n" +
-                            "The server's user database has been automatically reloaded."));
-                    } catch (Exception e) {
-                        Platform.runLater(() -> showResultInline(false, "Failed to delete user: " + e.getMessage()));
+            if (deleteButton != null) {
+                deleteButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+                    event.consume();
+                    String username = userComboBox.getValue();
+                    if (username == null || username.trim().isEmpty()) {
+                        showErrorInline("Please select a user to delete.");
+                        return;
                     }
-                }).start();
-            });
+                    showProgressInline("Deleting User", "Deleting verified user: " + username);
+                    new Thread(() -> {
+                        try {
+                            controller.deleteUser(username);
+                            Platform.runLater(() -> showResultInline(true, "User '" + username + "' has been deleted successfully!\n\n" +
+                                "The user has been removed from:\n" +
+                                "• Server user database\n" +
+                                "• Client credentials\n" +
+                                "• SSH key files\n\n" +
+                                "The server's user database has been automatically reloaded."));
+                        } catch (Exception e) {
+                            Platform.runLater(() -> showResultInline(false, "Failed to delete user: " + e.getMessage()));
+                        }
+                    }).start();
+                });
+            }
             Button backButton = (Button) dialog.getDialogPane().lookupButton(backButtonType);
-            backButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
-                event.consume();
-                showMainMenu();
-            });
+            if (backButton != null) {
+                backButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+                    event.consume();
+                    showMainMenu();
+                });
+            }
         });
     }
     
@@ -214,8 +234,7 @@ public class UserManagementDialog {
         ButtonType cancelButtonType = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
         dialog.getDialogPane().getButtonTypes().addAll(backButtonType, cancelButtonType);
         try {
-            CredentialsManager credentialsManager = new CredentialsManager("config/credentials.properties");
-            String[] availableUsers = credentialsManager.getAvailableUsers();
+            String[] availableUsers = controller.getAvailableUsers();
             StringBuilder usersList = new StringBuilder();
             if (availableUsers.length == 0) {
                 usersList.append("No users found.");
@@ -235,10 +254,12 @@ public class UserManagementDialog {
         }
         Platform.runLater(() -> {
             Button backButton = (Button) dialog.getDialogPane().lookupButton(backButtonType);
-            backButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
-                event.consume();
-                showMainMenu();
-            });
+            if (backButton != null) {
+                backButton.addEventFilter(javafx.event.ActionEvent.ACTION, event -> {
+                    event.consume();
+                    showMainMenu();
+                });
+            }
         });
     }
     
