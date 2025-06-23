@@ -22,27 +22,25 @@ public class Logger {
     }
 
     /**
-     * Initialize the logger with a specific log file.
+     * Initialize the logger with a log file.
      */
-    public static void initialize(String filename) {
+    public static void initialize(String logFile) {
         try {
-            logFile = filename;
-            Path logPath = Paths.get(logFile);
+            Logger.logFile = logFile;
+            File file = new File(logFile);
+            file.getParentFile().mkdirs(); // Create parent directories if they don't exist
             
-            // Create parent directories if they don't exist
-            if (logPath.getParent() != null) {
-                Files.createDirectories(logPath.getParent());
+            // Test write to ensure we can write to the file
+            try (FileWriter writer = new FileWriter(file, true)) {
+                writer.write("");
             }
             
-            logWriter = new PrintWriter(new FileWriter(logFile, true), true);
             initialized = true;
+            info("Logger initialized: " + logFile);
             
-            // Log initialization
-            log(LogLevel.INFO, "Logger initialized - logging to: " + logFile);
-        } catch (IOException e) {
+        } catch (Exception e) {
+            // Use System.err only for logger initialization failures
             System.err.println("Failed to initialize logger: " + e.getMessage());
-            // Fallback to console logging
-            initialized = false;
         }
     }
 
@@ -61,10 +59,18 @@ public class Logger {
     }
 
     /**
-     * Log a debug message.
+     * Log a debug message (only if debug mode is enabled).
      */
     public static void debug(String message) {
-        log(LogLevel.DEBUG, message);
+        if (currentLevel.ordinal() <= LogLevel.DEBUG.ordinal() && initialized) {
+            try (FileWriter writer = new FileWriter(logFile, true)) {
+                String timestamp = getTimestamp();
+                writer.write(timestamp + " DEBUG: " + message + "\n");
+            } catch (IOException e) {
+                // Use System.err only for logger failures
+                System.err.println("Logger not initialized. Message: " + message);
+            }
+        }
     }
 
     /**
@@ -85,27 +91,37 @@ public class Logger {
      * Log an error message.
      */
     public static void error(String message) {
-        log(LogLevel.ERROR, message);
-        // Show error messages on console for visibility
-        System.err.println("ERROR: " + message);
+        if (initialized) {
+            try (FileWriter writer = new FileWriter(logFile, true)) {
+                String timestamp = getTimestamp();
+                writer.write(timestamp + " ERROR: " + message + "\n");
+            } catch (IOException e) {
+                // Use System.err only for logger failures
+                System.err.println("ERROR: " + message);
+            }
+        } else {
+            // Use System.err only when logger is not initialized
+            System.err.println("ERROR: " + message);
+        }
     }
 
     /**
      * Log an error message with exception.
      */
     public static void error(String message, Throwable throwable) {
-        log(LogLevel.ERROR, message);
-        if (throwable != null) {
-            log(LogLevel.ERROR, "Exception: " + throwable.getMessage());
-            // Log full stack trace to file
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw);
-            throwable.printStackTrace(pw);
-            log(LogLevel.ERROR, "Stack trace: " + sw.toString());
-        }
-        // Show error messages on console for visibility
-        System.err.println("ERROR: " + message);
-        if (throwable != null) {
+        if (initialized) {
+            try (FileWriter writer = new FileWriter(logFile, true)) {
+                String timestamp = getTimestamp();
+                writer.write(timestamp + " ERROR: " + message + "\n");
+                writer.write(timestamp + " Exception: " + throwable.getMessage() + "\n");
+            } catch (IOException e) {
+                // Use System.err only for logger failures
+                System.err.println("ERROR: " + message);
+                System.err.println("Exception: " + throwable.getMessage());
+            }
+        } else {
+            // Use System.err only when logger is not initialized
+            System.err.println("ERROR: " + message);
             System.err.println("Exception: " + throwable.getMessage());
         }
     }
@@ -155,5 +171,9 @@ public class Logger {
      */
     public static String getLogFile() {
         return logFile;
+    }
+
+    private static String getTimestamp() {
+        return LocalDateTime.now().format(formatter);
     }
 } 

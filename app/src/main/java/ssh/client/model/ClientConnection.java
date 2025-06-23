@@ -2,7 +2,6 @@ package ssh.client.model;
 
 import ssh.client.model.AuthCredentials;
 import ssh.client.model.ServerInfo;
-import ssh.client.view.ClientUI;
 import ssh.model.crypto.DiffieHellmanKeyExchange;
 import ssh.model.crypto.RSAKeyGenerator;
 import ssh.model.crypto.SymmetricEncryption;
@@ -28,7 +27,6 @@ import java.util.function.Consumer;
 public class ClientConnection {
     private ServerInfo serverInfo;
     private AuthCredentials credentials;
-    private ClientUI ui;
     private Socket socket;
     private ProtocolHandler protocolHandler;
     private DiffieHellmanKeyExchange keyExchange;
@@ -42,11 +40,10 @@ public class ClientConnection {
     private Consumer<String> onStatus;
     private Consumer<String> onResult;
 
-    public ClientConnection(ServerInfo serverInfo, AuthCredentials credentials, ClientUI ui) {
+    public ClientConnection(ServerInfo serverInfo, AuthCredentials credentials) {
         Logger.info("ClientConnection constructor called");
         this.serverInfo = serverInfo;
         this.credentials = credentials;
-        this.ui = ui;
         this.connected = false;
         this.authenticated = false;
         this.workingDirectory = System.getProperty("user.home"); // Default to home directory
@@ -56,29 +53,24 @@ public class ClientConnection {
      * Connect to the server.
      */
     public boolean connect() {
+        Logger.debug("ClientConnection.connect() called");
+        
         try {
-            System.out.println("DEBUG: ClientConnection.connect() called");
-            Logger.info("Connecting to " + serverInfo.getHost() + ":" + serverInfo.getPort());
-            System.out.println("DEBUG: Creating socket to " + serverInfo.getHost() + ":" + serverInfo.getPort());
+            Logger.debug("Creating socket to " + serverInfo.getHost() + ":" + serverInfo.getPort());
+            socket = new Socket(serverInfo.getHost(), serverInfo.getPort());
+            socket.setTcpNoDelay(true);
+            Logger.debug("Socket created successfully");
             
-            // Create socket with timeout to prevent hanging
-            socket = new Socket();
-            socket.connect(new java.net.InetSocketAddress(serverInfo.getHost(), serverInfo.getPort()), 10000); // 10 second timeout
-            
-            System.out.println("DEBUG: Socket created successfully");
-            
-            // Set socket timeouts to prevent hanging
-            socket.setSoTimeout(30000); // 30 second read timeout
-            socket.setTcpNoDelay(true); // Disable Nagle's algorithm for better performance
-            
-            System.out.println("DEBUG: Creating protocol handler");
+            // Create protocol handler
+            Logger.debug("Creating protocol handler");
             protocolHandler = new ProtocolHandler(socket.getInputStream(), socket.getOutputStream());
             connected = true;
-            System.out.println("DEBUG: Connection successful");
+            Logger.debug("Connection successful");
             Logger.info("Connected successfully");
             return true;
-        } catch (IOException e) {
-            System.out.println("DEBUG: Connection failed with exception: " + e.getMessage());
+            
+        } catch (Exception e) {
+            Logger.debug("Connection failed with exception: " + e.getMessage());
             Logger.error("Connection failed: " + e.getMessage());
             if (onError != null) onError.accept("Connection failed: " + e.getMessage());
             return false;
@@ -90,72 +82,60 @@ public class ClientConnection {
      */
     public boolean performKeyExchange() {
         try {
-            System.out.println("DEBUG: performKeyExchange() called");
-            Logger.info("Starting key exchange...");
+            Logger.debug("performKeyExchange() called");
             
-            // Initialize DH key exchange
-            System.out.println("DEBUG: Initializing DH key exchange");
+            // Initialize Diffie-Hellman key exchange
+            Logger.debug("Initializing DH key exchange");
             keyExchange = new DiffieHellmanKeyExchange();
             keyExchange.generateKeyPair();
-            System.out.println("DEBUG: Generated DH key pair");
-            Logger.info("Generated DH key pair");
-
-            // Send key exchange init message
-            System.out.println("DEBUG: Creating key exchange init message");
+            Logger.debug("Generated DH key pair");
+            
+            // Create key exchange init message
+            Logger.debug("Creating key exchange init message");
             KeyExchangeMessage initMessage = new KeyExchangeMessage(MessageType.KEY_EXCHANGE_INIT);
             initMessage.setDhPublicKey(keyExchange.getPublicKeyBytes());
-            initMessage.setClientId("SSH-2.0-JavaSSH");
-            System.out.println("DEBUG: Created key exchange init message");
-            Logger.info("Created key exchange init message");
-
-            System.out.println("DEBUG: Sending key exchange init message");
-            protocolHandler.sendMessage(initMessage);
-            System.out.println("DEBUG: Sent key exchange init message");
-            Logger.info("Sent key exchange init message");
-
-            // Receive key exchange reply
-            System.out.println("DEBUG: Waiting for key exchange reply...");
-            Logger.info("Waiting for key exchange reply...");
-            Message replyMessage = protocolHandler.receiveMessage();
-            System.out.println("DEBUG: Received reply message: " + replyMessage.getType());
-            Logger.info("Received reply message: " + replyMessage.getType());
+            Logger.debug("Created key exchange init message");
             
-            if (replyMessage.getType() != MessageType.KEY_EXCHANGE_REPLY) {
-                Logger.error("Expected KEY_EXCHANGE_REPLY, got " + replyMessage.getType());
-                if (onError != null) onError.accept("Expected KEY_EXCHANGE_REPLY, got " + replyMessage.getType());
+            // Send init message
+            Logger.debug("Sending key exchange init message");
+            protocolHandler.sendMessage(initMessage);
+            Logger.debug("Sent key exchange init message");
+            
+            // Wait for reply
+            Logger.debug("Waiting for key exchange reply...");
+            Message replyMessage = protocolHandler.receiveMessage();
+            Logger.debug("Received reply message: " + replyMessage.getType());
+            
+            if (replyMessage.getType() == MessageType.KEY_EXCHANGE_REPLY) {
+                KeyExchangeMessage reply = (KeyExchangeMessage) replyMessage;
+                keyExchange.setOtherPublicKey(reply.getDhPublicKeyBytes());
+                byte[] sharedSecret = keyExchange.computeSharedSecret();
+                
+                // Store the session ID from the server
+                this.sessionId = reply.getSessionId();
+                if (this.sessionId == null || this.sessionId.isEmpty()) {
+                    Logger.warn("Server did not provide a session ID, generating one");
+                    this.sessionId = java.util.UUID.randomUUID().toString();
+                }
+                Logger.info("Session ID: " + this.sessionId);
+                
+                // Initialize encryption
+                encryption = new SymmetricEncryption();
+                encryption.initializeKey(sharedSecret);
+                
+                // Enable encryption in the protocol handler
+                protocolHandler.enableEncryption(encryption);
+                Logger.info("Encryption enabled in protocol handler");
+                
+                Logger.info("Key exchange completed successfully");
+                return true;
+            } else {
+                Logger.error("Unexpected message type during key exchange: " + replyMessage.getType());
                 return false;
             }
-
-            KeyExchangeMessage keyReply = (KeyExchangeMessage) replyMessage;
-            keyExchange.setOtherPublicKey(keyReply.getDhPublicKeyBytes());
-            Logger.info("Set server's public key");
-
-            // Compute shared secret
-            byte[] sharedSecret = keyExchange.computeSharedSecret();
-            Logger.info("Computed shared secret, length: " + sharedSecret.length);
-
-            // Initialize symmetric encryption
-            encryption = new SymmetricEncryption();
-            encryption.initializeKey(sharedSecret);
-            Logger.info("Initialized symmetric encryption");
-
-            // Enable encryption in protocol handler AFTER receiving the reply
-            protocolHandler.enableEncryption(encryption);
-            Logger.info("Enabled encryption in protocol handler");
-
-            // Store the session ID from the server
-            this.sessionId = keyReply.getSessionId();
-            if (this.sessionId == null || this.sessionId.isEmpty()) {
-                throw new IOException("Server did not provide a session ID.");
-            }
-            Logger.info("Received session ID: " + this.sessionId);
-
-            return true;
-
+            
         } catch (Exception e) {
             Logger.error("Key exchange failed: " + e.getMessage());
-            e.printStackTrace();
-            if (onError != null) onError.accept("Key exchange failed: " + e.getMessage());
             return false;
         }
     }
@@ -306,8 +286,8 @@ public class ClientConnection {
         if (shellResult.getStderr() != null && !shellResult.getStderr().isEmpty()) {
             output.append(shellResult.getStderr());
         }
-        // Only call onResult for non-GUI clients
-        if (onResult != null && !(ui instanceof ssh.client.view.JavaFXClientUI)) onResult.accept(output.toString());
+        // Call onResult callback if available
+        if (onResult != null) onResult.accept(output.toString());
         return output.toString();
     }
 

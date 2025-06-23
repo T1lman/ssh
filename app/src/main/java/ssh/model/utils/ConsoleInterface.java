@@ -2,6 +2,7 @@ package ssh.model.utils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import ssh.model.utils.Logger;
 
 /**
  * Clean console interface for user-friendly output.
@@ -95,7 +96,7 @@ public class ConsoleInterface {
     }
 
     /**
-     * Print shell output.
+     * Display shell output with formatting.
      */
     public static void shellOutput(String output) {
         System.out.println("📄 Output:");
@@ -103,46 +104,42 @@ public class ConsoleInterface {
     }
 
     /**
-     * Print a separator line.
+     * Display a separator line.
      */
     public static void separator() {
         System.out.println("─".repeat(50));
     }
 
     /**
-     * Print a header.
+     * Display a header with title.
      */
     public static void header(String title) {
-        separator();
         System.out.println("🚀 " + title);
-        separator();
     }
 
     /**
-     * Print a footer.
+     * Display a footer with message.
      */
     public static void footer(String message) {
-        separator();
         System.out.println("🏁 " + message);
-        separator();
     }
 
     /**
-     * Print progress with dots.
+     * Display progress with dots.
      */
     public static void progress(String message) {
         System.out.print(message + "... ");
     }
 
     /**
-     * Complete progress message.
+     * Complete progress indicator.
      */
     public static void progressComplete() {
         System.out.println("done");
     }
 
     /**
-     * Print a clean prompt.
+     * Display a prompt.
      */
     public static void prompt(String message) {
         System.out.print(message + ": ");

@@ -154,18 +154,21 @@ public class ConsoleClientUI implements ClientUI {
 
     @Override
     public AuthCredentials getAuthCredentials(String[] availableUsers) {
-        selectedUser = selectUser(availableUsers);
+        selectedUser = selectUserFromList(availableUsers);
         if (selectedUser == null) {
             return null; // User cancelled or invalid selection
         }
         
-        // This is a bit of a hack, but it's how the console flow works.
-        // We need the credentials manager to get the actual password/key details.
+        // Get credentials from the credentials manager
         CredentialsManager credentialsManager = new CredentialsManager("config/credentials.properties");
         return credentialsManager.getAuthCredentials(selectedUser);
     }
 
-    private String selectUser(String[] availableUsers) {
+    /**
+     * Pure view method - only handles user input for user selection.
+     * No business logic, just UI interaction.
+     */
+    private String selectUserFromList(String[] availableUsers) {
         if (availableUsers == null || availableUsers.length == 0) {
             displayError("No users configured in credentials.properties.");
             return "default";

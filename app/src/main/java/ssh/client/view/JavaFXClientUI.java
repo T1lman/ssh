@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 import ssh.client.model.AuthCredentials;
 import ssh.client.model.ServerInfo;
 import ssh.model.utils.CredentialsManager;
+import ssh.model.utils.Logger;
 import java.util.function.Consumer;
 
 /**
@@ -21,7 +22,7 @@ public class JavaFXClientUI implements ClientUI {
     
     // State
     private ServerInfo pendingServerInfo;
-    private ssh.client.controller.SSHClient sshClientController;
+    private ssh.client.controller.SSHClientController controller;
 
     // Event/callback fields
     private Consumer<AuthCredentials> onLoginRequested;
@@ -32,6 +33,8 @@ public class JavaFXClientUI implements ClientUI {
     private Consumer<String> onShellOutput;
     private Consumer<String> onWorkingDirectoryUpdate;
     private Consumer<String> onShellCommand;
+    private Consumer<java.io.File> onFileUploadRequested;
+    private Consumer<String> onFileDownloadRequested;
 
     public JavaFXClientUI(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -67,9 +70,9 @@ public class JavaFXClientUI implements ClientUI {
         new Thread(() -> {
             try {
                 // Create the SSH client controller
-                sshClientController = new ssh.client.controller.SSHClient(this);
-                // For GUI, call startConnection() directly
-                sshClientController.startConnection();
+                controller = new ssh.client.controller.SSHClientController(this);
+                // For GUI, call startConnectionFlow() directly
+                controller.startConnectionFlow();
                 // Only show main window if connection/auth succeeds
                 Platform.runLater(this::showMainWindow);
             } catch (Exception e) {
@@ -83,10 +86,10 @@ public class JavaFXClientUI implements ClientUI {
     }
 
     public void showMainWindow() {
-        System.out.println("DEBUG: Authentication successful, showing main window");
+        Logger.debug("Authentication successful, showing main window");
         
         if (!Platform.isFxApplicationThread()) {
-            System.out.println("DEBUG: Not on FX thread, using Platform.runLater");
+            Logger.debug("Not on FX thread, using Platform.runLater");
             Platform.runLater(this::showMainWindowDirectly);
             return;
         }
@@ -95,10 +98,15 @@ public class JavaFXClientUI implements ClientUI {
     }
     
     private void showMainWindowDirectly() {
-        System.out.println("DEBUG: showMainWindow() called");
+        Logger.debug("showMainWindow() called");
         
         // Create main window
         mainWindow = new MainWindow(primaryStage);
+        
+        // Set up working directory provider
+        if (controller != null) {
+            mainWindow.setWorkingDirectoryProvider(() -> controller.getModel().getWorkingDirectory());
+        }
         
         // Propagate the command handler if it was already set
         if (onCommandEntered != null) {
@@ -107,22 +115,16 @@ public class JavaFXClientUI implements ClientUI {
         
         // Set file transfer callbacks
         mainWindow.setOnFileUploadRequested(file -> {
-            if (sshClientController != null && file != null) {
-                try {
-                    sshClientController.getConnection().uploadFile(file.getAbsolutePath(), file.getName());
-                    mainWindow.displayMessage("File uploaded: " + file.getName());
-                } catch (Exception e) {
-                    mainWindow.displayError("File upload failed: " + e.getMessage());
+            if (controller != null && file != null) {
+                if (onFileUploadRequested != null) {
+                    onFileUploadRequested.accept(file);
                 }
             }
         });
         mainWindow.setOnFileDownloadRequested(remotePath -> {
-            if (sshClientController != null && remotePath != null && !remotePath.isEmpty()) {
-                String localPath = "downloads/" + new java.io.File(remotePath).getName();
-                try {
-                    sshClientController.getConnection().downloadFile(remotePath, localPath);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+            if (controller != null && remotePath != null && !remotePath.isEmpty()) {
+                if (onFileDownloadRequested != null) {
+                    onFileDownloadRequested.accept(remotePath);
                 }
             }
         });
@@ -132,12 +134,12 @@ public class JavaFXClientUI implements ClientUI {
             String username = pendingServerInfo.getUsername();
             String host = pendingServerInfo.getHost();
             int port = pendingServerInfo.getPort();
-            String sessionId = sshClientController != null ? sshClientController.getSessionId() : "-";
+            String sessionId = controller != null ? controller.getSessionId() : "-";
             mainWindow.updateHeader(username, host, port, sessionId);
         }
         
-        System.out.println("DEBUG: showMainWindow() completed");
-        System.out.println("DEBUG: Main window setup complete");
+        Logger.debug("showMainWindow() completed");
+        Logger.debug("Main window setup complete");
     }
 
     @Override
@@ -149,14 +151,14 @@ public class JavaFXClientUI implements ClientUI {
     @Override
     public void displayMessage(String message) {
         if (mainWindow != null) {
-            mainWindow.displayMessage(message);
+            Platform.runLater(() -> mainWindow.displayMessage(message));
         }
     }
 
     @Override
     public void displayError(String error) {
         if (mainWindow != null) {
-            mainWindow.displayError(error);
+            Platform.runLater(() -> mainWindow.displayError(error));
         }
     }
 
@@ -175,28 +177,28 @@ public class JavaFXClientUI implements ClientUI {
     @Override
     public void showConnectionStatus(boolean connected) {
         if (mainWindow != null) {
-            mainWindow.showConnectionStatus(connected);
+            Platform.runLater(() -> mainWindow.showConnectionStatus(connected));
         }
     }
 
     @Override
     public void showAuthenticationResult(boolean success, String message) {
         if (mainWindow != null) {
-            mainWindow.showAuthenticationResult(success, message);
+            Platform.runLater(() -> mainWindow.showAuthenticationResult(success, message));
         }
     }
 
     @Override
     public void displayShellOutput(String output) {
         if (mainWindow != null) {
-            mainWindow.displayShellOutput(output);
+            Platform.runLater(() -> mainWindow.displayShellOutput(output));
         }
     }
 
     @Override
     public void showFileTransferProgress(String filename, int percentage) {
         if (mainWindow != null) {
-            mainWindow.showFileTransferProgress(filename, percentage);
+            Platform.runLater(() -> mainWindow.showFileTransferProgress(filename, percentage));
         }
     }
 
@@ -213,36 +215,34 @@ public class JavaFXClientUI implements ClientUI {
 
     @Override
     public AuthCredentials getAuthCredentials(String[] availableUsers) {
-        System.out.println("DEBUG: getAuthCredentials called with " + (availableUsers != null ? availableUsers.length : 0) + " users");
+        Logger.debug("getAuthCredentials called with " + (availableUsers != null ? availableUsers.length : 0) + " users");
         
-        // Return credentials for the user selected in the startup window
-        if (pendingServerInfo != null && pendingServerInfo.getUsername() != null) {
+        if (startupScene != null && pendingServerInfo != null) {
             String selectedUser = pendingServerInfo.getUsername();
-            try {
-                CredentialsManager credentialsManager = new CredentialsManager("config/credentials.properties");
-                AuthCredentials credentials = credentialsManager.getAuthCredentials(selectedUser);
-                System.out.println("DEBUG: Returning credentials for user: " + selectedUser);
-                return credentials;
-            } catch (Exception e) {
-                System.out.println("DEBUG: Error getting credentials for user " + selectedUser + ": " + e.getMessage());
+            if (selectedUser != null && !selectedUser.isEmpty()) {
+                try {
+                    CredentialsManager credentialsManager = new CredentialsManager("config/credentials.properties");
+                    AuthCredentials credentials = credentialsManager.getAuthCredentials(selectedUser);
+                    Logger.debug("Returning credentials for user: " + selectedUser);
+                    return credentials;
+                } catch (Exception e) {
+                    Logger.debug("Error getting credentials for user " + selectedUser + ": " + e.getMessage());
+                    return null;
+                }
+            } else {
+                Logger.debug("No user selected, returning null");
                 return null;
             }
         }
-        
-        // Fallback: if somehow we don't have a selected user, return null
-        System.out.println("DEBUG: No user selected, returning null");
         return null;
     }
 
     @Override
     public void showConnectionProgress(String step) {
-        // Update the startup status label if we're still in startup phase
-        Platform.runLater(() -> {
-            if (startupScene != null) {
-                startupScene.showConnectingState(step);
-            }
-            System.out.println("GUI_PROGRESS: " + step);
-        });
+        Logger.debug("GUI_PROGRESS: " + step);
+        if (startupScene != null) {
+            Platform.runLater(() -> startupScene.showConnectingState(step));
+        }
     }
 
     @Override
@@ -253,13 +253,13 @@ public class JavaFXClientUI implements ClientUI {
     
     public void updateWorkingDirectory(String newWorkingDirectory) {
         if (mainWindow != null) {
-            mainWindow.updateWorkingDirectory(newWorkingDirectory);
+            Platform.runLater(() -> mainWindow.updateWorkingDirectory(newWorkingDirectory));
         }
     }
 
     public void displayShellCommand(String command, String output) {
         if (mainWindow != null) {
-            mainWindow.displayShellCommand(command, output);
+            Platform.runLater(() -> mainWindow.displayShellCommand(command, output));
         }
     }
 
@@ -297,5 +297,13 @@ public class JavaFXClientUI implements ClientUI {
 
     public void setOnShellCommand(Consumer<String> onShellCommand) {
         this.onShellCommand = onShellCommand;
+    }
+
+    public void setOnFileUploadRequested(Consumer<java.io.File> onFileUploadRequested) {
+        this.onFileUploadRequested = onFileUploadRequested;
+    }
+
+    public void setOnFileDownloadRequested(Consumer<String> onFileDownloadRequested) {
+        this.onFileDownloadRequested = onFileDownloadRequested;
     }
 } 

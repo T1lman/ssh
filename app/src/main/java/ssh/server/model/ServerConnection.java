@@ -15,8 +15,7 @@ import ssh.model.protocol.messages.FileTransferMessage;
 import ssh.model.protocol.messages.ErrorMessage;
 import ssh.model.protocol.messages.ReloadUsersMessage;
 import ssh.model.protocol.messages.DisconnectMessage;
-import ssh.server.view.ServerConfig;
-import ssh.server.view.ServerUI;
+import ssh.config.ServerConfig;
 import ssh.model.shell.ShellExecutor;
 import ssh.model.utils.Logger;
 
@@ -36,7 +35,6 @@ public class ServerConnection implements Runnable {
     private ProtocolHandler protocolHandler;
     private AuthenticationManager authManager;
     private KeyPair serverKeyPair;
-    private ServerUI ui;
     private ServerConfig config;
     private boolean authenticated;
     private String authenticatedUser;
@@ -44,16 +42,20 @@ public class ServerConnection implements Runnable {
     private SymmetricEncryption encryption;
     private ShellExecutor shellExecutor;
     private String sessionId;
+    
+    // Event callbacks for MVC compliance
     private Consumer<String> onError;
     private Consumer<String> onStatus;
-    private Consumer<String> onResult;
+    private Consumer<String> onAuthenticationResult;
+    private Consumer<String> onServiceRequest;
+    private Consumer<String> onFileTransferProgress;
+    private Consumer<String> onShellCommand;
 
     public ServerConnection(Socket clientSocket, AuthenticationManager authManager, 
-                          KeyPair serverKeyPair, ServerUI ui, ServerConfig config) {
+                          KeyPair serverKeyPair, ServerConfig config) {
         this.clientSocket = clientSocket;
         this.authManager = authManager;
         this.serverKeyPair = serverKeyPair;
-        this.ui = ui;
         this.config = config;
         this.authenticated = false;
         this.authenticatedUser = null;
@@ -64,37 +66,50 @@ public class ServerConnection implements Runnable {
         try {
             clientSocket.setTcpNoDelay(true); // Disable Nagle's algorithm for better performance
         } catch (Exception e) {
-            ui.displayError("Failed to set socket timeout: " + e.getMessage());
+            notifyError("Failed to set socket timeout: " + e.getMessage());
         }
     }
 
     @Override
     public void run() {
         try {
+            Logger.info("Server: Starting client connection handler for " + getClientInfo());
+            
             // Initialize protocol handler
+            Logger.info("Server: Initializing protocol handler");
             protocolHandler = new ProtocolHandler(
                 clientSocket.getInputStream(), 
                 clientSocket.getOutputStream()
             );
+            Logger.info("Server: Protocol handler initialized");
 
             // Perform key exchange
+            Logger.info("Server: Starting key exchange");
             if (!handleKeyExchange()) {
-                ui.displayError("Key exchange failed for client " + getClientInfo());
+                Logger.error("Server: Key exchange failed for client " + getClientInfo());
+                safeDisplayError("Key exchange failed for client " + getClientInfo());
                 return;
             }
+            Logger.info("Server: Key exchange completed successfully");
 
             // Handle authentication
+            Logger.info("Server: Starting authentication");
             if (!handleAuthentication()) {
-                ui.displayError("Authentication failed for client " + getClientInfo());
+                Logger.error("Server: Authentication failed for client " + getClientInfo());
+                safeDisplayError("Authentication failed for client " + getClientInfo());
                 return;
             }
+            Logger.info("Server: Authentication completed successfully");
 
             // Handle service requests
+            Logger.info("Server: Starting service request handling");
             handleServiceRequests();
 
         } catch (Exception e) {
-            ui.displayError("Error handling client " + getClientInfo() + ": " + e.getMessage());
+            Logger.error("Server: Error handling client " + getClientInfo() + ": " + e.getMessage(), e);
+            safeDisplayError("Error handling client " + getClientInfo() + ": " + e.getMessage());
         } finally {
+            Logger.info("Server: Cleaning up client connection for " + getClientInfo());
             cleanup();
         }
     }
@@ -106,43 +121,59 @@ public class ServerConnection implements Runnable {
         // Receive key exchange init message
         Message message = protocolHandler.receiveMessage();
         if (message.getType() != MessageType.KEY_EXCHANGE_INIT) {
-            ui.displayError("Expected KEY_EXCHANGE_INIT, got " + message.getType());
+            safeDisplayError("Expected KEY_EXCHANGE_INIT, got " + message.getType());
             return false;
         }
 
         KeyExchangeMessage initMessage = (KeyExchangeMessage) message;
-        ui.displayMessage("Received key exchange init from " + initMessage.getClientId());
+        safeDisplayMessage("Received key exchange init from " + initMessage.getClientId());
+        Logger.info("Server: Received key exchange init from " + initMessage.getClientId());
 
         // Initialize DH key exchange
+        Logger.info("Server: Initializing DH key exchange");
         keyExchange = new DiffieHellmanKeyExchange();
         keyExchange.generateKeyPair();
+        Logger.info("Server: Generated DH key pair");
         keyExchange.setOtherPublicKey(initMessage.getDhPublicKeyBytes());
+        Logger.info("Server: Set client's public key");
 
         // Compute shared secret
+        Logger.info("Server: Computing shared secret");
         byte[] sharedSecret = keyExchange.computeSharedSecret();
+        Logger.info("Server: Computed shared secret, length: " + sharedSecret.length);
 
         // Initialize symmetric encryption
+        Logger.info("Server: Initializing symmetric encryption");
         encryption = new SymmetricEncryption();
         encryption.initializeKey(sharedSecret);
+        Logger.info("Server: Initialized symmetric encryption");
 
         // Send key exchange reply BEFORE enabling encryption
+        Logger.info("Server: Creating key exchange reply message");
         KeyExchangeMessage replyMessage = new KeyExchangeMessage(MessageType.KEY_EXCHANGE_REPLY);
         replyMessage.setDhPublicKey(keyExchange.getPublicKeyBytes());
         replyMessage.setServerId("SSH-2.0-JavaSSH-Server");
         replyMessage.setSessionId(this.sessionId);
+        Logger.info("Server: Created reply message, signing DH public key");
 
         // Sign the DH public key with server's private key
+        Logger.info("Server: Starting RSA signature generation");
         byte[] signature = RSAKeyGenerator.sign(
             keyExchange.getPublicKeyBytes(), 
             serverKeyPair.getPrivate()
         );
+        Logger.info("Server: RSA signature generated, length: " + signature.length);
         replyMessage.setSignature(signature);
 
+        Logger.info("Server: Sending key exchange reply");
         protocolHandler.sendMessage(replyMessage);
-        ui.displayMessage("Key exchange completed successfully");
+        Logger.info("Server: Key exchange reply sent successfully");
+        safeDisplayMessage("Key exchange completed successfully");
 
         // Enable encryption AFTER sending the reply
+        Logger.info("Server: Enabling encryption");
         protocolHandler.enableEncryption(encryption);
+        Logger.info("Server: Encryption enabled");
 
         return true;
     }
@@ -154,7 +185,7 @@ public class ServerConnection implements Runnable {
         // Receive authentication request
         Message message = protocolHandler.receiveMessage();
         if (message.getType() != MessageType.AUTH_REQUEST) {
-            ui.displayError("Expected AUTH_REQUEST, got " + message.getType());
+            safeDisplayError("Expected AUTH_REQUEST, got " + message.getType());
             return false;
         }
 
@@ -162,7 +193,7 @@ public class ServerConnection implements Runnable {
         String username = authMessage.getUsername();
         String authType = authMessage.getAuthType();
 
-        ui.displayMessage("Authentication request from " + username + " using " + authType);
+        safeDisplayMessage("Authentication request from " + username + " using " + authType);
 
         // Prepare credentials map
         Map<String, String> credentials = new HashMap<>();
@@ -197,9 +228,9 @@ public class ServerConnection implements Runnable {
         if (authSuccess) {
             this.authenticated = true;
             this.authenticatedUser = username;
-            ui.showAuthenticationResult(username, true, "Authentication successful");
+            notifyAuthenticationResult(username, true, "Authentication successful");
         } else {
-            ui.showAuthenticationResult(username, false, "Authentication failed");
+            notifyAuthenticationResult(username, false, "Authentication failed");
         }
 
         return authSuccess;
@@ -215,17 +246,17 @@ public class ServerConnection implements Runnable {
                 message = protocolHandler.receiveMessage();
             } catch (IOException e) {
                 if (e.getMessage().contains("Client disconnected gracefully")) {
-                    ui.displayMessage("Client " + getClientInfo() + " disconnected gracefully");
+                    safeDisplayMessage("Client " + getClientInfo() + " disconnected gracefully");
                 } else {
-                    ui.displayError("Client disconnected or error: " + e.getMessage());
+                    safeDisplayError("Client disconnected or error: " + e.getMessage());
                 }
                 break;
             } catch (Exception e) {
-                ui.displayError("Unexpected error: " + e.getMessage());
+                safeDisplayError("Unexpected error: " + e.getMessage());
                 break;
             }
             if (message == null) {
-                ui.displayMessage("Client disconnected (null message)");
+                safeDisplayMessage("Client disconnected (null message)");
                 break;
             }
             switch (message.getType()) {
@@ -242,16 +273,16 @@ public class ServerConnection implements Runnable {
                     handleFileDownload((FileTransferMessage) message);
                     break;
                 case DISCONNECT:
-                    ui.displayMessage("Client " + getClientInfo() + " disconnected cleanly.");
+                    safeDisplayMessage("Client " + getClientInfo() + " disconnected cleanly.");
                     return;
                 case RELOAD_USERS:
                     handleReloadUsers();
                     break;
                 case ERROR:
-                    ui.displayError("Received error message from client: " + ((ErrorMessage) message).getErrorMessage());
+                    safeDisplayError("Received error message from client: " + ((ErrorMessage) message).getErrorMessage());
                     break;
                 default:
-                    ui.displayError("Unknown message type: " + message.getType());
+                    safeDisplayError("Unknown message type: " + message.getType());
                     break;
             }
         }
@@ -262,14 +293,14 @@ public class ServerConnection implements Runnable {
      */
     private void handleServiceRequest(ServiceMessage message) throws Exception {
         String service = message.getService();
-        ui.displayMessage("Service request from " + authenticatedUser + " for " + service);
+        safeDisplayMessage("Service request from " + authenticatedUser + " for " + service);
         
         // Send service accept response
         ServiceMessage response = new ServiceMessage(MessageType.SERVICE_ACCEPT);
         response.setService(service);
         
         protocolHandler.sendMessage(response);
-        ui.displayMessage("Service " + service + " accepted for " + authenticatedUser);
+        safeDisplayMessage("Service " + service + " accepted for " + authenticatedUser);
     }
 
     /**
@@ -278,8 +309,7 @@ public class ServerConnection implements Runnable {
     private void handleShellCommand(ShellMessage message) {
         try {
             String command = message.getCommand();
-            ui.showShellCommand(authenticatedUser, command);
-            Logger.info("Executing shell command: '" + command + "' for user: " + authenticatedUser);
+            safeDisplayMessage("Executing shell command: '" + command + "' for user: " + authenticatedUser);
 
             // Execute command using the session-specific executor
             ssh.model.shell.CommandResult result = shellExecutor.execute(command);
@@ -295,7 +325,7 @@ public class ServerConnection implements Runnable {
             protocolHandler.sendMessage(response);
             Logger.info("Sent SHELL_RESULT message to client.");
         } catch (Exception e) {
-            ui.displayError("Shell command error: " + e.getMessage());
+            safeDisplayError("Shell command error: " + e.getMessage());
             Logger.error("Exception in handleShellCommand: " + e.getMessage(), e);
             try {
                 ErrorMessage errorMsg = new ErrorMessage();
@@ -303,7 +333,7 @@ public class ServerConnection implements Runnable {
                 protocolHandler.sendMessage(errorMsg);
                 Logger.info("Sent ErrorMessage to client: " + e.getMessage());
             } catch (Exception ex) {
-                ui.displayError("Failed to send error message to client: " + ex.getMessage());
+                safeDisplayError("Failed to send error message to client: " + ex.getMessage());
                 Logger.error("Failed to send ErrorMessage to client: " + ex.getMessage(), ex);
             }
         }
@@ -317,8 +347,7 @@ public class ServerConnection implements Runnable {
         long fileSize = message.getFileSize();
         String targetPath = message.getTargetPath();
 
-        ui.showFileTransferProgress(filename, 0, fileSize);
-        Logger.info("File upload request from " + authenticatedUser + ": " + filename + " (" + fileSize + " bytes)");
+        safeDisplayMessage("File upload request from " + authenticatedUser + ": " + filename + " (" + fileSize + " bytes)");
 
         // Create file storage directory for the user
         java.io.File userDir = new java.io.File("data/server/files/" + authenticatedUser);
@@ -369,9 +398,7 @@ public class ServerConnection implements Runnable {
                 
                 // Update progress
                 int percentage = (int) ((bytesReceived * 100) / fileSize);
-                ui.showFileTransferProgress(filename, bytesReceived, fileSize);
-                
-                Logger.info("Received chunk " + (sequenceNumber - 1) + " from " + authenticatedUser + 
+                safeDisplayMessage("Received chunk " + (sequenceNumber - 1) + " from " + authenticatedUser + 
                           ", bytes: " + bytesReceived + "/" + fileSize + ", last: " + isLast);
             }
         }
@@ -383,8 +410,7 @@ public class ServerConnection implements Runnable {
         finalAck.setMessage("File upload completed: " + filename + " (" + bytesReceived + " bytes)");
         protocolHandler.sendMessage(finalAck);
 
-        Logger.info("File upload completed for " + authenticatedUser + ": " + filename + " -> " + targetFile.getAbsolutePath());
-        ui.showFileTransferProgress(filename, fileSize, fileSize);
+        safeDisplayMessage("File upload completed for " + authenticatedUser + ": " + filename + " -> " + targetFile.getAbsolutePath());
     }
 
     /**
@@ -394,8 +420,7 @@ public class ServerConnection implements Runnable {
         String filename = message.getFilename();
         String targetPath = message.getTargetPath();
         
-        Logger.info("File download request from " + authenticatedUser + " for: " + filename);
-        ui.displayMessage("File download request for: " + filename);
+        safeDisplayMessage("File download request from " + authenticatedUser + " for: " + filename);
 
         try {
             // Determine file path
@@ -412,13 +437,13 @@ public class ServerConnection implements Runnable {
             }
 
             long fileSize = fileToSend.length();
-            Logger.info("Sending file: " + filename + " (" + fileSize + " bytes)");
-            ui.showFileTransferProgress(filename, 0, fileSize);
+            safeDisplayMessage("Sending file: " + filename + " (" + fileSize + " bytes)");
 
             // Send file data in chunks
             final int CHUNK_SIZE = 8192; // 8KB chunks
             byte[] buffer = new byte[CHUNK_SIZE];
             long bytesSent = 0;
+            int sequenceNumber = 1;
 
             try (java.io.FileInputStream fis = new java.io.FileInputStream(fileToSend)) {
                 int bytesRead;
@@ -445,20 +470,22 @@ public class ServerConnection implements Runnable {
                     
                     // Update progress
                     int percentage = (int) ((bytesSent * 100) / fileSize);
-                    ui.showFileTransferProgress(filename, bytesSent, fileSize);
+                    safeDisplayMessage("Sent chunk " + sequenceNumber + " from " + authenticatedUser + 
+                              ", bytes: " + bytesSent + "/" + fileSize + ", last: " + (bytesSent == fileSize));
+                    sequenceNumber++;
                 }
             }
 
             // Wait for acknowledgment from client
             Message ackResponse = protocolHandler.receiveMessage();
             if (ackResponse.getType() != MessageType.FILE_ACK) {
-                Logger.warn("Expected FILE_ACK after download, but got " + ackResponse.getType());
+                safeDisplayError("Expected FILE_ACK after download, but got " + ackResponse.getType());
             }
 
-            Logger.info("File download completed for " + authenticatedUser + ": " + filename);
+            safeDisplayMessage("File download completed for " + authenticatedUser + ": " + filename);
 
         } catch (IOException e) {
-            Logger.error("File download failed for user " + authenticatedUser + ": " + e.getMessage());
+            safeDisplayError("File download failed for user " + authenticatedUser + ": " + e.getMessage());
             // Send a clear error message to the client
             ErrorMessage errorMsg = new ErrorMessage();
             errorMsg.setErrorMessage(e.getMessage());
@@ -471,9 +498,9 @@ public class ServerConnection implements Runnable {
      */
     private void handleReloadUsers() {
         try {
-            ui.displayMessage("Reloading user database...");
+            safeDisplayMessage("Reloading user database...");
             authManager.reloadUsers();
-            ui.displayMessage("User database reloaded successfully");
+            safeDisplayMessage("User database reloaded successfully");
             
             // Send acknowledgment back to client
             ServiceMessage response = new ServiceMessage(MessageType.SERVICE_ACCEPT);
@@ -481,7 +508,7 @@ public class ServerConnection implements Runnable {
             protocolHandler.sendMessage(response);
             
         } catch (Exception e) {
-            ui.displayError("Failed to reload user database: " + e.getMessage());
+            safeDisplayError("Failed to reload user database: " + e.getMessage());
             
             // Send error response to client
             ErrorMessage errorMsg = new ErrorMessage();
@@ -489,7 +516,7 @@ public class ServerConnection implements Runnable {
             try {
                 protocolHandler.sendMessage(errorMsg);
             } catch (Exception sendError) {
-                ui.displayError("Failed to send error response: " + sendError.getMessage());
+                safeDisplayError("Failed to send error response: " + sendError.getMessage());
             }
         }
     }
@@ -507,9 +534,9 @@ public class ServerConnection implements Runnable {
     private void cleanup() {
         try {
             if (authenticatedUser != null) {
-                ui.displayMessage("Cleaning up connection for " + getClientInfo() + " (user: " + authenticatedUser + ")");
+                safeDisplayMessage("Cleaning up connection for " + getClientInfo() + " (user: " + authenticatedUser + ")");
             } else {
-                ui.displayMessage("Cleaning up connection for " + getClientInfo());
+                safeDisplayMessage("Cleaning up connection for " + getClientInfo());
             }
             if (protocolHandler != null) {
                 protocolHandler.close();
@@ -526,7 +553,91 @@ public class ServerConnection implements Runnable {
             serverKeyPair = null;
             config = null;
         } catch (IOException e) {
-            ui.displayError("Error during cleanup: " + e.getMessage());
+            safeDisplayError("Error during cleanup: " + e.getMessage());
         }
+    }
+
+    // Helper methods for safe UI calls
+    private void safeDisplayMessage(String message) {
+        if (onStatus != null) {
+            onStatus.accept(message);
+        }
+        Logger.info("Server: " + message);
+    }
+
+    private void safeDisplayError(String error) {
+        if (onError != null) {
+            onError.accept(error);
+        }
+        Logger.error("Server: " + error);
+    }
+    
+    // Event notification methods for MVC compliance
+    private void notifyError(String error) {
+        if (onError != null) {
+            onError.accept(error);
+        }
+        Logger.error("Server: " + error);
+    }
+    
+    private void notifyStatus(String status) {
+        if (onStatus != null) {
+            onStatus.accept(status);
+        }
+        Logger.info("Server: " + status);
+    }
+    
+    private void notifyAuthenticationResult(String username, boolean success, String message) {
+        if (onAuthenticationResult != null) {
+            onAuthenticationResult.accept(username + " - " + (success ? "SUCCESS" : "FAILED") + ": " + message);
+        }
+        Logger.info("Server: Authentication " + (success ? "SUCCESS" : "FAILED") + " for " + username + ": " + message);
+    }
+    
+    private void notifyServiceRequest(String username, String serviceType) {
+        if (onServiceRequest != null) {
+            onServiceRequest.accept(username + " requested " + serviceType);
+        }
+        Logger.info("Server: " + username + " requested " + serviceType);
+    }
+    
+    private void notifyFileTransferProgress(String filename, long bytesTransferred, long totalBytes) {
+        if (onFileTransferProgress != null) {
+            int percentage = (int) ((bytesTransferred * 100) / totalBytes);
+            onFileTransferProgress.accept(filename + " - " + percentage + "%");
+        }
+        Logger.info("Server: File transfer " + filename + " - " + bytesTransferred + "/" + totalBytes + " bytes");
+    }
+    
+    private void notifyShellCommand(String username, String command) {
+        if (onShellCommand != null) {
+            onShellCommand.accept(username + " executed: " + command);
+        }
+        Logger.info("Server: " + username + " executed: " + command);
+    }
+    
+    // Event handler setters
+    public void setOnError(Consumer<String> onError) {
+        this.onError = onError;
+    }
+    
+    public void setOnStatus(Consumer<String> onStatus) {
+        this.onStatus = onStatus;
+    }
+    
+    public void setOnAuthenticationResult(Consumer<String> onAuthenticationResult) {
+        this.onAuthenticationResult = onAuthenticationResult;
+    }
+    
+    public void setOnServiceRequest(Consumer<String> onServiceRequest) {
+        this.onServiceRequest = onServiceRequest;
+    }
+    
+    public void setOnFileTransferProgress(Consumer<String> onFileTransferProgress) {
+        this.onFileTransferProgress = onFileTransferProgress;
+    }
+    
+    public void setOnShellCommand(Consumer<String> onShellCommand) {
+        this.onShellCommand = onShellCommand;
     }
 } 

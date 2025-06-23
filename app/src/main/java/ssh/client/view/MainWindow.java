@@ -15,8 +15,12 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
+import javafx.scene.control.ScrollPane;
 import java.util.function.Consumer;
 import java.io.File;
+import ssh.model.utils.Logger;
 
 /**
  * Handles the main SSH terminal interface.
@@ -25,8 +29,9 @@ import java.io.File;
 public class MainWindow {
     private final Stage primaryStage;
     
-    // UI Components
-    private TextArea terminalOutput;
+    // UI Components - Using TextFlow for styled text display
+    private ScrollPane terminalScrollPane;
+    private TextFlow terminalOutput;
     private ShellInputField commandInput;
     private String currentWorkingDirectory = "~";
     
@@ -43,6 +48,7 @@ public class MainWindow {
     private Consumer<String> onCommandEntered;
     private Runnable onFileTransfer;
     private Runnable onDisconnect;
+    private java.util.function.Supplier<String> workingDirectoryProvider;
     
     // Add fields for file transfer and user management consumers
     private Consumer<File> onFileUploadRequested;
@@ -60,11 +66,16 @@ public class MainWindow {
     
     public MainWindow(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        createMainWindow();
+        
+        if (!Platform.isFxApplicationThread()) {
+            Platform.runLater(this::createUI);
+        } else {
+            createUI();
+        }
     }
     
-    private void createMainWindow() {
-        System.out.println("DEBUG: Creating main window on FX thread");
+    private void createUI() {
+        Logger.debug("Creating main window on FX thread");
         
         // Header bar
         headerBar = new HBox();
@@ -99,31 +110,45 @@ public class MainWindow {
         headerBar.getChildren().addAll(appName, statusDot, userLabel, spacer, burgerButton);
         headerBar.setSpacing(0);
 
-        // Terminal output area: direct, edge-to-edge
-        terminalOutput = new TextArea();
-        terminalOutput.setEditable(false);
-        terminalOutput.setWrapText(true);
-        terminalOutput.setMouseTransparent(false);
-        terminalOutput.setFocusTraversable(true);
-        terminalOutput.getStyleClass().add("ssh-terminal-area");
-        terminalOutput.getStylesheets().add(getClass().getResource("/terminal.css").toExternalForm());
-        terminalOutput.appendText("SSH Terminal Connected\n");
-        terminalOutput.appendText("Type commands to execute on the server.\n\n");
+        // Terminal output area: Using TextFlow for styled text display
+        terminalOutput = new TextFlow();
+        terminalOutput.setStyle("-fx-background-color: #181c22; -fx-padding: 8px;");
+        terminalOutput.setLineSpacing(2);
+        
+        // Wrap TextFlow in ScrollPane
+        terminalScrollPane = new ScrollPane(terminalOutput);
+        terminalScrollPane.setFitToWidth(true);
+        terminalScrollPane.setFitToHeight(true);
+        terminalScrollPane.setStyle("-fx-background-color: #181c22; -fx-background: #181c22;");
+        terminalScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        terminalScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        
+        // Add initial content
+        addStyledText("SSH Terminal Connected\n", "info");
+        addStyledText("Type commands to execute on the server.\n\n", "info");
         
         // Add context menu for copy
         ContextMenu contextMenu = new ContextMenu();
         MenuItem copyItem = new MenuItem("Copy");
         copyItem.setOnAction(e -> {
-            String selectedText = terminalOutput.getSelectedText();
-            if (selectedText != null && !selectedText.isEmpty()) {
+            // Copy all text from TextFlow (simplified approach)
+            StringBuilder allText = new StringBuilder();
+            for (javafx.scene.Node node : terminalOutput.getChildren()) {
+                if (node instanceof Text) {
+                    allText.append(((Text) node).getText());
+                }
+            }
+            if (allText.length() > 0) {
                 javafx.scene.input.Clipboard clipboard = javafx.scene.input.Clipboard.getSystemClipboard();
                 javafx.scene.input.ClipboardContent content = new javafx.scene.input.ClipboardContent();
-                content.putString(selectedText);
+                content.putString(allText.toString());
                 clipboard.setContent(content);
             }
         });
-        contextMenu.getItems().add(copyItem);
-        terminalOutput.setContextMenu(contextMenu);
+        MenuItem clearItem = new MenuItem("Clear Terminal");
+        clearItem.setOnAction(e -> clearTerminal());
+        contextMenu.getItems().addAll(copyItem, clearItem);
+        terminalScrollPane.setContextMenu(contextMenu);
 
         // Command input area (full width, flat)
         HBox inputBar = new HBox(0);
@@ -143,7 +168,7 @@ public class MainWindow {
         // Main layout
         BorderPane mainLayout = new BorderPane();
         mainLayout.setTop(headerBar);
-        mainLayout.setCenter(terminalOutput);
+        mainLayout.setCenter(terminalScrollPane);
         mainLayout.setBottom(inputBar);
         mainLayout.setStyle("-fx-background-color: #181c22;");
 
@@ -157,7 +182,7 @@ public class MainWindow {
         // Keyboard shortcuts
         scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.isControlDown() && event.getCode() == KeyCode.L) {
-                terminalOutput.clear();
+                clearTerminal();
                 event.consume();
             } else if (event.isControlDown() && event.getCode() == KeyCode.U) {
                 handleFileTransfer();
@@ -180,11 +205,57 @@ public class MainWindow {
         primaryStage.toFront();
     }
     
+    private void addStyledText(String text, String style) {
+        Platform.runLater(() -> {
+            Text styledText = new Text(text);
+            styledText.setStyle("-fx-font-family: 'JetBrains Mono', 'Fira Mono', 'Consolas', monospace; -fx-font-size: 15px;");
+            
+            switch (style) {
+                case "command":
+                    styledText.setStyle(styledText.getStyle() + " -fx-fill: #3498db; -fx-font-weight: bold;");
+                    break;
+                case "output":
+                    styledText.setStyle(styledText.getStyle() + " -fx-fill: #e0e6ed;");
+                    break;
+                case "error":
+                    styledText.setStyle(styledText.getStyle() + " -fx-fill: #e74c3c;");
+                    break;
+                case "success":
+                    styledText.setStyle(styledText.getStyle() + " -fx-fill: #2ecc71;");
+                    break;
+                case "info":
+                    styledText.setStyle(styledText.getStyle() + " -fx-fill: #f39c12;");
+                    break;
+                case "prompt":
+                    styledText.setStyle(styledText.getStyle() + " -fx-fill: #95a5a6;");
+                    break;
+                default:
+                    styledText.setStyle(styledText.getStyle() + " -fx-fill: #e0e6ed;");
+            }
+            
+            terminalOutput.getChildren().add(styledText);
+            scrollToBottom();
+        });
+    }
+    
+    private void clearTerminal() {
+        Platform.runLater(() -> {
+            terminalOutput.getChildren().clear();
+            addStyledText("Terminal cleared.\n", "info");
+        });
+    }
+    
+    private void scrollToBottom() {
+        Platform.runLater(() -> {
+            terminalScrollPane.setVvalue(1.0);
+        });
+    }
+    
     private void sendCommand() {
         String command = commandInput.getCommand();
         if (!command.trim().isEmpty()) {
             if (command.trim().equalsIgnoreCase("cls")) {
-                terminalOutput.clear();
+                clearTerminal();
                 commandInput.clearCommand();
                 return;
             }
@@ -237,51 +308,36 @@ public class MainWindow {
     
     public void displayShellOutput(String output) {
         Platform.runLater(() -> {
-            String prompt = formatShellPrompt(currentWorkingDirectory);
-            terminalOutput.appendText(prompt);
             if (output != null && !output.isEmpty()) {
-                terminalOutput.appendText(output);
+                addStyledText(output + "\n", "output");
             }
-            Platform.runLater(() -> {
-                terminalOutput.positionCaret(terminalOutput.getLength());
-                terminalOutput.setScrollTop(Double.MAX_VALUE);
-            });
+            scrollToBottom();
         });
     }
     
     public void displayShellCommand(String command, String output) {
         Platform.runLater(() -> {
             String prompt = formatShellPrompt(currentWorkingDirectory);
-            String commandLine = prompt + command + "\n";
-            terminalOutput.appendText(commandLine);
+            // Add prompt in gray color
+            addStyledText(prompt, "prompt");
+            // Add command in blue color
+            addStyledText(command + "\n", "command");
             if (output != null && !output.isEmpty()) {
-                // Only output the result, not the prompt again
-                terminalOutput.appendText(output.trim() + "\n");
+                // Add output in white color
+                addStyledText(output.trim() + "\n", "output");
             }
-            Platform.runLater(() -> {
-                terminalOutput.positionCaret(terminalOutput.getLength());
-                terminalOutput.setScrollTop(Double.MAX_VALUE);
-            });
         });
     }
     
     public void displayMessage(String message) {
         Platform.runLater(() -> {
-            terminalOutput.appendText(message + "\n");
-            Platform.runLater(() -> {
-                terminalOutput.positionCaret(terminalOutput.getLength());
-                terminalOutput.setScrollTop(Double.MAX_VALUE);
-            });
+            addStyledText(message + "\n", "info");
         });
     }
     
     public void displayError(String error) {
         Platform.runLater(() -> {
-            terminalOutput.appendText("ERROR: " + error + "\n");
-            Platform.runLater(() -> {
-                terminalOutput.positionCaret(terminalOutput.getLength());
-                terminalOutput.setScrollTop(Double.MAX_VALUE);
-            });
+            addStyledText(error + "\n", "error");
         });
     }
     
@@ -304,19 +360,32 @@ public class MainWindow {
     public void showAuthenticationResult(boolean success, String message) {
         Platform.runLater(() -> {
             if (success) {
-                terminalOutput.appendText("Authentication successful: " + message + "\n");
+                addStyledText(message + "\n", "success");
             } else {
-                terminalOutput.appendText("Authentication failed: " + message + "\n");
+                addStyledText(message + "\n", "error");
             }
-            Platform.runLater(() -> {
-                terminalOutput.positionCaret(terminalOutput.getLength());
-                terminalOutput.setScrollTop(Double.MAX_VALUE);
-            });
+            scrollToBottom();
         });
     }
 
     public void setOnCommandEntered(Consumer<String> onCommandEntered) {
-        this.onCommandEntered = onCommandEntered;
+        this.onCommandEntered = command -> {
+            // Capture the working directory BEFORE processing the command
+            String currentDir = workingDirectoryProvider != null ? workingDirectoryProvider.get() : currentWorkingDirectory;
+            String prompt = formatShellPrompt(currentDir);
+            // Display prompt and command before sending
+            Platform.runLater(() -> {
+                // Add prompt in gray color
+                addStyledText(prompt, "prompt");
+                // Add command in blue color
+                addStyledText(command + "\n", "command");
+            });
+            onCommandEntered.accept(command);
+        };
+    }
+
+    public void setWorkingDirectoryProvider(java.util.function.Supplier<String> workingDirectoryProvider) {
+        this.workingDirectoryProvider = workingDirectoryProvider;
     }
 
     public void updateHeader(String username, String host, int port, String sessionId) {

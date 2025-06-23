@@ -17,105 +17,82 @@ public class CreateVerifiedUser {
     /**
      * Create a new verified user with all necessary data.
      */
-    public static void createUser(String username, String password) throws Exception {
-        System.out.println("Creating new verified user: " + username);
+    public static void createUser(String username, String password) {
+        Logger.info("Creating new verified user: " + username);
         
-        // Create directories if they don't exist
-        String clientKeysDir = "data/client/client_keys";
-        String serverKeysDir = "data/server/authorized_keys";
-        String serverUsersFile = "data/server/users.properties";
-        String clientCredentialsFile = "config/credentials.properties";
-        
-        File clientDir = new File(clientKeysDir);
-        File serverDir = new File(serverKeysDir);
-        File serverUsersDir = new File(serverUsersFile).getParentFile();
-        
-        clientDir.mkdirs();
-        serverDir.mkdirs();
-        serverUsersDir.mkdirs();
-        
-        // 1. Generate key pair for the user
-        System.out.println("  Generating key pair for user: " + username);
-        String keyName = username + "_rsa";
-        String privateKeyPath = clientKeysDir + File.separator + keyName;
-        String publicKeyPath = clientKeysDir + File.separator + keyName + ".pub";
-        
-        KeyManager.generateKeyPair(keyName, clientKeysDir);
-        
-        // 2. Add user to server's user database
-        System.out.println("  Adding user to server database: " + username);
-        addUserToServer(username, password, serverUsersFile);
-        
-        // 3. Add public key to server's authorized keys
-        System.out.println("  Adding public key to server for user: " + username);
-        KeyManager.addAuthorizedKey(username, publicKeyPath, serverKeysDir);
-        
-        // 4. Add user to client credentials
-        System.out.println("  Adding user to client credentials: " + username);
-        addUserToClientCredentials(username, password, clientCredentialsFile);
-        
-        // 5. Validate the setup
-        System.out.println("  Validating user setup...");
-        boolean isValid = validateUserSetup(username, privateKeyPath, publicKeyPath, serverUsersFile);
-        
-        if (isValid) {
-            System.out.println("  ✓ User '" + username + "' created successfully!");
-            System.out.println("  ✓ Key pair generated and validated");
-            System.out.println("  ✓ User added to server database");
-            System.out.println("  ✓ Public key authorized on server");
-            System.out.println("  ✓ User added to client credentials");
-        } else {
-            throw new Exception("User setup validation failed for " + username);
+        try {
+            // Step 1: Generate key pair for the user
+            Logger.info("  Generating key pair for user: " + username);
+            String keyName = username + "_rsa";
+            String clientKeysDir = "data/client/client_keys";
+            KeyManager.generateKeyPair(keyName, clientKeysDir);
+            
+            // Step 2: Add user to server database
+            Logger.info("  Adding user to server database: " + username);
+            UserStore userStore = new UserStore("data/server/users.properties", "data/server/authorized_keys");
+            userStore.addUser(username, password); // Use provided password
+            
+            // Step 3: Add public key to server for the user
+            Logger.info("  Adding public key to server for user: " + username);
+            String publicKeyPath = clientKeysDir + "/" + keyName + ".pub";
+            String serverKeysDir = "data/server/authorized_keys/" + username;
+            KeyManager.addAuthorizedKey(username, publicKeyPath, serverKeysDir);
+            
+            // Step 4: Add user to client credentials
+            Logger.info("  Adding user to client credentials: " + username);
+            CredentialsManager credentialsManager = new CredentialsManager("config/credentials.properties");
+            credentialsManager.addUser(username, password); // Use provided password
+            
+            // Step 5: Validate the setup
+            Logger.info("  Validating user setup...");
+            boolean isValid = validateUserSetup(username);
+            
+            if (isValid) {
+                Logger.info("  ✓ User '" + username + "' created successfully!");
+                Logger.info("  ✓ Key pair generated and validated");
+                Logger.info("  ✓ User added to server database");
+                Logger.info("  ✓ Public key authorized on server");
+                Logger.info("  ✓ User added to client credentials");
+            } else {
+                Logger.error("  ✗ User creation failed validation");
+            }
+            
+        } catch (Exception e) {
+            Logger.error("Failed to create user: " + e.getMessage());
+            e.printStackTrace();
         }
-    }
-    
-    /**
-     * Add a user to the server's user database.
-     */
-    private static void addUserToServer(String username, String password, String serverUsersFile) throws Exception {
-        // Create a temporary UserStore to add the user
-        ssh.model.auth.UserStore userStore = new ssh.model.auth.UserStore(serverUsersFile, "data/server/authorized_keys");
-        userStore.addUser(username, password);
-        userStore.saveUsers();
-    }
-    
-    /**
-     * Add a user to the client credentials file.
-     */
-    private static void addUserToClientCredentials(String username, String password, String credentialsFile) throws Exception {
-        CredentialsManager credentialsManager = new CredentialsManager(credentialsFile);
-        credentialsManager.addUser(username, password);
-        credentialsManager.saveCredentials();
     }
     
     /**
      * Validate that the user setup is complete and working.
      */
-    private static boolean validateUserSetup(String username, String privateKeyPath, String publicKeyPath, String serverUsersFile) {
+    private static boolean validateUserSetup(String username) {
         try {
-            // 1. Validate key pair
-            boolean keyPairValid = KeyManager.validateKeyPair(privateKeyPath, publicKeyPath);
-            if (!keyPairValid) {
-                System.out.println("  ✗ Key pair validation failed");
+            // Validate key pair
+            String privateKeyPath = "data/client/client_keys/" + username + "_rsa";
+            String publicKeyPath = "data/client/client_keys/" + username + "_rsa.pub";
+            
+            if (!KeyManager.validateKeyPair(privateKeyPath, publicKeyPath)) {
+                Logger.error("  ✗ Key pair validation failed");
                 return false;
             }
             
-            // 2. Check if user exists in server database
-            ssh.model.auth.UserStore userStore = new ssh.model.auth.UserStore(serverUsersFile, "data/server/authorized_keys");
-            boolean userExists = userStore.userExists(username);
-            if (!userExists) {
-                System.out.println("  ✗ User not found in server database");
+            // Validate user exists in server database
+            UserStore userStore = new UserStore("data/server/users.properties", "data/server/authorized_keys");
+            if (!userStore.userExists(username)) {
+                Logger.error("  ✗ User not found in server database");
                 return false;
             }
             
-            // 3. Check if public key is authorized
-            java.util.List<java.security.PublicKey> authorizedKeys = userStore.getAuthorizedKeys(username);
-            if (authorizedKeys.isEmpty()) {
-                System.out.println("  ✗ No authorized keys found for user");
+            // Validate authorized keys exist
+            String authorizedKeysDir = "data/server/authorized_keys/" + username;
+            java.io.File keysDir = new java.io.File(authorizedKeysDir);
+            if (!keysDir.exists() || keysDir.listFiles() == null || keysDir.listFiles().length == 0) {
+                Logger.error("  ✗ No authorized keys found for user");
                 return false;
             }
             
-            // 4. Check if user exists in client credentials
+            // Validate user exists in client credentials
             CredentialsManager credentialsManager = new CredentialsManager("config/credentials.properties");
             String[] availableUsers = credentialsManager.getAvailableUsers();
             boolean foundInClient = false;
@@ -126,14 +103,14 @@ public class CreateVerifiedUser {
                 }
             }
             if (!foundInClient) {
-                System.out.println("  ✗ User not found in client credentials");
+                Logger.error("  ✗ User not found in client credentials");
                 return false;
             }
             
             return true;
             
         } catch (Exception e) {
-            System.out.println("  ✗ Validation error: " + e.getMessage());
+            Logger.error("  ✗ Validation error: " + e.getMessage());
             return false;
         }
     }

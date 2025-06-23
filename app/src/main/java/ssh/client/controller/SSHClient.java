@@ -67,12 +67,12 @@ public class SSHClient {
      */
     public void start() {
         try {
-            System.out.println("DEBUG: SSHClient.start() called");
+            Logger.debug("SSHClient.start() called");
             
             // For GUI clients, don't start the connection process immediately
             // The GUI will handle user input and call startConnection() when ready
             if (ui instanceof ssh.client.view.JavaFXClientUI) {
-                System.out.println("DEBUG: GUI client - waiting for user input before starting connection");
+                Logger.debug("GUI client - waiting for user input before starting connection");
                 return;
             }
             
@@ -99,7 +99,7 @@ public class SSHClient {
      */
     public void startConnection() throws Exception {
         try {
-            System.out.println("DEBUG: startConnection() called");
+            Logger.debug("startConnection() called");
             
             // Get server information first (IP and port)
             ui.showConnectionProgress("Requesting server connection details...");
@@ -111,60 +111,60 @@ public class SSHClient {
             ui.showConnectionProgress("Requesting user credentials...");
             // Use a temporary manager to get available users before full connection
             CredentialsManager tempManager = new CredentialsManager("config/credentials.properties");
-            System.out.println("DEBUG: Got credentials manager, requesting auth");
+            Logger.debug("Got credentials manager, requesting auth");
             this.credentials = ui.getAuthCredentials(tempManager.getAvailableUsers());
 
             if (credentials == null) {
-                System.out.println("DEBUG: Authentication cancelled by user");
+                Logger.debug("Authentication cancelled by user");
                 throw new Exception("Authentication cancelled.");
             }
 
-            System.out.println("DEBUG: Authentication successful for user: " + credentials.getUsername());
+            Logger.debug("Authentication successful for user: " + credentials.getUsername());
             
             // Set the username in server info
             this.serverInfo.setUsername(credentials.getUsername());
             
             // Create connection
-            System.out.println("DEBUG: Creating client connection");
-            connection = new ClientConnection(serverInfo, credentials, ui);
+            Logger.debug("Creating client connection");
+            connection = new ClientConnection(serverInfo, credentials);
             // Wire up result handler for shell output
             connection.setOnResult(ui::displayShellOutput);
             
             // Connect to server
             ui.showConnectionProgress("Connecting to server...");
-            System.out.println("DEBUG: Attempting to connect to server");
+            Logger.debug("Attempting to connect to server");
             if (!connection.connect()) {
-                System.out.println("DEBUG: Connection failed");
+                Logger.debug("Connection failed");
                 throw new Exception("Failed to connect to server");
             }
             
-            System.out.println("DEBUG: Connection successful");
+            Logger.debug("Connection successful");
             ui.showConnectionStatus(true);
             
             // Perform key exchange
             ui.showConnectionProgress("Performing key exchange...");
-            System.out.println("DEBUG: Starting key exchange");
+            Logger.debug("Starting key exchange");
             if (!connection.performKeyExchange()) {
-                System.out.println("DEBUG: Key exchange failed");
+                Logger.debug("Key exchange failed");
                 throw new Exception("Key exchange failed");
             }
             
-            System.out.println("DEBUG: Key exchange successful");
+            Logger.debug("Key exchange successful");
             
             // Authenticate
             ui.showConnectionProgress("Authenticating...");
-            System.out.println("DEBUG: Starting authentication");
+            Logger.debug("Starting authentication");
             if (!connection.authenticate()) {
-                System.out.println("DEBUG: Authentication failed");
+                Logger.debug("Authentication failed");
                 throw new Exception("Authentication failed");
             }
             
-            System.out.println("DEBUG: Authentication successful");
+            Logger.debug("Authentication successful");
             ui.showAuthenticationResult(true, "Authentication successful");
             
             // For GUI clients, transition to main window after authentication
             if (ui instanceof ssh.client.view.JavaFXClientUI) {
-                System.out.println("DEBUG: GUI client - authentication successful, showing main window");
+                Logger.debug("GUI client - authentication successful, showing main window");
                 
                 // Start message handling thread for GUI clients
                 handleIncomingMessages();
@@ -188,7 +188,7 @@ public class SSHClient {
             }
             
             // Main client loop (for console clients)
-            System.out.println("DEBUG: Starting main client loop");
+            Logger.debug("Starting main client loop");
             mainLoop();
             
         } catch (Exception e) {

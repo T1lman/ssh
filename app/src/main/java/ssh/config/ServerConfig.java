@@ -1,4 +1,4 @@
-package ssh.server.view;
+package ssh.config;
 
 import java.io.FileInputStream;
 import java.io.IOException;

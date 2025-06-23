@@ -6,7 +6,7 @@ import ssh.model.crypto.RSAKeyGenerator;
 import ssh.model.utils.Logger;
 import ssh.server.model.ServerConnection;
 import ssh.server.view.ConsoleServerUI;
-import ssh.server.view.ServerConfig;
+import ssh.config.ServerConfig;
 import ssh.server.view.ServerUI;
 
 import java.io.IOException;
@@ -121,8 +121,58 @@ public class SSHServer {
                 
                 // Handle client in separate thread
                 ServerConnection connection = new ServerConnection(
-                    clientSocket, authManager, serverKeyPair, ui, config
+                    clientSocket, authManager, serverKeyPair, config
                 );
+                
+                // Wire up event handlers for MVC compliance
+                connection.setOnError(error -> ui.displayError(error));
+                connection.setOnStatus(status -> ui.displayMessage(status));
+                connection.setOnAuthenticationResult(result -> {
+                    // Parse the result string: "username - SUCCESS/FAILED: message"
+                    String[] parts = result.split(" - ");
+                    if (parts.length >= 2) {
+                        String username = parts[0];
+                        String statusPart = parts[1];
+                        boolean success = statusPart.startsWith("SUCCESS");
+                        String message = statusPart.substring(statusPart.indexOf(":") + 1).trim();
+                        ui.showAuthenticationResult(username, success, message);
+                    }
+                });
+                connection.setOnServiceRequest(result -> {
+                    // Parse the result string: "username requested serviceType"
+                    String[] parts = result.split(" requested ");
+                    if (parts.length >= 2) {
+                        String username = parts[0];
+                        String serviceType = parts[1];
+                        ui.showServiceRequest(username, serviceType);
+                    }
+                });
+                connection.setOnFileTransferProgress(result -> {
+                    // Parse the result string: "filename - percentage%"
+                    String[] parts = result.split(" - ");
+                    if (parts.length >= 2) {
+                        String filename = parts[0];
+                        String percentageStr = parts[1].replace("%", "");
+                        try {
+                            int percentage = Integer.parseInt(percentageStr);
+                            long totalBytes = 1000; // Default total
+                            long bytesTransferred = (percentage * totalBytes) / 100;
+                            ui.showFileTransferProgress(filename, bytesTransferred, totalBytes);
+                        } catch (NumberFormatException e) {
+                            ui.showFileTransferProgress(result, 0, 0);
+                        }
+                    }
+                });
+                connection.setOnShellCommand(result -> {
+                    // Parse the result string: "username executed: command"
+                    String[] parts = result.split(" executed: ");
+                    if (parts.length >= 2) {
+                        String username = parts[0];
+                        String command = parts[1];
+                        ui.showShellCommand(username, command);
+                    }
+                });
+                
                 threadPool.submit(connection);
                 
             } catch (IOException e) {
@@ -173,16 +223,13 @@ public class SSHServer {
         // Create UI
         ServerUI ui = new ConsoleServerUI();
         
-        // Get configuration from user
-        ServerConfig config = ui.getConfigFromUser();
-        
-        // Create and start server
-        SSHServer server = new SSHServer(config, ui);
+        // Create MVC controller
+        SSHServerController controller = new SSHServerController(ui);
         
         // Add shutdown hook
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             Logger.info("Shutdown signal received");
-            server.stop();
+            controller.stop();
             Logger.close();
         }));
         
@@ -191,6 +238,6 @@ public class SSHServer {
         Logger.info("Log file: " + Logger.getLogFile());
         
         // Start the server
-        server.start();
+        controller.start();
     }
 } 

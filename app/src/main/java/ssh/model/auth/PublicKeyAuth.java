@@ -1,6 +1,7 @@
 package ssh.model.auth;
 
 import ssh.model.crypto.RSAKeyGenerator;
+import ssh.model.utils.Logger;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -22,50 +23,50 @@ public class PublicKeyAuth {
     public boolean authenticate(String username, PublicKey clientPublicKey, byte[] signature, byte[] sessionData) {
         // Check if user exists
         if (!userStore.userExists(username)) {
-            System.err.println("PublicKeyAuth: User does not exist: " + username);
+            Logger.error("PublicKeyAuth: User does not exist: " + username);
             return false;
         }
 
         // Get user's authorized keys
         List<PublicKey> authorizedKeys = userStore.getAuthorizedKeys(username);
-        System.err.println("PublicKeyAuth: Found " + authorizedKeys.size() + " authorized keys for user: " + username);
+        Logger.info("PublicKeyAuth: Found " + authorizedKeys.size() + " authorized keys for user: " + username);
         
         // Check if the client's public key is in the authorized keys
         boolean keyAuthorized = false;
         String clientKeyString = null;
         try {
             clientKeyString = RSAKeyGenerator.getPublicKeyString(clientPublicKey);
-            System.err.println("PublicKeyAuth: Client public key: " + clientKeyString);
+            Logger.debug("PublicKeyAuth: Client public key: " + clientKeyString);
         } catch (Exception e) {
-            System.err.println("PublicKeyAuth: Error getting client key string: " + e.getMessage());
+            Logger.error("PublicKeyAuth: Error getting client key string: " + e.getMessage());
         }
         
         for (PublicKey authorizedKey : authorizedKeys) {
             try {
                 String authorizedKeyString = RSAKeyGenerator.getPublicKeyString(authorizedKey);
-                System.err.println("PublicKeyAuth: Comparing with authorized key: " + authorizedKeyString);
+                Logger.debug("PublicKeyAuth: Comparing with authorized key: " + authorizedKeyString);
                 if (keysMatch(clientPublicKey, authorizedKey)) {
                     keyAuthorized = true;
-                    System.err.println("PublicKeyAuth: Key match found!");
+                    Logger.info("PublicKeyAuth: Key match found!");
                     break;
                 }
             } catch (Exception e) {
-                System.err.println("PublicKeyAuth: Error comparing keys: " + e.getMessage());
+                Logger.error("PublicKeyAuth: Error comparing keys: " + e.getMessage());
             }
         }
 
         if (!keyAuthorized) {
-            System.err.println("PublicKeyAuth: No matching authorized key found for user: " + username);
+            Logger.error("PublicKeyAuth: No matching authorized key found for user: " + username);
             return false;
         }
 
         // Verify the signature
         try {
             boolean signatureValid = RSAKeyGenerator.verify(sessionData, signature, clientPublicKey);
-            System.err.println("PublicKeyAuth: Signature verification result: " + signatureValid);
+            Logger.info("PublicKeyAuth: Signature verification result: " + signatureValid);
             return signatureValid;
         } catch (Exception e) {
-            System.err.println("Error verifying signature: " + e.getMessage());
+            Logger.error("Error verifying signature: " + e.getMessage());
             return false;
         }
     }

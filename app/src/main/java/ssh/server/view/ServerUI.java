@@ -1,6 +1,6 @@
 package ssh.server.view;
 
-import ssh.server.view.ServerConfig;
+import ssh.config.ServerConfig;
 
 /**
  * Interface for server user interface implementations.
