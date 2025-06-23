@@ -88,8 +88,8 @@ public class MainWindow {
         terminalOutput = new TextArea();
         terminalOutput.setEditable(false);
         terminalOutput.setWrapText(true);
-        terminalOutput.setStyle("-fx-control-inner-background: #181c22; -fx-text-fill: #e0e6ed; -fx-font-family: 'JetBrains Mono', 'Fira Mono', 'Consolas', monospace; -fx-font-size: 15px; -fx-background-radius: 0; -fx-border-radius: 0; -fx-border-width: 1px; -fx-border-color: #22262c; -fx-padding: 18 18 18 18; -fx-line-spacing: 4px; -fx-background-insets: 0; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;");
-        terminalOutput.setFocusTraversable(false);
+        terminalOutput.getStyleClass().add("ssh-terminal-area");
+        terminalOutput.getStylesheets().add(getClass().getResource("/terminal.css").toExternalForm());
         terminalOutput.appendText("SSH Terminal Connected\n");
         terminalOutput.appendText("Type commands to execute on the server.\n\n");
 
@@ -208,53 +208,51 @@ public class MainWindow {
     
     public void displayShellOutput(String output) {
         Platform.runLater(() -> {
-            // Add the shell prompt with current working directory
             String prompt = formatShellPrompt(currentWorkingDirectory);
             terminalOutput.appendText(prompt);
-            
-            // Add the output
             if (output != null && !output.isEmpty()) {
                 terminalOutput.appendText(output);
             }
-            
-            // Auto-scroll to bottom
-            terminalOutput.setScrollTop(Double.MAX_VALUE);
+            Platform.runLater(() -> {
+                terminalOutput.positionCaret(terminalOutput.getLength());
+                terminalOutput.setScrollTop(Double.MAX_VALUE);
+            });
         });
     }
     
     public void displayShellCommand(String command, String output) {
         Platform.runLater(() -> {
-            // Add the shell prompt with current working directory and command
             String prompt = formatShellPrompt(currentWorkingDirectory);
             String commandLine = prompt + command + "\n";
-            
-            // Add the command line (commands will appear in the terminal's default color)
             terminalOutput.appendText(commandLine);
-            
-            // Add the output
             if (output != null && !output.isEmpty()) {
                 terminalOutput.appendText(output);
             }
-            
-            // Add a subtle separator line after command output
             terminalOutput.appendText("\n");
-            
-            // Auto-scroll to bottom
-            terminalOutput.setScrollTop(Double.MAX_VALUE);
+            Platform.runLater(() -> {
+                terminalOutput.positionCaret(terminalOutput.getLength());
+                terminalOutput.setScrollTop(Double.MAX_VALUE);
+            });
         });
     }
     
     public void displayMessage(String message) {
         Platform.runLater(() -> {
             terminalOutput.appendText(message + "\n");
-            terminalOutput.setScrollTop(Double.MAX_VALUE);
+            Platform.runLater(() -> {
+                terminalOutput.positionCaret(terminalOutput.getLength());
+                terminalOutput.setScrollTop(Double.MAX_VALUE);
+            });
         });
     }
     
     public void displayError(String error) {
         Platform.runLater(() -> {
             terminalOutput.appendText("ERROR: " + error + "\n");
-            terminalOutput.setScrollTop(Double.MAX_VALUE);
+            Platform.runLater(() -> {
+                terminalOutput.positionCaret(terminalOutput.getLength());
+                terminalOutput.setScrollTop(Double.MAX_VALUE);
+            });
         });
     }
     
@@ -281,7 +279,10 @@ public class MainWindow {
             } else {
                 terminalOutput.appendText("Authentication failed: " + message + "\n");
             }
-            terminalOutput.setScrollTop(Double.MAX_VALUE);
+            Platform.runLater(() -> {
+                terminalOutput.positionCaret(terminalOutput.getLength());
+                terminalOutput.setScrollTop(Double.MAX_VALUE);
+            });
         });
     }
 } 

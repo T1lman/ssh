@@ -287,11 +287,15 @@ public class ClientConnection {
             this.workingDirectory = shellResult.getWorkingDirectory();
         }
 
-        if (shellResult.getExitCode() == 0) {
-            return shellResult.getStdout();
-        } else {
-            return shellResult.getStderr();
+        // Always return both stdout and stderr concatenated
+        StringBuilder output = new StringBuilder();
+        if (shellResult.getStdout() != null && !shellResult.getStdout().isEmpty()) {
+            output.append(shellResult.getStdout());
         }
+        if (shellResult.getStderr() != null && !shellResult.getStderr().isEmpty()) {
+            output.append(shellResult.getStderr());
+        }
+        return output.toString();
     }
 
     /**

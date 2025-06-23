@@ -1,0 +1,43 @@
+/* terminal.css */
+.ssh-terminal-area {
+    -fx-control-inner-background: #181c22;
+    /* Layered backgrounds: outer (dark), bezel (blue), inner (dark) */
+    -fx-background-color: #181c22;
+    -fx-background-insets: 0, 1, 3;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-border-width: 1px;
+    -fx-border-color: #888;
+    -fx-border-style: solid;
+    -fx-border-insets: 0;
+    -fx-padding: 6 8 6 8;
+    -fx-line-spacing: 4px;
+    -fx-focus-color: #23272e;
+    -fx-faint-focus-color: #23272e;
+    -fx-highlight-fill: #181c22;
+    -fx-highlight-text-fill: #e0e6ed;
+    -fx-prompt-text-fill: #888;
+    -fx-effect: null;
+    -fx-text-fill: #e0e6ed;
+    -fx-font-family: 'JetBrains Mono', 'Fira Mono', 'Consolas', monospace;
+    -fx-font-size: 15px;
+}
+.ssh-terminal-area:focused,
+.ssh-terminal-area:disabled,
+.ssh-terminal-area:readonly {
+    -fx-border-color: #888;
+    -fx-background-color: #181c22;
+}
+/* Hide the 4 white dots (resize grip) in the TextArea */
+.ssh-terminal-area .corner {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-shape: "";
+    -fx-background-insets: 0;
+    -fx-min-width: 0;
+    -fx-min-height: 0;
+    -fx-max-width: 0;
+    -fx-max-height: 0;
+    -fx-opacity: 0;
+    -fx-visibility: hidden;
+} 
