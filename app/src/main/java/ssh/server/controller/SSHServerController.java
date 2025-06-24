@@ -2,8 +2,8 @@ package ssh.server.controller;
 
 import ssh.server.model.SSHServerModel;
 import ssh.server.view.ServerUI;
+import ssh.utils.Logger;
 import ssh.config.ServerConfig;
-import ssh.model.utils.Logger;
 
 /**
  * True MVC Controller for SSH Server - only coordinates between Model and View.

@@ -4,18 +4,19 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.io.TempDir;
+
+import ssh.shared_model.auth.UserStore;
+import ssh.utils.CreateVerifiedUser;
+import ssh.utils.CredentialsManager;
+import ssh.utils.KeyManager;
+import ssh.utils.Logger;
+
 import java.nio.file.Path;
 import java.nio.file.Files;
 import java.io.File;
 import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import ssh.model.utils.KeyManager;
-import ssh.model.auth.UserStore;
-import ssh.model.utils.CredentialsManager;
-import ssh.model.utils.Logger;
-import ssh.model.utils.CreateVerifiedUser;
 
 /**
  * Test for CreateVerifiedUser utility.

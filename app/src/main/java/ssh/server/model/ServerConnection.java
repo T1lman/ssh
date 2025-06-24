@@ -1,23 +1,23 @@
 package ssh.server.model;
 
-import ssh.model.auth.AuthenticationManager;
-import ssh.model.crypto.DiffieHellmanKeyExchange;
-import ssh.model.crypto.RSAKeyGenerator;
-import ssh.model.crypto.SymmetricEncryption;
-import ssh.model.protocol.ProtocolHandler;
-import ssh.model.protocol.Message;
-import ssh.model.protocol.MessageType;
-import ssh.model.protocol.messages.AuthMessage;
-import ssh.model.protocol.messages.KeyExchangeMessage;
-import ssh.model.protocol.messages.ShellMessage;
-import ssh.model.protocol.messages.ServiceMessage;
-import ssh.model.protocol.messages.FileTransferMessage;
-import ssh.model.protocol.messages.ErrorMessage;
-import ssh.model.protocol.messages.ReloadUsersMessage;
-import ssh.model.protocol.messages.DisconnectMessage;
 import ssh.config.ServerConfig;
-import ssh.model.shell.ShellExecutor;
-import ssh.model.utils.Logger;
+import ssh.shared_model.auth.AuthenticationManager;
+import ssh.shared_model.crypto.DiffieHellmanKeyExchange;
+import ssh.shared_model.crypto.RSAKeyGenerator;
+import ssh.shared_model.crypto.SymmetricEncryption;
+import ssh.shared_model.protocol.Message;
+import ssh.shared_model.protocol.MessageType;
+import ssh.shared_model.protocol.ProtocolHandler;
+import ssh.shared_model.protocol.messages.AuthMessage;
+import ssh.shared_model.protocol.messages.DisconnectMessage;
+import ssh.shared_model.protocol.messages.ErrorMessage;
+import ssh.shared_model.protocol.messages.FileTransferMessage;
+import ssh.shared_model.protocol.messages.KeyExchangeMessage;
+import ssh.shared_model.protocol.messages.ReloadUsersMessage;
+import ssh.shared_model.protocol.messages.ServiceMessage;
+import ssh.shared_model.protocol.messages.ShellMessage;
+import ssh.shared_model.shell.ShellExecutor;
+import ssh.utils.Logger;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -314,7 +314,7 @@ public class ServerConnection implements Runnable {
             safeDisplayMessage("Executing shell command: '" + command + "' for user: " + authenticatedUser);
 
             // Execute command using the session-specific executor
-            ssh.model.shell.CommandResult result = shellExecutor.execute(command);
+            ssh.shared_model.shell.CommandResult result = shellExecutor.execute(command);
             Logger.info("Command result: exitCode=" + result.getExitCode() + ", stdout='" + result.getStdout() + "', stderr='" + result.getStderr() + "'");
 
             // Send result back to client

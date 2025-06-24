@@ -6,8 +6,8 @@ import ssh.client.model.ClientConnection;
 import ssh.client.model.SSHClientModel;
 import ssh.client.view.ClientUI;
 import ssh.client.view.ConsoleClientUI;
-import ssh.model.utils.CredentialsManager;
-import ssh.model.utils.Logger;
+import ssh.utils.CredentialsManager;
+import ssh.utils.Logger;
 
 import java.util.function.Consumer;
 
@@ -354,7 +354,7 @@ public class SSHClientController {
     public boolean createUser(String username, String password) {
         try {
             Logger.info("SSHClientController: Creating user: " + username);
-            ssh.model.utils.CreateVerifiedUser.createUser(username, password);
+            ssh.utils.CreateVerifiedUser.createUser(username, password);
             return true;
         } catch (Exception e) {
             Logger.error("SSHClientController: Failed to create user " + username + ": " + e.getMessage());
@@ -369,7 +369,7 @@ public class SSHClientController {
     public boolean deleteUser(String username) {
         try {
             Logger.info("SSHClientController: Deleting user: " + username);
-            ssh.model.utils.DeleteVerifiedUser.deleteUser(username);
+            ssh.utils.DeleteVerifiedUser.deleteUser(username);
             return true;
         } catch (Exception e) {
             Logger.error("SSHClientController: Failed to delete user " + username + ": " + e.getMessage());

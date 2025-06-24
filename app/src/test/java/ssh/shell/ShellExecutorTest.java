@@ -4,15 +4,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import ssh.shared_model.shell.CommandResult;
+import ssh.shared_model.shell.ShellExecutor;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import ssh.model.shell.ShellExecutor;
-import ssh.model.shell.CommandResult;
 
 public class ShellExecutorTest {
 

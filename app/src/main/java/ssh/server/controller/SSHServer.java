@@ -2,7 +2,7 @@ package ssh.server.controller;
 
 import ssh.server.view.ConsoleServerUI;
 import ssh.server.view.ServerUI;
-import ssh.model.utils.Logger;
+import ssh.utils.Logger;
 
 /**
  * Main entry point for the SSH server application.

@@ -3,9 +3,9 @@ package ssh.client;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
-import ssh.model.utils.CredentialsManager;
-import ssh.model.utils.Logger;
 import ssh.client.view.JavaFXClientUI;
+import ssh.utils.CredentialsManager;
+import ssh.utils.Logger;
 import ssh.client.controller.SSHClientController;
 
 public class SSHClientGuiMain extends Application {

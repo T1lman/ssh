@@ -1,7 +1,7 @@
 package ssh.server.view;
 
-import ssh.model.utils.ConsoleInterface;
 import ssh.config.ServerConfig;
+import ssh.utils.ConsoleInterface;
 
 import java.io.Console;
 import java.util.Scanner;

@@ -1,7 +1,8 @@
 package ssh.client.model;
 
-import ssh.model.utils.Logger;
 import java.util.function.Consumer;
+
+import ssh.utils.Logger;
 
 /**
  * True MVC Model - contains all business logic for SSH client operations.

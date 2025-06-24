@@ -11,7 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import ssh.client.model.ServerInfo;
-import ssh.model.utils.CredentialsManager;
+import ssh.utils.CredentialsManager;
 
 import java.util.function.Consumer;
 

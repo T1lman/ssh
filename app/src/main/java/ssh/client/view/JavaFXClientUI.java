@@ -4,8 +4,9 @@ import javafx.application.Platform;
 import javafx.stage.Stage;
 import ssh.client.model.AuthCredentials;
 import ssh.client.model.ServerInfo;
-import ssh.model.utils.CredentialsManager;
-import ssh.model.utils.Logger;
+import ssh.utils.CredentialsManager;
+import ssh.utils.Logger;
+
 import java.util.function.Consumer;
 
 /**

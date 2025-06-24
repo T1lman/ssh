@@ -715,3 +715,131 @@ Zotero
 2025-06-24 16:18:36 INFO: Server: Cleaning up client connection for 127.0.0.1:52168
 2025-06-24 16:18:36 INFO: Server: Cleaning up connection for 127.0.0.1:52168 (user: tilman)
 2025-06-24 16:18:36 INFO: Protocol handler closed
+2025-06-24 17:00:18 INFO: Shutdown signal received
+2025-06-24 17:00:18 INFO: SSHServerController: Stopping server
+2025-06-24 17:00:18 INFO: SSHServerModel: Stopping server
+2025-06-24 17:06:04 INFO: Logger initialized: logs/server.log
+2025-06-24 17:06:04 INFO: SSHServerModel: Created new model instance
+2025-06-24 17:06:04 INFO: SSH Server Starting
+2025-06-24 17:06:04 INFO: Log file: logs/server.log
+2025-06-24 17:06:04 INFO: SSHServerController: Starting server
+2025-06-24 17:06:13 INFO: SSHServerModel: Starting server
+2025-06-24 17:06:26 INFO: Server: Starting client connection handler for 127.0.0.1:53222
+2025-06-24 17:06:26 INFO: Server: Initializing protocol handler
+2025-06-24 17:06:26 INFO: Server: Protocol handler initialized
+2025-06-24 17:06:26 INFO: Server: Starting key exchange
+2025-06-24 17:06:27 INFO: Server: Received key exchange init from null
+2025-06-24 17:06:27 INFO: Server: Received key exchange init from null
+2025-06-24 17:06:27 INFO: Server: Initializing DH key exchange
+2025-06-24 17:06:27 INFO: Server: Generated DH key pair
+2025-06-24 17:06:27 INFO: Server: Set client's public key
+2025-06-24 17:06:27 INFO: Server: Computing shared secret
+2025-06-24 17:06:27 INFO: Server: Computed shared secret, length: 256
+2025-06-24 17:06:27 INFO: Server: Initializing symmetric encryption
+2025-06-24 17:06:27 INFO: Server: Initialized symmetric encryption
+2025-06-24 17:06:27 INFO: Server: Creating key exchange reply message
+2025-06-24 17:06:27 INFO: Server: Created reply message, signing DH public key
+2025-06-24 17:06:27 INFO: Server: Starting RSA signature generation
+2025-06-24 17:06:27 INFO: Server: RSA signature generated, length: 256
+2025-06-24 17:06:27 INFO: Server: Sending key exchange reply
+2025-06-24 17:06:27 INFO: Sending message: KEY_EXCHANGE_REPLY, length: 1783
+2025-06-24 17:06:27 INFO: Message sent successfully
+2025-06-24 17:06:27 INFO: Server: Key exchange reply sent successfully
+2025-06-24 17:06:27 INFO: Server: Key exchange completed successfully
+2025-06-24 17:06:27 INFO: Server: Enabling encryption
+2025-06-24 17:06:27 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
+2025-06-24 17:06:27 INFO: Encryption and HMAC enabled in protocol handler
+2025-06-24 17:06:27 INFO: Server: Key exchange completed successfully
+2025-06-24 17:06:27 INFO: Server: Starting authentication
+2025-06-24 17:06:27 INFO: Waiting to receive message...
+2025-06-24 17:06:27 INFO: Reading encrypted message...
+2025-06-24 17:06:27 INFO: Read 4 bytes for encrypted message length
+2025-06-24 17:06:27 INFO: Encrypted message length: 1015
+2025-06-24 17:06:27 INFO: Read 1015 bytes for encrypted message body
+2025-06-24 17:06:27 INFO: Decrypting encrypted message, length: 1015
+2025-06-24 17:06:27 INFO: Message decrypted successfully, new length: 987
+2025-06-24 17:06:27 INFO: Received message: AUTH_REQUEST
+2025-06-24 17:06:27 INFO: Server: Authentication request from admin using dual
+2025-06-24 17:06:27 INFO: Authentication attempt for user: admin, type: dual
+2025-06-24 17:06:27 INFO: User existence check for 'admin': true
+2025-06-24 17:06:27 INFO: User validation passed for: admin
+2025-06-24 17:06:27 INFO: Attempting dual authentication (password + public key) for: admin
+2025-06-24 17:06:27 INFO: DualAuth: password present: true
+2025-06-24 17:06:27 INFO: DualAuth: publicKey present: true
+2025-06-24 17:06:27 INFO: DualAuth: signature present: true
+2025-06-24 17:06:27 INFO: DualAuth: sessionData present: true
+2025-06-24 17:06:27 INFO: PasswordAuth: Verifying password for user: admin
+2025-06-24 17:06:27 INFO: PasswordAuth: Checking if user exists: admin
+2025-06-24 17:06:27 INFO: PasswordAuth: User exists, verifying password for: admin
+2025-06-24 17:06:27 INFO: UserStore: Password verification for admin - Stored hash: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918, Input hash: 8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918, Matches: true
+2025-06-24 17:06:27 INFO: PasswordAuth: Password verification result for admin: true
+2025-06-24 17:06:27 INFO: PasswordAuth: Password authentication result for admin: true
+2025-06-24 17:06:27 INFO: DualAuth: Password authentication succeeded for user: admin
+2025-06-24 17:06:27 INFO: PublicKeyAuth: publicKey present: true
+2025-06-24 17:06:27 INFO: PublicKeyAuth: signature present: true
+2025-06-24 17:06:27 INFO: PublicKeyAuth: sessionData present: true
+2025-06-24 17:06:27 INFO: PublicKeyAuth: Created public key from string
+2025-06-24 17:06:27 INFO: PublicKeyAuth: Decoded signature, length: 256
+2025-06-24 17:06:27 INFO: PublicKeyAuth: Decoded session data, length: 36
+2025-06-24 17:06:27 INFO: PublicKeyAuth: Found 4 authorized keys for user: admin
+2025-06-24 17:06:27 INFO: PublicKeyAuth: Key match found!
+2025-06-24 17:06:27 INFO: PublicKeyAuth: Signature verification result: true
+2025-06-24 17:06:27 INFO: PublicKeyAuth: public key auth result: true
+2025-06-24 17:06:27 INFO: DualAuth: Public key authentication succeeded for user: admin
+2025-06-24 17:06:27 INFO: DualAuth: Dual authentication successful for user: admin
+2025-06-24 17:06:27 INFO: Sending message: AUTH_SUCCESS, length: 269
+2025-06-24 17:06:27 INFO: Message encrypted, new length: 297
+2025-06-24 17:06:27 INFO: Added length prefix for encrypted message, total length: 301
+2025-06-24 17:06:27 INFO: Message sent successfully
+2025-06-24 17:06:27 INFO: Server: Authentication SUCCESS for admin: Authentication successful
+2025-06-24 17:06:27 INFO: Server: Authentication completed successfully
+2025-06-24 17:06:27 INFO: Server: Starting service request handling
+2025-06-24 17:06:27 INFO: Waiting to receive message...
+2025-06-24 17:06:27 INFO: Reading encrypted message...
+2025-06-24 17:06:27 INFO: Read 4 bytes for encrypted message length
+2025-06-24 17:06:27 INFO: Encrypted message length: 186
+2025-06-24 17:06:27 INFO: Read 186 bytes for encrypted message body
+2025-06-24 17:06:27 INFO: Decrypting encrypted message, length: 186
+2025-06-24 17:06:27 INFO: Message decrypted successfully, new length: 158
+2025-06-24 17:06:27 INFO: Received message: SERVICE_REQUEST
+2025-06-24 17:06:27 INFO: Server: Service request from admin for shell
+2025-06-24 17:06:27 INFO: Sending message: SERVICE_ACCEPT, length: 157
+2025-06-24 17:06:27 INFO: Message encrypted, new length: 185
+2025-06-24 17:06:27 INFO: Added length prefix for encrypted message, total length: 189
+2025-06-24 17:06:27 INFO: Message sent successfully
+2025-06-24 17:06:27 INFO: Server: Service shell accepted for admin
+2025-06-24 17:06:27 INFO: Waiting to receive message...
+2025-06-24 17:06:27 INFO: Reading encrypted message...
+2025-06-24 17:06:28 INFO: Read 4 bytes for encrypted message length
+2025-06-24 17:06:28 INFO: Encrypted message length: 255
+2025-06-24 17:06:28 INFO: Read 255 bytes for encrypted message body
+2025-06-24 17:06:28 INFO: Decrypting encrypted message, length: 255
+2025-06-24 17:06:28 INFO: Message decrypted successfully, new length: 227
+2025-06-24 17:06:28 INFO: Received message: SHELL_COMMAND
+2025-06-24 17:06:28 INFO: Server: Executing shell command: 'ls' for user: admin
+2025-06-24 17:06:29 INFO: Command result: exitCode=0, stdout='Applications
+com~apple~CloudDocs
+Desktop
+Documents
+Downloads
+iCloud
+Library
+Movies
+Music
+Pictures
+Public
+Zotero
+', stderr=''
+2025-06-24 17:06:29 INFO: Sending message: SHELL_RESULT, length: 346
+2025-06-24 17:06:29 INFO: Message encrypted, new length: 374
+2025-06-24 17:06:29 INFO: Added length prefix for encrypted message, total length: 378
+2025-06-24 17:06:29 INFO: Message sent successfully
+2025-06-24 17:06:29 INFO: Sent SHELL_RESULT message to client.
+2025-06-24 17:06:29 INFO: Waiting to receive message...
+2025-06-24 17:06:29 INFO: Reading encrypted message...
+2025-06-24 17:06:32 INFO: Read -1 bytes for encrypted message length
+2025-06-24 17:06:32 INFO: Client disconnected gracefully (end of stream)
+2025-06-24 17:06:32 INFO: Server: Client 127.0.0.1:53222 disconnected gracefully
+2025-06-24 17:06:32 INFO: Server: Cleaning up client connection for 127.0.0.1:53222
+2025-06-24 17:06:32 INFO: Server: Cleaning up connection for 127.0.0.1:53222 (user: admin)
+2025-06-24 17:06:32 INFO: Protocol handler closed

@@ -7,6 +7,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import ssh.utils.Logger;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -20,7 +21,6 @@ import javafx.scene.text.TextFlow;
 import javafx.scene.control.ScrollPane;
 import java.util.function.Consumer;
 import java.io.File;
-import ssh.model.utils.Logger;
 
 /**
  * Handles the main SSH terminal interface.

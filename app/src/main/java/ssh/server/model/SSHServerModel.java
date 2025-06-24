@@ -1,11 +1,10 @@
 package ssh.server.model;
 
-import ssh.model.auth.AuthenticationManager;
-import ssh.model.auth.UserStore;
-import ssh.model.crypto.RSAKeyGenerator;
-import ssh.model.utils.Logger;
 import ssh.config.ServerConfig;
-
+import ssh.shared_model.auth.AuthenticationManager;
+import ssh.shared_model.auth.UserStore;
+import ssh.shared_model.crypto.RSAKeyGenerator;
+import ssh.utils.Logger;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;

@@ -1,9 +1,9 @@
 package ssh.client.view;
 
-import ssh.model.utils.ConsoleInterface;
-import ssh.model.utils.CredentialsManager;
 import ssh.client.model.AuthCredentials;
 import ssh.client.model.ServerInfo;
+import ssh.utils.ConsoleInterface;
+import ssh.utils.CredentialsManager;
 
 import java.io.Console;
 import java.util.Scanner;

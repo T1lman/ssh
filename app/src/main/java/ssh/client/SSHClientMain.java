@@ -2,8 +2,8 @@ package ssh.client;
 
 import ssh.client.controller.SSHClientController;
 import ssh.client.view.ConsoleClientUI;
+import ssh.utils.Logger;
 import ssh.client.view.ClientUI;
-import ssh.model.utils.Logger;
 
 public class SSHClientMain {
     public static void main(String[] args) {

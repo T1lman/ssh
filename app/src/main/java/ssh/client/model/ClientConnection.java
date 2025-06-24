@@ -2,16 +2,21 @@ package ssh.client.model;
 
 import ssh.client.model.AuthCredentials;
 import ssh.client.model.ServerInfo;
-import ssh.model.crypto.DiffieHellmanKeyExchange;
-import ssh.model.crypto.RSAKeyGenerator;
-import ssh.model.crypto.SymmetricEncryption;
-import ssh.model.protocol.Message;
-import ssh.model.protocol.MessageType;
-import ssh.model.protocol.ProtocolHandler;
-import ssh.model.protocol.messages.AuthMessage;
-import ssh.model.protocol.messages.KeyExchangeMessage;
-import ssh.model.protocol.messages.ShellMessage;
-import ssh.model.utils.Logger;
+import ssh.shared_model.crypto.DiffieHellmanKeyExchange;
+import ssh.shared_model.crypto.RSAKeyGenerator;
+import ssh.shared_model.crypto.SymmetricEncryption;
+import ssh.shared_model.protocol.Message;
+import ssh.shared_model.protocol.MessageType;
+import ssh.shared_model.protocol.ProtocolHandler;
+import ssh.shared_model.protocol.messages.AuthMessage;
+import ssh.shared_model.protocol.messages.KeyExchangeMessage;
+import ssh.shared_model.protocol.messages.ShellMessage;
+import ssh.shared_model.protocol.messages.ServiceMessage;
+import ssh.shared_model.protocol.messages.DisconnectMessage;
+import ssh.shared_model.protocol.messages.ReloadUsersMessage;
+import ssh.shared_model.protocol.messages.FileTransferMessage;
+import ssh.shared_model.protocol.messages.ErrorMessage;
+import ssh.utils.Logger;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -116,15 +121,15 @@ public class ClientConnection {
                     Logger.error("Expected server public key not found in client directory! Aborting connection.");
                     return false;
                 }
-                java.security.PublicKey expectedServerPubKey = ssh.model.crypto.RSAKeyGenerator.loadPublicKey(expectedServerPubKeyPath);
-                String expectedServerPubKeyString = ssh.model.crypto.RSAKeyGenerator.getPublicKeyString(expectedServerPubKey);
+                java.security.PublicKey expectedServerPubKey = ssh.shared_model.crypto.RSAKeyGenerator.loadPublicKey(expectedServerPubKeyPath);
+                String expectedServerPubKeyString = ssh.shared_model.crypto.RSAKeyGenerator.getPublicKeyString(expectedServerPubKey);
                 // 2. Compare with received server public key
                 if (!expectedServerPubKeyString.equals(reply.getServerPublicKey())) {
                     Logger.error("Server public key does not match expected key! Possible MITM attack.");
                     return false;
                 }
                 // 3. Verify server's signature over DH public key
-                boolean sigValid = ssh.model.crypto.RSAKeyGenerator.verify(
+                boolean sigValid = ssh.shared_model.crypto.RSAKeyGenerator.verify(
                     reply.getDhPublicKeyBytes(),
                     reply.getSignatureBytes(),
                     expectedServerPubKey
@@ -237,7 +242,7 @@ public class ClientConnection {
         try {
             Logger.info("Sending service request for: " + service);
             
-            ssh.model.protocol.messages.ServiceMessage serviceMessage = new ssh.model.protocol.messages.ServiceMessage(MessageType.SERVICE_REQUEST);
+            ssh.shared_model.protocol.messages.ServiceMessage serviceMessage = new ssh.shared_model.protocol.messages.ServiceMessage(MessageType.SERVICE_REQUEST);
             serviceMessage.setService(service);
             
             protocolHandler.sendMessage(serviceMessage);
@@ -288,7 +293,7 @@ public class ClientConnection {
 
         Message response = protocolHandler.receiveMessage();
         if (response.getType() == MessageType.ERROR) {
-            ssh.model.protocol.messages.ErrorMessage errorMsg = (ssh.model.protocol.messages.ErrorMessage) response;
+            ssh.shared_model.protocol.messages.ErrorMessage errorMsg = (ssh.shared_model.protocol.messages.ErrorMessage) response;
             if (onError != null) onError.accept("Server error: " + errorMsg.getErrorMessage());
             return "[SERVER ERROR] " + errorMsg.getErrorMessage();
         }
@@ -347,7 +352,7 @@ public class ClientConnection {
         if (onStatus != null) onStatus.accept(filename + " (" + fileSize + " bytes)");
 
         // Send file upload request
-        ssh.model.protocol.messages.FileTransferMessage uploadRequest = new ssh.model.protocol.messages.FileTransferMessage(MessageType.FILE_UPLOAD_REQUEST);
+        ssh.shared_model.protocol.messages.FileTransferMessage uploadRequest = new ssh.shared_model.protocol.messages.FileTransferMessage(MessageType.FILE_UPLOAD_REQUEST);
         uploadRequest.setFilename(filename);
         uploadRequest.setFileSize(fileSize);
         uploadRequest.setTargetPath(remotePath);
@@ -371,7 +376,7 @@ public class ClientConnection {
             int bytesRead;
             while ((bytesRead = fis.read(buffer)) != -1) {
                 // Create file data message
-                ssh.model.protocol.messages.FileTransferMessage dataMessage = new ssh.model.protocol.messages.FileTransferMessage(MessageType.FILE_DATA);
+                ssh.shared_model.protocol.messages.FileTransferMessage dataMessage = new ssh.shared_model.protocol.messages.FileTransferMessage(MessageType.FILE_DATA);
                 dataMessage.setFilename(filename);
                 dataMessage.setSequenceNumber(sequenceNumber);
                 dataMessage.setLast(bytesRead < CHUNK_SIZE); // Last chunk if we read less than buffer size
@@ -396,7 +401,7 @@ public class ClientConnection {
             throw new IOException("Expected final FILE_ACK, got " + response.getType());
         }
 
-        ssh.model.protocol.messages.FileTransferMessage finalAck = (ssh.model.protocol.messages.FileTransferMessage) response;
+        ssh.shared_model.protocol.messages.FileTransferMessage finalAck = (ssh.shared_model.protocol.messages.FileTransferMessage) response;
         Logger.info("File upload completed: " + finalAck.getMessage());
         if (onStatus != null) onStatus.accept("100%");
     }
@@ -414,7 +419,7 @@ public class ClientConnection {
         if (onStatus != null) onStatus.accept(filename);
 
         // Send file download request
-        ssh.model.protocol.messages.FileTransferMessage downloadRequest = new ssh.model.protocol.messages.FileTransferMessage(MessageType.FILE_DOWNLOAD_REQUEST);
+        ssh.shared_model.protocol.messages.FileTransferMessage downloadRequest = new ssh.shared_model.protocol.messages.FileTransferMessage(MessageType.FILE_DOWNLOAD_REQUEST);
         downloadRequest.setFilename(filename);
         downloadRequest.setTargetPath(remotePath);
         
@@ -426,7 +431,7 @@ public class ClientConnection {
 
         // Handle potential error message from server (e.g., file not found)
         if (response.getType() == MessageType.ERROR) {
-            ssh.model.protocol.messages.ErrorMessage errorMsg = (ssh.model.protocol.messages.ErrorMessage) response;
+            ssh.shared_model.protocol.messages.ErrorMessage errorMsg = (ssh.shared_model.protocol.messages.ErrorMessage) response;
             throw new IOException("Server error: " + errorMsg.getErrorMessage());
         }
 
@@ -434,7 +439,7 @@ public class ClientConnection {
             throw new IOException("Expected first chunk as FILE_DATA, got " + response.getType());
         }
 
-        ssh.model.protocol.messages.FileTransferMessage firstDataChunk = (ssh.model.protocol.messages.FileTransferMessage) response;
+        ssh.shared_model.protocol.messages.FileTransferMessage firstDataChunk = (ssh.shared_model.protocol.messages.FileTransferMessage) response;
         long totalBytes = firstDataChunk.getFileSize();
         Logger.info("Expecting file size: " + totalBytes + " bytes");
         
@@ -461,7 +466,7 @@ public class ClientConnection {
                     throw new IOException("Expected FILE_DATA, got " + subsequentResponse.getType());
                 }
 
-                ssh.model.protocol.messages.FileTransferMessage dataChunk = (ssh.model.protocol.messages.FileTransferMessage) subsequentResponse;
+                ssh.shared_model.protocol.messages.FileTransferMessage dataChunk = (ssh.shared_model.protocol.messages.FileTransferMessage) subsequentResponse;
                 byte[] chunkData = dataChunk.getDataBytes();
                 if (chunkData != null && chunkData.length > 0) {
                     fos.write(chunkData);
@@ -475,7 +480,7 @@ public class ClientConnection {
         }
 
         // Send final acknowledgment
-        ssh.model.protocol.messages.FileTransferMessage ack = new ssh.model.protocol.messages.FileTransferMessage(MessageType.FILE_ACK);
+        ssh.shared_model.protocol.messages.FileTransferMessage ack = new ssh.shared_model.protocol.messages.FileTransferMessage(MessageType.FILE_ACK);
         ack.setStatus("completed");
         ack.setMessage("File download completed successfully");
         
@@ -491,7 +496,7 @@ public class ClientConnection {
     public void sendDisconnect() {
         try {
             if (protocolHandler != null) {
-                ssh.model.protocol.messages.DisconnectMessage disconnectMsg = new ssh.model.protocol.messages.DisconnectMessage();
+                ssh.shared_model.protocol.messages.DisconnectMessage disconnectMsg = new ssh.shared_model.protocol.messages.DisconnectMessage();
                 protocolHandler.sendMessage(disconnectMsg);
             }
         } catch (Exception e) {
@@ -505,7 +510,7 @@ public class ClientConnection {
     public void sendReloadUsers() {
         try {
             if (protocolHandler != null && authenticated) {
-                ssh.model.protocol.messages.ReloadUsersMessage reloadMsg = new ssh.model.protocol.messages.ReloadUsersMessage();
+                ssh.shared_model.protocol.messages.ReloadUsersMessage reloadMsg = new ssh.shared_model.protocol.messages.ReloadUsersMessage();
                 protocolHandler.sendMessage(reloadMsg);
                 
                 // Wait for acknowledgment
@@ -513,7 +518,7 @@ public class ClientConnection {
                 if (response.getType() == MessageType.SERVICE_ACCEPT) {
                     Logger.info("Server acknowledged user database reload");
                 } else if (response.getType() == MessageType.ERROR) {
-                    ssh.model.protocol.messages.ErrorMessage errorMsg = (ssh.model.protocol.messages.ErrorMessage) response;
+                    ssh.shared_model.protocol.messages.ErrorMessage errorMsg = (ssh.shared_model.protocol.messages.ErrorMessage) response;
                     Logger.error("Server failed to reload user database: " + errorMsg.getErrorMessage());
                 }
             }

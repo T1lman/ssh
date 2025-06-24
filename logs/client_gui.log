@@ -238,3 +238,81 @@
 2025-06-24 16:18:12 INFO: Decrypting encrypted message, length: 374
 2025-06-24 16:18:12 INFO: Message decrypted successfully, new length: 346
 2025-06-24 16:18:12 INFO: Received message: SHELL_RESULT
+2025-06-24 17:06:18 INFO: Logger initialized: logs/client_gui.log
+2025-06-24 17:06:18 INFO: SSHClientModel: Created new model instance
+2025-06-24 17:06:26 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 17:06:26 INFO: SSHClientController: Starting connection flow
+2025-06-24 17:06:26 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 17:06:26 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 17:06:26 INFO: resolvePath: data/client/client_keys/admin_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/admin_rsa
+2025-06-24 17:06:26 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+2025-06-24 17:06:26 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+2025-06-24 17:06:26 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/admin_rsa
+2025-06-24 17:06:26 INFO: resolvePath: data/client/client_keys/admin_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/admin_rsa.pub
+2025-06-24 17:06:26 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+2025-06-24 17:06:26 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+2025-06-24 17:06:26 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/admin_rsa.pub
+2025-06-24 17:06:26 INFO: SSHClientModel: Starting connection process
+2025-06-24 17:06:26 INFO: ClientConnection constructor called
+2025-06-24 17:06:26 INFO: Connected successfully
+2025-06-24 17:06:27 INFO: Sending message: KEY_EXCHANGE_INIT, length: 996
+2025-06-24 17:06:27 INFO: Message sent successfully
+2025-06-24 17:06:27 INFO: Server authentication succeeded: public key and signature verified.
+2025-06-24 17:06:27 INFO: Session ID: 74f6faff-c00b-4a6f-959a-7f3da1dca145
+2025-06-24 17:06:27 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
+2025-06-24 17:06:27 INFO: Encryption and HMAC enabled in protocol handler
+2025-06-24 17:06:27 INFO: Key exchange completed successfully
+2025-06-24 17:06:27 INFO: Starting authentication...
+2025-06-24 17:06:27 INFO: Preparing auth for user: admin, type: dual
+2025-06-24 17:06:27 INFO: Using password authentication
+2025-06-24 17:06:27 INFO: Using public key authentication, signed session ID.
+2025-06-24 17:06:27 INFO: Sending message: AUTH_REQUEST, length: 987
+2025-06-24 17:06:27 INFO: Message encrypted, new length: 1015
+2025-06-24 17:06:27 INFO: Added length prefix for encrypted message, total length: 1019
+2025-06-24 17:06:27 INFO: Message sent successfully
+2025-06-24 17:06:27 INFO: Sent authentication request
+2025-06-24 17:06:27 INFO: Waiting to receive message...
+2025-06-24 17:06:27 INFO: Reading encrypted message...
+2025-06-24 17:06:27 INFO: Read 4 bytes for encrypted message length
+2025-06-24 17:06:27 INFO: Encrypted message length: 297
+2025-06-24 17:06:27 INFO: Read 297 bytes for encrypted message body
+2025-06-24 17:06:27 INFO: Decrypting encrypted message, length: 297
+2025-06-24 17:06:27 INFO: Message decrypted successfully, new length: 269
+2025-06-24 17:06:27 INFO: Received message: AUTH_SUCCESS
+2025-06-24 17:06:27 INFO: Received auth response: AUTH_SUCCESS
+2025-06-24 17:06:27 INFO: Authentication successful: true
+2025-06-24 17:06:27 INFO: SSHClientModel: Connection and authentication successful
+2025-06-24 17:06:27 INFO: SSHClientModel: Requesting service: shell
+2025-06-24 17:06:27 INFO: Sending service request for: shell
+2025-06-24 17:06:27 INFO: Sending message: SERVICE_REQUEST, length: 158
+2025-06-24 17:06:27 INFO: Message encrypted, new length: 186
+2025-06-24 17:06:27 INFO: Added length prefix for encrypted message, total length: 190
+2025-06-24 17:06:27 INFO: Message sent successfully
+2025-06-24 17:06:27 INFO: Sent service request
+2025-06-24 17:06:27 INFO: Waiting to receive message...
+2025-06-24 17:06:27 INFO: Reading encrypted message...
+2025-06-24 17:06:27 INFO: Read 4 bytes for encrypted message length
+2025-06-24 17:06:27 INFO: Encrypted message length: 185
+2025-06-24 17:06:27 INFO: Read 185 bytes for encrypted message body
+2025-06-24 17:06:27 INFO: Decrypting encrypted message, length: 185
+2025-06-24 17:06:27 INFO: Message decrypted successfully, new length: 157
+2025-06-24 17:06:27 INFO: Received message: SERVICE_ACCEPT
+2025-06-24 17:06:27 INFO: Received service response: SERVICE_ACCEPT
+2025-06-24 17:06:27 INFO: Service request accepted
+2025-06-24 17:06:27 INFO: SSHClientModel: Service request successful
+2025-06-24 17:06:27 INFO: SSHClientController: Service requested: shell
+2025-06-24 17:06:27 INFO: SSHClientController: Shell service requested for GUI client
+2025-06-24 17:06:28 INFO: SSHClientController: Handling shell command: ls
+2025-06-24 17:06:28 INFO: SSHClientModel: Sending shell command: ls
+2025-06-24 17:06:28 INFO: Sending message: SHELL_COMMAND, length: 227
+2025-06-24 17:06:28 INFO: Message encrypted, new length: 255
+2025-06-24 17:06:28 INFO: Added length prefix for encrypted message, total length: 259
+2025-06-24 17:06:28 INFO: Message sent successfully
+2025-06-24 17:06:28 INFO: Waiting to receive message...
+2025-06-24 17:06:28 INFO: Reading encrypted message...
+2025-06-24 17:06:29 INFO: Read 4 bytes for encrypted message length
+2025-06-24 17:06:29 INFO: Encrypted message length: 374
+2025-06-24 17:06:29 INFO: Read 374 bytes for encrypted message body
+2025-06-24 17:06:29 INFO: Decrypting encrypted message, length: 374
+2025-06-24 17:06:29 INFO: Message decrypted successfully, new length: 346
+2025-06-24 17:06:29 INFO: Received message: SHELL_RESULT
