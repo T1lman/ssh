@@ -108,6 +108,33 @@ public class ClientConnection {
             
             if (replyMessage.getType() == MessageType.KEY_EXCHANGE_REPLY) {
                 KeyExchangeMessage reply = (KeyExchangeMessage) replyMessage;
+                // --- Server Authentication ---
+                // 1. Load expected server public key from client directory
+                String expectedServerPubKeyPath = "data/client/server_keys/server_rsa_key.pub";
+                java.io.File expectedKeyFile = new java.io.File(expectedServerPubKeyPath);
+                if (!expectedKeyFile.exists()) {
+                    Logger.error("Expected server public key not found in client directory! Aborting connection.");
+                    return false;
+                }
+                java.security.PublicKey expectedServerPubKey = ssh.model.crypto.RSAKeyGenerator.loadPublicKey(expectedServerPubKeyPath);
+                String expectedServerPubKeyString = ssh.model.crypto.RSAKeyGenerator.getPublicKeyString(expectedServerPubKey);
+                // 2. Compare with received server public key
+                if (!expectedServerPubKeyString.equals(reply.getServerPublicKey())) {
+                    Logger.error("Server public key does not match expected key! Possible MITM attack.");
+                    return false;
+                }
+                // 3. Verify server's signature over DH public key
+                boolean sigValid = ssh.model.crypto.RSAKeyGenerator.verify(
+                    reply.getDhPublicKeyBytes(),
+                    reply.getSignatureBytes(),
+                    expectedServerPubKey
+                );
+                if (!sigValid) {
+                    Logger.error("Server signature verification failed! Possible MITM attack.");
+                    return false;
+                }
+                Logger.info("Server authentication succeeded: public key and signature verified.");
+                // --- End server authentication ---
                 keyExchange.setOtherPublicKey(reply.getDhPublicKeyBytes());
                 byte[] sharedSecret = keyExchange.computeSharedSecret();
                 

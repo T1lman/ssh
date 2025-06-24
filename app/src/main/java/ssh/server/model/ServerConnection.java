@@ -164,6 +164,8 @@ public class ServerConnection implements Runnable {
         );
         Logger.info("Server: RSA signature generated, length: " + signature.length);
         replyMessage.setSignature(signature);
+        // Add server public key for client verification
+        replyMessage.setServerPublicKey(RSAKeyGenerator.getPublicKeyString(serverKeyPair.getPublic()));
 
         Logger.info("Server: Sending key exchange reply");
         protocolHandler.sendMessage(replyMessage);

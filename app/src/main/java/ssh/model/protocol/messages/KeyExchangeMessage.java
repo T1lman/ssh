@@ -15,6 +15,7 @@ public class KeyExchangeMessage extends Message {
     private String serverId;
     private String signature;
     private String sessionId;
+    private String serverPublicKey;
 
     public KeyExchangeMessage() {
         super(MessageType.KEY_EXCHANGE_INIT);
@@ -91,5 +92,13 @@ public class KeyExchangeMessage extends Message {
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
+    }
+
+    public String getServerPublicKey() {
+        return serverPublicKey;
+    }
+
+    public void setServerPublicKey(String serverPublicKey) {
+        this.serverPublicKey = serverPublicKey;
     }
 } 

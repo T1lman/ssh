@@ -1,1057 +1,240 @@
-2025-06-24 14:04:57 INFO: Logger initialized: logs/client_gui.log
-2025-06-24 14:04:57 INFO: SSHClientModel: Created new model instance
-2025-06-24 14:05:10 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:05:11 INFO: SSHClientController: Starting connection flow
-2025-06-24 14:05:11 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:05:11 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:05:11 INFO: resolvePath: data/client/client_keys/tilman_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
-2025-06-24 14:05:11 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:05:11 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:05:11 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
-2025-06-24 14:05:11 INFO: resolvePath: data/client/client_keys/tilman_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
-2025-06-24 14:05:11 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:05:11 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:05:11 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
-2025-06-24 14:05:11 INFO: SSHClientModel: Starting connection process
-2025-06-24 14:05:11 INFO: ClientConnection constructor called
-2025-06-24 14:05:11 INFO: Connected successfully
-2025-06-24 14:05:11 INFO: Sending message: KEY_EXCHANGE_INIT, length: 973
-2025-06-24 14:05:11 INFO: Message sent successfully
-2025-06-24 14:05:11 INFO: Session ID: 97187a3c-0677-4ab9-9b40-b4f722b590cd
-2025-06-24 14:05:11 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
-2025-06-24 14:05:11 INFO: Encryption and HMAC enabled in protocol handler
-2025-06-24 14:05:11 INFO: Key exchange completed successfully
-2025-06-24 14:05:11 INFO: Starting authentication...
-2025-06-24 14:05:11 INFO: Preparing auth for user: tilman, type: dual
-2025-06-24 14:05:11 INFO: Using password authentication
-2025-06-24 14:05:12 INFO: Using public key authentication, signed session ID.
-2025-06-24 14:05:12 INFO: Sending message: AUTH_REQUEST, length: 986
-2025-06-24 14:05:12 INFO: Message encrypted, new length: 1014
-2025-06-24 14:05:12 INFO: Added length prefix for encrypted message, total length: 1018
-2025-06-24 14:05:12 INFO: Message sent successfully
-2025-06-24 14:05:12 INFO: Sent authentication request
-2025-06-24 14:05:12 INFO: Waiting to receive message...
-2025-06-24 14:05:12 INFO: Reading encrypted message...
-2025-06-24 14:05:12 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:05:12 INFO: Encrypted message length: 297
-2025-06-24 14:05:12 INFO: Read 297 bytes for encrypted message body
-2025-06-24 14:05:12 INFO: Decrypting encrypted message, length: 297
-2025-06-24 14:05:12 INFO: Message decrypted successfully, new length: 269
-2025-06-24 14:05:12 INFO: Received message: AUTH_SUCCESS
-2025-06-24 14:05:12 INFO: Received auth response: AUTH_SUCCESS
-2025-06-24 14:05:12 INFO: Authentication successful: true
-2025-06-24 14:05:12 INFO: SSHClientModel: Connection and authentication successful
-2025-06-24 14:05:12 INFO: SSHClientModel: Requesting service: shell
-2025-06-24 14:05:12 INFO: Sending service request for: shell
-2025-06-24 14:05:12 INFO: Sending message: SERVICE_REQUEST, length: 158
-2025-06-24 14:05:12 INFO: Message encrypted, new length: 186
-2025-06-24 14:05:12 INFO: Added length prefix for encrypted message, total length: 190
-2025-06-24 14:05:12 INFO: Message sent successfully
-2025-06-24 14:05:12 INFO: Sent service request
-2025-06-24 14:05:12 INFO: Waiting to receive message...
-2025-06-24 14:05:12 INFO: Reading encrypted message...
-2025-06-24 14:05:12 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:05:12 INFO: Encrypted message length: 185
-2025-06-24 14:05:12 INFO: Read 185 bytes for encrypted message body
-2025-06-24 14:05:12 INFO: Decrypting encrypted message, length: 185
-2025-06-24 14:05:12 INFO: Message decrypted successfully, new length: 157
-2025-06-24 14:05:12 INFO: Received message: SERVICE_ACCEPT
-2025-06-24 14:05:12 INFO: Received service response: SERVICE_ACCEPT
-2025-06-24 14:05:12 INFO: Service request accepted
-2025-06-24 14:05:12 INFO: SSHClientModel: Service request successful
-2025-06-24 14:05:12 INFO: SSHClientController: Service requested: shell
-2025-06-24 14:05:12 INFO: SSHClientController: Shell service requested for GUI client
-2025-06-24 14:05:13 INFO: SSHClientController: Handling shell command: ls
-2025-06-24 14:05:13 INFO: SSHClientModel: Sending shell command: ls
-2025-06-24 14:05:13 INFO: Sending message: SHELL_COMMAND, length: 227
-2025-06-24 14:05:13 INFO: Message encrypted, new length: 255
-2025-06-24 14:05:13 INFO: Added length prefix for encrypted message, total length: 259
-2025-06-24 14:05:13 INFO: Message sent successfully
-2025-06-24 14:05:13 INFO: Waiting to receive message...
-2025-06-24 14:05:13 INFO: Reading encrypted message...
-2025-06-24 14:05:13 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:05:13 INFO: Encrypted message length: 374
-2025-06-24 14:05:13 INFO: Read 374 bytes for encrypted message body
-2025-06-24 14:05:13 INFO: Decrypting encrypted message, length: 374
-2025-06-24 14:05:13 INFO: Message decrypted successfully, new length: 346
-2025-06-24 14:05:13 INFO: Received message: SHELL_RESULT
-2025-06-24 14:05:16 INFO: SSHClientController: Handling shell command: cd ..
-2025-06-24 14:05:16 INFO: SSHClientModel: Sending shell command: cd ..
-2025-06-24 14:05:16 INFO: Sending message: SHELL_COMMAND, length: 230
-2025-06-24 14:05:16 INFO: Message encrypted, new length: 258
-2025-06-24 14:05:16 INFO: Added length prefix for encrypted message, total length: 262
-2025-06-24 14:05:16 INFO: Message sent successfully
-2025-06-24 14:05:16 INFO: Waiting to receive message...
-2025-06-24 14:05:16 INFO: Reading encrypted message...
-2025-06-24 14:05:16 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:05:16 INFO: Encrypted message length: 243
-2025-06-24 14:05:16 INFO: Read 243 bytes for encrypted message body
-2025-06-24 14:05:16 INFO: Decrypting encrypted message, length: 243
-2025-06-24 14:05:16 INFO: Message decrypted successfully, new length: 215
-2025-06-24 14:05:16 INFO: Received message: SHELL_RESULT
-2025-06-24 14:05:17 INFO: SSHClientController: Handling shell command: ls
-2025-06-24 14:05:17 INFO: SSHClientModel: Sending shell command: ls
-2025-06-24 14:05:17 INFO: Sending message: SHELL_COMMAND, length: 220
-2025-06-24 14:05:17 INFO: Message encrypted, new length: 248
-2025-06-24 14:05:17 INFO: Added length prefix for encrypted message, total length: 252
-2025-06-24 14:05:17 INFO: Message sent successfully
-2025-06-24 14:05:17 INFO: Waiting to receive message...
-2025-06-24 14:05:17 INFO: Reading encrypted message...
-2025-06-24 14:05:17 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:05:17 INFO: Encrypted message length: 259
-2025-06-24 14:05:17 INFO: Read 259 bytes for encrypted message body
-2025-06-24 14:05:17 INFO: Decrypting encrypted message, length: 259
-2025-06-24 14:05:17 INFO: Message decrypted successfully, new length: 231
-2025-06-24 14:05:17 INFO: Received message: SHELL_RESULT
-2025-06-24 14:05:20 INFO: SSHClientController: Handling shell command: cd ..
-2025-06-24 14:05:20 INFO: SSHClientModel: Sending shell command: cd ..
-2025-06-24 14:05:20 INFO: Sending message: SHELL_COMMAND, length: 223
-2025-06-24 14:05:20 INFO: Message encrypted, new length: 251
-2025-06-24 14:05:20 INFO: Added length prefix for encrypted message, total length: 255
-2025-06-24 14:05:20 INFO: Message sent successfully
-2025-06-24 14:05:20 INFO: Waiting to receive message...
-2025-06-24 14:05:20 INFO: Reading encrypted message...
-2025-06-24 14:05:20 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:05:20 INFO: Encrypted message length: 238
-2025-06-24 14:05:20 INFO: Read 238 bytes for encrypted message body
-2025-06-24 14:05:20 INFO: Decrypting encrypted message, length: 238
-2025-06-24 14:05:20 INFO: Message decrypted successfully, new length: 210
-2025-06-24 14:05:20 INFO: Received message: SHELL_RESULT
-2025-06-24 14:05:23 INFO: SSHClientController: Handling shell command: cd ..
-2025-06-24 14:05:23 INFO: SSHClientModel: Sending shell command: cd ..
-2025-06-24 14:05:23 INFO: Sending message: SHELL_COMMAND, length: 218
-2025-06-24 14:05:23 INFO: Message encrypted, new length: 246
-2025-06-24 14:05:23 INFO: Added length prefix for encrypted message, total length: 250
-2025-06-24 14:05:23 INFO: Message sent successfully
-2025-06-24 14:05:23 INFO: Waiting to receive message...
-2025-06-24 14:05:23 INFO: Reading encrypted message...
-2025-06-24 14:05:23 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:05:23 INFO: Encrypted message length: 238
-2025-06-24 14:05:23 INFO: Read 238 bytes for encrypted message body
-2025-06-24 14:05:23 INFO: Decrypting encrypted message, length: 238
-2025-06-24 14:05:23 INFO: Message decrypted successfully, new length: 210
-2025-06-24 14:05:23 INFO: Received message: SHELL_RESULT
-2025-06-24 14:05:25 INFO: SSHClientController: Handling shell command: ls
-2025-06-24 14:05:25 INFO: SSHClientModel: Sending shell command: ls
-2025-06-24 14:05:25 INFO: Sending message: SHELL_COMMAND, length: 215
-2025-06-24 14:05:25 INFO: Message encrypted, new length: 243
-2025-06-24 14:05:25 INFO: Added length prefix for encrypted message, total length: 247
-2025-06-24 14:05:25 INFO: Message sent successfully
-2025-06-24 14:05:25 INFO: Waiting to receive message...
-2025-06-24 14:05:25 INFO: Reading encrypted message...
-2025-06-24 14:05:25 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:05:25 INFO: Encrypted message length: 348
-2025-06-24 14:05:25 INFO: Read 348 bytes for encrypted message body
-2025-06-24 14:05:25 INFO: Decrypting encrypted message, length: 348
-2025-06-24 14:05:25 INFO: Message decrypted successfully, new length: 320
-2025-06-24 14:05:25 INFO: Received message: SHELL_RESULT
-2025-06-24 14:05:32 INFO: SSHClientController: Handling shell command: cd ..
-2025-06-24 14:05:32 INFO: SSHClientModel: Sending shell command: cd ..
-2025-06-24 14:05:32 INFO: Sending message: SHELL_COMMAND, length: 218
-2025-06-24 14:05:32 INFO: Message encrypted, new length: 246
-2025-06-24 14:05:32 INFO: Added length prefix for encrypted message, total length: 250
-2025-06-24 14:05:32 INFO: Message sent successfully
-2025-06-24 14:05:32 INFO: Waiting to receive message...
-2025-06-24 14:05:32 INFO: Reading encrypted message...
-2025-06-24 14:05:32 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:05:32 INFO: Encrypted message length: 238
-2025-06-24 14:05:32 INFO: Read 238 bytes for encrypted message body
-2025-06-24 14:05:32 INFO: Decrypting encrypted message, length: 238
-2025-06-24 14:05:32 INFO: Message decrypted successfully, new length: 210
-2025-06-24 14:05:32 INFO: Received message: SHELL_RESULT
-2025-06-24 14:05:33 INFO: SSHClientController: Handling shell command: ls
-2025-06-24 14:05:33 INFO: SSHClientModel: Sending shell command: ls
-2025-06-24 14:05:33 INFO: Sending message: SHELL_COMMAND, length: 215
-2025-06-24 14:05:33 INFO: Message encrypted, new length: 243
-2025-06-24 14:05:33 INFO: Added length prefix for encrypted message, total length: 247
-2025-06-24 14:05:33 INFO: Message sent successfully
-2025-06-24 14:05:33 INFO: Waiting to receive message...
-2025-06-24 14:05:33 INFO: Reading encrypted message...
-2025-06-24 14:05:33 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:05:33 INFO: Encrypted message length: 348
-2025-06-24 14:05:33 INFO: Read 348 bytes for encrypted message body
-2025-06-24 14:05:33 INFO: Decrypting encrypted message, length: 348
-2025-06-24 14:05:33 INFO: Message decrypted successfully, new length: 320
-2025-06-24 14:05:33 INFO: Received message: SHELL_RESULT
-2025-06-24 14:05:36 INFO: SSHClientController: Handling shell command: ls
-2025-06-24 14:05:36 INFO: SSHClientModel: Sending shell command: ls
-2025-06-24 14:05:36 INFO: Sending message: SHELL_COMMAND, length: 216
-2025-06-24 14:05:36 INFO: Message encrypted, new length: 244
-2025-06-24 14:05:36 INFO: Added length prefix for encrypted message, total length: 248
-2025-06-24 14:05:36 INFO: Message sent successfully
-2025-06-24 14:05:36 INFO: Waiting to receive message...
-2025-06-24 14:05:36 INFO: Reading encrypted message...
-2025-06-24 14:05:36 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:05:36 INFO: Encrypted message length: 349
-2025-06-24 14:05:36 INFO: Read 349 bytes for encrypted message body
-2025-06-24 14:05:36 INFO: Decrypting encrypted message, length: 349
-2025-06-24 14:05:36 INFO: Message decrypted successfully, new length: 321
-2025-06-24 14:05:36 INFO: Received message: SHELL_RESULT
-2025-06-24 14:05:37 INFO: SSHClientController: Handling shell command: ls
-2025-06-24 14:05:37 INFO: SSHClientModel: Sending shell command: ls
-2025-06-24 14:05:37 INFO: Sending message: SHELL_COMMAND, length: 216
-2025-06-24 14:05:37 INFO: Message encrypted, new length: 244
-2025-06-24 14:05:37 INFO: Added length prefix for encrypted message, total length: 248
-2025-06-24 14:05:37 INFO: Message sent successfully
-2025-06-24 14:05:37 INFO: Waiting to receive message...
-2025-06-24 14:05:37 INFO: Reading encrypted message...
-2025-06-24 14:05:38 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:05:38 INFO: Encrypted message length: 349
-2025-06-24 14:05:38 INFO: Read 349 bytes for encrypted message body
-2025-06-24 14:05:38 INFO: Decrypting encrypted message, length: 349
-2025-06-24 14:05:38 INFO: Message decrypted successfully, new length: 321
-2025-06-24 14:05:38 INFO: Received message: SHELL_RESULT
-2025-06-24 14:05:55 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:06:05 INFO: SSHClientController: Creating user: wey
-2025-06-24 14:06:05 INFO: Creating new verified user: wey
-2025-06-24 14:06:05 INFO:   Generating key pair for user: wey
-2025-06-24 14:06:05 INFO: Generating new RSA key pair: wey_rsa
-2025-06-24 14:06:05 INFO: Key pair generated successfully:
-2025-06-24 14:06:05 INFO:   Private key: data/client/client_keys/wey_rsa
-2025-06-24 14:06:05 INFO:   Public key: data/client/client_keys/wey_rsa.pub
-2025-06-24 14:06:06 INFO:   Adding user to server database: wey
-2025-06-24 14:06:06 INFO:   Adding public key to server for user: wey
-2025-06-24 14:06:06 INFO: Adding authorized key for user: wey
-2025-06-24 14:06:06 INFO: Authorized key added successfully: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/server/authorized_keys/wey/wey/key_1750766766008.pub
-2025-06-24 14:06:06 INFO:   Adding user to client credentials: wey
-2025-06-24 14:06:06 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:06:06 INFO: Added user to credentials: wey
-2025-06-24 14:06:06 INFO:   User added to credentials manager, saving to disk...
-2025-06-24 14:06:06 INFO: Credentials saved to: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/config/credentials.properties
-2025-06-24 14:06:06 INFO:   Credentials saved successfully
-2025-06-24 14:06:06 INFO:   Validating user setup...
-2025-06-24 14:06:06 INFO: Key pair validation: PASSED
-2025-06-24 14:06:06 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:06:06 INFO:   Available users in credentials: tilman, admin, test, wey
-2025-06-24 14:06:06 INFO:   ✓ User 'wey' created successfully!
-2025-06-24 14:06:06 INFO:   ✓ Key pair generated and validated
-2025-06-24 14:06:06 INFO:   ✓ User added to server database
-2025-06-24 14:06:06 INFO:   ✓ Public key authorized on server
-2025-06-24 14:06:06 INFO:   ✓ User added to client credentials
-2025-06-24 14:06:10 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:06:12 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:06:14 INFO: SSHClientController: Deleting user: wey
-2025-06-24 14:06:14 INFO: Deleting verified user: wey
-2025-06-24 14:06:14 INFO:   Removing user from server database: wey
-2025-06-24 14:06:14 INFO:   Removing authorized keys from server for user: wey
-2025-06-24 14:06:14 INFO:     No authorized keys found for user: wey
-2025-06-24 14:06:14 INFO:   Removing user from client credentials: wey
-2025-06-24 14:06:14 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:06:14 INFO: Removed user from credentials: wey
-2025-06-24 14:06:14 INFO: Credentials saved to: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/config/credentials.properties
-2025-06-24 14:06:14 INFO:   Deleting user's SSH keys: wey
-2025-06-24 14:06:14 INFO:     Deleted private key: wey_rsa
-2025-06-24 14:06:14 INFO:     Deleted public key: wey_rsa.pub
-2025-06-24 14:06:14 INFO:     No SSH keys found for user: wey
-2025-06-24 14:06:14 INFO:   Validating user deletion...
-2025-06-24 14:06:14 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:06:14 INFO:   ✓ User 'wey' deleted successfully!
-2025-06-24 14:06:14 INFO:   ✓ User removed from server database
-2025-06-24 14:06:14 INFO:   ✓ Authorized keys removed from server
-2025-06-24 14:06:14 INFO:   ✓ User removed from client credentials
-2025-06-24 14:06:14 INFO:   ✓ SSH keys deleted
-2025-06-24 14:14:31 INFO: Logger initialized: logs/client_gui.log
-2025-06-24 14:14:31 INFO: SSHClientModel: Created new model instance
-2025-06-24 14:14:41 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:14:42 INFO: SSHClientController: Starting connection flow
-2025-06-24 14:14:42 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:14:42 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:14:42 INFO: resolvePath: data/client/client_keys/tilman_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
-2025-06-24 14:14:42 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:14:42 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:14:42 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
-2025-06-24 14:14:42 INFO: resolvePath: data/client/client_keys/tilman_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
-2025-06-24 14:14:42 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:14:42 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:14:42 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
-2025-06-24 14:14:42 INFO: SSHClientModel: Starting connection process
-2025-06-24 14:14:42 INFO: ClientConnection constructor called
-2025-06-24 14:14:42 INFO: Connected successfully
-2025-06-24 14:14:42 INFO: Sending message: KEY_EXCHANGE_INIT, length: 973
-2025-06-24 14:14:42 INFO: Message sent successfully
-2025-06-24 14:14:42 INFO: Session ID: 20f176ab-ead8-4e9d-979a-0f7751bbfce6
-2025-06-24 14:14:42 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
-2025-06-24 14:14:42 INFO: Encryption and HMAC enabled in protocol handler
-2025-06-24 14:14:42 INFO: Key exchange completed successfully
-2025-06-24 14:14:42 INFO: Starting authentication...
-2025-06-24 14:14:42 INFO: Preparing auth for user: tilman, type: dual
-2025-06-24 14:14:42 INFO: Using password authentication
-2025-06-24 14:14:42 INFO: Using public key authentication, signed session ID.
-2025-06-24 14:14:42 INFO: Sending message: AUTH_REQUEST, length: 986
-2025-06-24 14:14:42 INFO: Message encrypted, new length: 1014
-2025-06-24 14:14:42 INFO: Added length prefix for encrypted message, total length: 1018
-2025-06-24 14:14:42 INFO: Message sent successfully
-2025-06-24 14:14:42 INFO: Sent authentication request
-2025-06-24 14:14:42 INFO: Waiting to receive message...
-2025-06-24 14:14:42 INFO: Reading encrypted message...
-2025-06-24 14:14:42 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:14:42 INFO: Encrypted message length: 297
-2025-06-24 14:14:42 INFO: Read 297 bytes for encrypted message body
-2025-06-24 14:14:42 INFO: Decrypting encrypted message, length: 297
-2025-06-24 14:14:42 INFO: Message decrypted successfully, new length: 269
-2025-06-24 14:14:42 INFO: Received message: AUTH_SUCCESS
-2025-06-24 14:14:42 INFO: Received auth response: AUTH_SUCCESS
-2025-06-24 14:14:42 INFO: Authentication successful: true
-2025-06-24 14:14:42 INFO: SSHClientModel: Connection and authentication successful
-2025-06-24 14:14:42 INFO: SSHClientModel: Requesting service: shell
-2025-06-24 14:14:42 INFO: Sending service request for: shell
-2025-06-24 14:14:42 INFO: Sending message: SERVICE_REQUEST, length: 158
-2025-06-24 14:14:42 INFO: Message encrypted, new length: 186
-2025-06-24 14:14:42 INFO: Added length prefix for encrypted message, total length: 190
-2025-06-24 14:14:42 INFO: Message sent successfully
-2025-06-24 14:14:42 INFO: Sent service request
-2025-06-24 14:14:42 INFO: Waiting to receive message...
-2025-06-24 14:14:42 INFO: Reading encrypted message...
-2025-06-24 14:14:42 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:14:42 INFO: Encrypted message length: 185
-2025-06-24 14:14:42 INFO: Read 185 bytes for encrypted message body
-2025-06-24 14:14:42 INFO: Decrypting encrypted message, length: 185
-2025-06-24 14:14:42 INFO: Message decrypted successfully, new length: 157
-2025-06-24 14:14:42 INFO: Received message: SERVICE_ACCEPT
-2025-06-24 14:14:42 INFO: Received service response: SERVICE_ACCEPT
-2025-06-24 14:14:42 INFO: Service request accepted
-2025-06-24 14:14:42 INFO: SSHClientModel: Service request successful
-2025-06-24 14:14:42 INFO: SSHClientController: Service requested: shell
-2025-06-24 14:14:42 INFO: SSHClientController: Shell service requested for GUI client
-2025-06-24 14:14:44 INFO: SSHClientController: Handling shell command: ls
-2025-06-24 14:14:44 INFO: SSHClientModel: Sending shell command: ls
-2025-06-24 14:14:44 INFO: Sending message: SHELL_COMMAND, length: 227
-2025-06-24 14:14:44 INFO: Message encrypted, new length: 255
-2025-06-24 14:14:44 INFO: Added length prefix for encrypted message, total length: 259
-2025-06-24 14:14:44 INFO: Message sent successfully
-2025-06-24 14:14:44 INFO: Waiting to receive message...
-2025-06-24 14:14:44 INFO: Reading encrypted message...
-2025-06-24 14:14:44 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:14:44 INFO: Encrypted message length: 374
-2025-06-24 14:14:44 INFO: Read 374 bytes for encrypted message body
-2025-06-24 14:14:44 INFO: Decrypting encrypted message, length: 374
-2025-06-24 14:14:44 INFO: Message decrypted successfully, new length: 346
-2025-06-24 14:14:44 INFO: Received message: SHELL_RESULT
-2025-06-24 14:14:52 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:16:51 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:30:44 INFO: Logger initialized: logs/client_gui.log
-2025-06-24 14:30:44 INFO: SSHClientModel: Created new model instance
-2025-06-24 14:31:08 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:31:09 INFO: SSHClientController: Starting connection flow
-2025-06-24 14:31:09 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:31:09 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:31:09 INFO: resolvePath: data/client/client_keys/tilman_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
-2025-06-24 14:31:09 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:31:09 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:31:09 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
-2025-06-24 14:31:09 INFO: resolvePath: data/client/client_keys/tilman_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
-2025-06-24 14:31:09 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:31:09 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:31:09 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
-2025-06-24 14:31:09 INFO: SSHClientModel: Starting connection process
-2025-06-24 14:31:09 INFO: ClientConnection constructor called
-2025-06-24 14:31:09 INFO: Connected successfully
-2025-06-24 14:31:09 INFO: Sending message: KEY_EXCHANGE_INIT, length: 973
-2025-06-24 14:31:09 INFO: Message sent successfully
-2025-06-24 14:31:09 INFO: Session ID: 6c0568b3-aa20-4582-94d1-fb0195107191
-2025-06-24 14:31:09 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
-2025-06-24 14:31:09 INFO: Encryption and HMAC enabled in protocol handler
-2025-06-24 14:31:09 INFO: Key exchange completed successfully
-2025-06-24 14:31:09 INFO: Starting authentication...
-2025-06-24 14:31:09 INFO: Preparing auth for user: tilman, type: dual
-2025-06-24 14:31:09 INFO: Using password authentication
-2025-06-24 14:31:09 INFO: Using public key authentication, signed session ID.
-2025-06-24 14:31:09 INFO: Sending message: AUTH_REQUEST, length: 986
-2025-06-24 14:31:09 INFO: Message encrypted, new length: 1014
-2025-06-24 14:31:09 INFO: Added length prefix for encrypted message, total length: 1018
-2025-06-24 14:31:09 INFO: Message sent successfully
-2025-06-24 14:31:09 INFO: Sent authentication request
-2025-06-24 14:31:09 INFO: Waiting to receive message...
-2025-06-24 14:31:09 INFO: Reading encrypted message...
-2025-06-24 14:31:09 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:31:09 INFO: Encrypted message length: 297
-2025-06-24 14:31:09 INFO: Read 297 bytes for encrypted message body
-2025-06-24 14:31:09 INFO: Decrypting encrypted message, length: 297
-2025-06-24 14:31:09 INFO: Message decrypted successfully, new length: 269
-2025-06-24 14:31:09 INFO: Received message: AUTH_SUCCESS
-2025-06-24 14:31:09 INFO: Received auth response: AUTH_SUCCESS
-2025-06-24 14:31:09 INFO: Authentication successful: true
-2025-06-24 14:31:09 INFO: SSHClientModel: Connection and authentication successful
-2025-06-24 14:31:09 INFO: SSHClientModel: Requesting service: shell
-2025-06-24 14:31:09 INFO: Sending service request for: shell
-2025-06-24 14:31:09 INFO: Sending message: SERVICE_REQUEST, length: 158
-2025-06-24 14:31:09 INFO: Message encrypted, new length: 186
-2025-06-24 14:31:09 INFO: Added length prefix for encrypted message, total length: 190
-2025-06-24 14:31:09 INFO: Message sent successfully
-2025-06-24 14:31:09 INFO: Sent service request
-2025-06-24 14:31:09 INFO: Waiting to receive message...
-2025-06-24 14:31:09 INFO: Reading encrypted message...
-2025-06-24 14:31:09 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:31:09 INFO: Encrypted message length: 185
-2025-06-24 14:31:09 INFO: Read 185 bytes for encrypted message body
-2025-06-24 14:31:09 INFO: Decrypting encrypted message, length: 185
-2025-06-24 14:31:09 INFO: Message decrypted successfully, new length: 157
-2025-06-24 14:31:09 INFO: Received message: SERVICE_ACCEPT
-2025-06-24 14:31:09 INFO: Received service response: SERVICE_ACCEPT
-2025-06-24 14:31:09 INFO: Service request accepted
-2025-06-24 14:31:09 INFO: SSHClientModel: Service request successful
-2025-06-24 14:31:09 INFO: SSHClientController: Service requested: shell
-2025-06-24 14:31:09 INFO: SSHClientController: Shell service requested for GUI client
-2025-06-24 14:31:11 INFO: SSHClientController: Handling shell command: ls
-2025-06-24 14:31:11 INFO: SSHClientModel: Sending shell command: ls
-2025-06-24 14:31:11 INFO: Sending message: SHELL_COMMAND, length: 227
-2025-06-24 14:31:11 INFO: Message encrypted, new length: 255
-2025-06-24 14:31:11 INFO: Added length prefix for encrypted message, total length: 259
-2025-06-24 14:31:11 INFO: Message sent successfully
-2025-06-24 14:31:11 INFO: Waiting to receive message...
-2025-06-24 14:31:11 INFO: Reading encrypted message...
-2025-06-24 14:31:11 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:31:11 INFO: Encrypted message length: 374
-2025-06-24 14:31:11 INFO: Read 374 bytes for encrypted message body
-2025-06-24 14:31:11 INFO: Decrypting encrypted message, length: 374
-2025-06-24 14:31:11 INFO: Message decrypted successfully, new length: 346
-2025-06-24 14:31:11 INFO: Received message: SHELL_RESULT
-2025-06-24 14:31:16 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:31:31 INFO: SSHClientController: Creating user: ted
-2025-06-24 14:31:31 INFO: Creating new verified user: ted
-2025-06-24 14:31:31 INFO:   Generating key pair for user: ted
-2025-06-24 14:31:31 INFO: Generating new RSA key pair: ted_rsa
-2025-06-24 14:31:31 INFO: Key pair generated successfully:
-2025-06-24 14:31:31 INFO:   Private key: data/client/client_keys/ted_rsa
-2025-06-24 14:31:31 INFO:   Public key: data/client/client_keys/ted_rsa.pub
-2025-06-24 14:31:31 INFO:   Adding user to server database: ted
-2025-06-24 14:31:31 INFO:   Adding public key to server for user: ted
-2025-06-24 14:31:31 INFO: Adding authorized key for user: ted
-2025-06-24 14:31:31 INFO: Authorized key added successfully: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/server/authorized_keys/ted/ted/key_1750768291327.pub
-2025-06-24 14:31:31 INFO:   Adding user to client credentials: ted
-2025-06-24 14:31:31 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:31:31 INFO: Added user to credentials: ted
-2025-06-24 14:31:31 INFO:   User added to credentials manager, saving to disk...
-2025-06-24 14:31:31 INFO: Credentials saved to: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/config/credentials.properties
-2025-06-24 14:31:31 INFO:   Credentials saved successfully
-2025-06-24 14:31:31 INFO:   Validating user setup...
-2025-06-24 14:31:31 INFO: Key pair validation: PASSED
-2025-06-24 14:31:31 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:31:31 INFO:   Available users in credentials: tilman, admin, test, ted
-2025-06-24 14:31:31 INFO:   ✓ User 'ted' created successfully!
-2025-06-24 14:31:31 INFO:   ✓ Key pair generated and validated
-2025-06-24 14:31:31 INFO:   ✓ User added to server database
-2025-06-24 14:31:31 INFO:   ✓ Public key authorized on server
-2025-06-24 14:31:31 INFO:   ✓ User added to client credentials
-2025-06-24 14:31:35 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:31:51 INFO: Logger initialized: logs/client_gui.log
-2025-06-24 14:31:51 INFO: SSHClientModel: Created new model instance
-2025-06-24 14:32:01 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:32:04 INFO: SSHClientController: Starting connection flow
-2025-06-24 14:32:04 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:32:04 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:32:04 INFO: resolvePath: data/client/client_keys/ted_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/ted_rsa
-2025-06-24 14:32:04 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:32:04 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:32:04 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/ted_rsa
-2025-06-24 14:32:04 INFO: resolvePath: data/client/client_keys/ted_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/ted_rsa.pub
-2025-06-24 14:32:04 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:32:04 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:32:04 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/ted_rsa.pub
-2025-06-24 14:32:04 INFO: SSHClientModel: Starting connection process
-2025-06-24 14:32:04 INFO: ClientConnection constructor called
-2025-06-24 14:32:04 INFO: Connected successfully
-2025-06-24 14:32:04 INFO: Sending message: KEY_EXCHANGE_INIT, length: 973
-2025-06-24 14:32:04 INFO: Message sent successfully
-2025-06-24 14:32:04 INFO: Session ID: 3d0fe989-0ef2-405d-a183-1afbb8ad94c1
-2025-06-24 14:32:04 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
-2025-06-24 14:32:04 INFO: Encryption and HMAC enabled in protocol handler
-2025-06-24 14:32:04 INFO: Key exchange completed successfully
-2025-06-24 14:32:04 INFO: Starting authentication...
-2025-06-24 14:32:04 INFO: Preparing auth for user: ted, type: dual
-2025-06-24 14:32:04 INFO: Using password authentication
-2025-06-24 14:32:04 INFO: Using public key authentication, signed session ID.
-2025-06-24 14:32:04 INFO: Sending message: AUTH_REQUEST, length: 983
-2025-06-24 14:32:04 INFO: Message encrypted, new length: 1011
-2025-06-24 14:32:04 INFO: Added length prefix for encrypted message, total length: 1015
-2025-06-24 14:32:04 INFO: Message sent successfully
-2025-06-24 14:32:04 INFO: Sent authentication request
-2025-06-24 14:32:04 INFO: Waiting to receive message...
-2025-06-24 14:32:04 INFO: Reading encrypted message...
-2025-06-24 14:32:04 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:32:04 INFO: Encrypted message length: 294
-2025-06-24 14:32:04 INFO: Read 294 bytes for encrypted message body
-2025-06-24 14:32:04 INFO: Decrypting encrypted message, length: 294
-2025-06-24 14:32:04 INFO: Message decrypted successfully, new length: 266
-2025-06-24 14:32:04 INFO: Received message: AUTH_FAILURE
-2025-06-24 14:32:04 INFO: Received auth response: AUTH_FAILURE
-2025-06-24 14:32:04 ERROR: Authentication failed: Authentication failed
-2025-06-24 14:32:04 ERROR: Failed to handle login: Authentication failed
-2025-06-24 14:37:10 INFO: Main window closing
-2025-06-24 14:37:11 INFO: GUI application stopping
-2025-06-24 14:37:26 INFO: Logger initialized: logs/client_gui.log
-2025-06-24 14:37:26 INFO: SSHClientModel: Created new model instance
-2025-06-24 14:37:28 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:37:28 INFO: SSHClientController: Starting connection flow
-2025-06-24 14:37:28 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:37:28 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:37:28 INFO: resolvePath: data/client/client_keys/tilman_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
-2025-06-24 14:37:28 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:37:28 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:37:28 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
-2025-06-24 14:37:28 INFO: resolvePath: data/client/client_keys/tilman_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
-2025-06-24 14:37:28 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:37:28 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:37:28 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
-2025-06-24 14:37:28 INFO: SSHClientModel: Starting connection process
-2025-06-24 14:37:28 INFO: ClientConnection constructor called
-2025-06-24 14:37:28 INFO: Connected successfully
-2025-06-24 14:37:29 INFO: Sending message: KEY_EXCHANGE_INIT, length: 973
-2025-06-24 14:37:29 INFO: Message sent successfully
-2025-06-24 14:37:29 INFO: Session ID: b480a28e-62de-4148-acb9-7949223b9d17
-2025-06-24 14:37:29 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
-2025-06-24 14:37:29 INFO: Encryption and HMAC enabled in protocol handler
-2025-06-24 14:37:29 INFO: Key exchange completed successfully
-2025-06-24 14:37:29 INFO: Starting authentication...
-2025-06-24 14:37:29 INFO: Preparing auth for user: tilman, type: dual
-2025-06-24 14:37:29 INFO: Using password authentication
-2025-06-24 14:37:29 INFO: Using public key authentication, signed session ID.
-2025-06-24 14:37:29 INFO: Sending message: AUTH_REQUEST, length: 986
-2025-06-24 14:37:29 INFO: Message encrypted, new length: 1014
-2025-06-24 14:37:29 INFO: Added length prefix for encrypted message, total length: 1018
-2025-06-24 14:37:29 INFO: Message sent successfully
-2025-06-24 14:37:29 INFO: Sent authentication request
-2025-06-24 14:37:29 INFO: Waiting to receive message...
-2025-06-24 14:37:29 INFO: Reading encrypted message...
-2025-06-24 14:37:29 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:37:29 INFO: Encrypted message length: 297
-2025-06-24 14:37:29 INFO: Read 297 bytes for encrypted message body
-2025-06-24 14:37:29 INFO: Decrypting encrypted message, length: 297
-2025-06-24 14:37:29 INFO: Message decrypted successfully, new length: 269
-2025-06-24 14:37:29 INFO: Received message: AUTH_SUCCESS
-2025-06-24 14:37:29 INFO: Received auth response: AUTH_SUCCESS
-2025-06-24 14:37:29 INFO: Authentication successful: true
-2025-06-24 14:37:29 INFO: SSHClientModel: Connection and authentication successful
-2025-06-24 14:37:29 INFO: SSHClientModel: Requesting service: shell
-2025-06-24 14:37:29 INFO: Sending service request for: shell
-2025-06-24 14:37:29 INFO: Sending message: SERVICE_REQUEST, length: 158
-2025-06-24 14:37:29 INFO: Message encrypted, new length: 186
-2025-06-24 14:37:29 INFO: Added length prefix for encrypted message, total length: 190
-2025-06-24 14:37:29 INFO: Message sent successfully
-2025-06-24 14:37:29 INFO: Sent service request
-2025-06-24 14:37:29 INFO: Waiting to receive message...
-2025-06-24 14:37:29 INFO: Reading encrypted message...
-2025-06-24 14:37:29 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:37:29 INFO: Encrypted message length: 185
-2025-06-24 14:37:29 INFO: Read 185 bytes for encrypted message body
-2025-06-24 14:37:29 INFO: Decrypting encrypted message, length: 185
-2025-06-24 14:37:29 INFO: Message decrypted successfully, new length: 157
-2025-06-24 14:37:29 INFO: Received message: SERVICE_ACCEPT
-2025-06-24 14:37:29 INFO: Received service response: SERVICE_ACCEPT
-2025-06-24 14:37:29 INFO: Service request accepted
-2025-06-24 14:37:29 INFO: SSHClientModel: Service request successful
-2025-06-24 14:37:29 INFO: SSHClientController: Service requested: shell
-2025-06-24 14:37:29 INFO: SSHClientController: Shell service requested for GUI client
-2025-06-24 14:37:33 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:37:35 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:37:38 INFO: SSHClientController: Deleting user: ted
-2025-06-24 14:37:38 INFO: Deleting verified user: ted
-2025-06-24 14:37:38 INFO:   Removing user from server database: ted
-2025-06-24 14:37:38 INFO:   Removing authorized keys from server for user: ted
-2025-06-24 14:37:38 INFO:     No authorized keys found for user: ted
-2025-06-24 14:37:38 INFO:   Removing user from client credentials: ted
-2025-06-24 14:37:38 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:37:38 INFO: Removed user from credentials: ted
-2025-06-24 14:37:38 INFO: Credentials saved to: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/config/credentials.properties
-2025-06-24 14:37:38 INFO:   Deleting user's SSH keys: ted
-2025-06-24 14:37:38 INFO:     Deleted private key: ted_rsa
-2025-06-24 14:37:38 INFO:     Deleted public key: ted_rsa.pub
-2025-06-24 14:37:38 INFO:     No SSH keys found for user: ted
-2025-06-24 14:37:38 INFO:   Validating user deletion...
-2025-06-24 14:37:38 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:37:38 INFO:   ✓ User 'ted' deleted successfully!
-2025-06-24 14:37:38 INFO:   ✓ User removed from server database
-2025-06-24 14:37:38 INFO:   ✓ Authorized keys removed from server
-2025-06-24 14:37:38 INFO:   ✓ User removed from client credentials
-2025-06-24 14:37:38 INFO:   ✓ SSH keys deleted
-2025-06-24 14:37:51 INFO: SSHClientController: Creating user: test
-2025-06-24 14:37:51 INFO: Creating new verified user: test
-2025-06-24 14:37:51 INFO:   Generating key pair for user: test
-2025-06-24 14:37:51 INFO: Generating new RSA key pair: test_rsa
-2025-06-24 14:37:51 INFO: Key pair generated successfully:
-2025-06-24 14:37:51 INFO:   Private key: data/client/client_keys/test_rsa
-2025-06-24 14:37:51 INFO:   Public key: data/client/client_keys/test_rsa.pub
-2025-06-24 14:37:51 INFO:   Adding user to server database: test
-2025-06-24 14:37:51 INFO:   Adding public key to server for user: test
-2025-06-24 14:37:51 INFO: Adding authorized key for user: test
-2025-06-24 14:37:51 INFO: Authorized key added successfully: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/server/authorized_keys/test/test/key_1750768671291.pub
-2025-06-24 14:37:51 INFO:   Adding user to client credentials: test
-2025-06-24 14:37:51 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:37:51 INFO: Added user to credentials: test
-2025-06-24 14:37:51 INFO:   User added to credentials manager, saving to disk...
-2025-06-24 14:37:51 INFO: Credentials saved to: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/config/credentials.properties
-2025-06-24 14:37:51 INFO:   Credentials saved successfully
-2025-06-24 14:37:51 INFO:   Validating user setup...
-2025-06-24 14:37:51 INFO: Key pair validation: PASSED
-2025-06-24 14:37:51 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:37:51 INFO:   Available users in credentials: tilman, admin, test
-2025-06-24 14:37:51 INFO:   ✓ User 'test' created successfully!
-2025-06-24 14:37:51 INFO:   ✓ Key pair generated and validated
-2025-06-24 14:37:51 INFO:   ✓ User added to server database
-2025-06-24 14:37:51 INFO:   ✓ Public key authorized on server
-2025-06-24 14:37:51 INFO:   ✓ User added to client credentials
-2025-06-24 14:38:04 INFO: Logger initialized: logs/client_gui.log
-2025-06-24 14:38:04 INFO: SSHClientModel: Created new model instance
-2025-06-24 14:38:16 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:38:20 INFO: SSHClientController: Starting connection flow
-2025-06-24 14:38:20 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:38:20 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:38:20 INFO: resolvePath: data/client/client_keys/test_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/test_rsa
-2025-06-24 14:38:20 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:38:20 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:38:20 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/test_rsa
-2025-06-24 14:38:20 INFO: resolvePath: data/client/client_keys/test_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/test_rsa.pub
-2025-06-24 14:38:20 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:38:20 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:38:20 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/test_rsa.pub
-2025-06-24 14:38:20 INFO: SSHClientModel: Starting connection process
-2025-06-24 14:38:20 INFO: ClientConnection constructor called
-2025-06-24 14:38:20 INFO: Connected successfully
-2025-06-24 14:38:21 INFO: Sending message: KEY_EXCHANGE_INIT, length: 973
-2025-06-24 14:38:21 INFO: Message sent successfully
-2025-06-24 14:38:21 INFO: Session ID: d74bd117-1473-4266-ad2c-0d6ebb414f03
-2025-06-24 14:38:21 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
-2025-06-24 14:38:21 INFO: Encryption and HMAC enabled in protocol handler
-2025-06-24 14:38:21 INFO: Key exchange completed successfully
-2025-06-24 14:38:21 INFO: Starting authentication...
-2025-06-24 14:38:21 INFO: Preparing auth for user: test, type: dual
-2025-06-24 14:38:21 INFO: Using password authentication
-2025-06-24 14:38:21 INFO: Using public key authentication, signed session ID.
-2025-06-24 14:38:21 INFO: Sending message: AUTH_REQUEST, length: 985
-2025-06-24 14:38:21 INFO: Message encrypted, new length: 1013
-2025-06-24 14:38:21 INFO: Added length prefix for encrypted message, total length: 1017
-2025-06-24 14:38:21 INFO: Message sent successfully
-2025-06-24 14:38:21 INFO: Sent authentication request
-2025-06-24 14:38:21 INFO: Waiting to receive message...
-2025-06-24 14:38:21 INFO: Reading encrypted message...
-2025-06-24 14:38:21 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:38:21 INFO: Encrypted message length: 294
-2025-06-24 14:38:21 INFO: Read 294 bytes for encrypted message body
-2025-06-24 14:38:21 INFO: Decrypting encrypted message, length: 294
-2025-06-24 14:38:21 INFO: Message decrypted successfully, new length: 266
-2025-06-24 14:38:21 INFO: Received message: AUTH_FAILURE
-2025-06-24 14:38:21 INFO: Received auth response: AUTH_FAILURE
-2025-06-24 14:38:21 ERROR: Authentication failed: Authentication failed
-2025-06-24 14:38:21 ERROR: Failed to handle login: Authentication failed
-2025-06-24 14:38:24 INFO: Main window closing
-2025-06-24 14:38:24 INFO: GUI application stopping
-2025-06-24 14:38:45 INFO: Logger initialized: logs/client_gui.log
-2025-06-24 14:38:45 INFO: SSHClientModel: Created new model instance
-2025-06-24 14:38:47 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:38:49 INFO: SSHClientController: Starting connection flow
-2025-06-24 14:38:49 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:38:49 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:38:49 INFO: resolvePath: data/client/client_keys/tilman_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
-2025-06-24 14:38:49 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:38:49 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:38:49 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
-2025-06-24 14:38:49 INFO: resolvePath: data/client/client_keys/tilman_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
-2025-06-24 14:38:49 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:38:49 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:38:49 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
-2025-06-24 14:38:49 INFO: SSHClientModel: Starting connection process
-2025-06-24 14:38:49 INFO: ClientConnection constructor called
-2025-06-24 14:38:49 INFO: Connected successfully
-2025-06-24 14:38:50 INFO: Sending message: KEY_EXCHANGE_INIT, length: 973
-2025-06-24 14:38:50 INFO: Message sent successfully
-2025-06-24 14:38:50 INFO: Session ID: 91a43119-45f8-4b65-b1b4-4e9c491cb63b
-2025-06-24 14:38:50 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
-2025-06-24 14:38:50 INFO: Encryption and HMAC enabled in protocol handler
-2025-06-24 14:38:50 INFO: Key exchange completed successfully
-2025-06-24 14:38:50 INFO: Starting authentication...
-2025-06-24 14:38:50 INFO: Preparing auth for user: tilman, type: dual
-2025-06-24 14:38:50 INFO: Using password authentication
-2025-06-24 14:38:50 INFO: Using public key authentication, signed session ID.
-2025-06-24 14:38:50 INFO: Sending message: AUTH_REQUEST, length: 986
-2025-06-24 14:38:50 INFO: Message encrypted, new length: 1014
-2025-06-24 14:38:50 INFO: Added length prefix for encrypted message, total length: 1018
-2025-06-24 14:38:50 INFO: Message sent successfully
-2025-06-24 14:38:50 INFO: Sent authentication request
-2025-06-24 14:38:50 INFO: Waiting to receive message...
-2025-06-24 14:38:50 INFO: Reading encrypted message...
-2025-06-24 14:38:50 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:38:50 INFO: Encrypted message length: 297
-2025-06-24 14:38:50 INFO: Read 297 bytes for encrypted message body
-2025-06-24 14:38:50 INFO: Decrypting encrypted message, length: 297
-2025-06-24 14:38:50 INFO: Message decrypted successfully, new length: 269
-2025-06-24 14:38:50 INFO: Received message: AUTH_SUCCESS
-2025-06-24 14:38:50 INFO: Received auth response: AUTH_SUCCESS
-2025-06-24 14:38:50 INFO: Authentication successful: true
-2025-06-24 14:38:50 INFO: SSHClientModel: Connection and authentication successful
-2025-06-24 14:38:50 INFO: SSHClientModel: Requesting service: shell
-2025-06-24 14:38:50 INFO: Sending service request for: shell
-2025-06-24 14:38:50 INFO: Sending message: SERVICE_REQUEST, length: 158
-2025-06-24 14:38:50 INFO: Message encrypted, new length: 186
-2025-06-24 14:38:50 INFO: Added length prefix for encrypted message, total length: 190
-2025-06-24 14:38:50 INFO: Message sent successfully
-2025-06-24 14:38:50 INFO: Sent service request
-2025-06-24 14:38:50 INFO: Waiting to receive message...
-2025-06-24 14:38:50 INFO: Reading encrypted message...
-2025-06-24 14:38:50 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:38:50 INFO: Encrypted message length: 185
-2025-06-24 14:38:50 INFO: Read 185 bytes for encrypted message body
-2025-06-24 14:38:50 INFO: Decrypting encrypted message, length: 185
-2025-06-24 14:38:50 INFO: Message decrypted successfully, new length: 157
-2025-06-24 14:38:50 INFO: Received message: SERVICE_ACCEPT
-2025-06-24 14:38:50 INFO: Received service response: SERVICE_ACCEPT
-2025-06-24 14:38:50 INFO: Service request accepted
-2025-06-24 14:38:50 INFO: SSHClientModel: Service request successful
-2025-06-24 14:38:50 INFO: SSHClientController: Service requested: shell
-2025-06-24 14:38:50 INFO: SSHClientController: Shell service requested for GUI client
-2025-06-24 14:38:53 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:38:56 INFO: SSHClientController: Deleting user: test
-2025-06-24 14:38:56 INFO: Deleting verified user: test
-2025-06-24 14:38:56 INFO:   Removing user from server database: test
-2025-06-24 14:38:56 INFO:   Removing authorized keys from server for user: test
-2025-06-24 14:38:56 INFO:     No authorized keys found for user: test
-2025-06-24 14:38:56 INFO:   Removing user from client credentials: test
-2025-06-24 14:38:56 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:38:56 INFO: Removed user from credentials: test
-2025-06-24 14:38:56 INFO: Credentials saved to: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/config/credentials.properties
-2025-06-24 14:38:56 INFO:   Deleting user's SSH keys: test
-2025-06-24 14:38:56 INFO:     Deleted private key: test_rsa
-2025-06-24 14:38:56 INFO:     Deleted public key: test_rsa.pub
-2025-06-24 14:38:56 INFO:     No SSH keys found for user: test
-2025-06-24 14:38:56 INFO:   Validating user deletion...
-2025-06-24 14:38:56 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:38:56 INFO:   ✓ User 'test' deleted successfully!
-2025-06-24 14:38:56 INFO:   ✓ User removed from server database
-2025-06-24 14:38:56 INFO:   ✓ Authorized keys removed from server
-2025-06-24 14:38:56 INFO:   ✓ User removed from client credentials
-2025-06-24 14:38:56 INFO:   ✓ SSH keys deleted
-2025-06-24 14:39:12 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:39:20 INFO: SSHClientController: Creating user: lel
-2025-06-24 14:39:20 INFO: Creating new verified user: lel
-2025-06-24 14:39:20 INFO:   Generating key pair for user: lel
-2025-06-24 14:39:20 INFO: Generating new RSA key pair: lel_rsa
-2025-06-24 14:39:20 INFO: Key pair generated successfully:
-2025-06-24 14:39:20 INFO:   Private key: data/client/client_keys/lel_rsa
-2025-06-24 14:39:20 INFO:   Public key: data/client/client_keys/lel_rsa.pub
-2025-06-24 14:39:20 INFO:   Adding user to server database: lel
-2025-06-24 14:39:20 INFO:   Adding public key to server for user: lel
-2025-06-24 14:39:20 INFO: Adding authorized key for user: lel
-2025-06-24 14:39:20 INFO: Authorized key added successfully: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/server/authorized_keys/lel/lel/key_1750768760297.pub
-2025-06-24 14:39:20 INFO:   Adding user to client credentials: lel
-2025-06-24 14:39:20 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:39:20 INFO: Added user to credentials: lel
-2025-06-24 14:39:20 INFO:   User added to credentials manager, saving to disk...
-2025-06-24 14:39:20 INFO: Credentials saved to: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/config/credentials.properties
-2025-06-24 14:39:20 INFO:   Credentials saved successfully
-2025-06-24 14:39:20 INFO:   Validating user setup...
-2025-06-24 14:39:20 INFO: Key pair validation: PASSED
-2025-06-24 14:39:20 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:39:20 INFO:   Available users in credentials: tilman, lel, admin
-2025-06-24 14:39:20 INFO:   ✓ User 'lel' created successfully!
-2025-06-24 14:39:20 INFO:   ✓ Key pair generated and validated
-2025-06-24 14:39:20 INFO:   ✓ User added to server database
-2025-06-24 14:39:20 INFO:   ✓ Public key authorized on server
-2025-06-24 14:39:20 INFO:   ✓ User added to client credentials
-2025-06-24 14:39:33 INFO: Logger initialized: logs/client_gui.log
-2025-06-24 14:39:33 INFO: SSHClientModel: Created new model instance
-2025-06-24 14:39:35 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:39:38 INFO: SSHClientController: Starting connection flow
-2025-06-24 14:39:38 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:39:38 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:39:38 INFO: resolvePath: data/client/client_keys/lel_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/lel_rsa
-2025-06-24 14:39:38 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:39:38 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:39:38 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/lel_rsa
-2025-06-24 14:39:38 INFO: resolvePath: data/client/client_keys/lel_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/lel_rsa.pub
-2025-06-24 14:39:38 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:39:38 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:39:38 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/lel_rsa.pub
-2025-06-24 14:39:38 INFO: SSHClientModel: Starting connection process
-2025-06-24 14:39:38 INFO: ClientConnection constructor called
-2025-06-24 14:39:38 INFO: Connected successfully
-2025-06-24 14:39:38 INFO: Sending message: KEY_EXCHANGE_INIT, length: 973
-2025-06-24 14:39:38 INFO: Message sent successfully
-2025-06-24 14:39:38 INFO: Session ID: f60f791c-dad8-4d9c-abed-f5f52692cde2
-2025-06-24 14:39:38 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
-2025-06-24 14:39:38 INFO: Encryption and HMAC enabled in protocol handler
-2025-06-24 14:39:38 INFO: Key exchange completed successfully
-2025-06-24 14:39:38 INFO: Starting authentication...
-2025-06-24 14:39:38 INFO: Preparing auth for user: lel, type: dual
-2025-06-24 14:39:38 INFO: Using password authentication
-2025-06-24 14:39:38 INFO: Using public key authentication, signed session ID.
-2025-06-24 14:39:38 INFO: Sending message: AUTH_REQUEST, length: 983
-2025-06-24 14:39:38 INFO: Message encrypted, new length: 1011
-2025-06-24 14:39:38 INFO: Added length prefix for encrypted message, total length: 1015
-2025-06-24 14:39:38 INFO: Message sent successfully
-2025-06-24 14:39:38 INFO: Sent authentication request
-2025-06-24 14:39:38 INFO: Waiting to receive message...
-2025-06-24 14:39:38 INFO: Reading encrypted message...
-2025-06-24 14:39:38 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:39:38 INFO: Encrypted message length: 294
-2025-06-24 14:39:38 INFO: Read 294 bytes for encrypted message body
-2025-06-24 14:39:38 INFO: Decrypting encrypted message, length: 294
-2025-06-24 14:39:38 INFO: Message decrypted successfully, new length: 266
-2025-06-24 14:39:38 INFO: Received message: AUTH_FAILURE
-2025-06-24 14:39:38 INFO: Received auth response: AUTH_FAILURE
-2025-06-24 14:39:38 ERROR: Authentication failed: Authentication failed
-2025-06-24 14:39:38 ERROR: Failed to handle login: Authentication failed
-2025-06-24 14:46:25 INFO: Main window closing
-2025-06-24 14:46:25 INFO: GUI application stopping
-2025-06-24 14:48:07 INFO: Logger initialized: logs/client_gui.log
-2025-06-24 14:48:07 INFO: SSHClientModel: Created new model instance
-2025-06-24 14:48:15 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:48:16 INFO: SSHClientController: Starting connection flow
-2025-06-24 14:48:16 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:48:16 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:48:16 INFO: resolvePath: data/client/client_keys/tilman_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
-2025-06-24 14:48:16 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:48:16 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:48:16 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
-2025-06-24 14:48:16 INFO: resolvePath: data/client/client_keys/tilman_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
-2025-06-24 14:48:16 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:48:16 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:48:16 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
-2025-06-24 14:48:16 INFO: SSHClientModel: Starting connection process
-2025-06-24 14:48:16 INFO: ClientConnection constructor called
-2025-06-24 14:48:16 INFO: Connected successfully
-2025-06-24 14:48:16 INFO: Sending message: KEY_EXCHANGE_INIT, length: 973
-2025-06-24 14:48:16 INFO: Message sent successfully
-2025-06-24 14:48:16 INFO: Session ID: 74972198-251f-4fbf-8689-a617a7b774a2
-2025-06-24 14:48:16 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
-2025-06-24 14:48:16 INFO: Encryption and HMAC enabled in protocol handler
-2025-06-24 14:48:16 INFO: Key exchange completed successfully
-2025-06-24 14:48:16 INFO: Starting authentication...
-2025-06-24 14:48:16 INFO: Preparing auth for user: tilman, type: dual
-2025-06-24 14:48:16 INFO: Using password authentication
-2025-06-24 14:48:16 INFO: Using public key authentication, signed session ID.
-2025-06-24 14:48:16 INFO: Sending message: AUTH_REQUEST, length: 986
-2025-06-24 14:48:16 INFO: Message encrypted, new length: 1014
-2025-06-24 14:48:16 INFO: Added length prefix for encrypted message, total length: 1018
-2025-06-24 14:48:16 INFO: Message sent successfully
-2025-06-24 14:48:16 INFO: Sent authentication request
-2025-06-24 14:48:16 INFO: Waiting to receive message...
-2025-06-24 14:48:16 INFO: Reading encrypted message...
-2025-06-24 14:48:16 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:48:16 INFO: Encrypted message length: 297
-2025-06-24 14:48:16 INFO: Read 297 bytes for encrypted message body
-2025-06-24 14:48:16 INFO: Decrypting encrypted message, length: 297
-2025-06-24 14:48:16 INFO: Message decrypted successfully, new length: 269
-2025-06-24 14:48:16 INFO: Received message: AUTH_SUCCESS
-2025-06-24 14:48:16 INFO: Received auth response: AUTH_SUCCESS
-2025-06-24 14:48:16 INFO: Authentication successful: true
-2025-06-24 14:48:16 INFO: SSHClientModel: Connection and authentication successful
-2025-06-24 14:48:16 INFO: SSHClientModel: Requesting service: shell
-2025-06-24 14:48:16 INFO: Sending service request for: shell
-2025-06-24 14:48:16 INFO: Sending message: SERVICE_REQUEST, length: 158
-2025-06-24 14:48:16 INFO: Message encrypted, new length: 186
-2025-06-24 14:48:16 INFO: Added length prefix for encrypted message, total length: 190
-2025-06-24 14:48:16 INFO: Message sent successfully
-2025-06-24 14:48:16 INFO: Sent service request
-2025-06-24 14:48:16 INFO: Waiting to receive message...
-2025-06-24 14:48:16 INFO: Reading encrypted message...
-2025-06-24 14:48:16 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:48:16 INFO: Encrypted message length: 185
-2025-06-24 14:48:16 INFO: Read 185 bytes for encrypted message body
-2025-06-24 14:48:16 INFO: Decrypting encrypted message, length: 185
-2025-06-24 14:48:16 INFO: Message decrypted successfully, new length: 157
-2025-06-24 14:48:16 INFO: Received message: SERVICE_ACCEPT
-2025-06-24 14:48:16 INFO: Received service response: SERVICE_ACCEPT
-2025-06-24 14:48:16 INFO: Service request accepted
-2025-06-24 14:48:16 INFO: SSHClientModel: Service request successful
-2025-06-24 14:48:16 INFO: SSHClientController: Service requested: shell
-2025-06-24 14:48:16 INFO: SSHClientController: Shell service requested for GUI client
-2025-06-24 14:48:19 INFO: SSHClientController: Handling shell command: ls
-2025-06-24 14:48:19 INFO: SSHClientModel: Sending shell command: ls
-2025-06-24 14:48:19 INFO: Sending message: SHELL_COMMAND, length: 227
-2025-06-24 14:48:19 INFO: Message encrypted, new length: 255
-2025-06-24 14:48:19 INFO: Added length prefix for encrypted message, total length: 259
-2025-06-24 14:48:19 INFO: Message sent successfully
-2025-06-24 14:48:19 INFO: Waiting to receive message...
-2025-06-24 14:48:19 INFO: Reading encrypted message...
-2025-06-24 14:48:19 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:48:19 INFO: Encrypted message length: 374
-2025-06-24 14:48:19 INFO: Read 374 bytes for encrypted message body
-2025-06-24 14:48:19 INFO: Decrypting encrypted message, length: 374
-2025-06-24 14:48:19 INFO: Message decrypted successfully, new length: 346
-2025-06-24 14:48:19 INFO: Received message: SHELL_RESULT
-2025-06-24 14:48:23 INFO: SSHClientController: Handling shell command: ls
-2025-06-24 14:48:23 INFO: SSHClientModel: Sending shell command: ls
-2025-06-24 14:48:23 INFO: Sending message: SHELL_COMMAND, length: 227
-2025-06-24 14:48:23 INFO: Message encrypted, new length: 255
-2025-06-24 14:48:23 INFO: Added length prefix for encrypted message, total length: 259
-2025-06-24 14:48:23 INFO: Message sent successfully
-2025-06-24 14:48:23 INFO: Waiting to receive message...
-2025-06-24 14:48:23 INFO: Reading encrypted message...
-2025-06-24 14:48:23 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:48:23 INFO: Encrypted message length: 374
-2025-06-24 14:48:23 INFO: Read 374 bytes for encrypted message body
-2025-06-24 14:48:23 INFO: Decrypting encrypted message, length: 374
-2025-06-24 14:48:23 INFO: Message decrypted successfully, new length: 346
-2025-06-24 14:48:23 INFO: Received message: SHELL_RESULT
-2025-06-24 14:48:39 INFO: SSHClientController: Creating user: test1
-2025-06-24 14:48:39 INFO: Creating new verified user: test1
-2025-06-24 14:48:39 INFO:   Generating key pair for user: test1
-2025-06-24 14:48:39 INFO: Generating new RSA key pair: test1_rsa
-2025-06-24 14:48:39 INFO: Key pair generated successfully:
-2025-06-24 14:48:39 INFO:   Private key: data/client/client_keys/test1_rsa
-2025-06-24 14:48:39 INFO:   Public key: data/client/client_keys/test1_rsa.pub
-2025-06-24 14:48:39 INFO:   Adding user to server database: test1
-2025-06-24 14:48:39 INFO:   Adding public key to server for user: test1
-2025-06-24 14:48:39 INFO: Adding authorized key for user: test1
-2025-06-24 14:48:39 INFO: Authorized key added successfully: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/server/authorized_keys/test1/key_1750769319769.pub
-2025-06-24 14:48:39 INFO:   Adding user to client credentials: test1
-2025-06-24 14:48:39 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:48:39 INFO: Added user to credentials: test1
-2025-06-24 14:48:39 INFO:   User added to credentials manager, saving to disk...
-2025-06-24 14:48:39 INFO: Credentials saved to: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/config/credentials.properties
-2025-06-24 14:48:39 INFO:   Credentials saved successfully
-2025-06-24 14:48:39 INFO:   Validating user setup...
-2025-06-24 14:48:39 INFO: Key pair validation: PASSED
-2025-06-24 14:48:39 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:48:39 INFO:   Available users in credentials: tilman, lel, test1, admin
-2025-06-24 14:48:39 INFO:   ✓ User 'test1' created successfully!
-2025-06-24 14:48:39 INFO:   ✓ Key pair generated and validated
-2025-06-24 14:48:39 INFO:   ✓ User added to server database
-2025-06-24 14:48:39 INFO:   ✓ Public key authorized on server
-2025-06-24 14:48:39 INFO:   ✓ User added to client credentials
-2025-06-24 14:48:56 INFO: Logger initialized: logs/client_gui.log
-2025-06-24 14:48:56 INFO: SSHClientModel: Created new model instance
-2025-06-24 14:49:06 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:49:08 INFO: SSHClientController: Starting connection flow
-2025-06-24 14:49:08 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:49:08 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:49:08 INFO: resolvePath: data/client/client_keys/test1_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/test1_rsa
-2025-06-24 14:49:08 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:49:08 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:49:08 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/test1_rsa
-2025-06-24 14:49:08 INFO: resolvePath: data/client/client_keys/test1_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/test1_rsa.pub
-2025-06-24 14:49:08 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:49:08 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:49:08 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/test1_rsa.pub
-2025-06-24 14:49:08 INFO: SSHClientModel: Starting connection process
-2025-06-24 14:49:08 INFO: ClientConnection constructor called
-2025-06-24 14:49:08 INFO: Connected successfully
-2025-06-24 14:49:08 INFO: Sending message: KEY_EXCHANGE_INIT, length: 973
-2025-06-24 14:49:08 INFO: Message sent successfully
-2025-06-24 14:49:08 INFO: Session ID: e675b15f-2e71-4d49-95f9-b288b17abdbd
-2025-06-24 14:49:08 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
-2025-06-24 14:49:08 INFO: Encryption and HMAC enabled in protocol handler
-2025-06-24 14:49:08 INFO: Key exchange completed successfully
-2025-06-24 14:49:08 INFO: Starting authentication...
-2025-06-24 14:49:08 INFO: Preparing auth for user: test1, type: dual
-2025-06-24 14:49:08 INFO: Using password authentication
-2025-06-24 14:49:08 INFO: Using public key authentication, signed session ID.
-2025-06-24 14:49:08 INFO: Sending message: AUTH_REQUEST, length: 986
-2025-06-24 14:49:08 INFO: Message encrypted, new length: 1014
-2025-06-24 14:49:08 INFO: Added length prefix for encrypted message, total length: 1018
-2025-06-24 14:49:08 INFO: Message sent successfully
-2025-06-24 14:49:08 INFO: Sent authentication request
-2025-06-24 14:49:08 INFO: Waiting to receive message...
-2025-06-24 14:49:08 INFO: Reading encrypted message...
-2025-06-24 14:49:08 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:49:08 INFO: Encrypted message length: 294
-2025-06-24 14:49:08 INFO: Read 294 bytes for encrypted message body
-2025-06-24 14:49:08 INFO: Decrypting encrypted message, length: 294
-2025-06-24 14:49:08 INFO: Message decrypted successfully, new length: 266
-2025-06-24 14:49:08 INFO: Received message: AUTH_FAILURE
-2025-06-24 14:49:08 INFO: Received auth response: AUTH_FAILURE
-2025-06-24 14:49:08 ERROR: Authentication failed: Authentication failed
-2025-06-24 14:49:08 ERROR: Failed to handle login: Authentication failed
-2025-06-24 14:51:31 INFO: Logger initialized: logs/client_gui.log
-2025-06-24 14:51:31 INFO: SSHClientModel: Created new model instance
-2025-06-24 14:51:38 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:51:41 INFO: SSHClientController: Starting connection flow
-2025-06-24 14:51:41 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:51:41 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:51:41 INFO: resolvePath: data/client/client_keys/test1_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/test1_rsa
-2025-06-24 14:51:41 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:51:41 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:51:41 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/test1_rsa
-2025-06-24 14:51:41 INFO: resolvePath: data/client/client_keys/test1_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/test1_rsa.pub
-2025-06-24 14:51:41 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:51:41 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:51:41 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/test1_rsa.pub
-2025-06-24 14:51:41 INFO: SSHClientModel: Starting connection process
-2025-06-24 14:51:41 INFO: ClientConnection constructor called
-2025-06-24 14:51:41 INFO: Connected successfully
-2025-06-24 14:51:41 INFO: Sending message: KEY_EXCHANGE_INIT, length: 973
-2025-06-24 14:51:41 INFO: Message sent successfully
-2025-06-24 14:51:41 INFO: Session ID: 7e2fabf6-d179-4c69-a65e-1eea6225e5d3
-2025-06-24 14:51:41 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
-2025-06-24 14:51:41 INFO: Encryption and HMAC enabled in protocol handler
-2025-06-24 14:51:41 INFO: Key exchange completed successfully
-2025-06-24 14:51:41 INFO: Starting authentication...
-2025-06-24 14:51:41 INFO: Preparing auth for user: test1, type: dual
-2025-06-24 14:51:41 INFO: Using password authentication
-2025-06-24 14:51:41 INFO: Using public key authentication, signed session ID.
-2025-06-24 14:51:41 INFO: Sending message: AUTH_REQUEST, length: 986
-2025-06-24 14:51:41 INFO: Message encrypted, new length: 1014
-2025-06-24 14:51:41 INFO: Added length prefix for encrypted message, total length: 1018
-2025-06-24 14:51:41 INFO: Message sent successfully
-2025-06-24 14:51:41 INFO: Sent authentication request
-2025-06-24 14:51:41 INFO: Waiting to receive message...
-2025-06-24 14:51:41 INFO: Reading encrypted message...
-2025-06-24 14:51:41 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:51:41 INFO: Encrypted message length: 297
-2025-06-24 14:51:41 INFO: Read 297 bytes for encrypted message body
-2025-06-24 14:51:41 INFO: Decrypting encrypted message, length: 297
-2025-06-24 14:51:41 INFO: Message decrypted successfully, new length: 269
-2025-06-24 14:51:41 INFO: Received message: AUTH_SUCCESS
-2025-06-24 14:51:41 INFO: Received auth response: AUTH_SUCCESS
-2025-06-24 14:51:41 INFO: Authentication successful: true
-2025-06-24 14:51:41 INFO: SSHClientModel: Connection and authentication successful
-2025-06-24 14:51:41 INFO: SSHClientModel: Requesting service: shell
-2025-06-24 14:51:41 INFO: Sending service request for: shell
-2025-06-24 14:51:41 INFO: Sending message: SERVICE_REQUEST, length: 158
-2025-06-24 14:51:41 INFO: Message encrypted, new length: 186
-2025-06-24 14:51:41 INFO: Added length prefix for encrypted message, total length: 190
-2025-06-24 14:51:41 INFO: Message sent successfully
-2025-06-24 14:51:41 INFO: Sent service request
-2025-06-24 14:51:41 INFO: Waiting to receive message...
-2025-06-24 14:51:41 INFO: Reading encrypted message...
-2025-06-24 14:51:41 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:51:41 INFO: Encrypted message length: 185
-2025-06-24 14:51:41 INFO: Read 185 bytes for encrypted message body
-2025-06-24 14:51:41 INFO: Decrypting encrypted message, length: 185
-2025-06-24 14:51:41 INFO: Message decrypted successfully, new length: 157
-2025-06-24 14:51:41 INFO: Received message: SERVICE_ACCEPT
-2025-06-24 14:51:41 INFO: Received service response: SERVICE_ACCEPT
-2025-06-24 14:51:41 INFO: Service request accepted
-2025-06-24 14:51:41 INFO: SSHClientModel: Service request successful
-2025-06-24 14:51:41 INFO: SSHClientController: Service requested: shell
-2025-06-24 14:51:41 INFO: SSHClientController: Shell service requested for GUI client
-2025-06-24 14:51:44 INFO: SSHClientController: Handling shell command: ls
-2025-06-24 14:51:44 INFO: SSHClientModel: Sending shell command: ls
-2025-06-24 14:51:44 INFO: Sending message: SHELL_COMMAND, length: 227
-2025-06-24 14:51:44 INFO: Message encrypted, new length: 255
-2025-06-24 14:51:44 INFO: Added length prefix for encrypted message, total length: 259
-2025-06-24 14:51:44 INFO: Message sent successfully
-2025-06-24 14:51:44 INFO: Waiting to receive message...
-2025-06-24 14:51:44 INFO: Reading encrypted message...
-2025-06-24 14:51:44 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:51:44 INFO: Encrypted message length: 374
-2025-06-24 14:51:44 INFO: Read 374 bytes for encrypted message body
-2025-06-24 14:51:44 INFO: Decrypting encrypted message, length: 374
-2025-06-24 14:51:44 INFO: Message decrypted successfully, new length: 346
-2025-06-24 14:51:44 INFO: Received message: SHELL_RESULT
-2025-06-24 14:51:58 INFO: SSHClientController: Creating user: hey3
-2025-06-24 14:51:58 INFO: Creating new verified user: hey3
-2025-06-24 14:51:58 INFO:   Generating key pair for user: hey3
-2025-06-24 14:51:58 INFO: Generating new RSA key pair: hey3_rsa
-2025-06-24 14:51:58 INFO: Key pair generated successfully:
-2025-06-24 14:51:58 INFO:   Private key: data/client/client_keys/hey3_rsa
-2025-06-24 14:51:58 INFO:   Public key: data/client/client_keys/hey3_rsa.pub
-2025-06-24 14:51:58 INFO:   Adding user to server database: hey3
-2025-06-24 14:51:58 INFO:   Adding public key to server for user: hey3
-2025-06-24 14:51:58 INFO: Adding authorized key for user: hey3
-2025-06-24 14:51:58 INFO: Authorized key added successfully: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/server/authorized_keys/hey3/key_1750769518725.pub
-2025-06-24 14:51:58 INFO:   Adding user to client credentials: hey3
-2025-06-24 14:51:58 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:51:58 INFO: Added user to credentials: hey3
-2025-06-24 14:51:58 INFO:   User added to credentials manager, saving to disk...
-2025-06-24 14:51:58 INFO: Credentials saved to: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/config/credentials.properties
-2025-06-24 14:51:58 INFO:   Credentials saved successfully
-2025-06-24 14:51:58 INFO:   Validating user setup...
-2025-06-24 14:51:58 INFO: Key pair validation: PASSED
-2025-06-24 14:51:58 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:51:58 INFO:   Available users in credentials: hey3, lel, test1, tilman, admin
-2025-06-24 14:51:58 INFO:   ✓ User 'hey3' created successfully!
-2025-06-24 14:51:58 INFO:   ✓ Key pair generated and validated
-2025-06-24 14:51:58 INFO:   ✓ User added to server database
-2025-06-24 14:51:58 INFO:   ✓ Public key authorized on server
-2025-06-24 14:51:58 INFO:   ✓ User added to client credentials
-2025-06-24 14:52:03 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 16:16:51 INFO: Logger initialized: logs/client_gui.log
+2025-06-24 16:16:51 INFO: SSHClientModel: Created new model instance
+2025-06-24 16:16:59 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 16:17:02 INFO: SSHClientController: Starting connection flow
+2025-06-24 16:17:02 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 16:17:02 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 16:17:02 INFO: resolvePath: data/client/client_keys/tilman_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
+2025-06-24 16:17:02 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+2025-06-24 16:17:02 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+2025-06-24 16:17:02 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
+2025-06-24 16:17:02 INFO: resolvePath: data/client/client_keys/tilman_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
+2025-06-24 16:17:02 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+2025-06-24 16:17:02 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+2025-06-24 16:17:02 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
+2025-06-24 16:17:02 INFO: SSHClientModel: Starting connection process
+2025-06-24 16:17:02 INFO: ClientConnection constructor called
+2025-06-24 16:17:02 INFO: Connected successfully
+2025-06-24 16:17:03 INFO: Sending message: KEY_EXCHANGE_INIT, length: 996
+2025-06-24 16:17:03 INFO: Message sent successfully
+2025-06-24 16:17:03 INFO: Server authentication succeeded: public key and signature verified.
+2025-06-24 16:17:03 INFO: Session ID: 46f91e91-d0a8-4469-ad91-f4b9a666378d
+2025-06-24 16:17:03 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
+2025-06-24 16:17:03 INFO: Encryption and HMAC enabled in protocol handler
+2025-06-24 16:17:03 INFO: Key exchange completed successfully
+2025-06-24 16:17:03 INFO: Starting authentication...
+2025-06-24 16:17:03 INFO: Preparing auth for user: tilman, type: dual
+2025-06-24 16:17:03 INFO: Using password authentication
+2025-06-24 16:17:03 INFO: Using public key authentication, signed session ID.
+2025-06-24 16:17:03 INFO: Sending message: AUTH_REQUEST, length: 986
+2025-06-24 16:17:03 INFO: Message encrypted, new length: 1014
+2025-06-24 16:17:03 INFO: Added length prefix for encrypted message, total length: 1018
+2025-06-24 16:17:03 INFO: Message sent successfully
+2025-06-24 16:17:03 INFO: Sent authentication request
+2025-06-24 16:17:03 INFO: Waiting to receive message...
+2025-06-24 16:17:03 INFO: Reading encrypted message...
+2025-06-24 16:17:03 INFO: Read 4 bytes for encrypted message length
+2025-06-24 16:17:03 INFO: Encrypted message length: 297
+2025-06-24 16:17:03 INFO: Read 297 bytes for encrypted message body
+2025-06-24 16:17:03 INFO: Decrypting encrypted message, length: 297
+2025-06-24 16:17:03 INFO: Message decrypted successfully, new length: 269
+2025-06-24 16:17:03 INFO: Received message: AUTH_SUCCESS
+2025-06-24 16:17:03 INFO: Received auth response: AUTH_SUCCESS
+2025-06-24 16:17:03 INFO: Authentication successful: true
+2025-06-24 16:17:03 INFO: SSHClientModel: Connection and authentication successful
+2025-06-24 16:17:03 INFO: SSHClientModel: Requesting service: shell
+2025-06-24 16:17:03 INFO: Sending service request for: shell
+2025-06-24 16:17:03 INFO: Sending message: SERVICE_REQUEST, length: 158
+2025-06-24 16:17:03 INFO: Message encrypted, new length: 186
+2025-06-24 16:17:03 INFO: Added length prefix for encrypted message, total length: 190
+2025-06-24 16:17:03 INFO: Message sent successfully
+2025-06-24 16:17:03 INFO: Sent service request
+2025-06-24 16:17:03 INFO: Waiting to receive message...
+2025-06-24 16:17:03 INFO: Reading encrypted message...
+2025-06-24 16:17:03 INFO: Read 4 bytes for encrypted message length
+2025-06-24 16:17:03 INFO: Encrypted message length: 185
+2025-06-24 16:17:03 INFO: Read 185 bytes for encrypted message body
+2025-06-24 16:17:03 INFO: Decrypting encrypted message, length: 185
+2025-06-24 16:17:03 INFO: Message decrypted successfully, new length: 157
+2025-06-24 16:17:03 INFO: Received message: SERVICE_ACCEPT
+2025-06-24 16:17:03 INFO: Received service response: SERVICE_ACCEPT
+2025-06-24 16:17:03 INFO: Service request accepted
+2025-06-24 16:17:03 INFO: SSHClientModel: Service request successful
+2025-06-24 16:17:03 INFO: SSHClientController: Service requested: shell
+2025-06-24 16:17:03 INFO: SSHClientController: Shell service requested for GUI client
+2025-06-24 16:17:07 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 16:17:09 INFO: SSHClientController: Deleting user: hey3
+2025-06-24 16:17:09 INFO: Deleting verified user: hey3
+2025-06-24 16:17:09 INFO:   Removing user from server database: hey3
+2025-06-24 16:17:09 INFO:   Removing authorized keys from server for user: hey3
+2025-06-24 16:17:09 INFO:     No authorized keys found for user: hey3
+2025-06-24 16:17:09 INFO:   Removing user from client credentials: hey3
+2025-06-24 16:17:09 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 16:17:09 INFO: Removed user from credentials: hey3
+2025-06-24 16:17:09 INFO: Credentials saved to: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/config/credentials.properties
+2025-06-24 16:17:09 INFO:   Deleting user's SSH keys: hey3
+2025-06-24 16:17:09 INFO:     Deleted private key: hey3_rsa
+2025-06-24 16:17:09 INFO:     Deleted public key: hey3_rsa.pub
+2025-06-24 16:17:09 INFO:     No SSH keys found for user: hey3
+2025-06-24 16:17:09 INFO:   Validating user deletion...
+2025-06-24 16:17:09 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 16:17:09 INFO:   ✓ User 'hey3' deleted successfully!
+2025-06-24 16:17:09 INFO:   ✓ User removed from server database
+2025-06-24 16:17:09 INFO:   ✓ Authorized keys removed from server
+2025-06-24 16:17:09 INFO:   ✓ User removed from client credentials
+2025-06-24 16:17:09 INFO:   ✓ SSH keys deleted
+2025-06-24 16:17:13 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 16:17:18 INFO: SSHClientController: Deleting user: test1
+2025-06-24 16:17:18 INFO: Deleting verified user: test1
+2025-06-24 16:17:18 INFO:   Removing user from server database: test1
+2025-06-24 16:17:18 INFO:   Removing authorized keys from server for user: test1
+2025-06-24 16:17:18 INFO:     No authorized keys found for user: test1
+2025-06-24 16:17:18 INFO:   Removing user from client credentials: test1
+2025-06-24 16:17:18 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 16:17:18 INFO: Removed user from credentials: test1
+2025-06-24 16:17:18 INFO: Credentials saved to: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/config/credentials.properties
+2025-06-24 16:17:18 INFO:   Deleting user's SSH keys: test1
+2025-06-24 16:17:18 INFO:     Deleted private key: test1_rsa
+2025-06-24 16:17:18 INFO:     Deleted public key: test1_rsa.pub
+2025-06-24 16:17:18 INFO:     No SSH keys found for user: test1
+2025-06-24 16:17:18 INFO:   Validating user deletion...
+2025-06-24 16:17:18 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 16:17:18 INFO:   ✓ User 'test1' deleted successfully!
+2025-06-24 16:17:18 INFO:   ✓ User removed from server database
+2025-06-24 16:17:18 INFO:   ✓ Authorized keys removed from server
+2025-06-24 16:17:18 INFO:   ✓ User removed from client credentials
+2025-06-24 16:17:18 INFO:   ✓ SSH keys deleted
+2025-06-24 16:17:23 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 16:17:26 INFO: SSHClientController: Deleting user: lel
+2025-06-24 16:17:26 INFO: Deleting verified user: lel
+2025-06-24 16:17:26 INFO:   Removing user from server database: lel
+2025-06-24 16:17:26 INFO:   Removing authorized keys from server for user: lel
+2025-06-24 16:17:26 INFO:     No authorized keys found for user: lel
+2025-06-24 16:17:26 INFO:   Removing user from client credentials: lel
+2025-06-24 16:17:26 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 16:17:26 INFO: Removed user from credentials: lel
+2025-06-24 16:17:26 INFO: Credentials saved to: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/config/credentials.properties
+2025-06-24 16:17:26 INFO:   Deleting user's SSH keys: lel
+2025-06-24 16:17:26 INFO:     Deleted private key: lel_rsa
+2025-06-24 16:17:26 INFO:     Deleted public key: lel_rsa.pub
+2025-06-24 16:17:26 INFO:     No SSH keys found for user: lel
+2025-06-24 16:17:26 INFO:   Validating user deletion...
+2025-06-24 16:17:26 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 16:17:26 INFO:   ✓ User 'lel' deleted successfully!
+2025-06-24 16:17:26 INFO:   ✓ User removed from server database
+2025-06-24 16:17:26 INFO:   ✓ Authorized keys removed from server
+2025-06-24 16:17:26 INFO:   ✓ User removed from client credentials
+2025-06-24 16:17:26 INFO:   ✓ SSH keys deleted
+2025-06-24 16:17:30 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 16:17:37 INFO: SSHClientController: Handling shell command: cd ..
+2025-06-24 16:17:37 INFO: SSHClientModel: Sending shell command: cd ..
+2025-06-24 16:17:37 INFO: Sending message: SHELL_COMMAND, length: 230
+2025-06-24 16:17:37 INFO: Message encrypted, new length: 258
+2025-06-24 16:17:37 INFO: Added length prefix for encrypted message, total length: 262
+2025-06-24 16:17:37 INFO: Message sent successfully
+2025-06-24 16:17:37 INFO: Waiting to receive message...
+2025-06-24 16:17:37 INFO: Reading encrypted message...
+2025-06-24 16:17:37 INFO: Read 4 bytes for encrypted message length
+2025-06-24 16:17:37 INFO: Encrypted message length: 243
+2025-06-24 16:17:37 INFO: Read 243 bytes for encrypted message body
+2025-06-24 16:17:37 INFO: Decrypting encrypted message, length: 243
+2025-06-24 16:17:37 INFO: Message decrypted successfully, new length: 215
+2025-06-24 16:17:37 INFO: Received message: SHELL_RESULT
+2025-06-24 16:17:40 INFO: SSHClientController: Handling shell command: ls
+2025-06-24 16:17:40 INFO: SSHClientModel: Sending shell command: ls
+2025-06-24 16:17:40 INFO: Sending message: SHELL_COMMAND, length: 220
+2025-06-24 16:17:40 INFO: Message encrypted, new length: 248
+2025-06-24 16:17:40 INFO: Added length prefix for encrypted message, total length: 252
+2025-06-24 16:17:40 INFO: Message sent successfully
+2025-06-24 16:17:40 INFO: Waiting to receive message...
+2025-06-24 16:17:40 INFO: Reading encrypted message...
+2025-06-24 16:17:40 INFO: Read 4 bytes for encrypted message length
+2025-06-24 16:17:40 INFO: Encrypted message length: 259
+2025-06-24 16:17:40 INFO: Read 259 bytes for encrypted message body
+2025-06-24 16:17:40 INFO: Decrypting encrypted message, length: 259
+2025-06-24 16:17:40 INFO: Message decrypted successfully, new length: 231
+2025-06-24 16:17:40 INFO: Received message: SHELL_RESULT
+2025-06-24 16:17:43 INFO: SSHClientController: Handling shell command: cd ..
+2025-06-24 16:17:43 INFO: SSHClientModel: Sending shell command: cd ..
+2025-06-24 16:17:43 INFO: Sending message: SHELL_COMMAND, length: 223
+2025-06-24 16:17:43 INFO: Message encrypted, new length: 251
+2025-06-24 16:17:43 INFO: Added length prefix for encrypted message, total length: 255
+2025-06-24 16:17:43 INFO: Message sent successfully
+2025-06-24 16:17:43 INFO: Waiting to receive message...
+2025-06-24 16:17:43 INFO: Reading encrypted message...
+2025-06-24 16:17:43 INFO: Read 4 bytes for encrypted message length
+2025-06-24 16:17:43 INFO: Encrypted message length: 238
+2025-06-24 16:17:43 INFO: Read 238 bytes for encrypted message body
+2025-06-24 16:17:43 INFO: Decrypting encrypted message, length: 238
+2025-06-24 16:17:43 INFO: Message decrypted successfully, new length: 210
+2025-06-24 16:17:43 INFO: Received message: SHELL_RESULT
+2025-06-24 16:17:44 INFO: SSHClientController: Handling shell command: ls
+2025-06-24 16:17:44 INFO: SSHClientModel: Sending shell command: ls
+2025-06-24 16:17:44 INFO: Sending message: SHELL_COMMAND, length: 215
+2025-06-24 16:17:44 INFO: Message encrypted, new length: 243
+2025-06-24 16:17:44 INFO: Added length prefix for encrypted message, total length: 247
+2025-06-24 16:17:44 INFO: Message sent successfully
+2025-06-24 16:17:44 INFO: Waiting to receive message...
+2025-06-24 16:17:44 INFO: Reading encrypted message...
+2025-06-24 16:17:44 INFO: Read 4 bytes for encrypted message length
+2025-06-24 16:17:44 INFO: Encrypted message length: 348
+2025-06-24 16:17:44 INFO: Read 348 bytes for encrypted message body
+2025-06-24 16:17:44 INFO: Decrypting encrypted message, length: 348
+2025-06-24 16:17:44 INFO: Message decrypted successfully, new length: 320
+2025-06-24 16:17:44 INFO: Received message: SHELL_RESULT
+2025-06-24 16:17:57 INFO: SSHClientController: Handling shell command: cd System
+2025-06-24 16:17:57 INFO: SSHClientModel: Sending shell command: cd System
+2025-06-24 16:17:57 INFO: Sending message: SHELL_COMMAND, length: 222
+2025-06-24 16:17:57 INFO: Message encrypted, new length: 250
+2025-06-24 16:17:57 INFO: Added length prefix for encrypted message, total length: 254
+2025-06-24 16:17:57 INFO: Message sent successfully
+2025-06-24 16:17:57 INFO: Waiting to receive message...
+2025-06-24 16:17:57 INFO: Reading encrypted message...
+2025-06-24 16:17:57 INFO: Read 4 bytes for encrypted message length
+2025-06-24 16:17:57 INFO: Encrypted message length: 244
+2025-06-24 16:17:57 INFO: Read 244 bytes for encrypted message body
+2025-06-24 16:17:57 INFO: Decrypting encrypted message, length: 244
+2025-06-24 16:17:57 INFO: Message decrypted successfully, new length: 216
+2025-06-24 16:17:57 INFO: Received message: SHELL_RESULT
+2025-06-24 16:17:58 INFO: SSHClientController: Handling shell command: ls
+2025-06-24 16:17:58 INFO: SSHClientModel: Sending shell command: ls
+2025-06-24 16:17:58 INFO: Sending message: SHELL_COMMAND, length: 221
+2025-06-24 16:17:58 INFO: Message encrypted, new length: 249
+2025-06-24 16:17:58 INFO: Added length prefix for encrypted message, total length: 253
+2025-06-24 16:17:58 INFO: Message sent successfully
+2025-06-24 16:17:58 INFO: Waiting to receive message...
+2025-06-24 16:17:58 INFO: Reading encrypted message...
+2025-06-24 16:17:58 INFO: Read 4 bytes for encrypted message length
+2025-06-24 16:17:58 INFO: Encrypted message length: 321
+2025-06-24 16:17:58 INFO: Read 321 bytes for encrypted message body
+2025-06-24 16:17:58 INFO: Decrypting encrypted message, length: 321
+2025-06-24 16:17:58 INFO: Message decrypted successfully, new length: 293
+2025-06-24 16:17:58 INFO: Received message: SHELL_RESULT
+2025-06-24 16:18:10 INFO: SSHClientController: Handling shell command: cd /Users/Tilman
+2025-06-24 16:18:10 INFO: SSHClientModel: Sending shell command: cd /Users/Tilman
+2025-06-24 16:18:10 INFO: Sending message: SHELL_COMMAND, length: 235
+2025-06-24 16:18:10 INFO: Message encrypted, new length: 263
+2025-06-24 16:18:10 INFO: Added length prefix for encrypted message, total length: 267
+2025-06-24 16:18:10 INFO: Message sent successfully
+2025-06-24 16:18:10 INFO: Waiting to receive message...
+2025-06-24 16:18:10 INFO: Reading encrypted message...
+2025-06-24 16:18:10 INFO: Read 4 bytes for encrypted message length
+2025-06-24 16:18:10 INFO: Encrypted message length: 250
+2025-06-24 16:18:10 INFO: Read 250 bytes for encrypted message body
+2025-06-24 16:18:10 INFO: Decrypting encrypted message, length: 250
+2025-06-24 16:18:10 INFO: Message decrypted successfully, new length: 222
+2025-06-24 16:18:10 INFO: Received message: SHELL_RESULT
+2025-06-24 16:18:12 INFO: SSHClientController: Handling shell command: ls
+2025-06-24 16:18:12 INFO: SSHClientModel: Sending shell command: ls
+2025-06-24 16:18:12 INFO: Sending message: SHELL_COMMAND, length: 227
+2025-06-24 16:18:12 INFO: Message encrypted, new length: 255
+2025-06-24 16:18:12 INFO: Added length prefix for encrypted message, total length: 259
+2025-06-24 16:18:12 INFO: Message sent successfully
+2025-06-24 16:18:12 INFO: Waiting to receive message...
+2025-06-24 16:18:12 INFO: Reading encrypted message...
+2025-06-24 16:18:12 INFO: Read 4 bytes for encrypted message length
+2025-06-24 16:18:12 INFO: Encrypted message length: 374
+2025-06-24 16:18:12 INFO: Read 374 bytes for encrypted message body
+2025-06-24 16:18:12 INFO: Decrypting encrypted message, length: 374
+2025-06-24 16:18:12 INFO: Message decrypted successfully, new length: 346
+2025-06-24 16:18:12 INFO: Received message: SHELL_RESULT

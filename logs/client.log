@@ -1,146 +1,318 @@
-2025-06-24 14:52:17 INFO: Logger initialized: logs/client.log
-2025-06-24 14:52:17 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:52:17 INFO: SSHClientModel: Created new model instance
-2025-06-24 14:52:17 INFO: SSHClientController: Starting client
-2025-06-24 14:52:17 INFO: SSHClientController: Starting connection flow
-2025-06-24 14:52:25 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:52:28 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:52:28 INFO: resolvePath: data/client/client_keys/hey3_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/hey3_rsa
-2025-06-24 14:52:28 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:52:28 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:52:28 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/hey3_rsa
-2025-06-24 14:52:28 INFO: resolvePath: data/client/client_keys/hey3_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/hey3_rsa.pub
-2025-06-24 14:52:28 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:52:28 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:52:28 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/hey3_rsa.pub
-2025-06-24 14:52:28 INFO: SSHClientModel: Starting connection process
-2025-06-24 14:52:28 INFO: ClientConnection constructor called
-2025-06-24 14:52:28 INFO: Connected successfully
-2025-06-24 14:52:28 INFO: Sending message: KEY_EXCHANGE_INIT, length: 973
-2025-06-24 14:52:28 INFO: Message sent successfully
-2025-06-24 14:52:28 INFO: Session ID: 6db06e6b-ac40-4a05-86e6-3249ca43fc1d
-2025-06-24 14:52:28 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
-2025-06-24 14:52:28 INFO: Encryption and HMAC enabled in protocol handler
-2025-06-24 14:52:28 INFO: Key exchange completed successfully
-2025-06-24 14:52:28 INFO: Starting authentication...
-2025-06-24 14:52:28 INFO: Preparing auth for user: hey3, type: dual
-2025-06-24 14:52:28 INFO: Using password authentication
-2025-06-24 14:52:28 INFO: Using public key authentication, signed session ID.
-2025-06-24 14:52:28 INFO: Sending message: AUTH_REQUEST, length: 984
-2025-06-24 14:52:28 INFO: Message encrypted, new length: 1012
-2025-06-24 14:52:28 INFO: Added length prefix for encrypted message, total length: 1016
-2025-06-24 14:52:28 INFO: Message sent successfully
-2025-06-24 14:52:28 INFO: Sent authentication request
-2025-06-24 14:52:28 INFO: Waiting to receive message...
-2025-06-24 14:52:28 INFO: Reading encrypted message...
-2025-06-24 14:52:28 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:52:28 INFO: Encrypted message length: 294
-2025-06-24 14:52:28 INFO: Read 294 bytes for encrypted message body
-2025-06-24 14:52:28 INFO: Decrypting encrypted message, length: 294
-2025-06-24 14:52:28 INFO: Message decrypted successfully, new length: 266
-2025-06-24 14:52:28 INFO: Received message: AUTH_FAILURE
-2025-06-24 14:52:28 INFO: Received auth response: AUTH_FAILURE
-2025-06-24 14:52:28 ERROR: Authentication failed: Authentication failed
-2025-06-24 14:52:28 ERROR: SSHClientController: Failed to start client: Authentication failed
-2025-06-24 14:53:33 INFO: Logger initialized: logs/client.log
-2025-06-24 14:53:33 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:53:33 INFO: SSHClientModel: Created new model instance
-2025-06-24 14:53:33 INFO: SSHClientController: Starting client
-2025-06-24 14:53:33 INFO: SSHClientController: Starting connection flow
-2025-06-24 14:53:42 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:53:44 INFO: Credentials loaded from: config/credentials.properties
-2025-06-24 14:53:44 INFO: resolvePath: data/client/client_keys/hey3_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/hey3_rsa
-2025-06-24 14:53:44 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:53:44 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:53:44 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/hey3_rsa
-2025-06-24 14:53:44 INFO: resolvePath: data/client/client_keys/hey3_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/hey3_rsa.pub
-2025-06-24 14:53:44 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:53:44 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
-2025-06-24 14:53:44 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/hey3_rsa.pub
-2025-06-24 14:53:44 INFO: SSHClientModel: Starting connection process
-2025-06-24 14:53:44 INFO: ClientConnection constructor called
-2025-06-24 14:53:44 INFO: Connected successfully
-2025-06-24 14:53:45 INFO: Sending message: KEY_EXCHANGE_INIT, length: 973
-2025-06-24 14:53:45 INFO: Message sent successfully
-2025-06-24 14:53:45 INFO: Session ID: 68a97930-970d-4c60-93a9-63cdbe1817ec
-2025-06-24 14:53:45 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
-2025-06-24 14:53:45 INFO: Encryption and HMAC enabled in protocol handler
-2025-06-24 14:53:45 INFO: Key exchange completed successfully
-2025-06-24 14:53:45 INFO: Starting authentication...
-2025-06-24 14:53:45 INFO: Preparing auth for user: hey3, type: dual
-2025-06-24 14:53:45 INFO: Using password authentication
-2025-06-24 14:53:45 INFO: Using public key authentication, signed session ID.
-2025-06-24 14:53:45 INFO: Sending message: AUTH_REQUEST, length: 984
-2025-06-24 14:53:45 INFO: Message encrypted, new length: 1012
-2025-06-24 14:53:45 INFO: Added length prefix for encrypted message, total length: 1016
-2025-06-24 14:53:45 INFO: Message sent successfully
-2025-06-24 14:53:45 INFO: Sent authentication request
-2025-06-24 14:53:45 INFO: Waiting to receive message...
-2025-06-24 14:53:45 INFO: Reading encrypted message...
-2025-06-24 14:53:45 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:53:45 INFO: Encrypted message length: 297
-2025-06-24 14:53:45 INFO: Read 297 bytes for encrypted message body
-2025-06-24 14:53:45 INFO: Decrypting encrypted message, length: 297
-2025-06-24 14:53:45 INFO: Message decrypted successfully, new length: 269
-2025-06-24 14:53:45 INFO: Received message: AUTH_SUCCESS
-2025-06-24 14:53:45 INFO: Received auth response: AUTH_SUCCESS
-2025-06-24 14:53:45 INFO: Authentication successful: true
-2025-06-24 14:53:45 INFO: SSHClientModel: Connection and authentication successful
-2025-06-24 14:53:47 INFO: SSHClientModel: Requesting service: shell
-2025-06-24 14:53:47 INFO: Sending service request for: shell
-2025-06-24 14:53:47 INFO: Sending message: SERVICE_REQUEST, length: 158
-2025-06-24 14:53:47 INFO: Message encrypted, new length: 186
-2025-06-24 14:53:47 INFO: Added length prefix for encrypted message, total length: 190
-2025-06-24 14:53:47 INFO: Message sent successfully
-2025-06-24 14:53:47 INFO: Sent service request
-2025-06-24 14:53:47 INFO: Waiting to receive message...
-2025-06-24 14:53:47 INFO: Reading encrypted message...
-2025-06-24 14:53:47 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:53:47 INFO: Encrypted message length: 185
-2025-06-24 14:53:47 INFO: Read 185 bytes for encrypted message body
-2025-06-24 14:53:47 INFO: Decrypting encrypted message, length: 185
-2025-06-24 14:53:47 INFO: Message decrypted successfully, new length: 157
-2025-06-24 14:53:47 INFO: Received message: SERVICE_ACCEPT
-2025-06-24 14:53:47 INFO: Received service response: SERVICE_ACCEPT
-2025-06-24 14:53:47 INFO: Service request accepted
-2025-06-24 14:53:47 INFO: SSHClientModel: Service request successful
-2025-06-24 14:53:47 INFO: SSHClientController: Service requested: shell
-2025-06-24 14:53:49 INFO: SSHClientModel: Sending shell command: ls
-2025-06-24 14:53:49 INFO: Sending message: SHELL_COMMAND, length: 227
-2025-06-24 14:53:49 INFO: Message encrypted, new length: 255
-2025-06-24 14:53:49 INFO: Added length prefix for encrypted message, total length: 259
-2025-06-24 14:53:49 INFO: Message sent successfully
-2025-06-24 14:53:49 INFO: Waiting to receive message...
-2025-06-24 14:53:49 INFO: Reading encrypted message...
-2025-06-24 14:53:49 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:53:49 INFO: Encrypted message length: 374
-2025-06-24 14:53:49 INFO: Read 374 bytes for encrypted message body
-2025-06-24 14:53:49 INFO: Decrypting encrypted message, length: 374
-2025-06-24 14:53:49 INFO: Message decrypted successfully, new length: 346
-2025-06-24 14:53:49 INFO: Received message: SHELL_RESULT
-2025-06-24 14:53:53 INFO: SSHClientModel: Sending shell command: echo hea
-2025-06-24 14:53:53 INFO: Sending message: SHELL_COMMAND, length: 233
-2025-06-24 14:53:53 INFO: Message encrypted, new length: 261
-2025-06-24 14:53:53 INFO: Added length prefix for encrypted message, total length: 265
-2025-06-24 14:53:53 INFO: Message sent successfully
-2025-06-24 14:53:53 INFO: Waiting to receive message...
-2025-06-24 14:53:53 INFO: Reading encrypted message...
-2025-06-24 14:53:53 INFO: Read 4 bytes for encrypted message length
-2025-06-24 14:53:53 INFO: Encrypted message length: 255
-2025-06-24 14:53:53 INFO: Read 255 bytes for encrypted message body
-2025-06-24 14:53:53 INFO: Decrypting encrypted message, length: 255
-2025-06-24 14:53:53 INFO: Message decrypted successfully, new length: 227
-2025-06-24 14:53:53 INFO: Received message: SHELL_RESULT
-2025-06-24 15:50:53 INFO: SSHClientModel: Sending shell command: git status
-2025-06-24 15:50:53 INFO: Sending message: SHELL_COMMAND, length: 235
-2025-06-24 15:50:53 INFO: Message encrypted, new length: 263
-2025-06-24 15:50:53 INFO: Added length prefix for encrypted message, total length: 267
-2025-06-24 15:50:53 INFO: Message sent successfully
-2025-06-24 15:50:53 INFO: Waiting to receive message...
-2025-06-24 15:50:53 INFO: Reading encrypted message...
-2025-06-24 15:50:53 INFO: Read 4 bytes for encrypted message length
-2025-06-24 15:50:53 INFO: Encrypted message length: 322
-2025-06-24 15:50:53 INFO: Read 322 bytes for encrypted message body
-2025-06-24 15:50:53 INFO: Decrypting encrypted message, length: 322
-2025-06-24 15:50:53 INFO: Message decrypted successfully, new length: 294
-2025-06-24 15:50:53 INFO: Received message: SHELL_RESULT
+2025-06-24 15:56:22 INFO: Logger initialized: logs/client.log
+2025-06-24 15:56:22 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 15:56:22 INFO: SSHClientModel: Created new model instance
+2025-06-24 15:56:22 INFO: SSHClientController: Starting client
+2025-06-24 15:56:22 INFO: SSHClientController: Starting connection flow
+2025-06-24 15:57:00 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 15:57:03 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 15:57:03 INFO: resolvePath: data/client/client_keys/lel_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/lel_rsa
+2025-06-24 15:57:03 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+2025-06-24 15:57:03 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+2025-06-24 15:57:03 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/lel_rsa
+2025-06-24 15:57:03 INFO: resolvePath: data/client/client_keys/lel_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/lel_rsa.pub
+2025-06-24 15:57:03 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+2025-06-24 15:57:03 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+2025-06-24 15:57:03 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/lel_rsa.pub
+2025-06-24 15:57:03 INFO: SSHClientModel: Starting connection process
+2025-06-24 15:57:03 INFO: ClientConnection constructor called
+2025-06-24 15:57:03 INFO: Connected successfully
+2025-06-24 15:57:03 INFO: Sending message: KEY_EXCHANGE_INIT, length: 996
+2025-06-24 15:57:03 INFO: Message sent successfully
+2025-06-24 15:57:03 ERROR: Expected server public key not found in client or server directory! Aborting connection.
+2025-06-24 15:57:03 ERROR: SSHClientController: Failed to start client: Key exchange failed
+2025-06-24 15:59:16 INFO: Logger initialized: logs/client.log
+2025-06-24 15:59:16 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 15:59:16 INFO: SSHClientModel: Created new model instance
+2025-06-24 15:59:16 INFO: SSHClientController: Starting client
+2025-06-24 15:59:16 INFO: SSHClientController: Starting connection flow
+2025-06-24 15:59:30 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 15:59:33 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 15:59:33 INFO: resolvePath: data/client/client_keys/tilman_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
+2025-06-24 15:59:33 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+2025-06-24 15:59:33 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+2025-06-24 15:59:33 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa
+2025-06-24 15:59:33 INFO: resolvePath: data/client/client_keys/tilman_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
+2025-06-24 15:59:33 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+2025-06-24 15:59:33 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+2025-06-24 15:59:33 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/tilman_rsa.pub
+2025-06-24 15:59:33 INFO: SSHClientModel: Starting connection process
+2025-06-24 15:59:33 INFO: ClientConnection constructor called
+2025-06-24 15:59:33 INFO: Connected successfully
+2025-06-24 15:59:33 INFO: Sending message: KEY_EXCHANGE_INIT, length: 996
+2025-06-24 15:59:33 INFO: Message sent successfully
+2025-06-24 15:59:34 ERROR: Expected server public key not found in client or server directory! Aborting connection.
+2025-06-24 15:59:34 ERROR: SSHClientController: Failed to start client: Key exchange failed
+2025-06-24 16:01:59 INFO: Logger initialized: logs/client.log
+2025-06-24 16:01:59 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 16:01:59 INFO: SSHClientModel: Created new model instance
+2025-06-24 16:01:59 INFO: SSHClientController: Starting client
+2025-06-24 16:01:59 INFO: SSHClientController: Starting connection flow
+2025-06-24 16:02:10 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 16:02:13 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 16:02:13 INFO: resolvePath: data/client/client_keys/hey3_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/hey3_rsa
+2025-06-24 16:02:13 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+2025-06-24 16:02:13 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+2025-06-24 16:02:13 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/hey3_rsa
+2025-06-24 16:02:13 INFO: resolvePath: data/client/client_keys/hey3_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/hey3_rsa.pub
+2025-06-24 16:02:13 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+2025-06-24 16:02:13 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+2025-06-24 16:02:13 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/hey3_rsa.pub
+2025-06-24 16:02:13 INFO: SSHClientModel: Starting connection process
+2025-06-24 16:02:13 INFO: ClientConnection constructor called
+2025-06-24 16:02:13 INFO: Connected successfully
+2025-06-24 16:02:14 INFO: Sending message: KEY_EXCHANGE_INIT, length: 996
+2025-06-24 16:02:14 INFO: Message sent successfully
+2025-06-24 16:02:14 INFO: Server authentication succeeded: public key and signature verified.
+2025-06-24 16:02:14 INFO: Session ID: eed00ec3-7814-4456-bfe0-e7a8a74c039e
+2025-06-24 16:02:14 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
+2025-06-24 16:02:14 INFO: Encryption and HMAC enabled in protocol handler
+2025-06-24 16:02:14 INFO: Key exchange completed successfully
+2025-06-24 16:02:14 INFO: Starting authentication...
+2025-06-24 16:02:14 INFO: Preparing auth for user: hey3, type: dual
+2025-06-24 16:02:14 INFO: Using password authentication
+2025-06-24 16:02:14 INFO: Using public key authentication, signed session ID.
+2025-06-24 16:02:14 INFO: Sending message: AUTH_REQUEST, length: 984
+2025-06-24 16:02:14 INFO: Message encrypted, new length: 1012
+2025-06-24 16:02:14 INFO: Added length prefix for encrypted message, total length: 1016
+2025-06-24 16:02:14 INFO: Message sent successfully
+2025-06-24 16:02:14 INFO: Sent authentication request
+2025-06-24 16:02:14 INFO: Waiting to receive message...
+2025-06-24 16:02:14 INFO: Reading encrypted message...
+2025-06-24 16:02:14 INFO: Read 4 bytes for encrypted message length
+2025-06-24 16:02:14 INFO: Encrypted message length: 297
+2025-06-24 16:02:14 INFO: Read 297 bytes for encrypted message body
+2025-06-24 16:02:14 INFO: Decrypting encrypted message, length: 297
+2025-06-24 16:02:14 INFO: Message decrypted successfully, new length: 269
+2025-06-24 16:02:14 INFO: Received message: AUTH_SUCCESS
+2025-06-24 16:02:14 INFO: Received auth response: AUTH_SUCCESS
+2025-06-24 16:02:14 INFO: Authentication successful: true
+2025-06-24 16:02:14 INFO: SSHClientModel: Connection and authentication successful
+2025-06-24 16:02:16 INFO: SSHClientModel: Requesting service: shell
+2025-06-24 16:02:16 INFO: Sending service request for: shell
+2025-06-24 16:02:16 INFO: Sending message: SERVICE_REQUEST, length: 158
+2025-06-24 16:02:16 INFO: Message encrypted, new length: 186
+2025-06-24 16:02:16 INFO: Added length prefix for encrypted message, total length: 190
+2025-06-24 16:02:16 INFO: Message sent successfully
+2025-06-24 16:02:16 INFO: Sent service request
+2025-06-24 16:02:16 INFO: Waiting to receive message...
+2025-06-24 16:02:16 INFO: Reading encrypted message...
+2025-06-24 16:02:16 INFO: Read 4 bytes for encrypted message length
+2025-06-24 16:02:16 INFO: Encrypted message length: 185
+2025-06-24 16:02:16 INFO: Read 185 bytes for encrypted message body
+2025-06-24 16:02:16 INFO: Decrypting encrypted message, length: 185
+2025-06-24 16:02:16 INFO: Message decrypted successfully, new length: 157
+2025-06-24 16:02:16 INFO: Received message: SERVICE_ACCEPT
+2025-06-24 16:02:16 INFO: Received service response: SERVICE_ACCEPT
+2025-06-24 16:02:16 INFO: Service request accepted
+2025-06-24 16:02:16 INFO: SSHClientModel: Service request successful
+2025-06-24 16:02:16 INFO: SSHClientController: Service requested: shell
+2025-06-24 16:02:19 INFO: SSHClientModel: Sending shell command: ls
+2025-06-24 16:02:19 INFO: Sending message: SHELL_COMMAND, length: 227
+2025-06-24 16:02:19 INFO: Message encrypted, new length: 255
+2025-06-24 16:02:19 INFO: Added length prefix for encrypted message, total length: 259
+2025-06-24 16:02:19 INFO: Message sent successfully
+2025-06-24 16:02:19 INFO: Waiting to receive message...
+2025-06-24 16:02:19 INFO: Reading encrypted message...
+2025-06-24 16:02:19 INFO: Read 4 bytes for encrypted message length
+2025-06-24 16:02:19 INFO: Encrypted message length: 374
+2025-06-24 16:02:19 INFO: Read 374 bytes for encrypted message body
+2025-06-24 16:02:19 INFO: Decrypting encrypted message, length: 374
+2025-06-24 16:02:19 INFO: Message decrypted successfully, new length: 346
+2025-06-24 16:02:20 INFO: Received message: SHELL_RESULT
+2025-06-24 16:02:22 INFO: SSHClientModel: Sending shell command: cd ..
+2025-06-24 16:02:22 INFO: Sending message: SHELL_COMMAND, length: 230
+2025-06-24 16:02:22 INFO: Message encrypted, new length: 258
+2025-06-24 16:02:22 INFO: Added length prefix for encrypted message, total length: 262
+2025-06-24 16:02:22 INFO: Message sent successfully
+2025-06-24 16:02:22 INFO: Waiting to receive message...
+2025-06-24 16:02:22 INFO: Reading encrypted message...
+2025-06-24 16:02:22 INFO: Read 4 bytes for encrypted message length
+2025-06-24 16:02:22 INFO: Encrypted message length: 243
+2025-06-24 16:02:22 INFO: Read 243 bytes for encrypted message body
+2025-06-24 16:02:22 INFO: Decrypting encrypted message, length: 243
+2025-06-24 16:02:22 INFO: Message decrypted successfully, new length: 215
+2025-06-24 16:02:22 INFO: Received message: SHELL_RESULT
+2025-06-24 16:02:27 INFO: SSHClientController: Stopping client
+2025-06-24 16:02:27 INFO: SSHClientModel: Disconnecting from server
+2025-06-24 16:02:27 INFO: Sending message: DISCONNECT, length: 41
+2025-06-24 16:02:27 INFO: Message encrypted, new length: 69
+2025-06-24 16:02:27 INFO: Added length prefix for encrypted message, total length: 73
+2025-06-24 16:02:27 INFO: Message sent successfully
+2025-06-24 16:02:27 INFO: Sending message: DISCONNECT, length: 41
+2025-06-24 16:02:27 INFO: Message encrypted, new length: 69
+2025-06-24 16:02:27 INFO: Added length prefix for encrypted message, total length: 73
+2025-06-24 16:02:27 INFO: Message sent successfully
+2025-06-24 16:02:27 INFO: Protocol handler closed
+2025-06-24 16:02:27 INFO: Disconnected from server
+2025-06-24 16:04:03 INFO: Logger initialized: logs/client.log
+2025-06-24 16:04:03 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 16:04:03 INFO: SSHClientModel: Created new model instance
+2025-06-24 16:04:03 INFO: SSHClientController: Starting client
+2025-06-24 16:04:03 INFO: SSHClientController: Starting connection flow
+2025-06-24 16:04:11 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 16:04:13 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 16:04:13 INFO: resolvePath: data/client/client_keys/hey3_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/hey3_rsa
+2025-06-24 16:04:13 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+2025-06-24 16:04:13 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+2025-06-24 16:04:13 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/hey3_rsa
+2025-06-24 16:04:13 INFO: resolvePath: data/client/client_keys/hey3_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/hey3_rsa.pub
+2025-06-24 16:04:13 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+2025-06-24 16:04:13 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+2025-06-24 16:04:13 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/hey3_rsa.pub
+2025-06-24 16:04:13 INFO: SSHClientModel: Starting connection process
+2025-06-24 16:04:13 INFO: ClientConnection constructor called
+2025-06-24 16:04:13 INFO: Connected successfully
+2025-06-24 16:04:14 INFO: Sending message: KEY_EXCHANGE_INIT, length: 996
+2025-06-24 16:04:14 INFO: Message sent successfully
+2025-06-24 16:04:14 INFO: Server authentication succeeded: public key and signature verified.
+2025-06-24 16:04:14 INFO: Session ID: 3f667790-8c44-4b95-80de-d625b767936f
+2025-06-24 16:04:14 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
+2025-06-24 16:04:14 INFO: Encryption and HMAC enabled in protocol handler
+2025-06-24 16:04:14 INFO: Key exchange completed successfully
+2025-06-24 16:04:14 INFO: Starting authentication...
+2025-06-24 16:04:14 INFO: Preparing auth for user: hey3, type: dual
+2025-06-24 16:04:14 INFO: Using password authentication
+2025-06-24 16:04:14 INFO: Using public key authentication, signed session ID.
+2025-06-24 16:04:14 INFO: Sending message: AUTH_REQUEST, length: 984
+2025-06-24 16:04:14 INFO: Message encrypted, new length: 1012
+2025-06-24 16:04:14 INFO: Added length prefix for encrypted message, total length: 1016
+2025-06-24 16:04:14 INFO: Message sent successfully
+2025-06-24 16:04:14 INFO: Sent authentication request
+2025-06-24 16:04:14 INFO: Waiting to receive message...
+2025-06-24 16:04:14 INFO: Reading encrypted message...
+2025-06-24 16:04:14 INFO: Read 4 bytes for encrypted message length
+2025-06-24 16:04:14 INFO: Encrypted message length: 297
+2025-06-24 16:04:14 INFO: Read 297 bytes for encrypted message body
+2025-06-24 16:04:14 INFO: Decrypting encrypted message, length: 297
+2025-06-24 16:04:14 INFO: Message decrypted successfully, new length: 269
+2025-06-24 16:04:14 INFO: Received message: AUTH_SUCCESS
+2025-06-24 16:04:14 INFO: Received auth response: AUTH_SUCCESS
+2025-06-24 16:04:14 INFO: Authentication successful: true
+2025-06-24 16:04:14 INFO: SSHClientModel: Connection and authentication successful
+2025-06-24 16:04:19 INFO: SSHClientModel: Requesting service: shell
+2025-06-24 16:04:19 INFO: Sending service request for: shell
+2025-06-24 16:04:19 INFO: Sending message: SERVICE_REQUEST, length: 158
+2025-06-24 16:04:19 INFO: Message encrypted, new length: 186
+2025-06-24 16:04:19 INFO: Added length prefix for encrypted message, total length: 190
+2025-06-24 16:04:19 INFO: Message sent successfully
+2025-06-24 16:04:19 INFO: Sent service request
+2025-06-24 16:04:19 INFO: Waiting to receive message...
+2025-06-24 16:04:19 INFO: Reading encrypted message...
+2025-06-24 16:04:19 INFO: Read 4 bytes for encrypted message length
+2025-06-24 16:04:19 INFO: Encrypted message length: 185
+2025-06-24 16:04:19 INFO: Read 185 bytes for encrypted message body
+2025-06-24 16:04:19 INFO: Decrypting encrypted message, length: 185
+2025-06-24 16:04:19 INFO: Message decrypted successfully, new length: 157
+2025-06-24 16:04:19 INFO: Received message: SERVICE_ACCEPT
+2025-06-24 16:04:19 INFO: Received service response: SERVICE_ACCEPT
+2025-06-24 16:04:19 INFO: Service request accepted
+2025-06-24 16:04:19 INFO: SSHClientModel: Service request successful
+2025-06-24 16:04:19 INFO: SSHClientController: Service requested: shell
+2025-06-24 16:04:21 INFO: SSHClientModel: Sending shell command: ls 
+2025-06-24 16:04:21 INFO: Sending message: SHELL_COMMAND, length: 228
+2025-06-24 16:04:21 INFO: Message encrypted, new length: 256
+2025-06-24 16:04:21 INFO: Added length prefix for encrypted message, total length: 260
+2025-06-24 16:04:21 INFO: Message sent successfully
+2025-06-24 16:04:21 INFO: Waiting to receive message...
+2025-06-24 16:04:21 INFO: Reading encrypted message...
+2025-06-24 16:04:21 INFO: Read 4 bytes for encrypted message length
+2025-06-24 16:04:21 INFO: Encrypted message length: 374
+2025-06-24 16:04:21 INFO: Read 374 bytes for encrypted message body
+2025-06-24 16:04:21 INFO: Decrypting encrypted message, length: 374
+2025-06-24 16:04:21 INFO: Message decrypted successfully, new length: 346
+2025-06-24 16:04:21 INFO: Received message: SHELL_RESULT
+2025-06-24 16:06:13 INFO: Logger initialized: logs/client.log
+2025-06-24 16:06:13 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 16:06:13 INFO: SSHClientModel: Created new model instance
+2025-06-24 16:06:13 INFO: SSHClientController: Starting client
+2025-06-24 16:06:13 INFO: SSHClientController: Starting connection flow
+2025-06-24 16:06:32 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 16:06:44 INFO: Credentials loaded from: config/credentials.properties
+2025-06-24 16:06:44 INFO: resolvePath: data/client/client_keys/admin_rsa -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/admin_rsa
+2025-06-24 16:06:44 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+2025-06-24 16:06:44 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+2025-06-24 16:06:44 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/admin_rsa
+2025-06-24 16:06:44 INFO: resolvePath: data/client/client_keys/admin_rsa.pub -> /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/admin_rsa.pub
+2025-06-24 16:06:44 INFO:   currentDir: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+2025-06-24 16:06:44 INFO:   projectRoot: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh
+2025-06-24 16:06:44 INFO: resolvePath: File exists: /Users/tilman/Library/Mobile Documents/com~apple~CloudDocs/Schule/info/projects/ssh/data/client/client_keys/admin_rsa.pub
+2025-06-24 16:06:44 INFO: SSHClientModel: Starting connection process
+2025-06-24 16:06:44 INFO: ClientConnection constructor called
+2025-06-24 16:06:44 INFO: Connected successfully
+2025-06-24 16:06:44 INFO: Sending message: KEY_EXCHANGE_INIT, length: 996
+2025-06-24 16:06:44 INFO: Message sent successfully
+2025-06-24 16:06:44 INFO: Server authentication succeeded: public key and signature verified.
+2025-06-24 16:06:44 INFO: Session ID: 2de87b17-3321-42f2-a9d7-f9560f4fa2e2
+2025-06-24 16:06:44 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
+2025-06-24 16:06:44 INFO: Encryption and HMAC enabled in protocol handler
+2025-06-24 16:06:44 INFO: Key exchange completed successfully
+2025-06-24 16:06:44 INFO: Starting authentication...
+2025-06-24 16:06:44 INFO: Preparing auth for user: admin, type: dual
+2025-06-24 16:06:44 INFO: Using password authentication
+2025-06-24 16:06:44 INFO: Using public key authentication, signed session ID.
+2025-06-24 16:06:44 INFO: Sending message: AUTH_REQUEST, length: 987
+2025-06-24 16:06:44 INFO: Message encrypted, new length: 1015
+2025-06-24 16:06:44 INFO: Added length prefix for encrypted message, total length: 1019
+2025-06-24 16:06:44 INFO: Message sent successfully
+2025-06-24 16:06:44 INFO: Sent authentication request
+2025-06-24 16:06:44 INFO: Waiting to receive message...
+2025-06-24 16:06:44 INFO: Reading encrypted message...
+2025-06-24 16:06:44 INFO: Read 4 bytes for encrypted message length
+2025-06-24 16:06:44 INFO: Encrypted message length: 297
+2025-06-24 16:06:44 INFO: Read 297 bytes for encrypted message body
+2025-06-24 16:06:44 INFO: Decrypting encrypted message, length: 297
+2025-06-24 16:06:44 INFO: Message decrypted successfully, new length: 269
+2025-06-24 16:06:44 INFO: Received message: AUTH_SUCCESS
+2025-06-24 16:06:44 INFO: Received auth response: AUTH_SUCCESS
+2025-06-24 16:06:44 INFO: Authentication successful: true
+2025-06-24 16:06:44 INFO: SSHClientModel: Connection and authentication successful
+2025-06-24 16:06:47 INFO: SSHClientModel: Requesting service: shell
+2025-06-24 16:06:47 INFO: Sending service request for: shell
+2025-06-24 16:06:47 INFO: Sending message: SERVICE_REQUEST, length: 158
+2025-06-24 16:06:47 INFO: Message encrypted, new length: 186
+2025-06-24 16:06:47 INFO: Added length prefix for encrypted message, total length: 190
+2025-06-24 16:06:47 INFO: Message sent successfully
+2025-06-24 16:06:47 INFO: Sent service request
+2025-06-24 16:06:47 INFO: Waiting to receive message...
+2025-06-24 16:06:47 INFO: Reading encrypted message...
+2025-06-24 16:06:47 INFO: Read 4 bytes for encrypted message length
+2025-06-24 16:06:47 INFO: Encrypted message length: 185
+2025-06-24 16:06:47 INFO: Read 185 bytes for encrypted message body
+2025-06-24 16:06:47 INFO: Decrypting encrypted message, length: 185
+2025-06-24 16:06:47 INFO: Message decrypted successfully, new length: 157
+2025-06-24 16:06:47 INFO: Received message: SERVICE_ACCEPT
+2025-06-24 16:06:47 INFO: Received service response: SERVICE_ACCEPT
+2025-06-24 16:06:47 INFO: Service request accepted
+2025-06-24 16:06:47 INFO: SSHClientModel: Service request successful
+2025-06-24 16:06:47 INFO: SSHClientController: Service requested: shell
+2025-06-24 16:16:37 INFO: SSHClientModel: Requesting service: shell
+2025-06-24 16:16:37 INFO: Sending service request for: shell
+2025-06-24 16:16:37 INFO: Sending message: SERVICE_REQUEST, length: 158
+2025-06-24 16:16:37 INFO: Message encrypted, new length: 186
+2025-06-24 16:16:37 INFO: Added length prefix for encrypted message, total length: 190
+2025-06-24 16:16:37 INFO: Message sent successfully
+2025-06-24 16:16:37 INFO: Sent service request
+2025-06-24 16:16:37 INFO: Waiting to receive message...
+2025-06-24 16:16:37 INFO: Reading encrypted message...
+2025-06-24 16:16:37 INFO: Read 4 bytes for encrypted message length
+2025-06-24 16:16:37 INFO: Encrypted message length: 185
+2025-06-24 16:16:37 INFO: Read 185 bytes for encrypted message body
+2025-06-24 16:16:37 INFO: Decrypting encrypted message, length: 185
+2025-06-24 16:16:37 INFO: Message decrypted successfully, new length: 157
+2025-06-24 16:16:37 INFO: Received message: SERVICE_ACCEPT
+2025-06-24 16:16:37 INFO: Received service response: SERVICE_ACCEPT
+2025-06-24 16:16:37 INFO: Service request accepted
+2025-06-24 16:16:37 INFO: SSHClientModel: Service request successful
+2025-06-24 16:16:37 INFO: SSHClientController: Service requested: shell
+2025-06-24 16:16:41 INFO: SSHClientController: Stopping client
+2025-06-24 16:16:41 INFO: SSHClientModel: Disconnecting from server
+2025-06-24 16:16:41 INFO: Sending message: DISCONNECT, length: 41
+2025-06-24 16:16:41 INFO: Message encrypted, new length: 69
+2025-06-24 16:16:41 INFO: Added length prefix for encrypted message, total length: 73
+2025-06-24 16:16:41 INFO: Message sent successfully
+2025-06-24 16:16:41 INFO: Sending message: DISCONNECT, length: 41
+2025-06-24 16:16:41 INFO: Message encrypted, new length: 69
+2025-06-24 16:16:41 INFO: Added length prefix for encrypted message, total length: 73
+2025-06-24 16:16:41 INFO: Message sent successfully
+2025-06-24 16:16:41 INFO: Protocol handler closed
+2025-06-24 16:16:41 INFO: Disconnected from server
