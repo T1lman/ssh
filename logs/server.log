@@ -1,114 +1,90 @@
-2025-06-24 01:05:36 INFO: Logger initialized: logs/server.log
-2025-06-24 01:05:36 INFO: SSHServerModel: Created new model instance
-2025-06-24 01:05:36 INFO: SSH Server Starting
-2025-06-24 01:05:36 INFO: Log file: logs/server.log
-2025-06-24 01:05:36 INFO: SSHServerController: Starting server
-2025-06-24 01:05:40 INFO: SSHServerModel: Starting server
-2025-06-24 01:05:55 INFO: Server: Starting client connection handler for 127.0.0.1:62562
-2025-06-24 01:05:55 INFO: Server: Initializing protocol handler
-2025-06-24 01:05:55 INFO: Server: Protocol handler initialized
-2025-06-24 01:05:55 INFO: Server: Starting key exchange
-2025-06-24 01:05:55 INFO: Waiting to receive message...
-2025-06-24 01:05:55 INFO: Read 4 bytes for message length
-2025-06-24 01:05:55 INFO: Message length: 920
-2025-06-24 01:05:55 INFO: Read 920 bytes for message body (expected 920)
-2025-06-24 01:05:55 INFO: Message body (first 20 bytes): 01 7B 22 74 79 70 65 4E 61 6D 65 22 3A 22 4B 65 79 45 78 63 
-2025-06-24 01:05:55 INFO: Raw message type byte: 1
-2025-06-24 01:05:55 INFO: Parsed message type: KEY_EXCHANGE_INIT
-2025-06-24 01:05:55 INFO: fromPacket: restLength = 920
-2025-06-24 01:05:55 INFO: fromPacket: parsed message type = KEY_EXCHANGE_INIT
-2025-06-24 01:05:55 INFO: fromPacket: payloadLength = 915 (restLength=920 - 5)
-2025-06-24 01:05:55 INFO: fromPacket: checksum = 890922862
-2025-06-24 01:05:55 INFO: Received message: KEY_EXCHANGE_INIT
-2025-06-24 01:05:55 INFO: Server: Received key exchange init from null
-2025-06-24 01:05:55 INFO: Server: Received key exchange init from null
-2025-06-24 01:05:55 INFO: Server: Initializing DH key exchange
-2025-06-24 01:05:55 INFO: Server: Generated DH key pair
-2025-06-24 01:05:55 INFO: Server: Set client's public key
-2025-06-24 01:05:55 INFO: Server: Computing shared secret
-2025-06-24 01:05:55 INFO: Server: Computed shared secret, length: 256
-2025-06-24 01:05:55 INFO: Server: Initializing symmetric encryption
-2025-06-24 01:05:55 INFO: Server: Initialized symmetric encryption
-2025-06-24 01:05:55 INFO: Server: Creating key exchange reply message
-2025-06-24 01:05:55 INFO: Server: Created reply message, signing DH public key
-2025-06-24 01:05:55 INFO: Server: Starting RSA signature generation
-2025-06-24 01:05:55 INFO: Server: RSA signature generated, length: 256
-2025-06-24 01:05:55 INFO: Server: Sending key exchange reply
-2025-06-24 01:05:55 INFO: Sending message: KEY_EXCHANGE_REPLY, length: 1321
-2025-06-24 01:05:55 INFO: Message sent successfully
-2025-06-24 01:05:55 INFO: Server: Key exchange reply sent successfully
-2025-06-24 01:05:55 INFO: Server: Key exchange completed successfully
-2025-06-24 01:05:55 INFO: Server: Enabling encryption
-2025-06-24 01:05:55 INFO: Encryption enabled - subsequent messages will be encrypted/decrypted
-2025-06-24 01:05:55 INFO: Server: Encryption enabled
-2025-06-24 01:05:55 INFO: Server: Key exchange completed successfully
-2025-06-24 01:05:55 INFO: Server: Starting authentication
-2025-06-24 01:05:55 INFO: Waiting to receive message...
-2025-06-24 01:05:55 INFO: Reading encrypted message...
-2025-06-24 01:05:55 INFO: Read 4 bytes for encrypted message length
-2025-06-24 01:05:55 INFO: Encrypted message length: 965
-2025-06-24 01:05:55 INFO: Read 965 bytes for encrypted message body
-2025-06-24 01:05:55 INFO: Decrypting encrypted message, length: 965
-2025-06-24 01:05:55 INFO: Message decrypted successfully, new length: 937
-2025-06-24 01:05:55 INFO: fromPacket: restLength = 933
-2025-06-24 01:05:55 INFO: fromPacket: parsed message type = AUTH_REQUEST
-2025-06-24 01:05:55 INFO: fromPacket: payloadLength = 928 (restLength=933 - 5)
-2025-06-24 01:05:55 INFO: fromPacket: checksum = -1926432596
-2025-06-24 01:05:55 INFO: Received encrypted message: AUTH_REQUEST
-2025-06-24 01:05:55 INFO: Server: Authentication request from tilman using dual
-2025-06-24 01:05:55 INFO: Authentication attempt for user: tilman, type: dual
-2025-06-24 01:05:55 INFO: User existence check for 'tilman': true
-2025-06-24 01:05:55 INFO: User validation passed for: tilman
-2025-06-24 01:05:55 INFO: Attempting dual authentication (password + public key) for: tilman
-2025-06-24 01:05:55 INFO: Verifying password for user: tilman
-2025-06-24 01:05:55 INFO: PasswordAuth: Checking if user exists: tilman
-2025-06-24 01:05:55 INFO: PasswordAuth: User exists, verifying password for: tilman
-2025-06-24 01:05:55 INFO: UserStore: Password verification for tilman - Stored hash: 571d5b2882b8df135b9f3b50ab4fb722ba82b1f6bebe7b91163ab3208291f0ca, Input hash: 571d5b2882b8df135b9f3b50ab4fb722ba82b1f6bebe7b91163ab3208291f0ca, Matches: true
-2025-06-24 01:05:55 INFO: PasswordAuth: Password verification result for tilman: true
-2025-06-24 01:05:55 INFO: Password authentication result for tilman: true
-2025-06-24 01:05:55 INFO: PublicKeyAuth: Found 1 authorized keys for user: tilman
-2025-06-24 01:05:55 INFO: PublicKeyAuth: Key match found!
-2025-06-24 01:05:55 INFO: PublicKeyAuth: Signature verification result: true
-2025-06-24 01:05:55 INFO: Dual authentication successful for user: tilman
-2025-06-24 01:05:55 INFO: Sending message: AUTH_SUCCESS, length: 220
-2025-06-24 01:05:55 INFO: Message encrypted, new length: 248
-2025-06-24 01:05:55 INFO: Added length prefix for encrypted message, total length: 252
-2025-06-24 01:05:55 INFO: Message sent successfully
-2025-06-24 01:05:55 INFO: Server: Authentication SUCCESS for tilman: Authentication successful
-2025-06-24 01:05:55 INFO: Server: Authentication completed successfully
-2025-06-24 01:05:55 INFO: Server: Starting service request handling
-2025-06-24 01:05:55 INFO: Waiting to receive message...
-2025-06-24 01:05:55 INFO: Reading encrypted message...
-2025-06-24 01:05:55 INFO: Read 4 bytes for encrypted message length
-2025-06-24 01:05:55 INFO: Encrypted message length: 137
-2025-06-24 01:05:55 INFO: Read 137 bytes for encrypted message body
-2025-06-24 01:05:55 INFO: Decrypting encrypted message, length: 137
-2025-06-24 01:05:55 INFO: Message decrypted successfully, new length: 109
-2025-06-24 01:05:55 INFO: fromPacket: restLength = 105
-2025-06-24 01:05:55 INFO: fromPacket: parsed message type = SERVICE_REQUEST
-2025-06-24 01:05:55 INFO: fromPacket: payloadLength = 100 (restLength=105 - 5)
-2025-06-24 01:05:55 INFO: fromPacket: checksum = -1107515802
-2025-06-24 01:05:55 INFO: Received encrypted message: SERVICE_REQUEST
-2025-06-24 01:05:55 INFO: Server: Service request from tilman for shell
-2025-06-24 01:05:55 INFO: Sending message: SERVICE_ACCEPT, length: 108
-2025-06-24 01:05:55 INFO: Message encrypted, new length: 136
-2025-06-24 01:05:55 INFO: Added length prefix for encrypted message, total length: 140
-2025-06-24 01:05:55 INFO: Message sent successfully
-2025-06-24 01:05:55 INFO: Server: Service shell accepted for tilman
-2025-06-24 01:05:55 INFO: Waiting to receive message...
-2025-06-24 01:05:55 INFO: Reading encrypted message...
-2025-06-24 01:05:58 INFO: Read 4 bytes for encrypted message length
-2025-06-24 01:05:58 INFO: Encrypted message length: 206
-2025-06-24 01:05:58 INFO: Read 206 bytes for encrypted message body
-2025-06-24 01:05:58 INFO: Decrypting encrypted message, length: 206
-2025-06-24 01:05:58 INFO: Message decrypted successfully, new length: 178
-2025-06-24 01:05:58 INFO: fromPacket: restLength = 174
-2025-06-24 01:05:58 INFO: fromPacket: parsed message type = SHELL_COMMAND
-2025-06-24 01:05:58 INFO: fromPacket: payloadLength = 169 (restLength=174 - 5)
-2025-06-24 01:05:58 INFO: fromPacket: checksum = 1066413956
-2025-06-24 01:05:58 INFO: Received encrypted message: SHELL_COMMAND
-2025-06-24 01:05:58 INFO: Server: Executing shell command: 'ls' for user: tilman
-2025-06-24 01:05:58 INFO: Command result: exitCode=0, stdout='Applications
+2025-06-24 14:04:58 INFO: Logger initialized: logs/server.log
+2025-06-24 14:04:58 INFO: SSHServerModel: Created new model instance
+2025-06-24 14:04:58 INFO: SSH Server Starting
+2025-06-24 14:04:58 INFO: Log file: logs/server.log
+2025-06-24 14:04:58 INFO: SSHServerController: Starting server
+2025-06-24 14:05:02 INFO: SSHServerModel: Starting server
+2025-06-24 14:05:11 INFO: Server: Starting client connection handler for 127.0.0.1:50371
+2025-06-24 14:05:11 INFO: Server: Initializing protocol handler
+2025-06-24 14:05:11 INFO: Server: Protocol handler initialized
+2025-06-24 14:05:11 INFO: Server: Starting key exchange
+2025-06-24 14:05:11 INFO: Server: Received key exchange init from null
+2025-06-24 14:05:11 INFO: Server: Received key exchange init from null
+2025-06-24 14:05:11 INFO: Server: Initializing DH key exchange
+2025-06-24 14:05:11 INFO: Server: Generated DH key pair
+2025-06-24 14:05:11 INFO: Server: Set client's public key
+2025-06-24 14:05:11 INFO: Server: Computing shared secret
+2025-06-24 14:05:11 INFO: Server: Computed shared secret, length: 256
+2025-06-24 14:05:11 INFO: Server: Initializing symmetric encryption
+2025-06-24 14:05:11 INFO: Server: Initialized symmetric encryption
+2025-06-24 14:05:11 INFO: Server: Creating key exchange reply message
+2025-06-24 14:05:11 INFO: Server: Created reply message, signing DH public key
+2025-06-24 14:05:11 INFO: Server: Starting RSA signature generation
+2025-06-24 14:05:11 INFO: Server: RSA signature generated, length: 256
+2025-06-24 14:05:11 INFO: Server: Sending key exchange reply
+2025-06-24 14:05:11 INFO: Sending message: KEY_EXCHANGE_REPLY, length: 1370
+2025-06-24 14:05:11 INFO: Message sent successfully
+2025-06-24 14:05:11 INFO: Server: Key exchange reply sent successfully
+2025-06-24 14:05:11 INFO: Server: Key exchange completed successfully
+2025-06-24 14:05:11 INFO: Server: Enabling encryption
+2025-06-24 14:05:11 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
+2025-06-24 14:05:11 INFO: Encryption and HMAC enabled in protocol handler
+2025-06-24 14:05:11 INFO: Server: Key exchange completed successfully
+2025-06-24 14:05:11 INFO: Server: Starting authentication
+2025-06-24 14:05:11 INFO: Waiting to receive message...
+2025-06-24 14:05:11 INFO: Reading encrypted message...
+2025-06-24 14:05:12 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:05:12 INFO: Encrypted message length: 1014
+2025-06-24 14:05:12 INFO: Read 1014 bytes for encrypted message body
+2025-06-24 14:05:12 INFO: Decrypting encrypted message, length: 1014
+2025-06-24 14:05:12 INFO: Message decrypted successfully, new length: 986
+2025-06-24 14:05:12 INFO: Received message: AUTH_REQUEST
+2025-06-24 14:05:12 INFO: Server: Authentication request from tilman using dual
+2025-06-24 14:05:12 INFO: Authentication attempt for user: tilman, type: dual
+2025-06-24 14:05:12 INFO: User existence check for 'tilman': true
+2025-06-24 14:05:12 INFO: User validation passed for: tilman
+2025-06-24 14:05:12 INFO: Attempting dual authentication (password + public key) for: tilman
+2025-06-24 14:05:12 INFO: Verifying password for user: tilman
+2025-06-24 14:05:12 INFO: PasswordAuth: Checking if user exists: tilman
+2025-06-24 14:05:12 INFO: PasswordAuth: User exists, verifying password for: tilman
+2025-06-24 14:05:12 INFO: UserStore: Password verification for tilman - Stored hash: 571d5b2882b8df135b9f3b50ab4fb722ba82b1f6bebe7b91163ab3208291f0ca, Input hash: 571d5b2882b8df135b9f3b50ab4fb722ba82b1f6bebe7b91163ab3208291f0ca, Matches: true
+2025-06-24 14:05:12 INFO: PasswordAuth: Password verification result for tilman: true
+2025-06-24 14:05:12 INFO: Password authentication result for tilman: true
+2025-06-24 14:05:12 INFO: PublicKeyAuth: Found 1 authorized keys for user: tilman
+2025-06-24 14:05:12 INFO: PublicKeyAuth: Key match found!
+2025-06-24 14:05:12 INFO: PublicKeyAuth: Signature verification result: true
+2025-06-24 14:05:12 INFO: Dual authentication successful for user: tilman
+2025-06-24 14:05:12 INFO: Sending message: AUTH_SUCCESS, length: 269
+2025-06-24 14:05:12 INFO: Message encrypted, new length: 297
+2025-06-24 14:05:12 INFO: Added length prefix for encrypted message, total length: 301
+2025-06-24 14:05:12 INFO: Message sent successfully
+2025-06-24 14:05:12 INFO: Server: Authentication SUCCESS for tilman: Authentication successful
+2025-06-24 14:05:12 INFO: Server: Authentication completed successfully
+2025-06-24 14:05:12 INFO: Server: Starting service request handling
+2025-06-24 14:05:12 INFO: Waiting to receive message...
+2025-06-24 14:05:12 INFO: Reading encrypted message...
+2025-06-24 14:05:12 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:05:12 INFO: Encrypted message length: 186
+2025-06-24 14:05:12 INFO: Read 186 bytes for encrypted message body
+2025-06-24 14:05:12 INFO: Decrypting encrypted message, length: 186
+2025-06-24 14:05:12 INFO: Message decrypted successfully, new length: 158
+2025-06-24 14:05:12 INFO: Received message: SERVICE_REQUEST
+2025-06-24 14:05:12 INFO: Server: Service request from tilman for shell
+2025-06-24 14:05:12 INFO: Sending message: SERVICE_ACCEPT, length: 157
+2025-06-24 14:05:12 INFO: Message encrypted, new length: 185
+2025-06-24 14:05:12 INFO: Added length prefix for encrypted message, total length: 189
+2025-06-24 14:05:12 INFO: Message sent successfully
+2025-06-24 14:05:12 INFO: Server: Service shell accepted for tilman
+2025-06-24 14:05:12 INFO: Waiting to receive message...
+2025-06-24 14:05:12 INFO: Reading encrypted message...
+2025-06-24 14:05:13 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:05:13 INFO: Encrypted message length: 255
+2025-06-24 14:05:13 INFO: Read 255 bytes for encrypted message body
+2025-06-24 14:05:13 INFO: Decrypting encrypted message, length: 255
+2025-06-24 14:05:13 INFO: Message decrypted successfully, new length: 227
+2025-06-24 14:05:13 INFO: Received message: SHELL_COMMAND
+2025-06-24 14:05:13 INFO: Server: Executing shell command: 'ls' for user: tilman
+2025-06-24 14:05:13 INFO: Command result: exitCode=0, stdout='Applications
 com~apple~CloudDocs
 Desktop
 Documents
@@ -121,127 +97,301 @@ Pictures
 Public
 Zotero
 ', stderr=''
-2025-06-24 01:05:58 INFO: Sending message: SHELL_RESULT, length: 297
-2025-06-24 01:05:58 INFO: Message encrypted, new length: 325
-2025-06-24 01:05:58 INFO: Added length prefix for encrypted message, total length: 329
-2025-06-24 01:05:58 INFO: Message sent successfully
-2025-06-24 01:05:58 INFO: Sent SHELL_RESULT message to client.
-2025-06-24 01:05:58 INFO: Waiting to receive message...
-2025-06-24 01:05:58 INFO: Reading encrypted message...
-2025-06-24 01:11:13 INFO: Shutdown signal received
-2025-06-24 01:11:13 INFO: SSHServerController: Stopping server
-2025-06-24 01:11:13 INFO: SSHServerModel: Stopping server
-2025-06-24 01:11:22 INFO: Logger initialized: logs/server.log
-2025-06-24 01:11:22 INFO: SSHServerModel: Created new model instance
-2025-06-24 01:11:22 INFO: SSH Server Starting
-2025-06-24 01:11:22 INFO: Log file: logs/server.log
-2025-06-24 01:11:22 INFO: SSHServerController: Starting server
-2025-06-24 01:11:26 INFO: SSHServerModel: Starting server
-2025-06-24 01:11:43 INFO: Server: Starting client connection handler for 127.0.0.1:62674
-2025-06-24 01:11:43 INFO: Server: Initializing protocol handler
-2025-06-24 01:11:43 INFO: Server: Protocol handler initialized
-2025-06-24 01:11:43 INFO: Server: Starting key exchange
-2025-06-24 01:11:43 INFO: Waiting to receive message...
-2025-06-24 01:11:43 INFO: Read 4 bytes for message length
-2025-06-24 01:11:43 INFO: Message length: 920
-2025-06-24 01:11:43 INFO: Read 920 bytes for message body (expected 920)
-2025-06-24 01:11:43 INFO: Message body (first 20 bytes): 01 7B 22 74 79 70 65 4E 61 6D 65 22 3A 22 4B 65 79 45 78 63 
-2025-06-24 01:11:43 INFO: Raw message type byte: 1
-2025-06-24 01:11:43 INFO: Parsed message type: KEY_EXCHANGE_INIT
-2025-06-24 01:11:44 INFO: fromPacket: restLength = 920
-2025-06-24 01:11:44 INFO: fromPacket: parsed message type = KEY_EXCHANGE_INIT
-2025-06-24 01:11:44 INFO: fromPacket: payloadLength = 915 (restLength=920 - 5)
-2025-06-24 01:11:44 INFO: fromPacket: checksum = -518536978
-2025-06-24 01:11:44 INFO: Received message: KEY_EXCHANGE_INIT
-2025-06-24 01:11:44 INFO: Server: Received key exchange init from null
-2025-06-24 01:11:44 INFO: Server: Received key exchange init from null
-2025-06-24 01:11:44 INFO: Server: Initializing DH key exchange
-2025-06-24 01:11:44 INFO: Server: Generated DH key pair
-2025-06-24 01:11:44 INFO: Server: Set client's public key
-2025-06-24 01:11:44 INFO: Server: Computing shared secret
-2025-06-24 01:11:44 INFO: Server: Computed shared secret, length: 256
-2025-06-24 01:11:44 INFO: Server: Initializing symmetric encryption
-2025-06-24 01:11:44 INFO: Server: Initialized symmetric encryption
-2025-06-24 01:11:44 INFO: Server: Creating key exchange reply message
-2025-06-24 01:11:44 INFO: Server: Created reply message, signing DH public key
-2025-06-24 01:11:44 INFO: Server: Starting RSA signature generation
-2025-06-24 01:11:44 INFO: Server: RSA signature generated, length: 256
-2025-06-24 01:11:44 INFO: Server: Sending key exchange reply
-2025-06-24 01:11:44 INFO: Sending message: KEY_EXCHANGE_REPLY, length: 1321
-2025-06-24 01:11:44 INFO: Message sent successfully
-2025-06-24 01:11:44 INFO: Server: Key exchange reply sent successfully
-2025-06-24 01:11:44 INFO: Server: Key exchange completed successfully
-2025-06-24 01:11:44 INFO: Server: Enabling encryption
-2025-06-24 01:11:44 INFO: Encryption enabled - subsequent messages will be encrypted/decrypted
-2025-06-24 01:11:44 INFO: Server: Encryption enabled
-2025-06-24 01:11:44 INFO: Server: Key exchange completed successfully
-2025-06-24 01:11:44 INFO: Server: Starting authentication
-2025-06-24 01:11:44 INFO: Waiting to receive message...
-2025-06-24 01:11:44 INFO: Reading encrypted message...
-2025-06-24 01:11:44 INFO: Read 4 bytes for encrypted message length
-2025-06-24 01:11:44 INFO: Encrypted message length: 965
-2025-06-24 01:11:44 INFO: Read 965 bytes for encrypted message body
-2025-06-24 01:11:44 INFO: Decrypting encrypted message, length: 965
-2025-06-24 01:11:44 INFO: Message decrypted successfully, new length: 937
-2025-06-24 01:11:44 INFO: fromPacket: restLength = 933
-2025-06-24 01:11:44 INFO: fromPacket: parsed message type = AUTH_REQUEST
-2025-06-24 01:11:44 INFO: fromPacket: payloadLength = 928 (restLength=933 - 5)
-2025-06-24 01:11:44 INFO: fromPacket: checksum = 1351946270
-2025-06-24 01:11:44 INFO: Received encrypted message: AUTH_REQUEST
-2025-06-24 01:11:44 INFO: Server: Authentication request from tilman using dual
-2025-06-24 01:11:44 INFO: Authentication attempt for user: tilman, type: dual
-2025-06-24 01:11:44 INFO: User existence check for 'tilman': true
-2025-06-24 01:11:44 INFO: User validation passed for: tilman
-2025-06-24 01:11:44 INFO: Attempting dual authentication (password + public key) for: tilman
-2025-06-24 01:11:44 INFO: Verifying password for user: tilman
-2025-06-24 01:11:44 INFO: PasswordAuth: Checking if user exists: tilman
-2025-06-24 01:11:44 INFO: PasswordAuth: User exists, verifying password for: tilman
-2025-06-24 01:11:44 INFO: UserStore: Password verification for tilman - Stored hash: 571d5b2882b8df135b9f3b50ab4fb722ba82b1f6bebe7b91163ab3208291f0ca, Input hash: 571d5b2882b8df135b9f3b50ab4fb722ba82b1f6bebe7b91163ab3208291f0ca, Matches: true
-2025-06-24 01:11:44 INFO: PasswordAuth: Password verification result for tilman: true
-2025-06-24 01:11:44 INFO: Password authentication result for tilman: true
-2025-06-24 01:11:44 INFO: PublicKeyAuth: Found 1 authorized keys for user: tilman
-2025-06-24 01:11:44 INFO: PublicKeyAuth: Key match found!
-2025-06-24 01:11:44 INFO: PublicKeyAuth: Signature verification result: true
-2025-06-24 01:11:44 INFO: Dual authentication successful for user: tilman
-2025-06-24 01:11:44 INFO: Sending message: AUTH_SUCCESS, length: 220
-2025-06-24 01:11:44 INFO: Message encrypted, new length: 248
-2025-06-24 01:11:44 INFO: Added length prefix for encrypted message, total length: 252
-2025-06-24 01:11:44 INFO: Message sent successfully
-2025-06-24 01:11:44 INFO: Server: Authentication SUCCESS for tilman: Authentication successful
-2025-06-24 01:11:44 INFO: Server: Authentication completed successfully
-2025-06-24 01:11:44 INFO: Server: Starting service request handling
-2025-06-24 01:11:44 INFO: Waiting to receive message...
-2025-06-24 01:11:44 INFO: Reading encrypted message...
-2025-06-24 01:11:44 INFO: Read 4 bytes for encrypted message length
-2025-06-24 01:11:44 INFO: Encrypted message length: 137
-2025-06-24 01:11:44 INFO: Read 137 bytes for encrypted message body
-2025-06-24 01:11:44 INFO: Decrypting encrypted message, length: 137
-2025-06-24 01:11:44 INFO: Message decrypted successfully, new length: 109
-2025-06-24 01:11:44 INFO: fromPacket: restLength = 105
-2025-06-24 01:11:44 INFO: fromPacket: parsed message type = SERVICE_REQUEST
-2025-06-24 01:11:44 INFO: fromPacket: payloadLength = 100 (restLength=105 - 5)
-2025-06-24 01:11:44 INFO: fromPacket: checksum = -1107515802
-2025-06-24 01:11:44 INFO: Received encrypted message: SERVICE_REQUEST
-2025-06-24 01:11:44 INFO: Server: Service request from tilman for shell
-2025-06-24 01:11:44 INFO: Sending message: SERVICE_ACCEPT, length: 108
-2025-06-24 01:11:44 INFO: Message encrypted, new length: 136
-2025-06-24 01:11:44 INFO: Added length prefix for encrypted message, total length: 140
-2025-06-24 01:11:44 INFO: Message sent successfully
-2025-06-24 01:11:44 INFO: Server: Service shell accepted for tilman
-2025-06-24 01:11:44 INFO: Waiting to receive message...
-2025-06-24 01:11:44 INFO: Reading encrypted message...
-2025-06-24 01:11:47 INFO: Read 4 bytes for encrypted message length
-2025-06-24 01:11:47 INFO: Encrypted message length: 206
-2025-06-24 01:11:47 INFO: Read 206 bytes for encrypted message body
-2025-06-24 01:11:47 INFO: Decrypting encrypted message, length: 206
-2025-06-24 01:11:47 INFO: Message decrypted successfully, new length: 178
-2025-06-24 01:11:47 INFO: fromPacket: restLength = 174
-2025-06-24 01:11:47 INFO: fromPacket: parsed message type = SHELL_COMMAND
-2025-06-24 01:11:47 INFO: fromPacket: payloadLength = 169 (restLength=174 - 5)
-2025-06-24 01:11:47 INFO: fromPacket: checksum = 1066413956
-2025-06-24 01:11:47 INFO: Received encrypted message: SHELL_COMMAND
-2025-06-24 01:11:47 INFO: Server: Executing shell command: 'ls' for user: tilman
-2025-06-24 01:11:47 INFO: Command result: exitCode=0, stdout='Applications
+2025-06-24 14:05:13 INFO: Sending message: SHELL_RESULT, length: 346
+2025-06-24 14:05:13 INFO: Message encrypted, new length: 374
+2025-06-24 14:05:13 INFO: Added length prefix for encrypted message, total length: 378
+2025-06-24 14:05:13 INFO: Message sent successfully
+2025-06-24 14:05:13 INFO: Sent SHELL_RESULT message to client.
+2025-06-24 14:05:13 INFO: Waiting to receive message...
+2025-06-24 14:05:13 INFO: Reading encrypted message...
+2025-06-24 14:05:16 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:05:16 INFO: Encrypted message length: 258
+2025-06-24 14:05:16 INFO: Read 258 bytes for encrypted message body
+2025-06-24 14:05:16 INFO: Decrypting encrypted message, length: 258
+2025-06-24 14:05:16 INFO: Message decrypted successfully, new length: 230
+2025-06-24 14:05:16 INFO: Received message: SHELL_COMMAND
+2025-06-24 14:05:16 INFO: Server: Executing shell command: 'cd ..' for user: tilman
+2025-06-24 14:05:16 INFO: Command result: exitCode=0, stdout='', stderr=''
+2025-06-24 14:05:16 INFO: Sending message: SHELL_RESULT, length: 215
+2025-06-24 14:05:16 INFO: Message encrypted, new length: 243
+2025-06-24 14:05:16 INFO: Added length prefix for encrypted message, total length: 247
+2025-06-24 14:05:16 INFO: Message sent successfully
+2025-06-24 14:05:16 INFO: Sent SHELL_RESULT message to client.
+2025-06-24 14:05:16 INFO: Waiting to receive message...
+2025-06-24 14:05:16 INFO: Reading encrypted message...
+2025-06-24 14:05:17 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:05:17 INFO: Encrypted message length: 248
+2025-06-24 14:05:17 INFO: Read 248 bytes for encrypted message body
+2025-06-24 14:05:17 INFO: Decrypting encrypted message, length: 248
+2025-06-24 14:05:17 INFO: Message decrypted successfully, new length: 220
+2025-06-24 14:05:17 INFO: Received message: SHELL_COMMAND
+2025-06-24 14:05:17 INFO: Server: Executing shell command: 'ls' for user: tilman
+2025-06-24 14:05:17 INFO: Command result: exitCode=0, stdout='Shared
+tilman
+', stderr=''
+2025-06-24 14:05:17 INFO: Sending message: SHELL_RESULT, length: 231
+2025-06-24 14:05:17 INFO: Message encrypted, new length: 259
+2025-06-24 14:05:17 INFO: Added length prefix for encrypted message, total length: 263
+2025-06-24 14:05:17 INFO: Message sent successfully
+2025-06-24 14:05:17 INFO: Sent SHELL_RESULT message to client.
+2025-06-24 14:05:17 INFO: Waiting to receive message...
+2025-06-24 14:05:17 INFO: Reading encrypted message...
+2025-06-24 14:05:20 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:05:20 INFO: Encrypted message length: 251
+2025-06-24 14:05:20 INFO: Read 251 bytes for encrypted message body
+2025-06-24 14:05:20 INFO: Decrypting encrypted message, length: 251
+2025-06-24 14:05:20 INFO: Message decrypted successfully, new length: 223
+2025-06-24 14:05:20 INFO: Received message: SHELL_COMMAND
+2025-06-24 14:05:20 INFO: Server: Executing shell command: 'cd ..' for user: tilman
+2025-06-24 14:05:20 INFO: Command result: exitCode=0, stdout='', stderr=''
+2025-06-24 14:05:20 INFO: Sending message: SHELL_RESULT, length: 210
+2025-06-24 14:05:20 INFO: Message encrypted, new length: 238
+2025-06-24 14:05:20 INFO: Added length prefix for encrypted message, total length: 242
+2025-06-24 14:05:20 INFO: Message sent successfully
+2025-06-24 14:05:20 INFO: Sent SHELL_RESULT message to client.
+2025-06-24 14:05:20 INFO: Waiting to receive message...
+2025-06-24 14:05:20 INFO: Reading encrypted message...
+2025-06-24 14:05:23 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:05:23 INFO: Encrypted message length: 246
+2025-06-24 14:05:23 INFO: Read 246 bytes for encrypted message body
+2025-06-24 14:05:23 INFO: Decrypting encrypted message, length: 246
+2025-06-24 14:05:23 INFO: Message decrypted successfully, new length: 218
+2025-06-24 14:05:23 INFO: Received message: SHELL_COMMAND
+2025-06-24 14:05:23 INFO: Server: Executing shell command: 'cd ..' for user: tilman
+2025-06-24 14:05:23 INFO: Command result: exitCode=0, stdout='', stderr=''
+2025-06-24 14:05:23 INFO: Sending message: SHELL_RESULT, length: 210
+2025-06-24 14:05:23 INFO: Message encrypted, new length: 238
+2025-06-24 14:05:23 INFO: Added length prefix for encrypted message, total length: 242
+2025-06-24 14:05:23 INFO: Message sent successfully
+2025-06-24 14:05:23 INFO: Sent SHELL_RESULT message to client.
+2025-06-24 14:05:23 INFO: Waiting to receive message...
+2025-06-24 14:05:23 INFO: Reading encrypted message...
+2025-06-24 14:05:25 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:05:25 INFO: Encrypted message length: 243
+2025-06-24 14:05:25 INFO: Read 243 bytes for encrypted message body
+2025-06-24 14:05:25 INFO: Decrypting encrypted message, length: 243
+2025-06-24 14:05:25 INFO: Message decrypted successfully, new length: 215
+2025-06-24 14:05:25 INFO: Received message: SHELL_COMMAND
+2025-06-24 14:05:25 INFO: Server: Executing shell command: 'ls' for user: tilman
+2025-06-24 14:05:25 INFO: Command result: exitCode=0, stdout='Applications
+bin
+cores
+dev
+etc
+home
+Library
+opt
+private
+sbin
+System
+tmp
+Users
+usr
+var
+Volumes
+', stderr=''
+2025-06-24 14:05:25 INFO: Sending message: SHELL_RESULT, length: 320
+2025-06-24 14:05:25 INFO: Message encrypted, new length: 348
+2025-06-24 14:05:25 INFO: Added length prefix for encrypted message, total length: 352
+2025-06-24 14:05:25 INFO: Message sent successfully
+2025-06-24 14:05:25 INFO: Sent SHELL_RESULT message to client.
+2025-06-24 14:05:25 INFO: Waiting to receive message...
+2025-06-24 14:05:25 INFO: Reading encrypted message...
+2025-06-24 14:05:32 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:05:32 INFO: Encrypted message length: 246
+2025-06-24 14:05:32 INFO: Read 246 bytes for encrypted message body
+2025-06-24 14:05:32 INFO: Decrypting encrypted message, length: 246
+2025-06-24 14:05:32 INFO: Message decrypted successfully, new length: 218
+2025-06-24 14:05:32 INFO: Received message: SHELL_COMMAND
+2025-06-24 14:05:32 INFO: Server: Executing shell command: 'cd ..' for user: tilman
+2025-06-24 14:05:32 INFO: Command result: exitCode=0, stdout='', stderr=''
+2025-06-24 14:05:32 INFO: Sending message: SHELL_RESULT, length: 210
+2025-06-24 14:05:32 INFO: Message encrypted, new length: 238
+2025-06-24 14:05:32 INFO: Added length prefix for encrypted message, total length: 242
+2025-06-24 14:05:32 INFO: Message sent successfully
+2025-06-24 14:05:32 INFO: Sent SHELL_RESULT message to client.
+2025-06-24 14:05:32 INFO: Waiting to receive message...
+2025-06-24 14:05:32 INFO: Reading encrypted message...
+2025-06-24 14:05:33 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:05:33 INFO: Encrypted message length: 243
+2025-06-24 14:05:33 INFO: Read 243 bytes for encrypted message body
+2025-06-24 14:05:33 INFO: Decrypting encrypted message, length: 243
+2025-06-24 14:05:33 INFO: Message decrypted successfully, new length: 215
+2025-06-24 14:05:33 INFO: Received message: SHELL_COMMAND
+2025-06-24 14:05:33 INFO: Server: Executing shell command: 'ls' for user: tilman
+2025-06-24 14:05:33 INFO: Command result: exitCode=0, stdout='Applications
+bin
+cores
+dev
+etc
+home
+Library
+opt
+private
+sbin
+System
+tmp
+Users
+usr
+var
+Volumes
+', stderr=''
+2025-06-24 14:05:33 INFO: Sending message: SHELL_RESULT, length: 320
+2025-06-24 14:05:33 INFO: Message encrypted, new length: 348
+2025-06-24 14:05:33 INFO: Added length prefix for encrypted message, total length: 352
+2025-06-24 14:05:33 INFO: Message sent successfully
+2025-06-24 14:05:33 INFO: Sent SHELL_RESULT message to client.
+2025-06-24 14:05:33 INFO: Waiting to receive message...
+2025-06-24 14:05:33 INFO: Reading encrypted message...
+2025-06-24 14:05:36 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:05:36 INFO: Encrypted message length: 244
+2025-06-24 14:05:36 INFO: Read 244 bytes for encrypted message body
+2025-06-24 14:05:36 INFO: Decrypting encrypted message, length: 244
+2025-06-24 14:05:36 INFO: Message decrypted successfully, new length: 216
+2025-06-24 14:05:36 INFO: Received message: SHELL_COMMAND
+2025-06-24 14:05:36 INFO: Server: Executing shell command: 'ls' for user: tilman
+2025-06-24 14:05:36 INFO: Command result: exitCode=0, stdout='Applications
+bin
+cores
+dev
+etc
+home
+Library
+opt
+private
+sbin
+System
+tmp
+Users
+usr
+var
+Volumes
+', stderr=''
+2025-06-24 14:05:36 INFO: Sending message: SHELL_RESULT, length: 321
+2025-06-24 14:05:36 INFO: Message encrypted, new length: 349
+2025-06-24 14:05:36 INFO: Added length prefix for encrypted message, total length: 353
+2025-06-24 14:05:36 INFO: Message sent successfully
+2025-06-24 14:05:36 INFO: Sent SHELL_RESULT message to client.
+2025-06-24 14:05:36 INFO: Waiting to receive message...
+2025-06-24 14:05:36 INFO: Reading encrypted message...
+2025-06-24 14:05:37 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:05:37 INFO: Encrypted message length: 244
+2025-06-24 14:05:37 INFO: Read 244 bytes for encrypted message body
+2025-06-24 14:05:37 INFO: Decrypting encrypted message, length: 244
+2025-06-24 14:05:37 INFO: Message decrypted successfully, new length: 216
+2025-06-24 14:05:37 INFO: Received message: SHELL_COMMAND
+2025-06-24 14:05:37 INFO: Server: Executing shell command: 'ls' for user: tilman
+2025-06-24 14:05:37 INFO: Command result: exitCode=0, stdout='Applications
+bin
+cores
+dev
+etc
+home
+Library
+opt
+private
+sbin
+System
+tmp
+Users
+usr
+var
+Volumes
+', stderr=''
+2025-06-24 14:05:38 INFO: Sending message: SHELL_RESULT, length: 321
+2025-06-24 14:05:38 INFO: Message encrypted, new length: 349
+2025-06-24 14:05:38 INFO: Added length prefix for encrypted message, total length: 353
+2025-06-24 14:05:38 INFO: Message sent successfully
+2025-06-24 14:05:38 INFO: Sent SHELL_RESULT message to client.
+2025-06-24 14:05:38 INFO: Waiting to receive message...
+2025-06-24 14:05:38 INFO: Reading encrypted message...
+2025-06-24 14:06:18 INFO: Read -1 bytes for encrypted message length
+2025-06-24 14:06:18 INFO: Client disconnected gracefully (end of stream)
+2025-06-24 14:06:18 INFO: Server: Client 127.0.0.1:50371 disconnected gracefully
+2025-06-24 14:06:18 INFO: Server: Cleaning up client connection for 127.0.0.1:50371
+2025-06-24 14:06:18 INFO: Server: Cleaning up connection for 127.0.0.1:50371 (user: tilman)
+2025-06-24 14:06:18 INFO: Protocol handler closed
+2025-06-24 14:14:42 INFO: Server: Starting client connection handler for 127.0.0.1:50528
+2025-06-24 14:14:42 INFO: Server: Initializing protocol handler
+2025-06-24 14:14:42 INFO: Server: Protocol handler initialized
+2025-06-24 14:14:42 INFO: Server: Starting key exchange
+2025-06-24 14:14:42 INFO: Server: Received key exchange init from null
+2025-06-24 14:14:42 INFO: Server: Received key exchange init from null
+2025-06-24 14:14:42 INFO: Server: Initializing DH key exchange
+2025-06-24 14:14:42 INFO: Server: Generated DH key pair
+2025-06-24 14:14:42 INFO: Server: Set client's public key
+2025-06-24 14:14:42 INFO: Server: Computing shared secret
+2025-06-24 14:14:42 INFO: Server: Computed shared secret, length: 256
+2025-06-24 14:14:42 INFO: Server: Initializing symmetric encryption
+2025-06-24 14:14:42 INFO: Server: Initialized symmetric encryption
+2025-06-24 14:14:42 INFO: Server: Creating key exchange reply message
+2025-06-24 14:14:42 INFO: Server: Created reply message, signing DH public key
+2025-06-24 14:14:42 INFO: Server: Starting RSA signature generation
+2025-06-24 14:14:42 INFO: Server: RSA signature generated, length: 256
+2025-06-24 14:14:42 INFO: Server: Sending key exchange reply
+2025-06-24 14:14:42 INFO: Sending message: KEY_EXCHANGE_REPLY, length: 1370
+2025-06-24 14:14:42 INFO: Message sent successfully
+2025-06-24 14:14:42 INFO: Server: Key exchange reply sent successfully
+2025-06-24 14:14:42 INFO: Server: Key exchange completed successfully
+2025-06-24 14:14:42 INFO: Server: Enabling encryption
+2025-06-24 14:14:42 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
+2025-06-24 14:14:42 INFO: Encryption and HMAC enabled in protocol handler
+2025-06-24 14:14:42 INFO: Server: Key exchange completed successfully
+2025-06-24 14:14:42 INFO: Server: Starting authentication
+2025-06-24 14:14:42 INFO: Waiting to receive message...
+2025-06-24 14:14:42 INFO: Reading encrypted message...
+2025-06-24 14:14:42 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:14:42 INFO: Encrypted message length: 1014
+2025-06-24 14:14:42 INFO: Read 1014 bytes for encrypted message body
+2025-06-24 14:14:42 INFO: Decrypting encrypted message, length: 1014
+2025-06-24 14:14:42 INFO: Message decrypted successfully, new length: 986
+2025-06-24 14:14:42 INFO: Received message: AUTH_REQUEST
+2025-06-24 14:14:42 INFO: Server: Authentication request from tilman using dual
+2025-06-24 14:14:42 INFO: Authentication attempt for user: tilman, type: dual
+2025-06-24 14:14:42 INFO: User existence check for 'tilman': true
+2025-06-24 14:14:42 INFO: User validation passed for: tilman
+2025-06-24 14:14:42 INFO: Attempting dual authentication (password + public key) for: tilman
+2025-06-24 14:14:42 INFO: Verifying password for user: tilman
+2025-06-24 14:14:42 INFO: PasswordAuth: Checking if user exists: tilman
+2025-06-24 14:14:42 INFO: PasswordAuth: User exists, verifying password for: tilman
+2025-06-24 14:14:42 INFO: UserStore: Password verification for tilman - Stored hash: 571d5b2882b8df135b9f3b50ab4fb722ba82b1f6bebe7b91163ab3208291f0ca, Input hash: 571d5b2882b8df135b9f3b50ab4fb722ba82b1f6bebe7b91163ab3208291f0ca, Matches: true
+2025-06-24 14:14:42 INFO: PasswordAuth: Password verification result for tilman: true
+2025-06-24 14:14:42 INFO: Password authentication result for tilman: true
+2025-06-24 14:14:42 INFO: PublicKeyAuth: Found 1 authorized keys for user: tilman
+2025-06-24 14:14:42 INFO: PublicKeyAuth: Key match found!
+2025-06-24 14:14:42 INFO: PublicKeyAuth: Signature verification result: true
+2025-06-24 14:14:42 INFO: Dual authentication successful for user: tilman
+2025-06-24 14:14:42 INFO: Sending message: AUTH_SUCCESS, length: 269
+2025-06-24 14:14:42 INFO: Message encrypted, new length: 297
+2025-06-24 14:14:42 INFO: Added length prefix for encrypted message, total length: 301
+2025-06-24 14:14:42 INFO: Message sent successfully
+2025-06-24 14:14:42 INFO: Server: Authentication SUCCESS for tilman: Authentication successful
+2025-06-24 14:14:42 INFO: Server: Authentication completed successfully
+2025-06-24 14:14:42 INFO: Server: Starting service request handling
+2025-06-24 14:14:42 INFO: Waiting to receive message...
+2025-06-24 14:14:42 INFO: Reading encrypted message...
+2025-06-24 14:14:42 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:14:42 INFO: Encrypted message length: 186
+2025-06-24 14:14:42 INFO: Read 186 bytes for encrypted message body
+2025-06-24 14:14:42 INFO: Decrypting encrypted message, length: 186
+2025-06-24 14:14:42 INFO: Message decrypted successfully, new length: 158
+2025-06-24 14:14:42 INFO: Received message: SERVICE_REQUEST
+2025-06-24 14:14:42 INFO: Server: Service request from tilman for shell
+2025-06-24 14:14:42 INFO: Sending message: SERVICE_ACCEPT, length: 157
+2025-06-24 14:14:42 INFO: Message encrypted, new length: 185
+2025-06-24 14:14:42 INFO: Added length prefix for encrypted message, total length: 189
+2025-06-24 14:14:42 INFO: Message sent successfully
+2025-06-24 14:14:42 INFO: Server: Service shell accepted for tilman
+2025-06-24 14:14:42 INFO: Waiting to receive message...
+2025-06-24 14:14:42 INFO: Reading encrypted message...
+2025-06-24 14:14:44 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:14:44 INFO: Encrypted message length: 255
+2025-06-24 14:14:44 INFO: Read 255 bytes for encrypted message body
+2025-06-24 14:14:44 INFO: Decrypting encrypted message, length: 255
+2025-06-24 14:14:44 INFO: Message decrypted successfully, new length: 227
+2025-06-24 14:14:44 INFO: Received message: SHELL_COMMAND
+2025-06-24 14:14:44 INFO: Server: Executing shell command: 'ls' for user: tilman
+2025-06-24 14:14:44 INFO: Command result: exitCode=0, stdout='Applications
 com~apple~CloudDocs
 Desktop
 Documents
@@ -254,124 +404,109 @@ Pictures
 Public
 Zotero
 ', stderr=''
-2025-06-24 01:11:47 INFO: Sending message: SHELL_RESULT, length: 297
-2025-06-24 01:11:47 INFO: Message encrypted, new length: 325
-2025-06-24 01:11:47 INFO: Added length prefix for encrypted message, total length: 329
-2025-06-24 01:11:47 INFO: Message sent successfully
-2025-06-24 01:11:47 INFO: Sent SHELL_RESULT message to client.
-2025-06-24 01:11:47 INFO: Waiting to receive message...
-2025-06-24 01:11:47 INFO: Reading encrypted message...
-2025-06-24 01:14:58 INFO: Read -1 bytes for encrypted message length
-2025-06-24 01:14:58 INFO: Client disconnected gracefully (end of stream)
-2025-06-24 01:14:58 INFO: Server: Client 127.0.0.1:62674 disconnected gracefully
-2025-06-24 01:14:58 INFO: Server: Cleaning up client connection for 127.0.0.1:62674
-2025-06-24 01:14:58 INFO: Server: Cleaning up connection for 127.0.0.1:62674 (user: tilman)
-2025-06-24 01:14:58 INFO: Protocol handler closed
-2025-06-24 01:16:12 INFO: Server: Starting client connection handler for 127.0.0.1:62819
-2025-06-24 01:16:12 INFO: Server: Initializing protocol handler
-2025-06-24 01:16:12 INFO: Server: Protocol handler initialized
-2025-06-24 01:16:12 INFO: Server: Starting key exchange
-2025-06-24 01:16:12 INFO: Waiting to receive message...
-2025-06-24 01:16:12 INFO: Read 4 bytes for message length
-2025-06-24 01:16:12 INFO: Message length: 920
-2025-06-24 01:16:12 INFO: Read 920 bytes for message body (expected 920)
-2025-06-24 01:16:12 INFO: Message body (first 20 bytes): 01 7B 22 74 79 70 65 4E 61 6D 65 22 3A 22 4B 65 79 45 78 63 
-2025-06-24 01:16:12 INFO: Raw message type byte: 1
-2025-06-24 01:16:12 INFO: Parsed message type: KEY_EXCHANGE_INIT
-2025-06-24 01:16:12 INFO: fromPacket: restLength = 920
-2025-06-24 01:16:12 INFO: fromPacket: parsed message type = KEY_EXCHANGE_INIT
-2025-06-24 01:16:12 INFO: fromPacket: payloadLength = 915 (restLength=920 - 5)
-2025-06-24 01:16:12 INFO: fromPacket: checksum = -881423190
-2025-06-24 01:16:12 INFO: Received message: KEY_EXCHANGE_INIT
-2025-06-24 01:16:12 INFO: Server: Received key exchange init from null
-2025-06-24 01:16:12 INFO: Server: Received key exchange init from null
-2025-06-24 01:16:12 INFO: Server: Initializing DH key exchange
-2025-06-24 01:16:12 INFO: Server: Generated DH key pair
-2025-06-24 01:16:12 INFO: Server: Set client's public key
-2025-06-24 01:16:12 INFO: Server: Computing shared secret
-2025-06-24 01:16:12 INFO: Server: Computed shared secret, length: 256
-2025-06-24 01:16:12 INFO: Server: Initializing symmetric encryption
-2025-06-24 01:16:12 INFO: Server: Initialized symmetric encryption
-2025-06-24 01:16:12 INFO: Server: Creating key exchange reply message
-2025-06-24 01:16:12 INFO: Server: Created reply message, signing DH public key
-2025-06-24 01:16:12 INFO: Server: Starting RSA signature generation
-2025-06-24 01:16:12 INFO: Server: RSA signature generated, length: 256
-2025-06-24 01:16:12 INFO: Server: Sending key exchange reply
-2025-06-24 01:16:12 INFO: Sending message: KEY_EXCHANGE_REPLY, length: 1321
-2025-06-24 01:16:12 INFO: Message sent successfully
-2025-06-24 01:16:12 INFO: Server: Key exchange reply sent successfully
-2025-06-24 01:16:12 INFO: Server: Key exchange completed successfully
-2025-06-24 01:16:12 INFO: Server: Enabling encryption
-2025-06-24 01:16:12 INFO: Encryption enabled - subsequent messages will be encrypted/decrypted
-2025-06-24 01:16:12 INFO: Server: Encryption enabled
-2025-06-24 01:16:12 INFO: Server: Key exchange completed successfully
-2025-06-24 01:16:12 INFO: Server: Starting authentication
-2025-06-24 01:16:12 INFO: Waiting to receive message...
-2025-06-24 01:16:12 INFO: Reading encrypted message...
-2025-06-24 01:16:12 INFO: Read 4 bytes for encrypted message length
-2025-06-24 01:16:12 INFO: Encrypted message length: 965
-2025-06-24 01:16:12 INFO: Read 965 bytes for encrypted message body
-2025-06-24 01:16:12 INFO: Decrypting encrypted message, length: 965
-2025-06-24 01:16:12 INFO: Message decrypted successfully, new length: 937
-2025-06-24 01:16:12 INFO: fromPacket: restLength = 933
-2025-06-24 01:16:12 INFO: fromPacket: parsed message type = AUTH_REQUEST
-2025-06-24 01:16:12 INFO: fromPacket: payloadLength = 928 (restLength=933 - 5)
-2025-06-24 01:16:12 INFO: fromPacket: checksum = 418383826
-2025-06-24 01:16:12 INFO: Received encrypted message: AUTH_REQUEST
-2025-06-24 01:16:12 INFO: Server: Authentication request from tilman using dual
-2025-06-24 01:16:12 INFO: Authentication attempt for user: tilman, type: dual
-2025-06-24 01:16:12 INFO: User existence check for 'tilman': true
-2025-06-24 01:16:12 INFO: User validation passed for: tilman
-2025-06-24 01:16:12 INFO: Attempting dual authentication (password + public key) for: tilman
-2025-06-24 01:16:12 INFO: Verifying password for user: tilman
-2025-06-24 01:16:12 INFO: PasswordAuth: Checking if user exists: tilman
-2025-06-24 01:16:12 INFO: PasswordAuth: User exists, verifying password for: tilman
-2025-06-24 01:16:12 INFO: UserStore: Password verification for tilman - Stored hash: 571d5b2882b8df135b9f3b50ab4fb722ba82b1f6bebe7b91163ab3208291f0ca, Input hash: 571d5b2882b8df135b9f3b50ab4fb722ba82b1f6bebe7b91163ab3208291f0ca, Matches: true
-2025-06-24 01:16:12 INFO: PasswordAuth: Password verification result for tilman: true
-2025-06-24 01:16:12 INFO: Password authentication result for tilman: true
-2025-06-24 01:16:12 INFO: PublicKeyAuth: Found 1 authorized keys for user: tilman
-2025-06-24 01:16:12 INFO: PublicKeyAuth: Key match found!
-2025-06-24 01:16:12 INFO: PublicKeyAuth: Signature verification result: true
-2025-06-24 01:16:12 INFO: Dual authentication successful for user: tilman
-2025-06-24 01:16:12 INFO: Sending message: AUTH_SUCCESS, length: 220
-2025-06-24 01:16:12 INFO: Message encrypted, new length: 248
-2025-06-24 01:16:12 INFO: Added length prefix for encrypted message, total length: 252
-2025-06-24 01:16:12 INFO: Message sent successfully
-2025-06-24 01:16:12 INFO: Server: Authentication SUCCESS for tilman: Authentication successful
-2025-06-24 01:16:12 INFO: Server: Authentication completed successfully
-2025-06-24 01:16:12 INFO: Server: Starting service request handling
-2025-06-24 01:16:12 INFO: Waiting to receive message...
-2025-06-24 01:16:12 INFO: Reading encrypted message...
-2025-06-24 01:16:12 INFO: Read 4 bytes for encrypted message length
-2025-06-24 01:16:12 INFO: Encrypted message length: 137
-2025-06-24 01:16:12 INFO: Read 137 bytes for encrypted message body
-2025-06-24 01:16:12 INFO: Decrypting encrypted message, length: 137
-2025-06-24 01:16:12 INFO: Message decrypted successfully, new length: 109
-2025-06-24 01:16:12 INFO: fromPacket: restLength = 105
-2025-06-24 01:16:12 INFO: fromPacket: parsed message type = SERVICE_REQUEST
-2025-06-24 01:16:12 INFO: fromPacket: payloadLength = 100 (restLength=105 - 5)
-2025-06-24 01:16:12 INFO: fromPacket: checksum = -1107515802
-2025-06-24 01:16:12 INFO: Received encrypted message: SERVICE_REQUEST
-2025-06-24 01:16:12 INFO: Server: Service request from tilman for shell
-2025-06-24 01:16:12 INFO: Sending message: SERVICE_ACCEPT, length: 108
-2025-06-24 01:16:12 INFO: Message encrypted, new length: 136
-2025-06-24 01:16:12 INFO: Added length prefix for encrypted message, total length: 140
-2025-06-24 01:16:12 INFO: Message sent successfully
-2025-06-24 01:16:12 INFO: Server: Service shell accepted for tilman
-2025-06-24 01:16:12 INFO: Waiting to receive message...
-2025-06-24 01:16:12 INFO: Reading encrypted message...
-2025-06-24 01:16:50 INFO: Read 4 bytes for encrypted message length
-2025-06-24 01:16:50 INFO: Encrypted message length: 206
-2025-06-24 01:16:50 INFO: Read 206 bytes for encrypted message body
-2025-06-24 01:16:50 INFO: Decrypting encrypted message, length: 206
-2025-06-24 01:16:50 INFO: Message decrypted successfully, new length: 178
-2025-06-24 01:16:50 INFO: fromPacket: restLength = 174
-2025-06-24 01:16:50 INFO: fromPacket: parsed message type = SHELL_COMMAND
-2025-06-24 01:16:50 INFO: fromPacket: payloadLength = 169 (restLength=174 - 5)
-2025-06-24 01:16:50 INFO: fromPacket: checksum = 1066413956
-2025-06-24 01:16:50 INFO: Received encrypted message: SHELL_COMMAND
-2025-06-24 01:16:50 INFO: Server: Executing shell command: 'ls' for user: tilman
-2025-06-24 01:16:50 INFO: Command result: exitCode=0, stdout='Applications
+2025-06-24 14:14:44 INFO: Sending message: SHELL_RESULT, length: 346
+2025-06-24 14:14:44 INFO: Message encrypted, new length: 374
+2025-06-24 14:14:44 INFO: Added length prefix for encrypted message, total length: 378
+2025-06-24 14:14:44 INFO: Message sent successfully
+2025-06-24 14:14:44 INFO: Sent SHELL_RESULT message to client.
+2025-06-24 14:14:44 INFO: Waiting to receive message...
+2025-06-24 14:14:44 INFO: Reading encrypted message...
+2025-06-24 14:19:32 INFO: Read -1 bytes for encrypted message length
+2025-06-24 14:19:32 INFO: Client disconnected gracefully (end of stream)
+2025-06-24 14:19:32 INFO: Server: Client 127.0.0.1:50528 disconnected gracefully
+2025-06-24 14:19:32 INFO: Server: Cleaning up client connection for 127.0.0.1:50528
+2025-06-24 14:19:32 INFO: Server: Cleaning up connection for 127.0.0.1:50528 (user: tilman)
+2025-06-24 14:19:32 INFO: Protocol handler closed
+2025-06-24 14:19:33 INFO: Shutdown signal received
+2025-06-24 14:19:33 INFO: SSHServerController: Stopping server
+2025-06-24 14:19:33 INFO: SSHServerModel: Stopping server
+2025-06-24 14:30:22 INFO: Logger initialized: logs/server.log
+2025-06-24 14:30:22 INFO: SSHServerModel: Created new model instance
+2025-06-24 14:30:22 INFO: SSH Server Starting
+2025-06-24 14:30:22 INFO: Log file: logs/server.log
+2025-06-24 14:30:22 INFO: SSHServerController: Starting server
+2025-06-24 14:30:25 INFO: SSHServerModel: Starting server
+2025-06-24 14:31:09 INFO: Server: Starting client connection handler for 127.0.0.1:51000
+2025-06-24 14:31:09 INFO: Server: Initializing protocol handler
+2025-06-24 14:31:09 INFO: Server: Protocol handler initialized
+2025-06-24 14:31:09 INFO: Server: Starting key exchange
+2025-06-24 14:31:09 INFO: Server: Received key exchange init from null
+2025-06-24 14:31:09 INFO: Server: Received key exchange init from null
+2025-06-24 14:31:09 INFO: Server: Initializing DH key exchange
+2025-06-24 14:31:09 INFO: Server: Generated DH key pair
+2025-06-24 14:31:09 INFO: Server: Set client's public key
+2025-06-24 14:31:09 INFO: Server: Computing shared secret
+2025-06-24 14:31:09 INFO: Server: Computed shared secret, length: 256
+2025-06-24 14:31:09 INFO: Server: Initializing symmetric encryption
+2025-06-24 14:31:09 INFO: Server: Initialized symmetric encryption
+2025-06-24 14:31:09 INFO: Server: Creating key exchange reply message
+2025-06-24 14:31:09 INFO: Server: Created reply message, signing DH public key
+2025-06-24 14:31:09 INFO: Server: Starting RSA signature generation
+2025-06-24 14:31:09 INFO: Server: RSA signature generated, length: 256
+2025-06-24 14:31:09 INFO: Server: Sending key exchange reply
+2025-06-24 14:31:09 INFO: Sending message: KEY_EXCHANGE_REPLY, length: 1370
+2025-06-24 14:31:09 INFO: Message sent successfully
+2025-06-24 14:31:09 INFO: Server: Key exchange reply sent successfully
+2025-06-24 14:31:09 INFO: Server: Key exchange completed successfully
+2025-06-24 14:31:09 INFO: Server: Enabling encryption
+2025-06-24 14:31:09 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
+2025-06-24 14:31:09 INFO: Encryption and HMAC enabled in protocol handler
+2025-06-24 14:31:09 INFO: Server: Key exchange completed successfully
+2025-06-24 14:31:09 INFO: Server: Starting authentication
+2025-06-24 14:31:09 INFO: Waiting to receive message...
+2025-06-24 14:31:09 INFO: Reading encrypted message...
+2025-06-24 14:31:09 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:31:09 INFO: Encrypted message length: 1014
+2025-06-24 14:31:09 INFO: Read 1014 bytes for encrypted message body
+2025-06-24 14:31:09 INFO: Decrypting encrypted message, length: 1014
+2025-06-24 14:31:09 INFO: Message decrypted successfully, new length: 986
+2025-06-24 14:31:09 INFO: Received message: AUTH_REQUEST
+2025-06-24 14:31:09 INFO: Server: Authentication request from tilman using dual
+2025-06-24 14:31:09 INFO: Authentication attempt for user: tilman, type: dual
+2025-06-24 14:31:09 INFO: User existence check for 'tilman': true
+2025-06-24 14:31:09 INFO: User validation passed for: tilman
+2025-06-24 14:31:09 INFO: Attempting dual authentication (password + public key) for: tilman
+2025-06-24 14:31:09 INFO: Verifying password for user: tilman
+2025-06-24 14:31:09 INFO: PasswordAuth: Checking if user exists: tilman
+2025-06-24 14:31:09 INFO: PasswordAuth: User exists, verifying password for: tilman
+2025-06-24 14:31:09 INFO: UserStore: Password verification for tilman - Stored hash: 571d5b2882b8df135b9f3b50ab4fb722ba82b1f6bebe7b91163ab3208291f0ca, Input hash: 571d5b2882b8df135b9f3b50ab4fb722ba82b1f6bebe7b91163ab3208291f0ca, Matches: true
+2025-06-24 14:31:09 INFO: PasswordAuth: Password verification result for tilman: true
+2025-06-24 14:31:09 INFO: Password authentication result for tilman: true
+2025-06-24 14:31:09 INFO: PublicKeyAuth: Found 1 authorized keys for user: tilman
+2025-06-24 14:31:09 INFO: PublicKeyAuth: Key match found!
+2025-06-24 14:31:09 INFO: PublicKeyAuth: Signature verification result: true
+2025-06-24 14:31:09 INFO: Dual authentication successful for user: tilman
+2025-06-24 14:31:09 INFO: Sending message: AUTH_SUCCESS, length: 269
+2025-06-24 14:31:09 INFO: Message encrypted, new length: 297
+2025-06-24 14:31:09 INFO: Added length prefix for encrypted message, total length: 301
+2025-06-24 14:31:09 INFO: Message sent successfully
+2025-06-24 14:31:09 INFO: Server: Authentication SUCCESS for tilman: Authentication successful
+2025-06-24 14:31:09 INFO: Server: Authentication completed successfully
+2025-06-24 14:31:09 INFO: Server: Starting service request handling
+2025-06-24 14:31:09 INFO: Waiting to receive message...
+2025-06-24 14:31:09 INFO: Reading encrypted message...
+2025-06-24 14:31:09 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:31:09 INFO: Encrypted message length: 186
+2025-06-24 14:31:09 INFO: Read 186 bytes for encrypted message body
+2025-06-24 14:31:09 INFO: Decrypting encrypted message, length: 186
+2025-06-24 14:31:09 INFO: Message decrypted successfully, new length: 158
+2025-06-24 14:31:09 INFO: Received message: SERVICE_REQUEST
+2025-06-24 14:31:09 INFO: Server: Service request from tilman for shell
+2025-06-24 14:31:09 INFO: Sending message: SERVICE_ACCEPT, length: 157
+2025-06-24 14:31:09 INFO: Message encrypted, new length: 185
+2025-06-24 14:31:09 INFO: Added length prefix for encrypted message, total length: 189
+2025-06-24 14:31:09 INFO: Message sent successfully
+2025-06-24 14:31:09 INFO: Server: Service shell accepted for tilman
+2025-06-24 14:31:09 INFO: Waiting to receive message...
+2025-06-24 14:31:09 INFO: Reading encrypted message...
+2025-06-24 14:31:11 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:31:11 INFO: Encrypted message length: 255
+2025-06-24 14:31:11 INFO: Read 255 bytes for encrypted message body
+2025-06-24 14:31:11 INFO: Decrypting encrypted message, length: 255
+2025-06-24 14:31:11 INFO: Message decrypted successfully, new length: 227
+2025-06-24 14:31:11 INFO: Received message: SHELL_COMMAND
+2025-06-24 14:31:11 INFO: Server: Executing shell command: 'ls' for user: tilman
+2025-06-24 14:31:11 INFO: Command result: exitCode=0, stdout='Applications
 com~apple~CloudDocs
 Desktop
 Documents
@@ -384,127 +519,853 @@ Pictures
 Public
 Zotero
 ', stderr=''
-2025-06-24 01:16:50 INFO: Sending message: SHELL_RESULT, length: 297
-2025-06-24 01:16:50 INFO: Message encrypted, new length: 325
-2025-06-24 01:16:50 INFO: Added length prefix for encrypted message, total length: 329
-2025-06-24 01:16:50 INFO: Message sent successfully
-2025-06-24 01:16:50 INFO: Sent SHELL_RESULT message to client.
-2025-06-24 01:16:50 INFO: Waiting to receive message...
-2025-06-24 01:16:50 INFO: Reading encrypted message...
-2025-06-24 01:18:04 INFO: Read -1 bytes for encrypted message length
-2025-06-24 01:18:04 INFO: Client disconnected gracefully (end of stream)
-2025-06-24 01:18:04 INFO: Server: Client 127.0.0.1:62819 disconnected gracefully
-2025-06-24 01:18:04 INFO: Server: Cleaning up client connection for 127.0.0.1:62819
-2025-06-24 01:18:04 INFO: Server: Cleaning up connection for 127.0.0.1:62819 (user: tilman)
-2025-06-24 01:18:04 INFO: Protocol handler closed
-2025-06-24 01:19:04 INFO: Shutdown signal received
-2025-06-24 01:19:04 INFO: SSHServerController: Stopping server
-2025-06-24 01:19:04 INFO: SSHServerModel: Stopping server
-2025-06-24 01:19:10 INFO: Logger initialized: logs/server.log
-2025-06-24 01:19:10 INFO: SSHServerModel: Created new model instance
-2025-06-24 01:19:10 INFO: SSH Server Starting
-2025-06-24 01:19:10 INFO: Log file: logs/server.log
-2025-06-24 01:19:10 INFO: SSHServerController: Starting server
-2025-06-24 01:19:15 INFO: SSHServerModel: Starting server
-2025-06-24 01:19:33 INFO: Server: Starting client connection handler for 127.0.0.1:62977
-2025-06-24 01:19:33 INFO: Server: Initializing protocol handler
-2025-06-24 01:19:33 INFO: Server: Protocol handler initialized
-2025-06-24 01:19:33 INFO: Server: Starting key exchange
-2025-06-24 01:19:33 INFO: Waiting to receive message...
-2025-06-24 01:19:34 INFO: Read 4 bytes for message length
-2025-06-24 01:19:34 INFO: Message length: 920
-2025-06-24 01:19:34 INFO: Read 920 bytes for message body (expected 920)
-2025-06-24 01:19:34 INFO: Message body (first 20 bytes): 01 7B 22 74 79 70 65 4E 61 6D 65 22 3A 22 4B 65 79 45 78 63 
-2025-06-24 01:19:34 INFO: Raw message type byte: 1
-2025-06-24 01:19:34 INFO: Parsed message type: KEY_EXCHANGE_INIT
-2025-06-24 01:19:34 INFO: fromPacket: restLength = 920
-2025-06-24 01:19:34 INFO: fromPacket: parsed message type = KEY_EXCHANGE_INIT
-2025-06-24 01:19:34 INFO: fromPacket: payloadLength = 915 (restLength=920 - 5)
-2025-06-24 01:19:34 INFO: fromPacket: checksum = 1626778782
-2025-06-24 01:19:34 INFO: Received message: KEY_EXCHANGE_INIT
-2025-06-24 01:19:34 INFO: Server: Received key exchange init from null
-2025-06-24 01:19:34 INFO: Server: Received key exchange init from null
-2025-06-24 01:19:34 INFO: Server: Initializing DH key exchange
-2025-06-24 01:19:34 INFO: Server: Generated DH key pair
-2025-06-24 01:19:34 INFO: Server: Set client's public key
-2025-06-24 01:19:34 INFO: Server: Computing shared secret
-2025-06-24 01:19:34 INFO: Server: Computed shared secret, length: 256
-2025-06-24 01:19:34 INFO: Server: Initializing symmetric encryption
-2025-06-24 01:19:34 INFO: Server: Initialized symmetric encryption
-2025-06-24 01:19:34 INFO: Server: Creating key exchange reply message
-2025-06-24 01:19:34 INFO: Server: Created reply message, signing DH public key
-2025-06-24 01:19:34 INFO: Server: Starting RSA signature generation
-2025-06-24 01:19:34 INFO: Server: RSA signature generated, length: 256
-2025-06-24 01:19:34 INFO: Server: Sending key exchange reply
-2025-06-24 01:19:34 INFO: Sending message: KEY_EXCHANGE_REPLY, length: 1321
-2025-06-24 01:19:34 INFO: Message sent successfully
-2025-06-24 01:19:34 INFO: Server: Key exchange reply sent successfully
-2025-06-24 01:19:34 INFO: Server: Key exchange completed successfully
-2025-06-24 01:19:34 INFO: Server: Enabling encryption
-2025-06-24 01:19:34 INFO: Encryption enabled - subsequent messages will be encrypted/decrypted
-2025-06-24 01:19:34 INFO: Server: Encryption enabled
-2025-06-24 01:19:34 INFO: Server: Key exchange completed successfully
-2025-06-24 01:19:34 INFO: Server: Starting authentication
-2025-06-24 01:19:34 INFO: Waiting to receive message...
-2025-06-24 01:19:34 INFO: Reading encrypted message...
-2025-06-24 01:19:34 INFO: Read 4 bytes for encrypted message length
-2025-06-24 01:19:34 INFO: Encrypted message length: 965
-2025-06-24 01:19:34 INFO: Read 965 bytes for encrypted message body
-2025-06-24 01:19:34 INFO: Decrypting encrypted message, length: 965
-2025-06-24 01:19:34 INFO: Message decrypted successfully, new length: 937
-2025-06-24 01:19:34 INFO: fromPacket: restLength = 933
-2025-06-24 01:19:34 INFO: fromPacket: parsed message type = AUTH_REQUEST
-2025-06-24 01:19:34 INFO: fromPacket: payloadLength = 928 (restLength=933 - 5)
-2025-06-24 01:19:34 INFO: fromPacket: checksum = -931355163
-2025-06-24 01:19:34 INFO: Received encrypted message: AUTH_REQUEST
-2025-06-24 01:19:34 INFO: Server: Authentication request from tilman using dual
-2025-06-24 01:19:34 INFO: Authentication attempt for user: tilman, type: dual
-2025-06-24 01:19:34 INFO: User existence check for 'tilman': true
-2025-06-24 01:19:34 INFO: User validation passed for: tilman
-2025-06-24 01:19:34 INFO: Attempting dual authentication (password + public key) for: tilman
-2025-06-24 01:19:34 INFO: Verifying password for user: tilman
-2025-06-24 01:19:34 INFO: PasswordAuth: Checking if user exists: tilman
-2025-06-24 01:19:34 INFO: PasswordAuth: User exists, verifying password for: tilman
-2025-06-24 01:19:34 INFO: UserStore: Password verification for tilman - Stored hash: 571d5b2882b8df135b9f3b50ab4fb722ba82b1f6bebe7b91163ab3208291f0ca, Input hash: 571d5b2882b8df135b9f3b50ab4fb722ba82b1f6bebe7b91163ab3208291f0ca, Matches: true
-2025-06-24 01:19:34 INFO: PasswordAuth: Password verification result for tilman: true
-2025-06-24 01:19:34 INFO: Password authentication result for tilman: true
-2025-06-24 01:19:34 INFO: PublicKeyAuth: Found 1 authorized keys for user: tilman
-2025-06-24 01:19:34 INFO: PublicKeyAuth: Key match found!
-2025-06-24 01:19:34 INFO: PublicKeyAuth: Signature verification result: true
-2025-06-24 01:19:34 INFO: Dual authentication successful for user: tilman
-2025-06-24 01:19:34 INFO: Sending message: AUTH_SUCCESS, length: 220
-2025-06-24 01:19:34 INFO: Message encrypted, new length: 248
-2025-06-24 01:19:34 INFO: Added length prefix for encrypted message, total length: 252
-2025-06-24 01:19:34 INFO: Message sent successfully
-2025-06-24 01:19:34 INFO: Server: Authentication SUCCESS for tilman: Authentication successful
-2025-06-24 01:19:34 INFO: Server: Authentication completed successfully
-2025-06-24 01:19:34 INFO: Server: Starting service request handling
-2025-06-24 01:19:34 INFO: Waiting to receive message...
-2025-06-24 01:19:34 INFO: Reading encrypted message...
-2025-06-24 01:19:34 INFO: Read 4 bytes for encrypted message length
-2025-06-24 01:19:34 INFO: Encrypted message length: 137
-2025-06-24 01:19:34 INFO: Read 137 bytes for encrypted message body
-2025-06-24 01:19:34 INFO: Decrypting encrypted message, length: 137
-2025-06-24 01:19:34 INFO: Message decrypted successfully, new length: 109
-2025-06-24 01:19:34 INFO: fromPacket: restLength = 105
-2025-06-24 01:19:34 INFO: fromPacket: parsed message type = SERVICE_REQUEST
-2025-06-24 01:19:34 INFO: fromPacket: payloadLength = 100 (restLength=105 - 5)
-2025-06-24 01:19:34 INFO: fromPacket: checksum = -1107515802
-2025-06-24 01:19:34 INFO: Received encrypted message: SERVICE_REQUEST
-2025-06-24 01:19:34 INFO: Server: Service request from tilman for shell
-2025-06-24 01:19:34 INFO: Sending message: SERVICE_ACCEPT, length: 108
-2025-06-24 01:19:34 INFO: Message encrypted, new length: 136
-2025-06-24 01:19:34 INFO: Added length prefix for encrypted message, total length: 140
-2025-06-24 01:19:34 INFO: Message sent successfully
-2025-06-24 01:19:34 INFO: Server: Service shell accepted for tilman
-2025-06-24 01:19:34 INFO: Waiting to receive message...
-2025-06-24 01:19:34 INFO: Reading encrypted message...
-2025-06-24 01:20:42 INFO: Read -1 bytes for encrypted message length
-2025-06-24 01:20:42 INFO: Client disconnected gracefully (end of stream)
-2025-06-24 01:20:42 INFO: Server: Client 127.0.0.1:62977 disconnected gracefully
-2025-06-24 01:20:42 INFO: Server: Cleaning up client connection for 127.0.0.1:62977
-2025-06-24 01:20:42 INFO: Server: Cleaning up connection for 127.0.0.1:62977 (user: tilman)
-2025-06-24 01:20:42 INFO: Protocol handler closed
-2025-06-24 01:20:50 INFO: Shutdown signal received
-2025-06-24 01:20:50 INFO: SSHServerController: Stopping server
-2025-06-24 01:20:50 INFO: SSHServerModel: Stopping server
+2025-06-24 14:31:11 INFO: Sending message: SHELL_RESULT, length: 346
+2025-06-24 14:31:11 INFO: Message encrypted, new length: 374
+2025-06-24 14:31:11 INFO: Added length prefix for encrypted message, total length: 378
+2025-06-24 14:31:11 INFO: Message sent successfully
+2025-06-24 14:31:11 INFO: Sent SHELL_RESULT message to client.
+2025-06-24 14:31:11 INFO: Waiting to receive message...
+2025-06-24 14:31:11 INFO: Reading encrypted message...
+2025-06-24 14:31:42 INFO: Read -1 bytes for encrypted message length
+2025-06-24 14:31:42 INFO: Client disconnected gracefully (end of stream)
+2025-06-24 14:31:42 INFO: Server: Client 127.0.0.1:51000 disconnected gracefully
+2025-06-24 14:31:42 INFO: Server: Cleaning up client connection for 127.0.0.1:51000
+2025-06-24 14:31:42 INFO: Server: Cleaning up connection for 127.0.0.1:51000 (user: tilman)
+2025-06-24 14:31:42 INFO: Protocol handler closed
+2025-06-24 14:32:04 INFO: Server: Starting client connection handler for 127.0.0.1:51020
+2025-06-24 14:32:04 INFO: Server: Initializing protocol handler
+2025-06-24 14:32:04 INFO: Server: Protocol handler initialized
+2025-06-24 14:32:04 INFO: Server: Starting key exchange
+2025-06-24 14:32:04 INFO: Server: Received key exchange init from null
+2025-06-24 14:32:04 INFO: Server: Received key exchange init from null
+2025-06-24 14:32:04 INFO: Server: Initializing DH key exchange
+2025-06-24 14:32:04 INFO: Server: Generated DH key pair
+2025-06-24 14:32:04 INFO: Server: Set client's public key
+2025-06-24 14:32:04 INFO: Server: Computing shared secret
+2025-06-24 14:32:04 INFO: Server: Computed shared secret, length: 256
+2025-06-24 14:32:04 INFO: Server: Initializing symmetric encryption
+2025-06-24 14:32:04 INFO: Server: Initialized symmetric encryption
+2025-06-24 14:32:04 INFO: Server: Creating key exchange reply message
+2025-06-24 14:32:04 INFO: Server: Created reply message, signing DH public key
+2025-06-24 14:32:04 INFO: Server: Starting RSA signature generation
+2025-06-24 14:32:04 INFO: Server: RSA signature generated, length: 256
+2025-06-24 14:32:04 INFO: Server: Sending key exchange reply
+2025-06-24 14:32:04 INFO: Sending message: KEY_EXCHANGE_REPLY, length: 1370
+2025-06-24 14:32:04 INFO: Message sent successfully
+2025-06-24 14:32:04 INFO: Server: Key exchange reply sent successfully
+2025-06-24 14:32:04 INFO: Server: Key exchange completed successfully
+2025-06-24 14:32:04 INFO: Server: Enabling encryption
+2025-06-24 14:32:04 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
+2025-06-24 14:32:04 INFO: Encryption and HMAC enabled in protocol handler
+2025-06-24 14:32:04 INFO: Server: Key exchange completed successfully
+2025-06-24 14:32:04 INFO: Server: Starting authentication
+2025-06-24 14:32:04 INFO: Waiting to receive message...
+2025-06-24 14:32:04 INFO: Reading encrypted message...
+2025-06-24 14:32:04 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:32:04 INFO: Encrypted message length: 1011
+2025-06-24 14:32:04 INFO: Read 1011 bytes for encrypted message body
+2025-06-24 14:32:04 INFO: Decrypting encrypted message, length: 1011
+2025-06-24 14:32:04 INFO: Message decrypted successfully, new length: 983
+2025-06-24 14:32:04 INFO: Received message: AUTH_REQUEST
+2025-06-24 14:32:04 INFO: Server: Authentication request from ted using dual
+2025-06-24 14:32:04 INFO: Authentication attempt for user: ted, type: dual
+2025-06-24 14:32:04 INFO: User existence check for 'ted': false
+2025-06-24 14:32:04 ERROR: User validation failed for: ted
+2025-06-24 14:32:04 INFO: Sending message: AUTH_FAILURE, length: 266
+2025-06-24 14:32:04 INFO: Message encrypted, new length: 294
+2025-06-24 14:32:04 INFO: Added length prefix for encrypted message, total length: 298
+2025-06-24 14:32:04 INFO: Message sent successfully
+2025-06-24 14:32:04 INFO: Server: Authentication FAILED for ted: Authentication failed
+2025-06-24 14:32:04 ERROR: Server: Authentication failed for client 127.0.0.1:51020
+2025-06-24 14:32:04 ERROR: Server: Authentication failed for client 127.0.0.1:51020
+2025-06-24 14:32:04 INFO: Server: Cleaning up client connection for 127.0.0.1:51020
+2025-06-24 14:32:04 INFO: Server: Cleaning up connection for 127.0.0.1:51020
+2025-06-24 14:32:04 INFO: Protocol handler closed
+2025-06-24 14:37:29 INFO: Server: Starting client connection handler for 127.0.0.1:51099
+2025-06-24 14:37:29 INFO: Server: Initializing protocol handler
+2025-06-24 14:37:29 INFO: Server: Protocol handler initialized
+2025-06-24 14:37:29 INFO: Server: Starting key exchange
+2025-06-24 14:37:29 INFO: Server: Received key exchange init from null
+2025-06-24 14:37:29 INFO: Server: Received key exchange init from null
+2025-06-24 14:37:29 INFO: Server: Initializing DH key exchange
+2025-06-24 14:37:29 INFO: Server: Generated DH key pair
+2025-06-24 14:37:29 INFO: Server: Set client's public key
+2025-06-24 14:37:29 INFO: Server: Computing shared secret
+2025-06-24 14:37:29 INFO: Server: Computed shared secret, length: 256
+2025-06-24 14:37:29 INFO: Server: Initializing symmetric encryption
+2025-06-24 14:37:29 INFO: Server: Initialized symmetric encryption
+2025-06-24 14:37:29 INFO: Server: Creating key exchange reply message
+2025-06-24 14:37:29 INFO: Server: Created reply message, signing DH public key
+2025-06-24 14:37:29 INFO: Server: Starting RSA signature generation
+2025-06-24 14:37:29 INFO: Server: RSA signature generated, length: 256
+2025-06-24 14:37:29 INFO: Server: Sending key exchange reply
+2025-06-24 14:37:29 INFO: Sending message: KEY_EXCHANGE_REPLY, length: 1370
+2025-06-24 14:37:29 INFO: Message sent successfully
+2025-06-24 14:37:29 INFO: Server: Key exchange reply sent successfully
+2025-06-24 14:37:29 INFO: Server: Key exchange completed successfully
+2025-06-24 14:37:29 INFO: Server: Enabling encryption
+2025-06-24 14:37:29 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
+2025-06-24 14:37:29 INFO: Encryption and HMAC enabled in protocol handler
+2025-06-24 14:37:29 INFO: Server: Key exchange completed successfully
+2025-06-24 14:37:29 INFO: Server: Starting authentication
+2025-06-24 14:37:29 INFO: Waiting to receive message...
+2025-06-24 14:37:29 INFO: Reading encrypted message...
+2025-06-24 14:37:29 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:37:29 INFO: Encrypted message length: 1014
+2025-06-24 14:37:29 INFO: Read 1014 bytes for encrypted message body
+2025-06-24 14:37:29 INFO: Decrypting encrypted message, length: 1014
+2025-06-24 14:37:29 INFO: Message decrypted successfully, new length: 986
+2025-06-24 14:37:29 INFO: Received message: AUTH_REQUEST
+2025-06-24 14:37:29 INFO: Server: Authentication request from tilman using dual
+2025-06-24 14:37:29 INFO: Authentication attempt for user: tilman, type: dual
+2025-06-24 14:37:29 INFO: User existence check for 'tilman': true
+2025-06-24 14:37:29 INFO: User validation passed for: tilman
+2025-06-24 14:37:29 INFO: Attempting dual authentication (password + public key) for: tilman
+2025-06-24 14:37:29 INFO: Verifying password for user: tilman
+2025-06-24 14:37:29 INFO: PasswordAuth: Checking if user exists: tilman
+2025-06-24 14:37:29 INFO: PasswordAuth: User exists, verifying password for: tilman
+2025-06-24 14:37:29 INFO: UserStore: Password verification for tilman - Stored hash: 571d5b2882b8df135b9f3b50ab4fb722ba82b1f6bebe7b91163ab3208291f0ca, Input hash: 571d5b2882b8df135b9f3b50ab4fb722ba82b1f6bebe7b91163ab3208291f0ca, Matches: true
+2025-06-24 14:37:29 INFO: PasswordAuth: Password verification result for tilman: true
+2025-06-24 14:37:29 INFO: Password authentication result for tilman: true
+2025-06-24 14:37:29 INFO: PublicKeyAuth: Found 1 authorized keys for user: tilman
+2025-06-24 14:37:29 INFO: PublicKeyAuth: Key match found!
+2025-06-24 14:37:29 INFO: PublicKeyAuth: Signature verification result: true
+2025-06-24 14:37:29 INFO: Dual authentication successful for user: tilman
+2025-06-24 14:37:29 INFO: Sending message: AUTH_SUCCESS, length: 269
+2025-06-24 14:37:29 INFO: Message encrypted, new length: 297
+2025-06-24 14:37:29 INFO: Added length prefix for encrypted message, total length: 301
+2025-06-24 14:37:29 INFO: Message sent successfully
+2025-06-24 14:37:29 INFO: Server: Authentication SUCCESS for tilman: Authentication successful
+2025-06-24 14:37:29 INFO: Server: Authentication completed successfully
+2025-06-24 14:37:29 INFO: Server: Starting service request handling
+2025-06-24 14:37:29 INFO: Waiting to receive message...
+2025-06-24 14:37:29 INFO: Reading encrypted message...
+2025-06-24 14:37:29 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:37:29 INFO: Encrypted message length: 186
+2025-06-24 14:37:29 INFO: Read 186 bytes for encrypted message body
+2025-06-24 14:37:29 INFO: Decrypting encrypted message, length: 186
+2025-06-24 14:37:29 INFO: Message decrypted successfully, new length: 158
+2025-06-24 14:37:29 INFO: Received message: SERVICE_REQUEST
+2025-06-24 14:37:29 INFO: Server: Service request from tilman for shell
+2025-06-24 14:37:29 INFO: Sending message: SERVICE_ACCEPT, length: 157
+2025-06-24 14:37:29 INFO: Message encrypted, new length: 185
+2025-06-24 14:37:29 INFO: Added length prefix for encrypted message, total length: 189
+2025-06-24 14:37:29 INFO: Message sent successfully
+2025-06-24 14:37:29 INFO: Server: Service shell accepted for tilman
+2025-06-24 14:37:29 INFO: Waiting to receive message...
+2025-06-24 14:37:29 INFO: Reading encrypted message...
+2025-06-24 14:37:54 INFO: Read -1 bytes for encrypted message length
+2025-06-24 14:37:54 INFO: Client disconnected gracefully (end of stream)
+2025-06-24 14:37:54 INFO: Server: Client 127.0.0.1:51099 disconnected gracefully
+2025-06-24 14:37:54 INFO: Server: Cleaning up client connection for 127.0.0.1:51099
+2025-06-24 14:37:54 INFO: Server: Cleaning up connection for 127.0.0.1:51099 (user: tilman)
+2025-06-24 14:37:54 INFO: Protocol handler closed
+2025-06-24 14:38:20 INFO: Server: Starting client connection handler for 127.0.0.1:51105
+2025-06-24 14:38:20 INFO: Server: Initializing protocol handler
+2025-06-24 14:38:20 INFO: Server: Protocol handler initialized
+2025-06-24 14:38:20 INFO: Server: Starting key exchange
+2025-06-24 14:38:21 INFO: Server: Received key exchange init from null
+2025-06-24 14:38:21 INFO: Server: Received key exchange init from null
+2025-06-24 14:38:21 INFO: Server: Initializing DH key exchange
+2025-06-24 14:38:21 INFO: Server: Generated DH key pair
+2025-06-24 14:38:21 INFO: Server: Set client's public key
+2025-06-24 14:38:21 INFO: Server: Computing shared secret
+2025-06-24 14:38:21 INFO: Server: Computed shared secret, length: 256
+2025-06-24 14:38:21 INFO: Server: Initializing symmetric encryption
+2025-06-24 14:38:21 INFO: Server: Initialized symmetric encryption
+2025-06-24 14:38:21 INFO: Server: Creating key exchange reply message
+2025-06-24 14:38:21 INFO: Server: Created reply message, signing DH public key
+2025-06-24 14:38:21 INFO: Server: Starting RSA signature generation
+2025-06-24 14:38:21 INFO: Server: RSA signature generated, length: 256
+2025-06-24 14:38:21 INFO: Server: Sending key exchange reply
+2025-06-24 14:38:21 INFO: Sending message: KEY_EXCHANGE_REPLY, length: 1370
+2025-06-24 14:38:21 INFO: Message sent successfully
+2025-06-24 14:38:21 INFO: Server: Key exchange reply sent successfully
+2025-06-24 14:38:21 INFO: Server: Key exchange completed successfully
+2025-06-24 14:38:21 INFO: Server: Enabling encryption
+2025-06-24 14:38:21 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
+2025-06-24 14:38:21 INFO: Encryption and HMAC enabled in protocol handler
+2025-06-24 14:38:21 INFO: Server: Key exchange completed successfully
+2025-06-24 14:38:21 INFO: Server: Starting authentication
+2025-06-24 14:38:21 INFO: Waiting to receive message...
+2025-06-24 14:38:21 INFO: Reading encrypted message...
+2025-06-24 14:38:21 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:38:21 INFO: Encrypted message length: 1013
+2025-06-24 14:38:21 INFO: Read 1013 bytes for encrypted message body
+2025-06-24 14:38:21 INFO: Decrypting encrypted message, length: 1013
+2025-06-24 14:38:21 INFO: Message decrypted successfully, new length: 985
+2025-06-24 14:38:21 INFO: Received message: AUTH_REQUEST
+2025-06-24 14:38:21 INFO: Server: Authentication request from test using dual
+2025-06-24 14:38:21 INFO: Authentication attempt for user: test, type: dual
+2025-06-24 14:38:21 INFO: User existence check for 'test': true
+2025-06-24 14:38:21 INFO: User validation passed for: test
+2025-06-24 14:38:21 INFO: Attempting dual authentication (password + public key) for: test
+2025-06-24 14:38:21 INFO: Verifying password for user: test
+2025-06-24 14:38:21 INFO: PasswordAuth: Checking if user exists: test
+2025-06-24 14:38:21 INFO: PasswordAuth: User exists, verifying password for: test
+2025-06-24 14:38:21 INFO: UserStore: Password verification for test - Stored hash: 9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08, Input hash: 9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08, Matches: true
+2025-06-24 14:38:21 INFO: PasswordAuth: Password verification result for test: true
+2025-06-24 14:38:21 INFO: Password authentication result for test: true
+2025-06-24 14:38:21 INFO: PublicKeyAuth: Found 3 authorized keys for user: test
+2025-06-24 14:38:21 ERROR: PublicKeyAuth: No matching authorized key found for user: test
+2025-06-24 14:38:21 ERROR: Public key authentication failed for dual auth
+2025-06-24 14:38:21 INFO: Sending message: AUTH_FAILURE, length: 266
+2025-06-24 14:38:21 INFO: Message encrypted, new length: 294
+2025-06-24 14:38:21 INFO: Added length prefix for encrypted message, total length: 298
+2025-06-24 14:38:21 INFO: Message sent successfully
+2025-06-24 14:38:21 INFO: Server: Authentication FAILED for test: Authentication failed
+2025-06-24 14:38:21 ERROR: Server: Authentication failed for client 127.0.0.1:51105
+2025-06-24 14:38:21 ERROR: Server: Authentication failed for client 127.0.0.1:51105
+2025-06-24 14:38:21 INFO: Server: Cleaning up client connection for 127.0.0.1:51105
+2025-06-24 14:38:21 INFO: Server: Cleaning up connection for 127.0.0.1:51105
+2025-06-24 14:38:21 INFO: Protocol handler closed
+2025-06-24 14:38:49 INFO: Server: Starting client connection handler for 127.0.0.1:51111
+2025-06-24 14:38:49 INFO: Server: Initializing protocol handler
+2025-06-24 14:38:49 INFO: Server: Protocol handler initialized
+2025-06-24 14:38:49 INFO: Server: Starting key exchange
+2025-06-24 14:38:50 INFO: Server: Received key exchange init from null
+2025-06-24 14:38:50 INFO: Server: Received key exchange init from null
+2025-06-24 14:38:50 INFO: Server: Initializing DH key exchange
+2025-06-24 14:38:50 INFO: Server: Generated DH key pair
+2025-06-24 14:38:50 INFO: Server: Set client's public key
+2025-06-24 14:38:50 INFO: Server: Computing shared secret
+2025-06-24 14:38:50 INFO: Server: Computed shared secret, length: 256
+2025-06-24 14:38:50 INFO: Server: Initializing symmetric encryption
+2025-06-24 14:38:50 INFO: Server: Initialized symmetric encryption
+2025-06-24 14:38:50 INFO: Server: Creating key exchange reply message
+2025-06-24 14:38:50 INFO: Server: Created reply message, signing DH public key
+2025-06-24 14:38:50 INFO: Server: Starting RSA signature generation
+2025-06-24 14:38:50 INFO: Server: RSA signature generated, length: 256
+2025-06-24 14:38:50 INFO: Server: Sending key exchange reply
+2025-06-24 14:38:50 INFO: Sending message: KEY_EXCHANGE_REPLY, length: 1370
+2025-06-24 14:38:50 INFO: Message sent successfully
+2025-06-24 14:38:50 INFO: Server: Key exchange reply sent successfully
+2025-06-24 14:38:50 INFO: Server: Key exchange completed successfully
+2025-06-24 14:38:50 INFO: Server: Enabling encryption
+2025-06-24 14:38:50 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
+2025-06-24 14:38:50 INFO: Encryption and HMAC enabled in protocol handler
+2025-06-24 14:38:50 INFO: Server: Key exchange completed successfully
+2025-06-24 14:38:50 INFO: Server: Starting authentication
+2025-06-24 14:38:50 INFO: Waiting to receive message...
+2025-06-24 14:38:50 INFO: Reading encrypted message...
+2025-06-24 14:38:50 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:38:50 INFO: Encrypted message length: 1014
+2025-06-24 14:38:50 INFO: Read 1014 bytes for encrypted message body
+2025-06-24 14:38:50 INFO: Decrypting encrypted message, length: 1014
+2025-06-24 14:38:50 INFO: Message decrypted successfully, new length: 986
+2025-06-24 14:38:50 INFO: Received message: AUTH_REQUEST
+2025-06-24 14:38:50 INFO: Server: Authentication request from tilman using dual
+2025-06-24 14:38:50 INFO: Authentication attempt for user: tilman, type: dual
+2025-06-24 14:38:50 INFO: User existence check for 'tilman': true
+2025-06-24 14:38:50 INFO: User validation passed for: tilman
+2025-06-24 14:38:50 INFO: Attempting dual authentication (password + public key) for: tilman
+2025-06-24 14:38:50 INFO: Verifying password for user: tilman
+2025-06-24 14:38:50 INFO: PasswordAuth: Checking if user exists: tilman
+2025-06-24 14:38:50 INFO: PasswordAuth: User exists, verifying password for: tilman
+2025-06-24 14:38:50 INFO: UserStore: Password verification for tilman - Stored hash: 571d5b2882b8df135b9f3b50ab4fb722ba82b1f6bebe7b91163ab3208291f0ca, Input hash: 571d5b2882b8df135b9f3b50ab4fb722ba82b1f6bebe7b91163ab3208291f0ca, Matches: true
+2025-06-24 14:38:50 INFO: PasswordAuth: Password verification result for tilman: true
+2025-06-24 14:38:50 INFO: Password authentication result for tilman: true
+2025-06-24 14:38:50 INFO: PublicKeyAuth: Found 1 authorized keys for user: tilman
+2025-06-24 14:38:50 INFO: PublicKeyAuth: Key match found!
+2025-06-24 14:38:50 INFO: PublicKeyAuth: Signature verification result: true
+2025-06-24 14:38:50 INFO: Dual authentication successful for user: tilman
+2025-06-24 14:38:50 INFO: Sending message: AUTH_SUCCESS, length: 269
+2025-06-24 14:38:50 INFO: Message encrypted, new length: 297
+2025-06-24 14:38:50 INFO: Added length prefix for encrypted message, total length: 301
+2025-06-24 14:38:50 INFO: Message sent successfully
+2025-06-24 14:38:50 INFO: Server: Authentication SUCCESS for tilman: Authentication successful
+2025-06-24 14:38:50 INFO: Server: Authentication completed successfully
+2025-06-24 14:38:50 INFO: Server: Starting service request handling
+2025-06-24 14:38:50 INFO: Waiting to receive message...
+2025-06-24 14:38:50 INFO: Reading encrypted message...
+2025-06-24 14:38:50 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:38:50 INFO: Encrypted message length: 186
+2025-06-24 14:38:50 INFO: Read 186 bytes for encrypted message body
+2025-06-24 14:38:50 INFO: Decrypting encrypted message, length: 186
+2025-06-24 14:38:50 INFO: Message decrypted successfully, new length: 158
+2025-06-24 14:38:50 INFO: Received message: SERVICE_REQUEST
+2025-06-24 14:38:50 INFO: Server: Service request from tilman for shell
+2025-06-24 14:38:50 INFO: Sending message: SERVICE_ACCEPT, length: 157
+2025-06-24 14:38:50 INFO: Message encrypted, new length: 185
+2025-06-24 14:38:50 INFO: Added length prefix for encrypted message, total length: 189
+2025-06-24 14:38:50 INFO: Message sent successfully
+2025-06-24 14:38:50 INFO: Server: Service shell accepted for tilman
+2025-06-24 14:38:50 INFO: Waiting to receive message...
+2025-06-24 14:38:50 INFO: Reading encrypted message...
+2025-06-24 14:39:23 INFO: Read -1 bytes for encrypted message length
+2025-06-24 14:39:23 INFO: Client disconnected gracefully (end of stream)
+2025-06-24 14:39:23 INFO: Server: Client 127.0.0.1:51111 disconnected gracefully
+2025-06-24 14:39:23 INFO: Server: Cleaning up client connection for 127.0.0.1:51111
+2025-06-24 14:39:23 INFO: Server: Cleaning up connection for 127.0.0.1:51111 (user: tilman)
+2025-06-24 14:39:23 INFO: Protocol handler closed
+2025-06-24 14:39:38 INFO: Server: Starting client connection handler for 127.0.0.1:51117
+2025-06-24 14:39:38 INFO: Server: Initializing protocol handler
+2025-06-24 14:39:38 INFO: Server: Protocol handler initialized
+2025-06-24 14:39:38 INFO: Server: Starting key exchange
+2025-06-24 14:39:38 INFO: Server: Received key exchange init from null
+2025-06-24 14:39:38 INFO: Server: Received key exchange init from null
+2025-06-24 14:39:38 INFO: Server: Initializing DH key exchange
+2025-06-24 14:39:38 INFO: Server: Generated DH key pair
+2025-06-24 14:39:38 INFO: Server: Set client's public key
+2025-06-24 14:39:38 INFO: Server: Computing shared secret
+2025-06-24 14:39:38 INFO: Server: Computed shared secret, length: 256
+2025-06-24 14:39:38 INFO: Server: Initializing symmetric encryption
+2025-06-24 14:39:38 INFO: Server: Initialized symmetric encryption
+2025-06-24 14:39:38 INFO: Server: Creating key exchange reply message
+2025-06-24 14:39:38 INFO: Server: Created reply message, signing DH public key
+2025-06-24 14:39:38 INFO: Server: Starting RSA signature generation
+2025-06-24 14:39:38 INFO: Server: RSA signature generated, length: 256
+2025-06-24 14:39:38 INFO: Server: Sending key exchange reply
+2025-06-24 14:39:38 INFO: Sending message: KEY_EXCHANGE_REPLY, length: 1370
+2025-06-24 14:39:38 INFO: Message sent successfully
+2025-06-24 14:39:38 INFO: Server: Key exchange reply sent successfully
+2025-06-24 14:39:38 INFO: Server: Key exchange completed successfully
+2025-06-24 14:39:38 INFO: Server: Enabling encryption
+2025-06-24 14:39:38 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
+2025-06-24 14:39:38 INFO: Encryption and HMAC enabled in protocol handler
+2025-06-24 14:39:38 INFO: Server: Key exchange completed successfully
+2025-06-24 14:39:38 INFO: Server: Starting authentication
+2025-06-24 14:39:38 INFO: Waiting to receive message...
+2025-06-24 14:39:38 INFO: Reading encrypted message...
+2025-06-24 14:39:38 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:39:38 INFO: Encrypted message length: 1011
+2025-06-24 14:39:38 INFO: Read 1011 bytes for encrypted message body
+2025-06-24 14:39:38 INFO: Decrypting encrypted message, length: 1011
+2025-06-24 14:39:38 INFO: Message decrypted successfully, new length: 983
+2025-06-24 14:39:38 INFO: Received message: AUTH_REQUEST
+2025-06-24 14:39:38 INFO: Server: Authentication request from lel using dual
+2025-06-24 14:39:38 INFO: Authentication attempt for user: lel, type: dual
+2025-06-24 14:39:38 INFO: User existence check for 'lel': false
+2025-06-24 14:39:38 ERROR: User validation failed for: lel
+2025-06-24 14:39:38 INFO: Sending message: AUTH_FAILURE, length: 266
+2025-06-24 14:39:38 INFO: Message encrypted, new length: 294
+2025-06-24 14:39:38 INFO: Added length prefix for encrypted message, total length: 298
+2025-06-24 14:39:38 INFO: Message sent successfully
+2025-06-24 14:39:38 INFO: Server: Authentication FAILED for lel: Authentication failed
+2025-06-24 14:39:38 ERROR: Server: Authentication failed for client 127.0.0.1:51117
+2025-06-24 14:39:38 ERROR: Server: Authentication failed for client 127.0.0.1:51117
+2025-06-24 14:39:38 INFO: Server: Cleaning up client connection for 127.0.0.1:51117
+2025-06-24 14:39:38 INFO: Server: Cleaning up connection for 127.0.0.1:51117
+2025-06-24 14:39:38 INFO: Protocol handler closed
+2025-06-24 14:47:58 INFO: Shutdown signal received
+2025-06-24 14:47:58 INFO: SSHServerController: Stopping server
+2025-06-24 14:47:58 INFO: SSHServerModel: Stopping server
+2025-06-24 14:48:07 INFO: Logger initialized: logs/server.log
+2025-06-24 14:48:07 INFO: SSHServerModel: Created new model instance
+2025-06-24 14:48:07 INFO: SSH Server Starting
+2025-06-24 14:48:07 INFO: Log file: logs/server.log
+2025-06-24 14:48:07 INFO: SSHServerController: Starting server
+2025-06-24 14:48:10 INFO: SSHServerModel: Starting server
+2025-06-24 14:48:16 INFO: Server: Starting client connection handler for 127.0.0.1:51321
+2025-06-24 14:48:16 INFO: Server: Initializing protocol handler
+2025-06-24 14:48:16 INFO: Server: Protocol handler initialized
+2025-06-24 14:48:16 INFO: Server: Starting key exchange
+2025-06-24 14:48:16 INFO: Server: Received key exchange init from null
+2025-06-24 14:48:16 INFO: Server: Received key exchange init from null
+2025-06-24 14:48:16 INFO: Server: Initializing DH key exchange
+2025-06-24 14:48:16 INFO: Server: Generated DH key pair
+2025-06-24 14:48:16 INFO: Server: Set client's public key
+2025-06-24 14:48:16 INFO: Server: Computing shared secret
+2025-06-24 14:48:16 INFO: Server: Computed shared secret, length: 256
+2025-06-24 14:48:16 INFO: Server: Initializing symmetric encryption
+2025-06-24 14:48:16 INFO: Server: Initialized symmetric encryption
+2025-06-24 14:48:16 INFO: Server: Creating key exchange reply message
+2025-06-24 14:48:16 INFO: Server: Created reply message, signing DH public key
+2025-06-24 14:48:16 INFO: Server: Starting RSA signature generation
+2025-06-24 14:48:16 INFO: Server: RSA signature generated, length: 256
+2025-06-24 14:48:16 INFO: Server: Sending key exchange reply
+2025-06-24 14:48:16 INFO: Sending message: KEY_EXCHANGE_REPLY, length: 1370
+2025-06-24 14:48:16 INFO: Message sent successfully
+2025-06-24 14:48:16 INFO: Server: Key exchange reply sent successfully
+2025-06-24 14:48:16 INFO: Server: Key exchange completed successfully
+2025-06-24 14:48:16 INFO: Server: Enabling encryption
+2025-06-24 14:48:16 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
+2025-06-24 14:48:16 INFO: Encryption and HMAC enabled in protocol handler
+2025-06-24 14:48:16 INFO: Server: Key exchange completed successfully
+2025-06-24 14:48:16 INFO: Server: Starting authentication
+2025-06-24 14:48:16 INFO: Waiting to receive message...
+2025-06-24 14:48:16 INFO: Reading encrypted message...
+2025-06-24 14:48:16 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:48:16 INFO: Encrypted message length: 1014
+2025-06-24 14:48:16 INFO: Read 1014 bytes for encrypted message body
+2025-06-24 14:48:16 INFO: Decrypting encrypted message, length: 1014
+2025-06-24 14:48:16 INFO: Message decrypted successfully, new length: 986
+2025-06-24 14:48:16 INFO: Received message: AUTH_REQUEST
+2025-06-24 14:48:16 INFO: Server: Authentication request from tilman using dual
+2025-06-24 14:48:16 INFO: Authentication attempt for user: tilman, type: dual
+2025-06-24 14:48:16 INFO: User existence check for 'tilman': true
+2025-06-24 14:48:16 INFO: User validation passed for: tilman
+2025-06-24 14:48:16 INFO: Attempting dual authentication (password + public key) for: tilman
+2025-06-24 14:48:16 INFO: Verifying password for user: tilman
+2025-06-24 14:48:16 INFO: PasswordAuth: Checking if user exists: tilman
+2025-06-24 14:48:16 INFO: PasswordAuth: User exists, verifying password for: tilman
+2025-06-24 14:48:16 INFO: UserStore: Password verification for tilman - Stored hash: 571d5b2882b8df135b9f3b50ab4fb722ba82b1f6bebe7b91163ab3208291f0ca, Input hash: 571d5b2882b8df135b9f3b50ab4fb722ba82b1f6bebe7b91163ab3208291f0ca, Matches: true
+2025-06-24 14:48:16 INFO: PasswordAuth: Password verification result for tilman: true
+2025-06-24 14:48:16 INFO: Password authentication result for tilman: true
+2025-06-24 14:48:16 INFO: PublicKeyAuth: Found 1 authorized keys for user: tilman
+2025-06-24 14:48:16 INFO: PublicKeyAuth: Key match found!
+2025-06-24 14:48:16 INFO: PublicKeyAuth: Signature verification result: true
+2025-06-24 14:48:16 INFO: Dual authentication successful for user: tilman
+2025-06-24 14:48:16 INFO: Sending message: AUTH_SUCCESS, length: 269
+2025-06-24 14:48:16 INFO: Message encrypted, new length: 297
+2025-06-24 14:48:16 INFO: Added length prefix for encrypted message, total length: 301
+2025-06-24 14:48:16 INFO: Message sent successfully
+2025-06-24 14:48:16 INFO: Server: Authentication SUCCESS for tilman: Authentication successful
+2025-06-24 14:48:16 INFO: Server: Authentication completed successfully
+2025-06-24 14:48:16 INFO: Server: Starting service request handling
+2025-06-24 14:48:16 INFO: Waiting to receive message...
+2025-06-24 14:48:16 INFO: Reading encrypted message...
+2025-06-24 14:48:16 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:48:16 INFO: Encrypted message length: 186
+2025-06-24 14:48:16 INFO: Read 186 bytes for encrypted message body
+2025-06-24 14:48:16 INFO: Decrypting encrypted message, length: 186
+2025-06-24 14:48:16 INFO: Message decrypted successfully, new length: 158
+2025-06-24 14:48:16 INFO: Received message: SERVICE_REQUEST
+2025-06-24 14:48:16 INFO: Server: Service request from tilman for shell
+2025-06-24 14:48:16 INFO: Sending message: SERVICE_ACCEPT, length: 157
+2025-06-24 14:48:16 INFO: Message encrypted, new length: 185
+2025-06-24 14:48:16 INFO: Added length prefix for encrypted message, total length: 189
+2025-06-24 14:48:16 INFO: Message sent successfully
+2025-06-24 14:48:16 INFO: Server: Service shell accepted for tilman
+2025-06-24 14:48:16 INFO: Waiting to receive message...
+2025-06-24 14:48:16 INFO: Reading encrypted message...
+2025-06-24 14:48:19 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:48:19 INFO: Encrypted message length: 255
+2025-06-24 14:48:19 INFO: Read 255 bytes for encrypted message body
+2025-06-24 14:48:19 INFO: Decrypting encrypted message, length: 255
+2025-06-24 14:48:19 INFO: Message decrypted successfully, new length: 227
+2025-06-24 14:48:19 INFO: Received message: SHELL_COMMAND
+2025-06-24 14:48:19 INFO: Server: Executing shell command: 'ls' for user: tilman
+2025-06-24 14:48:19 INFO: Command result: exitCode=0, stdout='Applications
+com~apple~CloudDocs
+Desktop
+Documents
+Downloads
+iCloud
+Library
+Movies
+Music
+Pictures
+Public
+Zotero
+', stderr=''
+2025-06-24 14:48:19 INFO: Sending message: SHELL_RESULT, length: 346
+2025-06-24 14:48:19 INFO: Message encrypted, new length: 374
+2025-06-24 14:48:19 INFO: Added length prefix for encrypted message, total length: 378
+2025-06-24 14:48:19 INFO: Message sent successfully
+2025-06-24 14:48:19 INFO: Sent SHELL_RESULT message to client.
+2025-06-24 14:48:19 INFO: Waiting to receive message...
+2025-06-24 14:48:19 INFO: Reading encrypted message...
+2025-06-24 14:48:23 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:48:23 INFO: Encrypted message length: 255
+2025-06-24 14:48:23 INFO: Read 255 bytes for encrypted message body
+2025-06-24 14:48:23 INFO: Decrypting encrypted message, length: 255
+2025-06-24 14:48:23 INFO: Message decrypted successfully, new length: 227
+2025-06-24 14:48:23 INFO: Received message: SHELL_COMMAND
+2025-06-24 14:48:23 INFO: Server: Executing shell command: 'ls' for user: tilman
+2025-06-24 14:48:23 INFO: Command result: exitCode=0, stdout='Applications
+com~apple~CloudDocs
+Desktop
+Documents
+Downloads
+iCloud
+Library
+Movies
+Music
+Pictures
+Public
+Zotero
+', stderr=''
+2025-06-24 14:48:23 INFO: Sending message: SHELL_RESULT, length: 346
+2025-06-24 14:48:23 INFO: Message encrypted, new length: 374
+2025-06-24 14:48:23 INFO: Added length prefix for encrypted message, total length: 378
+2025-06-24 14:48:23 INFO: Message sent successfully
+2025-06-24 14:48:23 INFO: Sent SHELL_RESULT message to client.
+2025-06-24 14:48:23 INFO: Waiting to receive message...
+2025-06-24 14:48:23 INFO: Reading encrypted message...
+2025-06-24 14:48:45 INFO: Read -1 bytes for encrypted message length
+2025-06-24 14:48:45 INFO: Client disconnected gracefully (end of stream)
+2025-06-24 14:48:45 INFO: Server: Client 127.0.0.1:51321 disconnected gracefully
+2025-06-24 14:48:45 INFO: Server: Cleaning up client connection for 127.0.0.1:51321
+2025-06-24 14:48:45 INFO: Server: Cleaning up connection for 127.0.0.1:51321 (user: tilman)
+2025-06-24 14:48:45 INFO: Protocol handler closed
+2025-06-24 14:49:08 INFO: Server: Starting client connection handler for 127.0.0.1:51325
+2025-06-24 14:49:08 INFO: Server: Initializing protocol handler
+2025-06-24 14:49:08 INFO: Server: Protocol handler initialized
+2025-06-24 14:49:08 INFO: Server: Starting key exchange
+2025-06-24 14:49:08 INFO: Server: Received key exchange init from null
+2025-06-24 14:49:08 INFO: Server: Received key exchange init from null
+2025-06-24 14:49:08 INFO: Server: Initializing DH key exchange
+2025-06-24 14:49:08 INFO: Server: Generated DH key pair
+2025-06-24 14:49:08 INFO: Server: Set client's public key
+2025-06-24 14:49:08 INFO: Server: Computing shared secret
+2025-06-24 14:49:08 INFO: Server: Computed shared secret, length: 256
+2025-06-24 14:49:08 INFO: Server: Initializing symmetric encryption
+2025-06-24 14:49:08 INFO: Server: Initialized symmetric encryption
+2025-06-24 14:49:08 INFO: Server: Creating key exchange reply message
+2025-06-24 14:49:08 INFO: Server: Created reply message, signing DH public key
+2025-06-24 14:49:08 INFO: Server: Starting RSA signature generation
+2025-06-24 14:49:08 INFO: Server: RSA signature generated, length: 256
+2025-06-24 14:49:08 INFO: Server: Sending key exchange reply
+2025-06-24 14:49:08 INFO: Sending message: KEY_EXCHANGE_REPLY, length: 1370
+2025-06-24 14:49:08 INFO: Message sent successfully
+2025-06-24 14:49:08 INFO: Server: Key exchange reply sent successfully
+2025-06-24 14:49:08 INFO: Server: Key exchange completed successfully
+2025-06-24 14:49:08 INFO: Server: Enabling encryption
+2025-06-24 14:49:08 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
+2025-06-24 14:49:08 INFO: Encryption and HMAC enabled in protocol handler
+2025-06-24 14:49:08 INFO: Server: Key exchange completed successfully
+2025-06-24 14:49:08 INFO: Server: Starting authentication
+2025-06-24 14:49:08 INFO: Waiting to receive message...
+2025-06-24 14:49:08 INFO: Reading encrypted message...
+2025-06-24 14:49:08 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:49:08 INFO: Encrypted message length: 1014
+2025-06-24 14:49:08 INFO: Read 1014 bytes for encrypted message body
+2025-06-24 14:49:08 INFO: Decrypting encrypted message, length: 1014
+2025-06-24 14:49:08 INFO: Message decrypted successfully, new length: 986
+2025-06-24 14:49:08 INFO: Received message: AUTH_REQUEST
+2025-06-24 14:49:08 INFO: Server: Authentication request from test1 using dual
+2025-06-24 14:49:08 INFO: Authentication attempt for user: test1, type: dual
+2025-06-24 14:49:08 INFO: User existence check for 'test1': false
+2025-06-24 14:49:08 ERROR: User validation failed for: test1
+2025-06-24 14:49:08 INFO: Sending message: AUTH_FAILURE, length: 266
+2025-06-24 14:49:08 INFO: Message encrypted, new length: 294
+2025-06-24 14:49:08 INFO: Added length prefix for encrypted message, total length: 298
+2025-06-24 14:49:08 INFO: Message sent successfully
+2025-06-24 14:49:08 INFO: Server: Authentication FAILED for test1: Authentication failed
+2025-06-24 14:49:08 ERROR: Server: Authentication failed for client 127.0.0.1:51325
+2025-06-24 14:49:08 ERROR: Server: Authentication failed for client 127.0.0.1:51325
+2025-06-24 14:49:08 INFO: Server: Cleaning up client connection for 127.0.0.1:51325
+2025-06-24 14:49:08 INFO: Server: Cleaning up connection for 127.0.0.1:51325
+2025-06-24 14:49:08 INFO: Protocol handler closed
+2025-06-24 14:51:13 INFO: Shutdown signal received
+2025-06-24 14:51:13 INFO: SSHServerController: Stopping server
+2025-06-24 14:51:13 INFO: SSHServerModel: Stopping server
+2025-06-24 14:51:18 INFO: Logger initialized: logs/server.log
+2025-06-24 14:51:18 INFO: SSHServerModel: Created new model instance
+2025-06-24 14:51:18 INFO: SSH Server Starting
+2025-06-24 14:51:18 INFO: Log file: logs/server.log
+2025-06-24 14:51:18 INFO: SSHServerController: Starting server
+2025-06-24 14:51:22 INFO: SSHServerModel: Starting server
+2025-06-24 14:51:41 INFO: Server: Starting client connection handler for 127.0.0.1:51409
+2025-06-24 14:51:41 INFO: Server: Initializing protocol handler
+2025-06-24 14:51:41 INFO: Server: Protocol handler initialized
+2025-06-24 14:51:41 INFO: Server: Starting key exchange
+2025-06-24 14:51:41 INFO: Server: Received key exchange init from null
+2025-06-24 14:51:41 INFO: Server: Received key exchange init from null
+2025-06-24 14:51:41 INFO: Server: Initializing DH key exchange
+2025-06-24 14:51:41 INFO: Server: Generated DH key pair
+2025-06-24 14:51:41 INFO: Server: Set client's public key
+2025-06-24 14:51:41 INFO: Server: Computing shared secret
+2025-06-24 14:51:41 INFO: Server: Computed shared secret, length: 256
+2025-06-24 14:51:41 INFO: Server: Initializing symmetric encryption
+2025-06-24 14:51:41 INFO: Server: Initialized symmetric encryption
+2025-06-24 14:51:41 INFO: Server: Creating key exchange reply message
+2025-06-24 14:51:41 INFO: Server: Created reply message, signing DH public key
+2025-06-24 14:51:41 INFO: Server: Starting RSA signature generation
+2025-06-24 14:51:41 INFO: Server: RSA signature generated, length: 256
+2025-06-24 14:51:41 INFO: Server: Sending key exchange reply
+2025-06-24 14:51:41 INFO: Sending message: KEY_EXCHANGE_REPLY, length: 1370
+2025-06-24 14:51:41 INFO: Message sent successfully
+2025-06-24 14:51:41 INFO: Server: Key exchange reply sent successfully
+2025-06-24 14:51:41 INFO: Server: Key exchange completed successfully
+2025-06-24 14:51:41 INFO: Server: Enabling encryption
+2025-06-24 14:51:41 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
+2025-06-24 14:51:41 INFO: Encryption and HMAC enabled in protocol handler
+2025-06-24 14:51:41 INFO: Server: Key exchange completed successfully
+2025-06-24 14:51:41 INFO: Server: Starting authentication
+2025-06-24 14:51:41 INFO: Waiting to receive message...
+2025-06-24 14:51:41 INFO: Reading encrypted message...
+2025-06-24 14:51:41 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:51:41 INFO: Encrypted message length: 1014
+2025-06-24 14:51:41 INFO: Read 1014 bytes for encrypted message body
+2025-06-24 14:51:41 INFO: Decrypting encrypted message, length: 1014
+2025-06-24 14:51:41 INFO: Message decrypted successfully, new length: 986
+2025-06-24 14:51:41 INFO: Received message: AUTH_REQUEST
+2025-06-24 14:51:41 INFO: Server: Authentication request from test1 using dual
+2025-06-24 14:51:41 INFO: Authentication attempt for user: test1, type: dual
+2025-06-24 14:51:41 INFO: User existence check for 'test1': true
+2025-06-24 14:51:41 INFO: User validation passed for: test1
+2025-06-24 14:51:41 INFO: Attempting dual authentication (password + public key) for: test1
+2025-06-24 14:51:41 INFO: DualAuth: password present: true
+2025-06-24 14:51:41 INFO: DualAuth: publicKey present: true
+2025-06-24 14:51:41 INFO: DualAuth: signature present: true
+2025-06-24 14:51:41 INFO: DualAuth: sessionData present: true
+2025-06-24 14:51:41 INFO: PasswordAuth: Verifying password for user: test1
+2025-06-24 14:51:41 INFO: PasswordAuth: Checking if user exists: test1
+2025-06-24 14:51:41 INFO: PasswordAuth: User exists, verifying password for: test1
+2025-06-24 14:51:41 INFO: UserStore: Password verification for test1 - Stored hash: 9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08, Input hash: 9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08, Matches: true
+2025-06-24 14:51:41 INFO: PasswordAuth: Password verification result for test1: true
+2025-06-24 14:51:41 INFO: PasswordAuth: Password authentication result for test1: true
+2025-06-24 14:51:41 INFO: DualAuth: Password authentication succeeded for user: test1
+2025-06-24 14:51:41 INFO: PublicKeyAuth: publicKey present: true
+2025-06-24 14:51:41 INFO: PublicKeyAuth: signature present: true
+2025-06-24 14:51:41 INFO: PublicKeyAuth: sessionData present: true
+2025-06-24 14:51:41 INFO: PublicKeyAuth: Created public key from string
+2025-06-24 14:51:41 INFO: PublicKeyAuth: Decoded signature, length: 256
+2025-06-24 14:51:41 INFO: PublicKeyAuth: Decoded session data, length: 36
+2025-06-24 14:51:41 INFO: PublicKeyAuth: Found 1 authorized keys for user: test1
+2025-06-24 14:51:41 INFO: PublicKeyAuth: Key match found!
+2025-06-24 14:51:41 INFO: PublicKeyAuth: Signature verification result: true
+2025-06-24 14:51:41 INFO: PublicKeyAuth: public key auth result: true
+2025-06-24 14:51:41 INFO: DualAuth: Public key authentication succeeded for user: test1
+2025-06-24 14:51:41 INFO: DualAuth: Dual authentication successful for user: test1
+2025-06-24 14:51:41 INFO: Sending message: AUTH_SUCCESS, length: 269
+2025-06-24 14:51:41 INFO: Message encrypted, new length: 297
+2025-06-24 14:51:41 INFO: Added length prefix for encrypted message, total length: 301
+2025-06-24 14:51:41 INFO: Message sent successfully
+2025-06-24 14:51:41 INFO: Server: Authentication SUCCESS for test1: Authentication successful
+2025-06-24 14:51:41 INFO: Server: Authentication completed successfully
+2025-06-24 14:51:41 INFO: Server: Starting service request handling
+2025-06-24 14:51:41 INFO: Waiting to receive message...
+2025-06-24 14:51:41 INFO: Reading encrypted message...
+2025-06-24 14:51:41 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:51:41 INFO: Encrypted message length: 186
+2025-06-24 14:51:41 INFO: Read 186 bytes for encrypted message body
+2025-06-24 14:51:41 INFO: Decrypting encrypted message, length: 186
+2025-06-24 14:51:41 INFO: Message decrypted successfully, new length: 158
+2025-06-24 14:51:41 INFO: Received message: SERVICE_REQUEST
+2025-06-24 14:51:41 INFO: Server: Service request from test1 for shell
+2025-06-24 14:51:41 INFO: Sending message: SERVICE_ACCEPT, length: 157
+2025-06-24 14:51:41 INFO: Message encrypted, new length: 185
+2025-06-24 14:51:41 INFO: Added length prefix for encrypted message, total length: 189
+2025-06-24 14:51:41 INFO: Message sent successfully
+2025-06-24 14:51:41 INFO: Server: Service shell accepted for test1
+2025-06-24 14:51:41 INFO: Waiting to receive message...
+2025-06-24 14:51:41 INFO: Reading encrypted message...
+2025-06-24 14:51:44 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:51:44 INFO: Encrypted message length: 255
+2025-06-24 14:51:44 INFO: Read 255 bytes for encrypted message body
+2025-06-24 14:51:44 INFO: Decrypting encrypted message, length: 255
+2025-06-24 14:51:44 INFO: Message decrypted successfully, new length: 227
+2025-06-24 14:51:44 INFO: Received message: SHELL_COMMAND
+2025-06-24 14:51:44 INFO: Server: Executing shell command: 'ls' for user: test1
+2025-06-24 14:51:44 INFO: Command result: exitCode=0, stdout='Applications
+com~apple~CloudDocs
+Desktop
+Documents
+Downloads
+iCloud
+Library
+Movies
+Music
+Pictures
+Public
+Zotero
+', stderr=''
+2025-06-24 14:51:44 INFO: Sending message: SHELL_RESULT, length: 346
+2025-06-24 14:51:44 INFO: Message encrypted, new length: 374
+2025-06-24 14:51:44 INFO: Added length prefix for encrypted message, total length: 378
+2025-06-24 14:51:44 INFO: Message sent successfully
+2025-06-24 14:51:44 INFO: Sent SHELL_RESULT message to client.
+2025-06-24 14:51:44 INFO: Waiting to receive message...
+2025-06-24 14:51:44 INFO: Reading encrypted message...
+2025-06-24 14:52:08 INFO: Read -1 bytes for encrypted message length
+2025-06-24 14:52:08 INFO: Client disconnected gracefully (end of stream)
+2025-06-24 14:52:08 INFO: Server: Client 127.0.0.1:51409 disconnected gracefully
+2025-06-24 14:52:08 INFO: Server: Cleaning up client connection for 127.0.0.1:51409
+2025-06-24 14:52:08 INFO: Server: Cleaning up connection for 127.0.0.1:51409 (user: test1)
+2025-06-24 14:52:08 INFO: Protocol handler closed
+2025-06-24 14:52:28 INFO: Server: Starting client connection handler for 127.0.0.1:51411
+2025-06-24 14:52:28 INFO: Server: Initializing protocol handler
+2025-06-24 14:52:28 INFO: Server: Protocol handler initialized
+2025-06-24 14:52:28 INFO: Server: Starting key exchange
+2025-06-24 14:52:28 INFO: Server: Received key exchange init from null
+2025-06-24 14:52:28 INFO: Server: Received key exchange init from null
+2025-06-24 14:52:28 INFO: Server: Initializing DH key exchange
+2025-06-24 14:52:28 INFO: Server: Generated DH key pair
+2025-06-24 14:52:28 INFO: Server: Set client's public key
+2025-06-24 14:52:28 INFO: Server: Computing shared secret
+2025-06-24 14:52:28 INFO: Server: Computed shared secret, length: 256
+2025-06-24 14:52:28 INFO: Server: Initializing symmetric encryption
+2025-06-24 14:52:28 INFO: Server: Initialized symmetric encryption
+2025-06-24 14:52:28 INFO: Server: Creating key exchange reply message
+2025-06-24 14:52:28 INFO: Server: Created reply message, signing DH public key
+2025-06-24 14:52:28 INFO: Server: Starting RSA signature generation
+2025-06-24 14:52:28 INFO: Server: RSA signature generated, length: 256
+2025-06-24 14:52:28 INFO: Server: Sending key exchange reply
+2025-06-24 14:52:28 INFO: Sending message: KEY_EXCHANGE_REPLY, length: 1370
+2025-06-24 14:52:28 INFO: Message sent successfully
+2025-06-24 14:52:28 INFO: Server: Key exchange reply sent successfully
+2025-06-24 14:52:28 INFO: Server: Key exchange completed successfully
+2025-06-24 14:52:28 INFO: Server: Enabling encryption
+2025-06-24 14:52:28 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
+2025-06-24 14:52:28 INFO: Encryption and HMAC enabled in protocol handler
+2025-06-24 14:52:28 INFO: Server: Key exchange completed successfully
+2025-06-24 14:52:28 INFO: Server: Starting authentication
+2025-06-24 14:52:28 INFO: Waiting to receive message...
+2025-06-24 14:52:28 INFO: Reading encrypted message...
+2025-06-24 14:52:28 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:52:28 INFO: Encrypted message length: 1012
+2025-06-24 14:52:28 INFO: Read 1012 bytes for encrypted message body
+2025-06-24 14:52:28 INFO: Decrypting encrypted message, length: 1012
+2025-06-24 14:52:28 INFO: Message decrypted successfully, new length: 984
+2025-06-24 14:52:28 INFO: Received message: AUTH_REQUEST
+2025-06-24 14:52:28 INFO: Server: Authentication request from hey3 using dual
+2025-06-24 14:52:28 INFO: Authentication attempt for user: hey3, type: dual
+2025-06-24 14:52:28 INFO: User existence check for 'hey3': false
+2025-06-24 14:52:28 ERROR: User validation failed for: hey3
+2025-06-24 14:52:28 INFO: Sending message: AUTH_FAILURE, length: 266
+2025-06-24 14:52:28 INFO: Message encrypted, new length: 294
+2025-06-24 14:52:28 INFO: Added length prefix for encrypted message, total length: 298
+2025-06-24 14:52:28 INFO: Message sent successfully
+2025-06-24 14:52:28 INFO: Server: Authentication FAILED for hey3: Authentication failed
+2025-06-24 14:52:28 ERROR: Server: Authentication failed for client 127.0.0.1:51411
+2025-06-24 14:52:28 ERROR: Server: Authentication failed for client 127.0.0.1:51411
+2025-06-24 14:52:28 INFO: Server: Cleaning up client connection for 127.0.0.1:51411
+2025-06-24 14:52:28 INFO: Server: Cleaning up connection for 127.0.0.1:51411
+2025-06-24 14:52:28 INFO: Protocol handler closed
+2025-06-24 14:53:24 INFO: Shutdown signal received
+2025-06-24 14:53:24 INFO: SSHServerController: Stopping server
+2025-06-24 14:53:24 INFO: SSHServerModel: Stopping server
+2025-06-24 14:53:30 INFO: Logger initialized: logs/server.log
+2025-06-24 14:53:30 INFO: SSHServerModel: Created new model instance
+2025-06-24 14:53:30 INFO: SSH Server Starting
+2025-06-24 14:53:30 INFO: Log file: logs/server.log
+2025-06-24 14:53:30 INFO: SSHServerController: Starting server
+2025-06-24 14:53:36 INFO: SSHServerModel: Starting server
+2025-06-24 14:53:44 INFO: Server: Starting client connection handler for 127.0.0.1:51423
+2025-06-24 14:53:44 INFO: Server: Initializing protocol handler
+2025-06-24 14:53:44 INFO: Server: Protocol handler initialized
+2025-06-24 14:53:44 INFO: Server: Starting key exchange
+2025-06-24 14:53:45 INFO: Server: Received key exchange init from null
+2025-06-24 14:53:45 INFO: Server: Received key exchange init from null
+2025-06-24 14:53:45 INFO: Server: Initializing DH key exchange
+2025-06-24 14:53:45 INFO: Server: Generated DH key pair
+2025-06-24 14:53:45 INFO: Server: Set client's public key
+2025-06-24 14:53:45 INFO: Server: Computing shared secret
+2025-06-24 14:53:45 INFO: Server: Computed shared secret, length: 256
+2025-06-24 14:53:45 INFO: Server: Initializing symmetric encryption
+2025-06-24 14:53:45 INFO: Server: Initialized symmetric encryption
+2025-06-24 14:53:45 INFO: Server: Creating key exchange reply message
+2025-06-24 14:53:45 INFO: Server: Created reply message, signing DH public key
+2025-06-24 14:53:45 INFO: Server: Starting RSA signature generation
+2025-06-24 14:53:45 INFO: Server: RSA signature generated, length: 256
+2025-06-24 14:53:45 INFO: Server: Sending key exchange reply
+2025-06-24 14:53:45 INFO: Sending message: KEY_EXCHANGE_REPLY, length: 1370
+2025-06-24 14:53:45 INFO: Message sent successfully
+2025-06-24 14:53:45 INFO: Server: Key exchange reply sent successfully
+2025-06-24 14:53:45 INFO: Server: Key exchange completed successfully
+2025-06-24 14:53:45 INFO: Server: Enabling encryption
+2025-06-24 14:53:45 INFO: Encryption and HMAC enabled - subsequent messages will be encrypted/decrypted and authenticated
+2025-06-24 14:53:45 INFO: Encryption and HMAC enabled in protocol handler
+2025-06-24 14:53:45 INFO: Server: Key exchange completed successfully
+2025-06-24 14:53:45 INFO: Server: Starting authentication
+2025-06-24 14:53:45 INFO: Waiting to receive message...
+2025-06-24 14:53:45 INFO: Reading encrypted message...
+2025-06-24 14:53:45 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:53:45 INFO: Encrypted message length: 1012
+2025-06-24 14:53:45 INFO: Read 1012 bytes for encrypted message body
+2025-06-24 14:53:45 INFO: Decrypting encrypted message, length: 1012
+2025-06-24 14:53:45 INFO: Message decrypted successfully, new length: 984
+2025-06-24 14:53:45 INFO: Received message: AUTH_REQUEST
+2025-06-24 14:53:45 INFO: Server: Authentication request from hey3 using dual
+2025-06-24 14:53:45 INFO: Authentication attempt for user: hey3, type: dual
+2025-06-24 14:53:45 INFO: User existence check for 'hey3': true
+2025-06-24 14:53:45 INFO: User validation passed for: hey3
+2025-06-24 14:53:45 INFO: Attempting dual authentication (password + public key) for: hey3
+2025-06-24 14:53:45 INFO: DualAuth: password present: true
+2025-06-24 14:53:45 INFO: DualAuth: publicKey present: true
+2025-06-24 14:53:45 INFO: DualAuth: signature present: true
+2025-06-24 14:53:45 INFO: DualAuth: sessionData present: true
+2025-06-24 14:53:45 INFO: PasswordAuth: Verifying password for user: hey3
+2025-06-24 14:53:45 INFO: PasswordAuth: Checking if user exists: hey3
+2025-06-24 14:53:45 INFO: PasswordAuth: User exists, verifying password for: hey3
+2025-06-24 14:53:45 INFO: UserStore: Password verification for hey3 - Stored hash: fa690b82061edfd2852629aeba8a8977b57e40fcb77d1a7a28b26cba62591204, Input hash: fa690b82061edfd2852629aeba8a8977b57e40fcb77d1a7a28b26cba62591204, Matches: true
+2025-06-24 14:53:45 INFO: PasswordAuth: Password verification result for hey3: true
+2025-06-24 14:53:45 INFO: PasswordAuth: Password authentication result for hey3: true
+2025-06-24 14:53:45 INFO: DualAuth: Password authentication succeeded for user: hey3
+2025-06-24 14:53:45 INFO: PublicKeyAuth: publicKey present: true
+2025-06-24 14:53:45 INFO: PublicKeyAuth: signature present: true
+2025-06-24 14:53:45 INFO: PublicKeyAuth: sessionData present: true
+2025-06-24 14:53:45 INFO: PublicKeyAuth: Created public key from string
+2025-06-24 14:53:45 INFO: PublicKeyAuth: Decoded signature, length: 256
+2025-06-24 14:53:45 INFO: PublicKeyAuth: Decoded session data, length: 36
+2025-06-24 14:53:45 INFO: PublicKeyAuth: Found 1 authorized keys for user: hey3
+2025-06-24 14:53:45 INFO: PublicKeyAuth: Key match found!
+2025-06-24 14:53:45 INFO: PublicKeyAuth: Signature verification result: true
+2025-06-24 14:53:45 INFO: PublicKeyAuth: public key auth result: true
+2025-06-24 14:53:45 INFO: DualAuth: Public key authentication succeeded for user: hey3
+2025-06-24 14:53:45 INFO: DualAuth: Dual authentication successful for user: hey3
+2025-06-24 14:53:45 INFO: Sending message: AUTH_SUCCESS, length: 269
+2025-06-24 14:53:45 INFO: Message encrypted, new length: 297
+2025-06-24 14:53:45 INFO: Added length prefix for encrypted message, total length: 301
+2025-06-24 14:53:45 INFO: Message sent successfully
+2025-06-24 14:53:45 INFO: Server: Authentication SUCCESS for hey3: Authentication successful
+2025-06-24 14:53:45 INFO: Server: Authentication completed successfully
+2025-06-24 14:53:45 INFO: Server: Starting service request handling
+2025-06-24 14:53:45 INFO: Waiting to receive message...
+2025-06-24 14:53:45 INFO: Reading encrypted message...
+2025-06-24 14:53:47 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:53:47 INFO: Encrypted message length: 186
+2025-06-24 14:53:47 INFO: Read 186 bytes for encrypted message body
+2025-06-24 14:53:47 INFO: Decrypting encrypted message, length: 186
+2025-06-24 14:53:47 INFO: Message decrypted successfully, new length: 158
+2025-06-24 14:53:47 INFO: Received message: SERVICE_REQUEST
+2025-06-24 14:53:47 INFO: Server: Service request from hey3 for shell
+2025-06-24 14:53:47 INFO: Sending message: SERVICE_ACCEPT, length: 157
+2025-06-24 14:53:47 INFO: Message encrypted, new length: 185
+2025-06-24 14:53:47 INFO: Added length prefix for encrypted message, total length: 189
+2025-06-24 14:53:47 INFO: Message sent successfully
+2025-06-24 14:53:47 INFO: Server: Service shell accepted for hey3
+2025-06-24 14:53:47 INFO: Waiting to receive message...
+2025-06-24 14:53:47 INFO: Reading encrypted message...
+2025-06-24 14:53:49 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:53:49 INFO: Encrypted message length: 255
+2025-06-24 14:53:49 INFO: Read 255 bytes for encrypted message body
+2025-06-24 14:53:49 INFO: Decrypting encrypted message, length: 255
+2025-06-24 14:53:49 INFO: Message decrypted successfully, new length: 227
+2025-06-24 14:53:49 INFO: Received message: SHELL_COMMAND
+2025-06-24 14:53:49 INFO: Server: Executing shell command: 'ls' for user: hey3
+2025-06-24 14:53:49 INFO: Command result: exitCode=0, stdout='Applications
+com~apple~CloudDocs
+Desktop
+Documents
+Downloads
+iCloud
+Library
+Movies
+Music
+Pictures
+Public
+Zotero
+', stderr=''
+2025-06-24 14:53:49 INFO: Sending message: SHELL_RESULT, length: 346
+2025-06-24 14:53:49 INFO: Message encrypted, new length: 374
+2025-06-24 14:53:49 INFO: Added length prefix for encrypted message, total length: 378
+2025-06-24 14:53:49 INFO: Message sent successfully
+2025-06-24 14:53:49 INFO: Sent SHELL_RESULT message to client.
+2025-06-24 14:53:49 INFO: Waiting to receive message...
+2025-06-24 14:53:49 INFO: Reading encrypted message...
+2025-06-24 14:53:53 INFO: Read 4 bytes for encrypted message length
+2025-06-24 14:53:53 INFO: Encrypted message length: 261
+2025-06-24 14:53:53 INFO: Read 261 bytes for encrypted message body
+2025-06-24 14:53:53 INFO: Decrypting encrypted message, length: 261
+2025-06-24 14:53:53 INFO: Message decrypted successfully, new length: 233
+2025-06-24 14:53:53 INFO: Received message: SHELL_COMMAND
+2025-06-24 14:53:53 INFO: Server: Executing shell command: 'echo hea' for user: hey3
+2025-06-24 14:53:53 INFO: Command result: exitCode=0, stdout='hea
+', stderr=''
+2025-06-24 14:53:53 INFO: Sending message: SHELL_RESULT, length: 227
+2025-06-24 14:53:53 INFO: Message encrypted, new length: 255
+2025-06-24 14:53:53 INFO: Added length prefix for encrypted message, total length: 259
+2025-06-24 14:53:53 INFO: Message sent successfully
+2025-06-24 14:53:53 INFO: Sent SHELL_RESULT message to client.
+2025-06-24 14:53:53 INFO: Waiting to receive message...
+2025-06-24 14:53:53 INFO: Reading encrypted message...
+2025-06-24 15:50:53 INFO: Read 4 bytes for encrypted message length
+2025-06-24 15:50:53 INFO: Encrypted message length: 263
+2025-06-24 15:50:53 INFO: Read 263 bytes for encrypted message body
+2025-06-24 15:50:53 INFO: Decrypting encrypted message, length: 263
+2025-06-24 15:50:53 INFO: Message decrypted successfully, new length: 235
+2025-06-24 15:50:53 INFO: Received message: SHELL_COMMAND
+2025-06-24 15:50:53 INFO: Server: Executing shell command: 'git status' for user: hey3
+2025-06-24 15:50:53 INFO: Command result: exitCode=128, stdout='fatal: not a git repository (or any of the parent directories): .git
+', stderr=''
+2025-06-24 15:50:53 INFO: Sending message: SHELL_RESULT, length: 294
+2025-06-24 15:50:53 INFO: Message encrypted, new length: 322
+2025-06-24 15:50:53 INFO: Added length prefix for encrypted message, total length: 326
+2025-06-24 15:50:53 INFO: Message sent successfully
+2025-06-24 15:50:53 INFO: Sent SHELL_RESULT message to client.
+2025-06-24 15:50:53 INFO: Waiting to receive message...
+2025-06-24 15:50:53 INFO: Reading encrypted message...

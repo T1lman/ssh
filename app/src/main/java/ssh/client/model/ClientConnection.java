@@ -119,13 +119,11 @@ public class ClientConnection {
                 }
                 Logger.info("Session ID: " + this.sessionId);
                 
-                // Initialize encryption
+                // Initialize encryption and HMAC
                 encryption = new SymmetricEncryption();
                 encryption.initializeKey(sharedSecret);
-                
-                // Enable encryption in the protocol handler
-                protocolHandler.enableEncryption(encryption);
-                Logger.info("Encryption enabled in protocol handler");
+                protocolHandler.enableEncryption(encryption, sharedSecret);
+                Logger.info("Encryption and HMAC enabled in protocol handler");
                 
                 Logger.info("Key exchange completed successfully");
                 return true;

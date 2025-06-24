@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import ssh.model.protocol.MessageType;
+import ssh.model.utils.HMACUtil;
 
 /**
  * Abstract base class for all SSH protocol messages.
@@ -30,7 +31,8 @@ import ssh.model.protocol.MessageType;
 public abstract class Message {
     private MessageType type;
     private byte[] payload;
-    private int checksum;
+    private int sequenceNumber;
+    private byte[] mac;
 
     @JsonIgnore
     private static final ObjectMapper objectMapper = new ObjectMapper();
@@ -67,80 +69,46 @@ public abstract class Message {
     }
 
     /**
-     * Calculate the checksum of the payload.
+     * Create a complete message packet with length, type, payload, and MAC.
      */
-    public void calculateChecksum() {
-        if (payload != null) {
-            CRC32 crc = new CRC32();
-            crc.update(payload);
-            this.checksum = (int) crc.getValue();
-        }
-    }
-
-    /**
-     * Verify the checksum of the payload.
-     */
-    public boolean verifyChecksum() {
-        if (payload == null) {
-            return checksum == 0;
-        }
-        
-        CRC32 crc = new CRC32();
-        crc.update(payload);
-        return checksum == (int) crc.getValue();
-    }
-
-    /**
-     * Create a complete message packet with length, type, payload, and checksum.
-     */
-    public byte[] toPacket() {
+    public byte[] toPacket(byte[] hmacKey) {
         byte[] serializedPayload = serialize();
         this.payload = serializedPayload;
-        calculateChecksum();
-
-        // Packet structure: [4 bytes: length] [1 byte: type] [payload] [4 bytes: checksum]
-        int restLength = 1 + serializedPayload.length + 4; // type + payload + checksum
+        int restLength = 1 + 4 + serializedPayload.length + 32;
         ByteBuffer buffer = ByteBuffer.allocate(4 + restLength);
-        
-        buffer.putInt(restLength); // Length of the rest of the message (not including these 4 bytes)
+        buffer.putInt(restLength);
         buffer.put((byte) type.getValue());
+        buffer.putInt(sequenceNumber);
         buffer.put(serializedPayload);
-        buffer.putInt(checksum);
-        
+        byte[] mac = new byte[32];
+        if (hmacKey != null && type != MessageType.KEY_EXCHANGE_INIT && type != MessageType.KEY_EXCHANGE_REPLY) {
+            mac = ssh.model.utils.HMACUtil.hmacSha256(hmacKey, buffer.array(), 4, restLength - 32);
+        }
+        buffer.put(mac);
         return buffer.array();
     }
 
     /**
      * Parse a complete message packet.
      */
-    public static Message fromPacket(byte[] packet) {
+    public static Message fromPacket(byte[] packet, byte[] hmacKey) {
         ByteBuffer buffer = ByteBuffer.wrap(packet);
-        
-        int restLength = buffer.getInt(); // Length of type + payload + checksum
-        Logger.info("fromPacket: restLength = " + restLength);
-        
+        int restLength = buffer.getInt();
         MessageType type = MessageType.fromValue(buffer.get() & 0xFF);
-        Logger.info("fromPacket: parsed message type = " + type);
-        
-        // Payload length = restLength - type(1) - checksum(4)
-        int payloadLength = restLength - 5;
-        Logger.info("fromPacket: payloadLength = " + payloadLength + " (restLength=" + restLength + " - 5)");
-        
+        int seq = buffer.getInt();
+        int payloadLength = restLength - 4 - 1 - 32;
         byte[] payload = new byte[payloadLength];
         buffer.get(payload);
-        
-        int checksum = buffer.getInt();
-        Logger.info("fromPacket: checksum = " + checksum);
-        
-        Message message = createMessage(type);
-        message.payload = payload;
-        message.checksum = checksum;
-        
-        if (!message.verifyChecksum()) {
-            Logger.error("fromPacket: Checksum verification failed");
-            throw new IllegalArgumentException("Checksum verification failed");
+        byte[] mac = new byte[32];
+        buffer.get(mac);
+        if (hmacKey != null && type != MessageType.KEY_EXCHANGE_INIT && type != MessageType.KEY_EXCHANGE_REPLY) {
+            byte[] macCheck = ssh.model.utils.HMACUtil.hmacSha256(hmacKey, packet, 4, restLength - 32);
+            if (!java.util.Arrays.equals(mac, macCheck)) throw new SecurityException("MAC check failed!");
         }
-        
+        Message message = createMessage(type);
+        message.sequenceNumber = seq;
+        message.payload = payload;
+        message.mac = mac;
         message.deserialize(payload);
         return message;
     }
@@ -204,11 +172,19 @@ public abstract class Message {
         this.payload = payload;
     }
 
-    public int getChecksum() {
-        return checksum;
+    public int getSequenceNumber() {
+        return sequenceNumber;
     }
 
-    public void setChecksum(int checksum) {
-        this.checksum = checksum;
+    public void setSequenceNumber(int sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
+    }
+
+    public byte[] getMac() {
+        return mac;
+    }
+
+    public void setMac(byte[] mac) {
+        this.mac = mac;
     }
 } 

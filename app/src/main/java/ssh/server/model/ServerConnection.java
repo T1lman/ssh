@@ -172,8 +172,8 @@ public class ServerConnection implements Runnable {
 
         // Enable encryption AFTER sending the reply
         Logger.info("Server: Enabling encryption");
-        protocolHandler.enableEncryption(encryption);
-        Logger.info("Server: Encryption enabled");
+        protocolHandler.enableEncryption(encryption, sharedSecret);
+        Logger.info("Encryption and HMAC enabled in protocol handler");
 
         return true;
     }

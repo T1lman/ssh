@@ -115,4 +115,11 @@ public class SymmetricEncryption {
         this.secretKey = keyGen.generateKey();
         this.cipher = Cipher.getInstance(ALGORITHM);
     }
+
+    public static byte[] deriveHmacKey(byte[] sharedSecret) throws Exception {
+        // Verwende ein anderes Label/Präfix, um Kollisionen mit dem AES-Key zu vermeiden
+        java.security.MessageDigest digest = java.security.MessageDigest.getInstance("SHA-256");
+        digest.update("HMAC_KEY_DERIVATION".getBytes(java.nio.charset.StandardCharsets.UTF_8));
+        return digest.digest(sharedSecret);
+    }
 } 

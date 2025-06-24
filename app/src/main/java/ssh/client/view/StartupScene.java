@@ -235,6 +235,9 @@ public class StartupScene {
         alert.setContentText(message);
         alert.initOwner(primaryStage);
         alert.showAndWait();
+        // Exit application after error dialog is acknowledged
+        javafx.application.Platform.exit();
+        System.exit(1);
     }
     
     public VBox getRoot() {

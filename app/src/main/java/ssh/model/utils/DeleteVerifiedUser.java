@@ -73,25 +73,25 @@ public class DeleteVerifiedUser {
     private static void removeAuthorizedKeysFromServer(String username, String serverKeysDir) throws Exception {
         File userKeyDir = new File(serverKeysDir, username);
         if (userKeyDir.exists() && userKeyDir.isDirectory()) {
-            File[] keyFiles = userKeyDir.listFiles();
-            if (keyFiles != null) {
-                for (File keyFile : keyFiles) {
-                    if (keyFile.delete()) {
-                        Logger.info("    Deleted key file: " + keyFile.getName());
-                    } else {
-                        Logger.warn("    Warning: Could not delete key file: " + keyFile.getName());
-                    }
-                }
-            }
-            
-            if (userKeyDir.delete()) {
-                Logger.info("    Deleted user key directory: " + username);
-            } else {
-                Logger.warn("    Warning: Could not delete user key directory: " + username);
-            }
+            deleteDirectory(userKeyDir);
+            Logger.info("    Recursively deleted user key directory: " + username);
         } else {
             Logger.info("    No authorized keys found for user: " + username);
         }
+    }
+    
+    private static void deleteDirectory(File dir) {
+        File[] files = dir.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    deleteDirectory(file);
+                } else {
+                    file.delete();
+                }
+            }
+        }
+        dir.delete();
     }
     
     /**

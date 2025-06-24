@@ -36,7 +36,7 @@ public class CreateVerifiedUser {
             // Step 3: Add public key to server for the user
             Logger.info("  Adding public key to server for user: " + username);
             String publicKeyPath = clientKeysDir + "/" + keyName + ".pub";
-            String serverKeysDir = "data/server/authorized_keys/" + username;
+            String serverKeysDir = "data/server/authorized_keys";
             KeyManager.addAuthorizedKey(username, publicKeyPath, serverKeysDir);
             
             // Step 4: Add user to client credentials
