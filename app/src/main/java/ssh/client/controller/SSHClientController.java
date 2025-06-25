@@ -389,4 +389,21 @@ public class SSHClientController {
             guiView.showMainWindow();
         }
     }
+
+    /**
+     * Handle a port forward request from the UI.
+     */
+    public void handlePortForwardRequest(boolean isLocal, int sourcePort, String destHost, int destPort) {
+        try {
+            if (isLocal) {
+                model.requestLocalPortForward(sourcePort, destHost, destPort);
+                view.displayMessage("Started local port forward: localhost:" + sourcePort + " -> " + destHost + ":" + destPort);
+            } else {
+                model.requestRemotePortForward(sourcePort, destHost, destPort);
+                view.displayMessage("Started remote port forward: server:" + sourcePort + " -> " + destHost + ":" + destPort);
+            }
+        } catch (Exception e) {
+            view.displayError("Failed to start port forward: " + e.getMessage());
+        }
+    }
 } 

@@ -63,4 +63,49 @@ class SSHClientModelTest {
         // Simulate working directory change event
         assertNull(dir[0]);
     }
+
+    @Test
+    void testPortForwardDelegation() throws Exception {
+        class MockConnection extends ClientConnection {
+            boolean localCalled = false;
+            boolean remoteCalled = false;
+            int localPort, remotePort, destPort;
+            String remoteHost, localHost;
+            MockConnection() { super(null, null); }
+            @Override
+            public void requestLocalPortForward(int localPort, String remoteHost, int remotePort) {
+                localCalled = true;
+                this.localPort = localPort;
+                this.remoteHost = remoteHost;
+                this.destPort = remotePort;
+            }
+            @Override
+            public void requestRemotePortForward(int remotePort, String localHost, int localPort) {
+                remoteCalled = true;
+                this.remotePort = remotePort;
+                this.localHost = localHost;
+                this.localPort = localPort;
+            }
+            @Override
+            public boolean isActive() { return true; }
+        }
+        SSHClientModel model = new SSHClientModel();
+        MockConnection mockConn = new MockConnection();
+        java.lang.reflect.Field f = model.getClass().getDeclaredField("connection");
+        f.setAccessible(true);
+        f.set(model, mockConn);
+        java.lang.reflect.Field c = model.getClass().getDeclaredField("connected");
+        c.setAccessible(true);
+        c.set(model, true);
+        model.requestLocalPortForward(1234, "host", 5678);
+        assertTrue(mockConn.localCalled);
+        assertEquals(1234, mockConn.localPort);
+        assertEquals("host", mockConn.remoteHost);
+        assertEquals(5678, mockConn.destPort);
+        model.requestRemotePortForward(2222, "lh", 3333);
+        assertTrue(mockConn.remoteCalled);
+        assertEquals(2222, mockConn.remotePort);
+        assertEquals("lh", mockConn.localHost);
+        assertEquals(3333, mockConn.localPort);
+    }
 } 

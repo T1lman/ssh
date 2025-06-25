@@ -67,6 +67,23 @@ public class MainWindow {
     private int currentPort = -1;
     private String currentSessionId = "-";
     
+    // Add field for port forwarding callback
+    private Consumer<PortForwardRequest> onPortForwardRequested;
+
+    // Data class for port forward requests
+    public static class PortForwardRequest {
+        public final boolean isLocal;
+        public final int sourcePort;
+        public final String destHost;
+        public final int destPort;
+        public PortForwardRequest(boolean isLocal, int sourcePort, String destHost, int destPort) {
+            this.isLocal = isLocal;
+            this.sourcePort = sourcePort;
+            this.destHost = destHost;
+            this.destPort = destPort;
+        }
+    }
+    
     public MainWindow(Stage primaryStage) {
         this.primaryStage = primaryStage;
         
@@ -98,12 +115,14 @@ public class MainWindow {
         fileTransferMenuItem.setOnAction(e -> handleFileTransfer());
         MenuItem manageUsersMenuItem = new MenuItem("Manage Users");
         manageUsersMenuItem.setOnAction(e -> handleManageSSHUsers());
+        MenuItem portForwardMenuItem = new MenuItem("Port Forwarding");
+        portForwardMenuItem.setOnAction(e -> showPortForwardDialog());
         MenuItem disconnectMenuItem = new MenuItem("Disconnect");
         disconnectMenuItem.setOnAction(e -> handleDisconnect());
         Button burgerButton = new Button("≡");
         burgerButton.setStyle("-fx-background-color: transparent; -fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: #fff; -fx-cursor: hand; -fx-padding: 0 0 0 32;");
         burgerButton.setTooltip(new Tooltip("Actions"));
-        ContextMenu burgerMenu = new ContextMenu(fileTransferMenuItem, manageUsersMenuItem, disconnectMenuItem);
+        ContextMenu burgerMenu = new ContextMenu(fileTransferMenuItem, manageUsersMenuItem, portForwardMenuItem, disconnectMenuItem);
         burgerButton.setOnAction(e -> {
             burgerMenu.show(burgerButton, javafx.geometry.Side.BOTTOM, 0, 0);
         });
@@ -192,6 +211,9 @@ public class MainWindow {
                 event.consume();
             } else if (event.isControlDown() && event.getCode() == KeyCode.M) {
                 handleManageSSHUsers();
+                event.consume();
+            } else if (event.isControlDown() && event.getCode() == KeyCode.P) {
+                showPortForwardDialog();
                 event.consume();
             } else if (event.isControlDown() && event.getCode() == KeyCode.D) {
                 handleDisconnect();
@@ -420,5 +442,52 @@ public class MainWindow {
      */
     public void setController(ssh.client.controller.SSHClientController controller) {
         this.controller = controller;
+    }
+
+    private void showPortForwardDialog() {
+        Dialog<PortForwardRequest> dialog = new Dialog<>();
+        dialog.setTitle("Port Forwarding Setup");
+        dialog.setHeaderText("Set up a new port forward");
+        ButtonType okButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(10));
+        ToggleGroup typeGroup = new ToggleGroup();
+        RadioButton localRadio = new RadioButton("Local");
+        localRadio.setToggleGroup(typeGroup);
+        localRadio.setSelected(true);
+        RadioButton remoteRadio = new RadioButton("Remote");
+        remoteRadio.setToggleGroup(typeGroup);
+        HBox typeBox = new HBox(10, localRadio, remoteRadio);
+        TextField sourcePortField = new TextField();
+        sourcePortField.setPromptText("Source Port");
+        TextField destHostField = new TextField();
+        destHostField.setPromptText("Destination Host");
+        TextField destPortField = new TextField();
+        destPortField.setPromptText("Destination Port");
+        vbox.getChildren().addAll(new Label("Type:"), typeBox, new Label("Source Port:"), sourcePortField, new Label("Destination Host:"), destHostField, new Label("Destination Port:"), destPortField);
+        dialog.getDialogPane().setContent(vbox);
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == okButtonType) {
+                try {
+                    boolean isLocal = localRadio.isSelected();
+                    int sourcePort = Integer.parseInt(sourcePortField.getText().trim());
+                    String destHost = destHostField.getText().trim();
+                    int destPort = Integer.parseInt(destPortField.getText().trim());
+                    return new PortForwardRequest(isLocal, sourcePort, destHost, destPort);
+                } catch (Exception e) {
+                    return null;
+                }
+            }
+            return null;
+        });
+        dialog.showAndWait().ifPresent(req -> {
+            if (onPortForwardRequested != null) onPortForwardRequested.accept(req);
+        });
+    }
+
+    // Setter for port forward callback
+    public void setOnPortForwardRequested(Consumer<PortForwardRequest> cb) {
+        this.onPortForwardRequested = cb;
     }
 } 

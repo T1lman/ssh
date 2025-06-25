@@ -10,6 +10,10 @@ import ssh.shared_model.protocol.messages.FileTransferMessage;
 import ssh.shared_model.protocol.messages.KeyExchangeMessage;
 import ssh.shared_model.protocol.messages.ServiceMessage;
 import ssh.shared_model.protocol.messages.ShellMessage;
+import ssh.shared_model.protocol.messages.PortForwardRequestMessage;
+import ssh.shared_model.protocol.messages.PortForwardAcceptMessage;
+import ssh.shared_model.protocol.messages.PortForwardDataMessage;
+import ssh.shared_model.protocol.messages.PortForwardCloseMessage;
 
 import org.junit.jupiter.api.Test;
 
@@ -123,5 +127,47 @@ public class ProtocolMessageJsonTest {
         assertEquals(msg.getSignature(), deserialized.getSignature());
         assertEquals(msg.isSuccess(), deserialized.isSuccess());
         assertEquals(msg.getMessage(), deserialized.getMessage());
+    }
+
+    @Test
+    public void testPortForwardRequestMessageJson() throws Exception {
+        PortForwardRequestMessage msg = new PortForwardRequestMessage(PortForwardRequestMessage.ForwardType.LOCAL, 8080, "remotehost", 80);
+        byte[] json = objectMapper.writeValueAsBytes(msg);
+        Message base = objectMapper.readValue(json, Message.class);
+        PortForwardRequestMessage deserialized = (PortForwardRequestMessage) base;
+        assertEquals(msg.getForwardType(), deserialized.getForwardType());
+        assertEquals(msg.getSourcePort(), deserialized.getSourcePort());
+        assertEquals(msg.getDestHost(), deserialized.getDestHost());
+        assertEquals(msg.getDestPort(), deserialized.getDestPort());
+    }
+
+    @Test
+    public void testPortForwardAcceptMessageJson() throws Exception {
+        PortForwardAcceptMessage msg = new PortForwardAcceptMessage("conn123", true, null);
+        byte[] json = objectMapper.writeValueAsBytes(msg);
+        Message base = objectMapper.readValue(json, Message.class);
+        PortForwardAcceptMessage deserialized = (PortForwardAcceptMessage) base;
+        assertEquals(msg.getConnectionId(), deserialized.getConnectionId());
+        assertEquals(msg.isSuccess(), deserialized.isSuccess());
+        assertEquals(msg.getErrorMessage(), deserialized.getErrorMessage());
+    }
+
+    @Test
+    public void testPortForwardDataMessageJson() throws Exception {
+        PortForwardDataMessage msg = new PortForwardDataMessage("conn123", "YmFzZTY0ZGF0YQ==");
+        byte[] json = objectMapper.writeValueAsBytes(msg);
+        Message base = objectMapper.readValue(json, Message.class);
+        PortForwardDataMessage deserialized = (PortForwardDataMessage) base;
+        assertEquals(msg.getConnectionId(), deserialized.getConnectionId());
+        assertEquals(msg.getData(), deserialized.getData());
+    }
+
+    @Test
+    public void testPortForwardCloseMessageJson() throws Exception {
+        PortForwardCloseMessage msg = new PortForwardCloseMessage("conn123");
+        byte[] json = objectMapper.writeValueAsBytes(msg);
+        Message base = objectMapper.readValue(json, Message.class);
+        PortForwardCloseMessage deserialized = (PortForwardCloseMessage) base;
+        assertEquals(msg.getConnectionId(), deserialized.getConnectionId());
     }
 } 

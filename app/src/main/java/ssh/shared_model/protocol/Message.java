@@ -36,7 +36,11 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
     @JsonSubTypes.Type(value = ssh.shared_model.protocol.messages.ErrorMessage.class, name = "ErrorMessage"),
     @JsonSubTypes.Type(value = ssh.shared_model.protocol.messages.KeyExchangeMessage.class, name = "KeyExchangeMessage"),
     @JsonSubTypes.Type(value = ssh.shared_model.protocol.messages.FileTransferMessage.class, name = "FileTransferMessage"),
-    @JsonSubTypes.Type(value = ssh.shared_model.protocol.messages.AuthMessage.class, name = "AuthMessage")
+    @JsonSubTypes.Type(value = ssh.shared_model.protocol.messages.AuthMessage.class, name = "AuthMessage"),
+    @JsonSubTypes.Type(value = ssh.shared_model.protocol.messages.PortForwardRequestMessage.class, name = "PortForwardRequestMessage"),
+    @JsonSubTypes.Type(value = ssh.shared_model.protocol.messages.PortForwardAcceptMessage.class, name = "PortForwardAcceptMessage"),
+    @JsonSubTypes.Type(value = ssh.shared_model.protocol.messages.PortForwardDataMessage.class, name = "PortForwardDataMessage"),
+    @JsonSubTypes.Type(value = ssh.shared_model.protocol.messages.PortForwardCloseMessage.class, name = "PortForwardCloseMessage")
 })
 public abstract class Message {
     private MessageType type;
@@ -160,6 +164,14 @@ public abstract class Message {
                 return new ssh.shared_model.protocol.messages.DisconnectMessage();
             case RELOAD_USERS:
                 return new ssh.shared_model.protocol.messages.ReloadUsersMessage();
+            case PORT_FORWARD_REQUEST:
+                return new ssh.shared_model.protocol.messages.PortForwardRequestMessage();
+            case PORT_FORWARD_ACCEPT:
+                return new ssh.shared_model.protocol.messages.PortForwardAcceptMessage();
+            case PORT_FORWARD_DATA:
+                return new ssh.shared_model.protocol.messages.PortForwardDataMessage();
+            case PORT_FORWARD_CLOSE:
+                return new ssh.shared_model.protocol.messages.PortForwardCloseMessage();
             default:
                 throw new IllegalArgumentException("Unsupported message type: " + type);
         }

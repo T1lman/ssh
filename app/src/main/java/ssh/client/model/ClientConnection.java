@@ -17,6 +17,10 @@ import ssh.shared_model.protocol.messages.ReloadUsersMessage;
 import ssh.shared_model.protocol.messages.FileTransferMessage;
 import ssh.shared_model.protocol.messages.ErrorMessage;
 import ssh.utils.Logger;
+import ssh.shared_model.protocol.messages.PortForwardRequestMessage;
+import ssh.shared_model.protocol.messages.PortForwardAcceptMessage;
+import ssh.shared_model.protocol.messages.PortForwardDataMessage;
+import ssh.shared_model.protocol.messages.PortForwardCloseMessage;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -25,6 +29,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Consumer;
+import java.net.ServerSocket;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.Base64;
+import java.util.concurrent.CompletableFuture;
+import java.util.UUID;
 
 /**
  * Handles client connection to SSH server.
@@ -44,6 +55,11 @@ public class ClientConnection {
     private Consumer<String> onError;
     private Consumer<String> onStatus;
     private Consumer<String> onResult;
+
+    // Port forwarding state
+    private final Map<String, Socket> activeForwards = new ConcurrentHashMap<>();
+    private final Map<String, CompletableFuture<PortForwardAcceptMessage>> pendingPortForwards = new ConcurrentHashMap<>();
+    private ExecutorService portForwardThreadPool = Executors.newCachedThreadPool();
 
     public ClientConnection(ServerInfo serverInfo, AuthCredentials credentials) {
         Logger.info("ClientConnection constructor called");
@@ -594,4 +610,176 @@ public class ClientConnection {
     public void setOnError(Consumer<String> onError) { this.onError = onError; }
     public void setOnStatus(Consumer<String> onStatus) { this.onStatus = onStatus; }
     public void setOnResult(Consumer<String> onResult) { this.onResult = onResult; }
+
+    // --- Port Forwarding ---
+    /**
+     * Request local port forwarding: listen on localPort, forward to remoteHost:remotePort via SSH.
+     */
+    public void requestLocalPortForward(int localPort, String remoteHost, int remotePort) throws Exception {
+        ServerSocket serverSocket = new ServerSocket(localPort);
+        portForwardThreadPool.submit(() -> {
+            while (!serverSocket.isClosed()) {
+                try {
+                    Socket localClient = serverSocket.accept();
+                    String connectionId = UUID.randomUUID().toString();
+                    activeForwards.put(connectionId, localClient);
+                    PortForwardRequestMessage req = new PortForwardRequestMessage(
+                        PortForwardRequestMessage.ForwardType.LOCAL,
+                        localPort, remoteHost, remotePort
+                    );
+                    req.setConnectionId(connectionId);
+                    Logger.info("[PortForward] Sending PORT_FORWARD_REQUEST for connectionId=" + connectionId + ", localPort=" + localPort + ", remoteHost=" + remoteHost + ", remotePort=" + remotePort);
+                    // Send the request and wait for accept
+                    CompletableFuture<PortForwardAcceptMessage> future = new CompletableFuture<>();
+                    pendingPortForwards.put(connectionId, future);
+                    protocolHandler.sendMessage(req);
+                    PortForwardAcceptMessage accept = future.get(10, java.util.concurrent.TimeUnit.SECONDS);
+                    if (accept == null) {
+                        Logger.error("[PortForward] Did not receive PORT_FORWARD_ACCEPT for connectionId=" + connectionId);
+                        localClient.close();
+                        activeForwards.remove(connectionId);
+                        continue;
+                    }
+                    // Start relaying
+                    portForwardThreadPool.submit(() -> relayLocalToRemote(connectionId, localClient));
+                } catch (Exception e) {
+                    Logger.error("[PortForward] Error in local port forward accept loop: " + e.getMessage());
+                }
+            }
+        });
+    }
+
+    private void relayLocalToRemote(String connectionId, Socket localClient) {
+        try {
+            byte[] buffer = new byte[8192];
+            while (!localClient.isClosed()) {
+                int read = localClient.getInputStream().read(buffer);
+                if (read == -1) break;
+                String data = Base64.getEncoder().encodeToString(java.util.Arrays.copyOf(buffer, read));
+                PortForwardDataMessage dataMsg = new PortForwardDataMessage(connectionId, data);
+                protocolHandler.sendMessage(dataMsg);
+            }
+        } catch (Exception e) {
+            Logger.error("Relay local->remote error: " + e.getMessage());
+        } finally {
+            // Do NOT close or remove the socket here. Wait for PortForwardCloseMessage.
+            // try { localClient.close(); } catch (Exception ignored) {}
+            // activeForwards.remove(connectionId);
+            // Notify server to close
+            try { protocolHandler.sendMessage(new PortForwardCloseMessage(connectionId)); } catch (Exception ignored) {}
+        }
+    }
+
+    /**
+     * Request remote port forwarding: ask server to listen on remotePort, forward to localHost:localPort.
+     */
+    public void requestRemotePortForward(int remotePort, String localHost, int localPort) throws Exception {
+        // Generate a unique connectionId for this forward
+        String connectionId = java.util.UUID.randomUUID().toString();
+        PortForwardRequestMessage req = new PortForwardRequestMessage(
+            PortForwardRequestMessage.ForwardType.REMOTE, remotePort, localHost, localPort);
+        CompletableFuture<PortForwardAcceptMessage> future = new CompletableFuture<>();
+        pendingPortForwards.put(connectionId, future);
+        req.setConnectionId(connectionId);
+        protocolHandler.sendMessage(req);
+        // Wait for PortForwardAcceptMessage (handled by dispatcher)
+        PortForwardAcceptMessage resp = future.get();
+        if (resp.isSuccess()) {
+            // Connect to localHost:localPort
+            Socket localSocket = new Socket(localHost, localPort);
+            activeForwards.put(connectionId, localSocket);
+            // Relay data in both directions
+            portForwardThreadPool.submit(() -> relayRemoteToLocal(connectionId, localSocket));
+            portForwardThreadPool.submit(() -> relayLocalToRemoteRemoteForward(connectionId, localSocket));
+        }
+    }
+
+    private void relayRemoteToLocal(String connectionId, Socket localSocket) {
+        // Data from server to local
+        // Already handled by handlePortForwardData
+    }
+
+    private void relayLocalToRemoteRemoteForward(String connectionId, Socket localSocket) {
+        try {
+            byte[] buffer = new byte[8192];
+            while (!localSocket.isClosed()) {
+                int read = localSocket.getInputStream().read(buffer);
+                if (read == -1) break;
+                String data = Base64.getEncoder().encodeToString(java.util.Arrays.copyOf(buffer, read));
+                PortForwardDataMessage dataMsg = new PortForwardDataMessage(connectionId, data);
+                protocolHandler.sendMessage(dataMsg);
+            }
+        } catch (Exception e) {
+            Logger.error("Relay local->remote (remote forward) error: " + e.getMessage());
+        } finally {
+            try { localSocket.close(); } catch (Exception ignored) {}
+            activeForwards.remove(connectionId);
+            try { protocolHandler.sendMessage(new PortForwardCloseMessage(connectionId)); } catch (Exception ignored) {}
+        }
+    }
+
+    /**
+     * Start processing incoming messages in a background thread (for port forwarding, etc).
+     */
+    public void processIncomingMessages() {
+        portForwardThreadPool.submit(() -> {
+            while (isConnected()) {
+                try {
+                    Message msg = protocolHandler.receiveMessage();
+                    if (msg == null) {
+                        Logger.info("processIncomingMessages: Connection closed or EOF reached, exiting loop.");
+                        break;
+                    }
+                    if (msg instanceof PortForwardAcceptMessage) {
+                        PortForwardAcceptMessage acceptMsg = (PortForwardAcceptMessage) msg;
+                        CompletableFuture<PortForwardAcceptMessage> future = pendingPortForwards.remove(acceptMsg.getConnectionId());
+                        if (future != null) {
+                            future.complete(acceptMsg);
+                        }
+                    } else if (msg instanceof PortForwardDataMessage) {
+                        handlePortForwardData((PortForwardDataMessage) msg);
+                    } else if (msg instanceof PortForwardCloseMessage) {
+                        handlePortForwardClose((PortForwardCloseMessage) msg);
+                    }
+                    // ... handle other message types as needed ...
+                } catch (Exception e) {
+                    Logger.error("Error in processIncomingMessages: " + e.getMessage());
+                    // If the error is EOF or disconnect, exit the loop
+                    if (e.getMessage() != null && e.getMessage().toLowerCase().contains("end of stream")) {
+                        Logger.info("processIncomingMessages: Detected end of stream, exiting loop.");
+                        break;
+                    }
+                }
+            }
+            Logger.info("processIncomingMessages: Exiting and cleaning up.");
+            disconnect();
+        });
+    }
+
+    /**
+     * Handle incoming port forward data from the server.
+     */
+    private void handlePortForwardData(PortForwardDataMessage msg) {
+        Socket localClient = activeForwards.get(msg.getConnectionId());
+        if (localClient != null && !localClient.isClosed()) {
+            try {
+                byte[] data = Base64.getDecoder().decode(msg.getData());
+                Logger.info("[handlePortForwardData] Writing " + data.length + " bytes to local client");
+                localClient.getOutputStream().write(data);
+                localClient.getOutputStream().flush();
+            } catch (Exception e) {
+                Logger.error("Error writing to local client: " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Handle incoming port forward close from the server.
+     */
+    private void handlePortForwardClose(PortForwardCloseMessage msg) {
+        Socket localClient = activeForwards.remove(msg.getConnectionId());
+        if (localClient != null) {
+            try { localClient.close(); } catch (Exception ignored) {}
+        }
+    }
 } 

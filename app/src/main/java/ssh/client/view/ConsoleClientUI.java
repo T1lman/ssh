@@ -119,22 +119,23 @@ public class ConsoleClientUI implements ClientUI {
         ConsoleInterface.info("Available services:");
         ConsoleInterface.info("1. Shell");
         ConsoleInterface.info("2. File Transfer");
-        ConsoleInterface.info("3. Exit");
-        
+        ConsoleInterface.info("3. Port Forwarding");
+        ConsoleInterface.info("4. Exit");
         try {
-            String choice = getInput("Select service (1-3)");
-            
+            String choice = getInput("Select service (1-4)");
             if (choice == null || choice.trim().isEmpty()) {
                 displayError("No input received, defaulting to shell");
                 return "shell";
             }
-            
             switch (choice.trim()) {
                 case "1":
                     return "shell";
                 case "2":
                     return "file-transfer";
                 case "3":
+                    promptPortForwarding();
+                    return "shell";
+                case "4":
                     running = false;
                     return "exit";
                 default:
@@ -144,6 +145,22 @@ public class ConsoleClientUI implements ClientUI {
         } catch (Exception e) {
             displayError("Error reading input, defaulting to shell: " + e.getMessage());
             return "shell";
+        }
+    }
+
+    private void promptPortForwarding() {
+        try {
+            String type = getInput("Type (local/remote)").trim().toLowerCase();
+            boolean isLocal = type.startsWith("l");
+            int sourcePort = Integer.parseInt(getInput("Source port"));
+            String destHost = getInput("Destination host");
+            int destPort = Integer.parseInt(getInput("Destination port"));
+            if (controller != null) {
+                controller.handlePortForwardRequest(isLocal, sourcePort, destHost, destPort);
+                displayMessage((isLocal ? "Local" : "Remote") + " port forward started.");
+            }
+        } catch (Exception e) {
+            displayError("Failed to start port forward: " + e.getMessage());
         }
     }
 

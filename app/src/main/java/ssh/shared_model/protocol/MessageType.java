@@ -20,7 +20,11 @@ public enum MessageType {
     FILE_ACK(14),
     ERROR(15),
     DISCONNECT(16),
-    RELOAD_USERS(17);
+    RELOAD_USERS(17),
+    PORT_FORWARD_REQUEST(18),
+    PORT_FORWARD_ACCEPT(19),
+    PORT_FORWARD_DATA(20),
+    PORT_FORWARD_CLOSE(21);
 
     private final int value;
 

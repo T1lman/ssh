@@ -18,6 +18,10 @@ import ssh.shared_model.protocol.messages.ServiceMessage;
 import ssh.shared_model.protocol.messages.ShellMessage;
 import ssh.shared_model.shell.ShellExecutor;
 import ssh.utils.Logger;
+import ssh.shared_model.protocol.messages.PortForwardRequestMessage;
+import ssh.shared_model.protocol.messages.PortForwardAcceptMessage;
+import ssh.shared_model.protocol.messages.PortForwardDataMessage;
+import ssh.shared_model.protocol.messages.PortForwardCloseMessage;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -26,6 +30,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.Base64;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Handles a single client connection on the server side.
@@ -50,6 +60,11 @@ public class ServerConnection implements Runnable {
     private Consumer<String> onServiceRequest;
     private Consumer<String> onFileTransferProgress;
     private Consumer<String> onShellCommand;
+
+    // Port forwarding state
+    private final Map<String, Socket> activeForwards = new ConcurrentHashMap<>();
+    private final Map<String, BlockingQueue<Message>> portForwardOutgoingQueues = new ConcurrentHashMap<>();
+    private ExecutorService portForwardThreadPool = Executors.newCachedThreadPool();
 
     public ServerConnection(Socket clientSocket, AuthenticationManager authManager, 
                           KeyPair serverKeyPair, ServerConfig config) {
@@ -242,50 +257,22 @@ public class ServerConnection implements Runnable {
      * Handle service requests after authentication.
      */
     private void handleServiceRequests() throws Exception {
+        clientSocket.setSoTimeout(100); // 100ms timeout for periodic queue flushing
         while (authenticated && !clientSocket.isClosed()) {
             Message message = null;
             try {
-                message = protocolHandler.receiveMessage();
-            } catch (IOException e) {
-                if (e.getMessage().contains("Client disconnected gracefully")) {
-                    safeDisplayMessage("Client " + getClientInfo() + " disconnected gracefully");
-                } else {
-                    safeDisplayError("Client disconnected or error: " + e.getMessage());
+                // Try to receive a message with timeout
+                try {
+                    message = protocolHandler.receiveMessage();
+                } catch (java.net.SocketTimeoutException ste) {
+                    // Timeout: no message, just flush outgoing queues
                 }
-                break;
+                if (message != null) {
+                    handleMessage(message);
+                }
             } catch (Exception e) {
-                safeDisplayError("Unexpected error: " + e.getMessage());
+                Logger.error("Error in handleServiceRequests: " + e.getMessage());
                 break;
-            }
-            if (message == null) {
-                safeDisplayMessage("Client disconnected (null message)");
-                break;
-            }
-            switch (message.getType()) {
-                case SERVICE_REQUEST:
-                    handleServiceRequest((ServiceMessage) message);
-                    break;
-                case SHELL_COMMAND:
-                    handleShellCommand((ShellMessage) message);
-                    break;
-                case FILE_UPLOAD_REQUEST:
-                    handleFileUpload((FileTransferMessage) message);
-                    break;
-                case FILE_DOWNLOAD_REQUEST:
-                    handleFileDownload((FileTransferMessage) message);
-                    break;
-                case DISCONNECT:
-                    safeDisplayMessage("Client " + getClientInfo() + " disconnected cleanly.");
-                    return;
-                case RELOAD_USERS:
-                    handleReloadUsers();
-                    break;
-                case ERROR:
-                    safeDisplayError("Received error message from client: " + ((ErrorMessage) message).getErrorMessage());
-                    break;
-                default:
-                    safeDisplayError("Unknown message type: " + message.getType());
-                    break;
             }
         }
     }
@@ -524,6 +511,131 @@ public class ServerConnection implements Runnable {
     }
 
     /**
+     * Handle a port forwarding request from the client.
+     */
+    private void handlePortForwardRequest(PortForwardRequestMessage msg) {
+        if (msg.getForwardType() == PortForwardRequestMessage.ForwardType.LOCAL) {
+            portForwardThreadPool.submit(() -> {
+                try {
+                    Socket targetSocket = new Socket(msg.getDestHost(), msg.getDestPort());
+                    String connectionId = msg.getConnectionId();
+                    activeForwards.put(connectionId, targetSocket);
+                    BlockingQueue<Message> outgoingQueue = new LinkedBlockingQueue<>();
+                    portForwardOutgoingQueues.put(connectionId, outgoingQueue);
+                    // Start sender thread
+                    portForwardThreadPool.submit(() -> portForwardSender(connectionId, outgoingQueue));
+                    // Enqueue accept message
+                    outgoingQueue.put(new PortForwardAcceptMessage(connectionId, true, null));
+                    // Start relay threads
+                    portForwardThreadPool.submit(() -> relayTargetToClient(connectionId, targetSocket, outgoingQueue));
+                    portForwardThreadPool.submit(() -> relayClientToTarget(connectionId, targetSocket));
+                } catch (Exception e) {
+                    try {
+                        protocolHandler.sendMessage(new PortForwardAcceptMessage(null, false, e.getMessage()));
+                    } catch (Exception ignored) {}
+                }
+            });
+        } else {
+            portForwardThreadPool.submit(() -> {
+                try {
+                    java.net.ServerSocket serverSocket = new java.net.ServerSocket(msg.getSourcePort());
+                    while (!serverSocket.isClosed()) {
+                        Socket remoteClient = serverSocket.accept();
+                        String connectionId = msg.getConnectionId();
+                        activeForwards.put(connectionId, remoteClient);
+                        BlockingQueue<Message> outgoingQueue = new LinkedBlockingQueue<>();
+                        portForwardOutgoingQueues.put(connectionId, outgoingQueue);
+                        portForwardThreadPool.submit(() -> portForwardSender(connectionId, outgoingQueue));
+                        outgoingQueue.put(new PortForwardAcceptMessage(connectionId, true, null));
+                        portForwardThreadPool.submit(() -> relayTargetToClient(connectionId, remoteClient, outgoingQueue));
+                        portForwardThreadPool.submit(() -> relayClientToTarget(connectionId, remoteClient));
+                    }
+                } catch (Exception e) {
+                    try {
+                        protocolHandler.sendMessage(new PortForwardAcceptMessage(null, false, e.getMessage()));
+                    } catch (Exception ignored) {}
+                }
+            });
+        }
+    }
+
+    // Sender thread: only this thread calls protocolHandler.sendMessage for this connection
+    private void portForwardSender(String connectionId, BlockingQueue<Message> queue) {
+        try {
+            while (true) {
+                Message msg = queue.take();
+                protocolHandler.sendMessage(msg);
+                if (msg instanceof PortForwardCloseMessage) {
+                    Logger.info("[PortForward] Sent PortForwardCloseMessage for connectionId=" + connectionId);
+                    break;
+                }
+                if (msg instanceof PortForwardDataMessage) {
+                    Logger.info("[PortForward] Sent PortForwardDataMessage for connectionId=" + connectionId + ", bytes=" + ((PortForwardDataMessage)msg).getData().length());
+                }
+            }
+        } catch (Exception e) {
+            Logger.error("[portForwardSender] Error: " + e.getMessage());
+        } finally {
+            portForwardOutgoingQueues.remove(connectionId);
+        }
+    }
+
+    // Relay data from target socket to client (enqueue to outgoing queue)
+    private void relayTargetToClient(String connectionId, Socket targetSocket, BlockingQueue<Message> outgoingQueue) {
+        try {
+            byte[] buffer = new byte[8192];
+            while (!targetSocket.isClosed()) {
+                int read = targetSocket.getInputStream().read(buffer);
+                if (read == -1) break;
+                String data = Base64.getEncoder().encodeToString(java.util.Arrays.copyOf(buffer, read));
+                outgoingQueue.put(new PortForwardDataMessage(connectionId, data));
+            }
+        } catch (Exception e) {
+            Logger.error("[relayTargetToClient] Error: " + e.getMessage());
+        } finally {
+            try { targetSocket.close(); } catch (Exception ignored) {}
+            activeForwards.remove(connectionId);
+            try { outgoingQueue.put(new PortForwardCloseMessage(connectionId)); } catch (Exception ignored) {}
+        }
+    }
+
+    // Relay data from client to target socket (handled by handlePortForwardData)
+    private void relayClientToTarget(String connectionId, Socket targetSocket) {
+        // No-op: handled by handlePortForwardData
+        // This thread can just wait for the socket to close
+        try {
+            while (!targetSocket.isClosed()) {
+                Thread.sleep(100);
+            }
+        } catch (Exception ignored) {}
+    }
+
+    /**
+     * Handle incoming port forward data from the client.
+     */
+    private void handlePortForwardData(PortForwardDataMessage msg) {
+        Socket targetSocket = activeForwards.get(msg.getConnectionId());
+        if (targetSocket != null && !targetSocket.isClosed()) {
+            try {
+                byte[] data = Base64.getDecoder().decode(msg.getData());
+                targetSocket.getOutputStream().write(data);
+            } catch (Exception e) {
+                Logger.error("Error writing to target socket: " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Handle incoming port forward close from the client.
+     */
+    private void handlePortForwardClose(PortForwardCloseMessage msg) {
+        Socket targetSocket = activeForwards.remove(msg.getConnectionId());
+        if (targetSocket != null) {
+            try { targetSocket.close(); } catch (Exception ignored) {}
+        }
+    }
+
+    /**
      * Get client information string.
      */
     private String getClientInfo() {
@@ -641,5 +753,44 @@ public class ServerConnection implements Runnable {
     
     public void setOnShellCommand(Consumer<String> onShellCommand) {
         this.onShellCommand = onShellCommand;
+    }
+
+    // Central message dispatcher for the main loop
+    private void handleMessage(Message message) throws Exception {
+        switch (message.getType()) {
+            case PORT_FORWARD_REQUEST:
+                handlePortForwardRequest((PortForwardRequestMessage) message);
+                break;
+            case PORT_FORWARD_DATA:
+                handlePortForwardData((PortForwardDataMessage) message);
+                break;
+            case PORT_FORWARD_CLOSE:
+                handlePortForwardClose((PortForwardCloseMessage) message);
+                break;
+            case SERVICE_REQUEST:
+                handleServiceRequest((ServiceMessage) message);
+                break;
+            case SHELL_COMMAND:
+                handleShellCommand((ShellMessage) message);
+                break;
+            case FILE_UPLOAD_REQUEST:
+                handleFileUpload((FileTransferMessage) message);
+                break;
+            case FILE_DOWNLOAD_REQUEST:
+                handleFileDownload((FileTransferMessage) message);
+                break;
+            case DISCONNECT:
+                safeDisplayMessage("Client " + getClientInfo() + " disconnected cleanly.");
+                throw new IOException("Client disconnected cleanly");
+            case RELOAD_USERS:
+                handleReloadUsers();
+                break;
+            case ERROR:
+                safeDisplayError("Received error message from client: " + ((ErrorMessage) message).getErrorMessage());
+                break;
+            default:
+                safeDisplayError("Unknown message type: " + message.getType());
+                break;
+        }
     }
 } 

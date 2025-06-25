@@ -1,0 +1,2 @@
+// Root project build.gradle - no test configuration should be here
+// All test { ... } blocks must be in app/build.gradle 

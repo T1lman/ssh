@@ -122,6 +122,15 @@ public class JavaFXClientUI implements ClientUI {
             }
         });
         
+        // Set up port forwarding callback
+        if (mainWindow != null) {
+            mainWindow.setOnPortForwardRequested(req -> {
+                if (controller != null) {
+                    controller.handlePortForwardRequest(req.isLocal, req.sourcePort, req.destHost, req.destPort);
+                }
+            });
+        }
+        
         // Update the header with user and server info and session id
         if (pendingServerInfo != null) {
             String username = pendingServerInfo.getUsername();

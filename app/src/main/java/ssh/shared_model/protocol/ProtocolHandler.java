@@ -85,7 +85,7 @@ public class ProtocolHandler {
             }
         }
         try {
-            Logger.info("Waiting to receive message...");
+            Logger.debug("Waiting to receive message...");
             byte[] fullPacketBytes;
             if (encryptionEnabled && encryption != null) {
                 Logger.info("Reading encrypted message...");

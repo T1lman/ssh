@@ -25,6 +25,9 @@ public class SSHClientModel {
     private Consumer<String> onWorkingDirectoryChanged;
     private Consumer<String> onServiceRequested;
 
+    // Add a flag to track if the dispatcher is running
+    private boolean dispatcherRunning = false;
+
     public SSHClientModel() {
         Logger.info("SSHClientModel: Created new model instance");
     }
@@ -205,6 +208,31 @@ public class SSHClientModel {
      */
     public AuthCredentials getCredentials() {
         return credentials;
+    }
+
+    /**
+     * Start a local port forward (delegate to ClientConnection).
+     */
+    public void requestLocalPortForward(int localPort, String remoteHost, int remotePort) throws Exception {
+        if (!isConnected()) throw new Exception("Not connected to server");
+        startDispatcherIfNeeded();
+        connection.requestLocalPortForward(localPort, remoteHost, remotePort);
+    }
+
+    /**
+     * Start a remote port forward (delegate to ClientConnection).
+     */
+    public void requestRemotePortForward(int remotePort, String localHost, int localPort) throws Exception {
+        if (!isConnected()) throw new Exception("Not connected to server");
+        startDispatcherIfNeeded();
+        connection.requestRemotePortForward(remotePort, localHost, localPort);
+    }
+
+    private void startDispatcherIfNeeded() {
+        if (!dispatcherRunning) {
+            dispatcherRunning = true;
+            connection.processIncomingMessages();
+        }
     }
 
     // Event notification methods
