@@ -18,6 +18,7 @@ public class ProtocolHandler {
     private int sendSequenceNumber = 0;
     private int recvSequenceNumber = 0;
     private byte[] hmacKey = null;
+    private final Object sendLock = new Object();
 
     public ProtocolHandler(InputStream inputStream, OutputStream outputStream) {
         this.inputStream = inputStream;
@@ -28,28 +29,30 @@ public class ProtocolHandler {
      * Send a message to the remote peer.
      */
     public void sendMessage(Message message) throws IOException {
-        // Für Key-Exchange-Nachrichten keinen HMAC-Key verlangen
-        boolean isKeyExchange = message.getType() == ssh.shared_model.protocol.MessageType.KEY_EXCHANGE_INIT || message.getType() == ssh.shared_model.protocol.MessageType.KEY_EXCHANGE_REPLY;
-        if (!isKeyExchange && hmacKey == null) throw new IOException("HMAC key not initialized");
-        message.setSequenceNumber(sendSequenceNumber++);
-        byte[] packet = message.toPacket(isKeyExchange ? null : hmacKey);
-        Logger.info("Sending message: " + message.getType() + ", length: " + packet.length);
-        if (encryptionEnabled && encryption != null) {
-            try {
-                packet = encryptPayload(packet);
-                Logger.info("Message encrypted, new length: " + packet.length);
-                ByteBuffer encryptedPacket = ByteBuffer.allocate(4 + packet.length);
-                encryptedPacket.putInt(packet.length);
-                encryptedPacket.put(packet);
-                packet = encryptedPacket.array();
-                Logger.info("Added length prefix for encrypted message, total length: " + packet.length);
-            } catch (Exception e) {
-                throw new IOException("Failed to encrypt payload", e);
+        synchronized (sendLock) {
+            // Für Key-Exchange-Nachrichten keinen HMAC-Key verlangen
+            boolean isKeyExchange = message.getType() == ssh.shared_model.protocol.MessageType.KEY_EXCHANGE_INIT || message.getType() == ssh.shared_model.protocol.MessageType.KEY_EXCHANGE_REPLY;
+            if (!isKeyExchange && hmacKey == null) throw new IOException("HMAC key not initialized");
+            message.setSequenceNumber(sendSequenceNumber++);
+            byte[] packet = message.toPacket(isKeyExchange ? null : hmacKey);
+            Logger.info("Sending message: " + message.getType() + ", length: " + packet.length);
+            if (encryptionEnabled && encryption != null) {
+                try {
+                    packet = encryptPayload(packet);
+                    Logger.info("Message encrypted, new length: " + packet.length);
+                    ByteBuffer encryptedPacket = ByteBuffer.allocate(4 + packet.length);
+                    encryptedPacket.putInt(packet.length);
+                    encryptedPacket.put(packet);
+                    packet = encryptedPacket.array();
+                    Logger.info("Added length prefix for encrypted message, total length: " + packet.length);
+                } catch (Exception e) {
+                    throw new IOException("Failed to encrypt payload", e);
+                }
             }
+            outputStream.write(packet);
+            outputStream.flush();
+            Logger.info("Message sent successfully");
         }
-        outputStream.write(packet);
-        outputStream.flush();
-        Logger.info("Message sent successfully");
     }
 
     /**
@@ -85,13 +88,10 @@ public class ProtocolHandler {
             }
         }
         try {
-            Logger.debug("Waiting to receive message...");
             byte[] fullPacketBytes;
             if (encryptionEnabled && encryption != null) {
-                Logger.info("Reading encrypted message...");
                 byte[] lengthBytes = new byte[4];
                 int bytesRead = inputStream.read(lengthBytes);
-                Logger.info("Read " + bytesRead + " bytes for encrypted message length");
                 if (bytesRead == -1) {
                     Logger.info("Client disconnected gracefully (end of stream)");
                     throw new IOException("Client disconnected gracefully");
@@ -101,7 +101,6 @@ public class ProtocolHandler {
                     throw new IOException("Failed to read encrypted message length");
                 }
                 int encryptedLength = java.nio.ByteBuffer.wrap(lengthBytes).getInt();
-                Logger.info("Encrypted message length: " + encryptedLength);
                 if (encryptedLength <= 0 || encryptedLength > MAX_MESSAGE_LENGTH) {
                     Logger.error("Invalid encrypted message length: " + encryptedLength);
                     throw new IOException("Invalid encrypted message length: " + encryptedLength);
@@ -116,11 +115,8 @@ public class ProtocolHandler {
                     }
                     totalRead += read;
                 }
-                Logger.info("Read " + totalRead + " bytes for encrypted message body");
                 try {
-                    Logger.info("Decrypting encrypted message, length: " + encryptedMessage.length);
                     byte[] decryptedMessage = decryptPayload(encryptedMessage);
-                    Logger.info("Message decrypted successfully, new length: " + decryptedMessage.length);
                     fullPacketBytes = decryptedMessage;
                 } catch (Exception e) {
                     Logger.error("Failed to decrypt payload: " + e.getMessage());
@@ -129,7 +125,6 @@ public class ProtocolHandler {
             } else {
                 byte[] lengthBytes = new byte[4];
                 int bytesRead = inputStream.read(lengthBytes);
-                Logger.info("Read " + bytesRead + " bytes for message length");
                 if (bytesRead == -1) {
                     Logger.info("Client disconnected gracefully (end of stream)");
                     throw new IOException("Client disconnected gracefully");
@@ -139,7 +134,6 @@ public class ProtocolHandler {
                     throw new IOException("Failed to read message length");
                 }
                 int messageLength = java.nio.ByteBuffer.wrap(lengthBytes).getInt();
-                Logger.info("Message length: " + messageLength);
                 if (messageLength <= 0 || messageLength > MAX_MESSAGE_LENGTH) {
                     Logger.error("Invalid message length: " + messageLength);
                     throw new IOException("Invalid message length: " + messageLength);
@@ -154,7 +148,6 @@ public class ProtocolHandler {
                     }
                     totalRead += read;
                 }
-                Logger.info("Read " + totalRead + " bytes for message body (expected " + messageLength + ")");
                 fullPacketBytes = new byte[4 + messageBytes.length];
                 System.arraycopy(lengthBytes, 0, fullPacketBytes, 0, 4);
                 System.arraycopy(messageBytes, 0, fullPacketBytes, 4, messageBytes.length);

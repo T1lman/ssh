@@ -19,6 +19,7 @@ public class FileTransferMessage extends Message {
     private boolean isLast;
     private String status;
     private String message;
+    private String requestId;
 
     public FileTransferMessage() {
         super(MessageType.FILE_UPLOAD_REQUEST);
@@ -110,5 +111,13 @@ public class FileTransferMessage extends Message {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
     }
 } 

@@ -12,6 +12,7 @@ public class ShellMessage extends Message {
     private int exitCode;
     private String stdout;
     private String stderr;
+    private String requestId;
 
     public ShellMessage() {
         super(MessageType.SHELL_COMMAND);
@@ -70,5 +71,13 @@ public class ShellMessage extends Message {
 
     public void setStderr(String stderr) {
         this.stderr = stderr;
+    }
+
+    public String getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
     }
 } 

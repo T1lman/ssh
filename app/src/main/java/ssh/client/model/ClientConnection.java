@@ -59,6 +59,8 @@ public class ClientConnection {
     // Port forwarding state
     private final Map<String, Socket> activeForwards = new ConcurrentHashMap<>();
     private final Map<String, CompletableFuture<PortForwardAcceptMessage>> pendingPortForwards = new ConcurrentHashMap<>();
+    // New: Pending synchronous responses (e.g., shell, file transfer)
+    private final Map<String, CompletableFuture<Message>> pendingResponses = new ConcurrentHashMap<>();
     private ExecutorService portForwardThreadPool = Executors.newCachedThreadPool();
 
     public ClientConnection(ServerInfo serverInfo, AuthCredentials credentials) {
@@ -285,56 +287,29 @@ public class ClientConnection {
     }
 
     /**
-     * Send a shell command to the server.
+     * Send a shell command to the server and get the response asynchronously (after dispatcher is started).
      */
-    public void sendShellCommand(String command) throws Exception {
-        if (!authenticated) {
-            throw new IllegalStateException("Not authenticated");
+    public CompletableFuture<Message> sendShellCommandAsync(String command) {
+        try {
+            if (!authenticated) {
+                CompletableFuture<Message> failed = new CompletableFuture<>();
+                failed.completeExceptionally(new IllegalStateException("Not authenticated"));
+                return failed;
+            }
+            ShellMessage shellMessage = new ShellMessage(MessageType.SHELL_COMMAND);
+            shellMessage.setCommand(command);
+            shellMessage.setWorkingDirectory(this.workingDirectory);
+            String requestId = java.util.UUID.randomUUID().toString();
+            shellMessage.setRequestId(requestId);
+            CompletableFuture<Message> future = new CompletableFuture<>();
+            pendingResponses.put(requestId, future);
+            protocolHandler.sendMessage(shellMessage);
+            return future;
+        } catch (Exception e) {
+            CompletableFuture<Message> failed = new CompletableFuture<>();
+            failed.completeExceptionally(e);
+            return failed;
         }
-
-        ShellMessage shellMessage = new ShellMessage(MessageType.SHELL_COMMAND);
-        shellMessage.setCommand(command);
-        shellMessage.setWorkingDirectory(this.workingDirectory);
-
-        protocolHandler.sendMessage(shellMessage);
-    }
-
-    /**
-     * Receive shell response from the server.
-     */
-    public String receiveShellResponse() throws Exception {
-        if (!authenticated) {
-            throw new IllegalStateException("Not authenticated");
-        }
-
-        Message response = protocolHandler.receiveMessage();
-        if (response.getType() == MessageType.ERROR) {
-            ssh.shared_model.protocol.messages.ErrorMessage errorMsg = (ssh.shared_model.protocol.messages.ErrorMessage) response;
-            if (onError != null) onError.accept("Server error: " + errorMsg.getErrorMessage());
-            return "[SERVER ERROR] " + errorMsg.getErrorMessage();
-        }
-        if (response.getType() != MessageType.SHELL_RESULT) {
-            throw new IOException("Expected SHELL_RESULT, got " + response.getType());
-        }
-
-        ShellMessage shellResult = (ShellMessage) response;
-        
-        // Update the working directory
-        if (shellResult.getWorkingDirectory() != null && !shellResult.getWorkingDirectory().isEmpty()) {
-            this.workingDirectory = shellResult.getWorkingDirectory();
-        }
-
-        // Always return both stdout and stderr concatenated
-        StringBuilder output = new StringBuilder();
-        if (shellResult.getStdout() != null && !shellResult.getStdout().isEmpty()) {
-            output.append(shellResult.getStdout());
-        }
-        if (shellResult.getStderr() != null && !shellResult.getStderr().isEmpty()) {
-            output.append(shellResult.getStderr());
-        }
-        // Call onResult callback if available
-        if (onResult != null) onResult.accept(output.toString());
-        return output.toString();
     }
 
     /**
@@ -342,168 +317,6 @@ public class ClientConnection {
      */
     public String getWorkingDirectory() {
         return workingDirectory;
-    }
-
-    /**
-     * Upload a file to the server.
-     */
-    public void uploadFile(String localPath, String remotePath) throws Exception {
-        if (!authenticated) {
-            throw new IllegalStateException("Not authenticated");
-        }
-
-        // Check if local file exists
-        java.io.File localFile = new java.io.File(localPath);
-        if (!localFile.exists()) {
-            throw new IOException("Local file does not exist: " + localPath);
-        }
-        if (!localFile.canRead()) {
-            throw new IOException("Cannot read local file: " + localPath);
-        }
-
-        long fileSize = localFile.length();
-        String filename = localFile.getName();
-        
-        Logger.info("Starting file upload: " + filename + " (" + fileSize + " bytes)");
-        if (onStatus != null) onStatus.accept(filename + " (" + fileSize + " bytes)");
-
-        // Send file upload request
-        ssh.shared_model.protocol.messages.FileTransferMessage uploadRequest = new ssh.shared_model.protocol.messages.FileTransferMessage(MessageType.FILE_UPLOAD_REQUEST);
-        uploadRequest.setFilename(filename);
-        uploadRequest.setFileSize(fileSize);
-        uploadRequest.setTargetPath(remotePath);
-        
-        protocolHandler.sendMessage(uploadRequest);
-        Logger.info("Sent file upload request");
-
-        // Wait for acknowledgment
-        Message response = protocolHandler.receiveMessage();
-        if (response.getType() != MessageType.FILE_ACK) {
-            throw new IOException("Expected FILE_ACK, got " + response.getType());
-        }
-
-        // Read and send file in chunks
-        final int CHUNK_SIZE = 8192; // 8KB chunks
-        byte[] buffer = new byte[CHUNK_SIZE];
-        int sequenceNumber = 1;
-        long bytesTransferred = 0;
-
-        try (java.io.FileInputStream fis = new java.io.FileInputStream(localFile)) {
-            int bytesRead;
-            while ((bytesRead = fis.read(buffer)) != -1) {
-                // Create file data message
-                ssh.shared_model.protocol.messages.FileTransferMessage dataMessage = new ssh.shared_model.protocol.messages.FileTransferMessage(MessageType.FILE_DATA);
-                dataMessage.setFilename(filename);
-                dataMessage.setSequenceNumber(sequenceNumber);
-                dataMessage.setLast(bytesRead < CHUNK_SIZE); // Last chunk if we read less than buffer size
-                // Set the actual data (only the bytes we read)
-                byte[] actualData = new byte[bytesRead];
-                System.arraycopy(buffer, 0, actualData, 0, bytesRead);
-                dataMessage.setData(actualData);
-                // Send the chunk
-                protocolHandler.sendMessage(dataMessage);
-                bytesTransferred += bytesRead;
-                sequenceNumber++;
-                // Update progress
-                int percentage = (int) ((bytesTransferred * 100) / fileSize);
-                if (onStatus != null) onStatus.accept(percentage + "%");
-                Logger.info("Sent chunk " + (sequenceNumber - 1) + ", bytes: " + bytesTransferred + "/" + fileSize);
-            }
-        }
-
-        // Wait for final acknowledgment
-        response = protocolHandler.receiveMessage();
-        if (response.getType() != MessageType.FILE_ACK) {
-            throw new IOException("Expected final FILE_ACK, got " + response.getType());
-        }
-
-        ssh.shared_model.protocol.messages.FileTransferMessage finalAck = (ssh.shared_model.protocol.messages.FileTransferMessage) response;
-        Logger.info("File upload completed: " + finalAck.getMessage());
-        if (onStatus != null) onStatus.accept("100%");
-    }
-
-    /**
-     * Download a file from the server.
-     */
-    public void downloadFile(String remotePath, String localPath) throws Exception {
-        if (!authenticated) {
-            throw new IllegalStateException("Not authenticated");
-        }
-
-        String filename = new java.io.File(remotePath).getName();
-        Logger.info("Starting file download: " + filename);
-        if (onStatus != null) onStatus.accept(filename);
-
-        // Send file download request
-        ssh.shared_model.protocol.messages.FileTransferMessage downloadRequest = new ssh.shared_model.protocol.messages.FileTransferMessage(MessageType.FILE_DOWNLOAD_REQUEST);
-        downloadRequest.setFilename(filename);
-        downloadRequest.setTargetPath(remotePath);
-        
-        protocolHandler.sendMessage(downloadRequest);
-        Logger.info("Sent file download request");
-
-        // The first message from the server will be metadata or an error
-        Message response = protocolHandler.receiveMessage();
-
-        // Handle potential error message from server (e.g., file not found)
-        if (response.getType() == MessageType.ERROR) {
-            ssh.shared_model.protocol.messages.ErrorMessage errorMsg = (ssh.shared_model.protocol.messages.ErrorMessage) response;
-            throw new IOException("Server error: " + errorMsg.getErrorMessage());
-        }
-
-        if (response.getType() != MessageType.FILE_DATA) {
-            throw new IOException("Expected first chunk as FILE_DATA, got " + response.getType());
-        }
-
-        ssh.shared_model.protocol.messages.FileTransferMessage firstDataChunk = (ssh.shared_model.protocol.messages.FileTransferMessage) response;
-        long totalBytes = firstDataChunk.getFileSize();
-        Logger.info("Expecting file size: " + totalBytes + " bytes");
-        
-        // Create local file
-        java.io.File localFile = new java.io.File(localPath);
-        java.io.File parentDir = localFile.getParentFile();
-        if (parentDir != null) {
-            parentDir.mkdirs();
-        }
-
-        long bytesReceived = 0;
-        try (java.io.FileOutputStream fos = new java.io.FileOutputStream(localFile)) {
-            // Write the first chunk of data
-            byte[] firstChunkData = firstDataChunk.getDataBytes();
-            if (firstChunkData != null && firstChunkData.length > 0) {
-                fos.write(firstChunkData);
-                bytesReceived += firstChunkData.length;
-            }
-
-            // Read subsequent chunks until the total file size is reached
-            while (bytesReceived < totalBytes) {
-                Message subsequentResponse = protocolHandler.receiveMessage();
-                if (subsequentResponse.getType() != MessageType.FILE_DATA) {
-                    throw new IOException("Expected FILE_DATA, got " + subsequentResponse.getType());
-                }
-
-                ssh.shared_model.protocol.messages.FileTransferMessage dataChunk = (ssh.shared_model.protocol.messages.FileTransferMessage) subsequentResponse;
-                byte[] chunkData = dataChunk.getDataBytes();
-                if (chunkData != null && chunkData.length > 0) {
-                    fos.write(chunkData);
-                    bytesReceived += chunkData.length;
-                }
-                
-                // Update progress
-                int percentage = (int) ((bytesReceived * 100) / totalBytes);
-                if (onStatus != null) onStatus.accept(percentage + "%");
-            }
-        }
-
-        // Send final acknowledgment
-        ssh.shared_model.protocol.messages.FileTransferMessage ack = new ssh.shared_model.protocol.messages.FileTransferMessage(MessageType.FILE_ACK);
-        ack.setStatus("completed");
-        ack.setMessage("File download completed successfully");
-        
-        protocolHandler.sendMessage(ack);
-        
-        Logger.info("File download completed: " + filename + " (" + bytesReceived + " bytes)");
-        if (onStatus != null) onStatus.accept("100%");
     }
 
     /**
@@ -517,29 +330,6 @@ public class ClientConnection {
             }
         } catch (Exception e) {
             // Ignore errors on disconnect
-        }
-    }
-
-    /**
-     * Send a reload users request to the server.
-     */
-    public void sendReloadUsers() {
-        try {
-            if (protocolHandler != null && authenticated) {
-                ssh.shared_model.protocol.messages.ReloadUsersMessage reloadMsg = new ssh.shared_model.protocol.messages.ReloadUsersMessage();
-                protocolHandler.sendMessage(reloadMsg);
-                
-                // Wait for acknowledgment
-                Message response = protocolHandler.receiveMessage();
-                if (response.getType() == MessageType.SERVICE_ACCEPT) {
-                    Logger.info("Server acknowledged user database reload");
-                } else if (response.getType() == MessageType.ERROR) {
-                    ssh.shared_model.protocol.messages.ErrorMessage errorMsg = (ssh.shared_model.protocol.messages.ErrorMessage) response;
-                    Logger.error("Server failed to reload user database: " + errorMsg.getErrorMessage());
-                }
-            }
-        } catch (Exception e) {
-            Logger.error("Failed to send reload users request: " + e.getMessage());
         }
     }
 
@@ -616,11 +406,14 @@ public class ClientConnection {
      * Request local port forwarding: listen on localPort, forward to remoteHost:remotePort via SSH.
      */
     public void requestLocalPortForward(int localPort, String remoteHost, int remotePort) throws Exception {
+        Logger.info("[PortForward] Starting local port forward accept loop on port " + localPort);
         ServerSocket serverSocket = new ServerSocket(localPort);
         portForwardThreadPool.submit(() -> {
             while (!serverSocket.isClosed()) {
                 try {
+                    Logger.info("[PortForward] Waiting for local client connection on port " + localPort);
                     Socket localClient = serverSocket.accept();
+                    Logger.info("[PortForward] Accepted local client connection: " + localClient);
                     String connectionId = UUID.randomUUID().toString();
                     activeForwards.put(connectionId, localClient);
                     PortForwardRequestMessage req = new PortForwardRequestMessage(
@@ -629,21 +422,29 @@ public class ClientConnection {
                     );
                     req.setConnectionId(connectionId);
                     Logger.info("[PortForward] Sending PORT_FORWARD_REQUEST for connectionId=" + connectionId + ", localPort=" + localPort + ", remoteHost=" + remoteHost + ", remotePort=" + remotePort);
-                    // Send the request and wait for accept
                     CompletableFuture<PortForwardAcceptMessage> future = new CompletableFuture<>();
                     pendingPortForwards.put(connectionId, future);
+                    Logger.info("[PortForward] Put future for connectionId=" + connectionId);
                     protocolHandler.sendMessage(req);
-                    PortForwardAcceptMessage accept = future.get(10, java.util.concurrent.TimeUnit.SECONDS);
+                    Logger.info("[PortForward] Waiting for PORT_FORWARD_ACCEPT for connectionId=" + connectionId);
+                    PortForwardAcceptMessage accept = null;
+                    try {
+                        accept = future.get(10, java.util.concurrent.TimeUnit.SECONDS);
+                        Logger.info("[PortForward] Received PORT_FORWARD_ACCEPT for connectionId=" + connectionId + ": " + (accept != null ? accept.isSuccess() : "null"));
+                    } catch (Exception ex) {
+                        Logger.error("[PortForward] Exception while waiting for PORT_FORWARD_ACCEPT: " + ex);
+                    }
                     if (accept == null) {
                         Logger.error("[PortForward] Did not receive PORT_FORWARD_ACCEPT for connectionId=" + connectionId);
                         localClient.close();
                         activeForwards.remove(connectionId);
+                        // Do NOT remove the future here; let the dispatcher clean up
                         continue;
                     }
                     // Start relaying
                     portForwardThreadPool.submit(() -> relayLocalToRemote(connectionId, localClient));
                 } catch (Exception e) {
-                    Logger.error("[PortForward] Error in local port forward accept loop: " + e.getMessage());
+                    Logger.error("[PortForward] Error in local port forward accept loop: " + e);
                 }
             }
         });
@@ -723,36 +524,67 @@ public class ClientConnection {
      */
     public void processIncomingMessages() {
         portForwardThreadPool.submit(() -> {
+            Logger.info("[Dispatcher] processIncomingMessages started");
             while (isConnected()) {
                 try {
+                    Logger.info("[Dispatcher] Top of loop, about to receive message...");
                     Message msg = protocolHandler.receiveMessage();
+                    Logger.info("[Dispatcher] Received message: " + (msg != null ? msg.getType() : "null"));
                     if (msg == null) {
                         Logger.info("processIncomingMessages: Connection closed or EOF reached, exiting loop.");
                         break;
                     }
                     if (msg instanceof PortForwardAcceptMessage) {
                         PortForwardAcceptMessage acceptMsg = (PortForwardAcceptMessage) msg;
-                        CompletableFuture<PortForwardAcceptMessage> future = pendingPortForwards.remove(acceptMsg.getConnectionId());
+                        Logger.info("[Dispatcher] Completing future for connectionId=" + acceptMsg.getConnectionId());
+                        CompletableFuture<PortForwardAcceptMessage> future = pendingPortForwards.get(acceptMsg.getConnectionId());
                         if (future != null) {
                             future.complete(acceptMsg);
+                            pendingPortForwards.remove(acceptMsg.getConnectionId());
+                            Logger.info("[Dispatcher] Removed future for connectionId=" + acceptMsg.getConnectionId());
+                        } else {
+                            Logger.warn("[Dispatcher] No future found for connectionId=" + acceptMsg.getConnectionId());
+                        }
+                    } else if (msg instanceof ShellMessage) {
+                        ShellMessage shellMsg = (ShellMessage) msg;
+                        String reqId = shellMsg.getRequestId();
+                        Logger.info("[Dispatcher] Received ShellMessage: type=" + shellMsg.getType() + ", requestId=" + reqId);
+                        if (reqId != null) {
+                            CompletableFuture<Message> future = pendingResponses.get(reqId);
+                            if (future != null) {
+                                Logger.info("[Dispatcher] Completing future for shell requestId=" + reqId + ", type=" + shellMsg.getType());
+                                future.complete(shellMsg);
+                                pendingResponses.remove(reqId);
+                                Logger.info("[Dispatcher] Completed and removed future for shell requestId=" + reqId);
+                            } else {
+                                Logger.warn("[Dispatcher] No pending future for shell requestId=" + reqId);
+                            }
+                        }
+                    } else if (msg instanceof FileTransferMessage) {
+                        FileTransferMessage ftMsg = (FileTransferMessage) msg;
+                        String reqId = ftMsg.getRequestId();
+                        if (reqId != null) {
+                            CompletableFuture<Message> future = pendingResponses.get(reqId);
+                            if (future != null) {
+                                future.complete(ftMsg);
+                                pendingResponses.remove(reqId);
+                                Logger.info("[Dispatcher] Completed and removed future for file transfer requestId=" + reqId);
+                            } else {
+                                Logger.warn("[Dispatcher] No pending future for file transfer requestId=" + reqId);
+                            }
                         }
                     } else if (msg instanceof PortForwardDataMessage) {
                         handlePortForwardData((PortForwardDataMessage) msg);
                     } else if (msg instanceof PortForwardCloseMessage) {
                         handlePortForwardClose((PortForwardCloseMessage) msg);
+                    } else {
+                        Logger.warn("[Dispatcher] Received unhandled message type: " + msg.getType());
                     }
                     // ... handle other message types as needed ...
                 } catch (Exception e) {
-                    Logger.error("Error in processIncomingMessages: " + e.getMessage());
-                    // If the error is EOF or disconnect, exit the loop
-                    if (e.getMessage() != null && e.getMessage().toLowerCase().contains("end of stream")) {
-                        Logger.info("processIncomingMessages: Detected end of stream, exiting loop.");
-                        break;
-                    }
+                    Logger.error("[Dispatcher] Exception in processIncomingMessages: " + e, e);
                 }
             }
-            Logger.info("processIncomingMessages: Exiting and cleaning up.");
-            disconnect();
         });
     }
 
@@ -780,6 +612,134 @@ public class ClientConnection {
         Socket localClient = activeForwards.remove(msg.getConnectionId());
         if (localClient != null) {
             try { localClient.close(); } catch (Exception ignored) {}
+        }
+    }
+
+    public CompletableFuture<Message> uploadFileAsync(String localPath, String remotePath) {
+        try {
+            if (!authenticated) {
+                CompletableFuture<Message> failed = new CompletableFuture<>();
+                failed.completeExceptionally(new IllegalStateException("Not authenticated"));
+                return failed;
+            }
+            java.io.File localFile = new java.io.File(localPath);
+            if (!localFile.exists()) {
+                CompletableFuture<Message> failed = new CompletableFuture<>();
+                failed.completeExceptionally(new IOException("Local file does not exist: " + localPath));
+                return failed;
+            }
+            if (!localFile.canRead()) {
+                CompletableFuture<Message> failed = new CompletableFuture<>();
+                failed.completeExceptionally(new IOException("Cannot read local file: " + localPath));
+                return failed;
+            }
+            long fileSize = localFile.length();
+            String filename = localFile.getName();
+            Logger.info("Starting file upload: " + filename + " (" + fileSize + " bytes)");
+            if (onStatus != null) onStatus.accept(filename + " (" + fileSize + " bytes)");
+            FileTransferMessage uploadRequest = new FileTransferMessage(MessageType.FILE_UPLOAD_REQUEST);
+            uploadRequest.setFilename(filename);
+            uploadRequest.setFileSize(fileSize);
+            uploadRequest.setTargetPath(remotePath);
+            String requestId = java.util.UUID.randomUUID().toString();
+            uploadRequest.setRequestId(requestId);
+            CompletableFuture<Message> future = new CompletableFuture<>();
+            pendingResponses.put(requestId, future);
+            protocolHandler.sendMessage(uploadRequest);
+            return future.thenCompose(response -> {
+                if (response.getType() != MessageType.FILE_ACK) {
+                    CompletableFuture<Message> failed = new CompletableFuture<>();
+                    failed.completeExceptionally(new IOException("Expected FILE_ACK, got " + response.getType()));
+                    return failed;
+                }
+                final int CHUNK_SIZE = 8192;
+                byte[] buffer = new byte[CHUNK_SIZE];
+                int sequenceNumber = 1;
+                long bytesTransferred = 0;
+                try (java.io.FileInputStream fis = new java.io.FileInputStream(localFile)) {
+                    int bytesRead;
+                    while ((bytesRead = fis.read(buffer)) != -1) {
+                        FileTransferMessage dataMessage = new FileTransferMessage(MessageType.FILE_DATA);
+                        dataMessage.setFilename(filename);
+                        dataMessage.setSequenceNumber(sequenceNumber);
+                        dataMessage.setLast(bytesRead < CHUNK_SIZE);
+                        dataMessage.setData(java.util.Arrays.copyOf(buffer, bytesRead));
+                        dataMessage.setRequestId(requestId);
+                        protocolHandler.sendMessage(dataMessage);
+                        bytesTransferred += bytesRead;
+                        sequenceNumber++;
+                        int percentage = (int) ((bytesTransferred * 100) / fileSize);
+                        if (onStatus != null) onStatus.accept(percentage + "%");
+                        Logger.info("Sent chunk " + (sequenceNumber - 1) + ", bytes: " + bytesTransferred + "/" + fileSize);
+                    }
+                } catch (Exception e) {
+                    CompletableFuture<Message> failed = new CompletableFuture<>();
+                    failed.completeExceptionally(e);
+                    return failed;
+                }
+                CompletableFuture<Message> finalAckFuture = new CompletableFuture<>();
+                pendingResponses.put(requestId, finalAckFuture);
+                return finalAckFuture;
+            });
+        } catch (Exception e) {
+            CompletableFuture<Message> failed = new CompletableFuture<>();
+            failed.completeExceptionally(e);
+            return failed;
+        }
+    }
+
+    public CompletableFuture<Message> downloadFileAsync(String remotePath, String localPath) {
+        try {
+            if (!authenticated) {
+                CompletableFuture<Message> failed = new CompletableFuture<>();
+                failed.completeExceptionally(new IllegalStateException("Not authenticated"));
+                return failed;
+            }
+            FileTransferMessage downloadRequest = new FileTransferMessage(MessageType.FILE_DOWNLOAD_REQUEST);
+            downloadRequest.setTargetPath(remotePath);
+            String requestId = java.util.UUID.randomUUID().toString();
+            downloadRequest.setRequestId(requestId);
+            CompletableFuture<Message> future = new CompletableFuture<>();
+            pendingResponses.put(requestId, future);
+            protocolHandler.sendMessage(downloadRequest);
+            return future.thenCompose(response -> {
+                if (response.getType() != MessageType.FILE_ACK) {
+                    CompletableFuture<Message> failed = new CompletableFuture<>();
+                    failed.completeExceptionally(new IOException("Expected FILE_ACK, got " + response.getType()));
+                    return failed;
+                }
+                final java.io.File localFile = new java.io.File(localPath);
+                try (java.io.FileOutputStream fos = new java.io.FileOutputStream(localFile)) {
+                    boolean done = false;
+                    while (!done) {
+                        CompletableFuture<Message> chunkFuture = new CompletableFuture<>();
+                        pendingResponses.put(requestId, chunkFuture);
+                        Message chunkMsg = chunkFuture.get();
+                        if (chunkMsg.getType() == MessageType.FILE_DATA) {
+                            FileTransferMessage dataMsg = (FileTransferMessage) chunkMsg;
+                            fos.write(dataMsg.getDataBytes());
+                            if (dataMsg.isLast()) {
+                                done = true;
+                            }
+                        } else if (chunkMsg.getType() == MessageType.FILE_ACK) {
+                            done = true;
+                        } else {
+                            throw new IOException("Unexpected message type during file download: " + chunkMsg.getType());
+                        }
+                    }
+                } catch (Exception e) {
+                    CompletableFuture<Message> failed = new CompletableFuture<>();
+                    failed.completeExceptionally(e);
+                    return failed;
+                }
+                CompletableFuture<Message> completed = new CompletableFuture<>();
+                completed.complete(response);
+                return completed;
+            });
+        } catch (Exception e) {
+            CompletableFuture<Message> failed = new CompletableFuture<>();
+            failed.completeExceptionally(e);
+            return failed;
         }
     }
 } 

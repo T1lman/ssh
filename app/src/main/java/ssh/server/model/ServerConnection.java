@@ -310,7 +310,8 @@ public class ServerConnection implements Runnable {
             response.setStdout(result.getStdout());
             response.setStderr(result.getStderr());
             response.setWorkingDirectory(shellExecutor.getCurrentWorkingDirectory());
-
+            // Copy requestId from incoming message
+            response.setRequestId(message.getRequestId());
             protocolHandler.sendMessage(response);
             Logger.info("Sent SHELL_RESULT message to client.");
         } catch (Exception e) {

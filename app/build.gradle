@@ -147,3 +147,34 @@ task serverJar(type: Jar) {
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
+
+// Server-only JAR for Raspberry Pi (without JavaFX)
+task serverPiJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'ssh.server.controller.SSHServer'
+    }
+    archiveBaseName = 'ssh-server-pi'
+    archiveClassifier = 'all'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    
+    // Include only server and shared classes, exclude client and JavaFX
+    from sourceSets.main.output
+    include 'ssh/server/**'
+    include 'ssh/shared_model/**'
+    include 'ssh/config/**'
+    include 'ssh/utils/**'
+    
+    // Include runtime dependencies except JavaFX
+    from { 
+        configurations.runtimeClasspath.collect { 
+            if (it.name.contains('javafx')) {
+                // Skip JavaFX dependencies
+                return []
+            } else {
+                return it.isDirectory() ? it : zipTree(it)
+            }
+        }.flatten()
+    }
+    
+    with jar
+}

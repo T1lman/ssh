@@ -192,8 +192,12 @@ public class JavaFXClientUI implements ClientUI {
 
     @Override
     public void displayShellOutput(String output) {
+        Logger.info("[View] displayShellOutput called with output: " + output);
         if (mainWindow != null) {
+            Logger.info("[View] mainWindow is not null, updating UI");
             Platform.runLater(() -> mainWindow.displayShellOutput(output));
+        } else {
+            Logger.warn("[View] mainWindow is null, cannot display shell output");
         }
     }
 

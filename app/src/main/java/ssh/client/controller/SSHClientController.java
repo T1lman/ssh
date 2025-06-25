@@ -141,6 +141,8 @@ public class SSHClientController {
             try {
                 model.requestService("shell");
                 Logger.info("SSHClientController: Shell service requested for GUI client");
+                model.getConnection().processIncomingMessages();
+                Logger.info("SSHClientController: Started dispatcher for GUI client");
             } catch (Exception e) {
                 Logger.error("SSHClientController: Failed to request shell service for GUI: " + e.getMessage());
                 view.displayError("Failed to initialize shell: " + e.getMessage());
@@ -188,38 +190,37 @@ public class SSHClientController {
         try {
             // Request shell service
             model.requestService("shell");
+            // Start dispatcher for port forwarding and async messages
+            model.getConnection().processIncomingMessages();
             view.displayMessage("Entering shell mode. Type 'exit' to return to service menu.");
         } catch (Exception e) {
             Logger.error("SSHClientController: Failed to request shell service: " + e.getMessage());
             view.displayError("Failed to enter shell mode: " + e.getMessage());
             return;
         }
-        
         while (running && view.shouldContinue() && model.isConnected()) {
             try {
-                // Fetch the current working directory from the model
                 String currentDir = model.getWorkingDirectory();
                 if (currentDir == null || currentDir.isEmpty()) {
                     currentDir = "~";
                 }
-                // Show prompt with working directory
                 String prompt = currentDir + " $ ";
                 String command = view.getInput(prompt);
-                
                 if (command == null || command.trim().isEmpty()) {
                     continue;
                 }
-                
                 if (command.trim().equalsIgnoreCase("exit")) {
                     break;
                 }
-                
-                // Echo the command (like a real shell)
                 view.displayMessage(prompt + command);
-                
-                // Send command to model
-                model.sendShellCommand(command);
-                
+                // Async shell command, block for result before next prompt
+                try {
+                    model.sendShellCommandAsync(command).get();
+                } catch (Exception ex) {
+                    Logger.error("SSHClientController: Error in shell mode: " + ex.getMessage());
+                    view.displayError("Shell error: " + ex.getMessage());
+                    break;
+                }
             } catch (Exception e) {
                 Logger.error("SSHClientController: Error in shell mode: " + e.getMessage());
                 view.displayError("Shell error: " + e.getMessage());
@@ -240,40 +241,30 @@ public class SSHClientController {
      * Handle shell command from view.
      */
     public void handleShellCommand(String command) {
-        try {
-            Logger.info("SSHClientController: Handling shell command: " + command);
-            model.sendShellCommand(command);
-        } catch (Exception e) {
-            Logger.error("SSHClientController: Error handling shell command: " + e.getMessage());
-            view.displayError("Error sending shell command: " + e.getMessage());
-        }
+        Logger.info("SSHClientController: Handling shell command: " + command);
+        model.sendShellCommandAsync(command)
+            .exceptionally(ex -> { view.displayError("Error sending shell command: " + ex.getMessage()); return null; });
     }
 
     /**
      * Handle file upload request from view.
      */
     public void handleFileUpload(java.io.File file) {
-        try {
-            Logger.info("SSHClientController: Handling file upload: " + file.getName());
-            model.uploadFile(file.getAbsolutePath(), file.getName());
-        } catch (Exception e) {
-            Logger.error("SSHClientController: Error handling file upload: " + e.getMessage());
-            view.displayError("File upload failed: " + e.getMessage());
-        }
+        Logger.info("SSHClientController: Handling file upload: " + file.getName());
+        model.uploadFileAsync(file.getAbsolutePath(), file.getName())
+            .thenAccept(v -> view.displayMessage("File upload complete: " + file.getName()))
+            .exceptionally(ex -> { view.displayError("File upload failed: " + ex.getMessage()); return null; });
     }
 
     /**
      * Handle file download request from view.
      */
     public void handleFileDownload(String remotePath) {
-        try {
-            Logger.info("SSHClientController: Handling file download: " + remotePath);
-            String localPath = "downloads/" + new java.io.File(remotePath).getName();
-            model.downloadFile(remotePath, localPath);
-        } catch (Exception e) {
-            Logger.error("SSHClientController: Error handling file download: " + e.getMessage());
-            view.displayError("File download failed: " + e.getMessage());
-        }
+        Logger.info("SSHClientController: Handling file download: " + remotePath);
+        String localPath = "downloads/" + new java.io.File(remotePath).getName();
+        model.downloadFileAsync(remotePath, localPath)
+            .thenAccept(v -> view.displayMessage("File download complete: " + remotePath))
+            .exceptionally(ex -> { view.displayError("File download failed: " + ex.getMessage()); return null; });
     }
 
     /**

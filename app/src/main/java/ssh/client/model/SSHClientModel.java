@@ -1,6 +1,7 @@
 package ssh.client.model;
 
 import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
 
 import ssh.utils.Logger;
 
@@ -96,49 +97,53 @@ public class SSHClientModel {
     /**
      * Send a shell command.
      */
-    public void sendShellCommand(String command) throws Exception {
+    public CompletableFuture<String> sendShellCommandAsync(String command) {
         if (!isConnected()) {
-            throw new Exception("Not connected to server");
+            CompletableFuture<String> failed = new CompletableFuture<>();
+            failed.completeExceptionally(new Exception("Not connected to server"));
+            return failed;
         }
-        
-        Logger.info("SSHClientModel: Sending shell command: " + command);
-        connection.sendShellCommand(command);
-        
-        // Get response
-        String response = connection.receiveShellResponse();
-        notifyShellOutput(response);
-        
-        // Check if working directory changed and notify
-        String newWorkingDirectory = connection.getWorkingDirectory();
-        if (newWorkingDirectory != null && !newWorkingDirectory.isEmpty()) {
-            notifyWorkingDirectoryChanged(newWorkingDirectory);
-        }
+        Logger.info("SSHClientModel: Sending shell command (async): " + command);
+        return connection.sendShellCommandAsync(command)
+            .thenApply(msg -> {
+                ssh.shared_model.protocol.messages.ShellMessage shellMsg = (ssh.shared_model.protocol.messages.ShellMessage) msg;
+                String output = (shellMsg.getStdout() != null ? shellMsg.getStdout() : "") +
+                                (shellMsg.getStderr() != null ? shellMsg.getStderr() : "");
+                notifyShellOutput(output);
+                String newWorkingDirectory = shellMsg.getWorkingDirectory();
+                if (newWorkingDirectory != null && !newWorkingDirectory.isEmpty()) {
+                    notifyWorkingDirectoryChanged(newWorkingDirectory);
+                }
+                return output;
+            });
     }
 
     /**
      * Upload a file.
      */
-    public void uploadFile(String localPath, String remotePath) throws Exception {
+    public CompletableFuture<Void> uploadFileAsync(String localPath, String remotePath) {
         if (!isConnected()) {
-            throw new Exception("Not connected to server");
+            CompletableFuture<Void> failed = new CompletableFuture<>();
+            failed.completeExceptionally(new Exception("Not connected to server"));
+            return failed;
         }
-        
-        Logger.info("SSHClientModel: Uploading file from " + localPath + " to " + remotePath);
-        connection.uploadFile(localPath, remotePath);
-        notifyFileTransferProgress("Upload completed: " + new java.io.File(localPath).getName(), 100);
+        Logger.info("SSHClientModel: Uploading file (async) from " + localPath + " to " + remotePath);
+        return connection.uploadFileAsync(localPath, remotePath)
+            .thenAccept(msg -> notifyFileTransferProgress("Upload completed: " + new java.io.File(localPath).getName(), 100));
     }
 
     /**
      * Download a file.
      */
-    public void downloadFile(String remotePath, String localPath) throws Exception {
+    public CompletableFuture<Void> downloadFileAsync(String remotePath, String localPath) {
         if (!isConnected()) {
-            throw new Exception("Not connected to server");
+            CompletableFuture<Void> failed = new CompletableFuture<>();
+            failed.completeExceptionally(new Exception("Not connected to server"));
+            return failed;
         }
-        
-        Logger.info("SSHClientModel: Downloading file from " + remotePath + " to " + localPath);
-        connection.downloadFile(remotePath, localPath);
-        notifyFileTransferProgress("Download completed: " + new java.io.File(remotePath).getName(), 100);
+        Logger.info("SSHClientModel: Downloading file (async) from " + remotePath + " to " + localPath);
+        return connection.downloadFileAsync(remotePath, localPath)
+            .thenAccept(msg -> notifyFileTransferProgress("Download completed: " + new java.io.File(remotePath).getName(), 100));
     }
 
     /**
@@ -215,7 +220,6 @@ public class SSHClientModel {
      */
     public void requestLocalPortForward(int localPort, String remoteHost, int remotePort) throws Exception {
         if (!isConnected()) throw new Exception("Not connected to server");
-        startDispatcherIfNeeded();
         connection.requestLocalPortForward(localPort, remoteHost, remotePort);
     }
 
@@ -224,15 +228,7 @@ public class SSHClientModel {
      */
     public void requestRemotePortForward(int remotePort, String localHost, int localPort) throws Exception {
         if (!isConnected()) throw new Exception("Not connected to server");
-        startDispatcherIfNeeded();
         connection.requestRemotePortForward(remotePort, localHost, localPort);
-    }
-
-    private void startDispatcherIfNeeded() {
-        if (!dispatcherRunning) {
-            dispatcherRunning = true;
-            connection.processIncomingMessages();
-        }
     }
 
     // Event notification methods
@@ -249,8 +245,12 @@ public class SSHClientModel {
     }
 
     private void notifyShellOutput(String output) {
+        Logger.info("[Model] notifyShellOutput called with output: " + output);
         if (onShellOutput != null) {
+            Logger.info("[Model] onShellOutput is set, calling accept");
             onShellOutput.accept(output);
+        } else {
+            Logger.warn("[Model] onShellOutput is null!");
         }
     }
 
@@ -294,6 +294,7 @@ public class SSHClientModel {
     }
 
     public void setOnShellOutput(Consumer<String> onShellOutput) {
+        Logger.info("[Model] setOnShellOutput called");
         this.onShellOutput = onShellOutput;
     }
 
@@ -315,5 +316,9 @@ public class SSHClientModel {
 
     public void setOnServiceRequested(Consumer<String> onServiceRequested) {
         this.onServiceRequested = onServiceRequested;
+    }
+
+    public ClientConnection getConnection() {
+        return connection;
     }
 } 
