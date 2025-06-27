@@ -121,4 +121,8 @@ public class ShellInputField extends TextField {
     public void setOnCommandEntered(Consumer<String> onCommandEntered) {
         this.onCommandEntered = onCommandEntered;
     }
+
+    public String getPrompt() {
+        return prompt;
+    }
 } 

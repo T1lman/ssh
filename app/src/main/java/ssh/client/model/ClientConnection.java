@@ -581,10 +581,21 @@ public class ClientConnection {
                         Logger.warn("[Dispatcher] Received unhandled message type: " + msg.getType());
                     }
                     // ... handle other message types as needed ...
+                } catch (IOException e) {
+                    // Check if this is a server disconnect
+                    if (e.getMessage() != null && e.getMessage().contains("Client disconnected gracefully")) {
+                        Logger.info("[Dispatcher] Server disconnected gracefully, breaking out of message processing loop");
+                        break;
+                    }
+                    Logger.error("[Dispatcher] IOException in processIncomingMessages: " + e.getMessage());
+                    break;
                 } catch (Exception e) {
-                    Logger.error("[Dispatcher] Exception in processIncomingMessages: " + e, e);
+                    Logger.error("[Dispatcher] Exception in processIncomingMessages: " + e.getMessage());
+                    // For other exceptions, break out of the loop
+                    break;
                 }
             }
+            Logger.info("[Dispatcher] processIncomingMessages loop ended");
         });
     }
 
@@ -616,24 +627,35 @@ public class ClientConnection {
     }
 
     public CompletableFuture<Message> uploadFileAsync(String localPath, String remotePath) {
+        CompletableFuture<Message> resultFuture = new CompletableFuture<>();
         try {
             if (!authenticated) {
-                CompletableFuture<Message> failed = new CompletableFuture<>();
-                failed.completeExceptionally(new IllegalStateException("Not authenticated"));
-                return failed;
+                resultFuture.completeExceptionally(new IllegalStateException("Not authenticated"));
+                return resultFuture;
+            }
+            Logger.info("Ensuring dispatcher is running for file upload...");
+            if (!isConnected()) {
+                resultFuture.completeExceptionally(new IllegalStateException("Not connected"));
+                return resultFuture;
             }
             java.io.File localFile = new java.io.File(localPath);
+            Logger.info("[FileUpload] Absolute path: " + localFile.getAbsolutePath());
+            Logger.info("[FileUpload] Exists: " + localFile.exists() + ", Readable: " + localFile.canRead());
+            Logger.info("[FileUpload] File size: " + localFile.length() + " bytes");
             if (!localFile.exists()) {
-                CompletableFuture<Message> failed = new CompletableFuture<>();
-                failed.completeExceptionally(new IOException("Local file does not exist: " + localPath));
-                return failed;
+                resultFuture.completeExceptionally(new IOException("Local file does not exist: " + localPath));
+                Logger.error("[FileUpload] File does not exist: " + localFile.getAbsolutePath());
+                return resultFuture;
             }
             if (!localFile.canRead()) {
-                CompletableFuture<Message> failed = new CompletableFuture<>();
-                failed.completeExceptionally(new IOException("Cannot read local file: " + localPath));
-                return failed;
+                resultFuture.completeExceptionally(new IOException("Cannot read local file: " + localPath));
+                Logger.error("[FileUpload] Cannot read file: " + localFile.getAbsolutePath());
+                return resultFuture;
             }
             long fileSize = localFile.length();
+            if (fileSize == 0) {
+                Logger.warn("[FileUpload] File is 0 bytes: " + localFile.getAbsolutePath());
+            }
             String filename = localFile.getName();
             Logger.info("Starting file upload: " + filename + " (" + fileSize + " bytes)");
             if (onStatus != null) onStatus.accept(filename + " (" + fileSize + " bytes)");
@@ -643,49 +665,85 @@ public class ClientConnection {
             uploadRequest.setTargetPath(remotePath);
             String requestId = java.util.UUID.randomUUID().toString();
             uploadRequest.setRequestId(requestId);
-            CompletableFuture<Message> future = new CompletableFuture<>();
-            pendingResponses.put(requestId, future);
+            CompletableFuture<Message> ackFuture = new CompletableFuture<>();
+            pendingResponses.put(requestId, ackFuture);
+            Logger.info("Sending FILE_UPLOAD_REQUEST with requestId: " + requestId);
             protocolHandler.sendMessage(uploadRequest);
-            return future.thenCompose(response -> {
-                if (response.getType() != MessageType.FILE_ACK) {
-                    CompletableFuture<Message> failed = new CompletableFuture<>();
-                    failed.completeExceptionally(new IOException("Expected FILE_ACK, got " + response.getType()));
-                    return failed;
-                }
-                final int CHUNK_SIZE = 8192;
-                byte[] buffer = new byte[CHUNK_SIZE];
-                int sequenceNumber = 1;
-                long bytesTransferred = 0;
-                try (java.io.FileInputStream fis = new java.io.FileInputStream(localFile)) {
-                    int bytesRead;
-                    while ((bytesRead = fis.read(buffer)) != -1) {
-                        FileTransferMessage dataMessage = new FileTransferMessage(MessageType.FILE_DATA);
-                        dataMessage.setFilename(filename);
-                        dataMessage.setSequenceNumber(sequenceNumber);
-                        dataMessage.setLast(bytesRead < CHUNK_SIZE);
-                        dataMessage.setData(java.util.Arrays.copyOf(buffer, bytesRead));
-                        dataMessage.setRequestId(requestId);
-                        protocolHandler.sendMessage(dataMessage);
-                        bytesTransferred += bytesRead;
-                        sequenceNumber++;
-                        int percentage = (int) ((bytesTransferred * 100) / fileSize);
-                        if (onStatus != null) onStatus.accept(percentage + "%");
-                        Logger.info("Sent chunk " + (sequenceNumber - 1) + ", bytes: " + bytesTransferred + "/" + fileSize);
+            ackFuture.orTimeout(10, java.util.concurrent.TimeUnit.SECONDS)
+                .thenAccept(response -> {
+                    if (response.getType() != MessageType.FILE_ACK) {
+                        resultFuture.completeExceptionally(new IOException("Expected FILE_ACK, got " + response.getType()));
+                        return;
                     }
-                } catch (Exception e) {
-                    CompletableFuture<Message> failed = new CompletableFuture<>();
-                    failed.completeExceptionally(e);
-                    return failed;
-                }
-                CompletableFuture<Message> finalAckFuture = new CompletableFuture<>();
-                pendingResponses.put(requestId, finalAckFuture);
-                return finalAckFuture;
-            });
+                    Logger.info("Received response for upload request " + requestId + ": " + response.getType());
+                    Logger.info("Starting to send file data after receiving FILE_ACK for requestId: " + requestId);
+                    // Send file data in a background thread
+                    portForwardThreadPool.submit(() -> {
+                        try {
+                            final int CHUNK_SIZE = 8192;
+                            byte[] buffer = new byte[CHUNK_SIZE];
+                            int sequenceNumber = 1;
+                            long bytesTransferred = 0;
+                            if (fileSize == 0) {
+                                FileTransferMessage dataMessage = new FileTransferMessage(MessageType.FILE_DATA);
+                                dataMessage.setFilename(filename);
+                                dataMessage.setSequenceNumber(sequenceNumber);
+                                dataMessage.setLast(true);
+                                dataMessage.setData(new byte[0]);
+                                dataMessage.setRequestId(requestId);
+                                Logger.info("Sending FILE_DATA for 0-byte file, requestId: " + requestId);
+                                protocolHandler.sendMessage(dataMessage);
+                                bytesTransferred = 0;
+                                sequenceNumber++;
+                            } else {
+                                try (java.io.FileInputStream fis = new java.io.FileInputStream(localFile)) {
+                                    int bytesRead;
+                                    while ((bytesRead = fis.read(buffer)) != -1) {
+                                        FileTransferMessage dataMessage = new FileTransferMessage(MessageType.FILE_DATA);
+                                        dataMessage.setFilename(filename);
+                                        dataMessage.setSequenceNumber(sequenceNumber);
+                                        dataMessage.setLast(bytesRead < CHUNK_SIZE);
+                                        dataMessage.setData(java.util.Arrays.copyOf(buffer, bytesRead));
+                                        dataMessage.setRequestId(requestId);
+                                        Logger.info("Sending FILE_DATA chunk " + sequenceNumber + " for requestId: " + requestId);
+                                        protocolHandler.sendMessage(dataMessage);
+                                        bytesTransferred += bytesRead;
+                                        sequenceNumber++;
+                                        int percentage = (int) ((bytesTransferred * 100) / fileSize);
+                                        if (onStatus != null) onStatus.accept(percentage + "%");
+                                        Logger.info("Sent chunk " + (sequenceNumber - 1) + ", bytes: " + bytesTransferred + "/" + fileSize);
+                                    }
+                                }
+                            }
+                            Logger.info("All file data sent, waiting for final ACK for requestId: " + requestId);
+                            CompletableFuture<Message> finalAckFuture = new CompletableFuture<>();
+                            pendingResponses.put(requestId, finalAckFuture);
+                            finalAckFuture.orTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+                                .thenAccept(finalAck -> {
+                                    Logger.info("File upload completed successfully for requestId: " + requestId);
+                                    resultFuture.complete(finalAck);
+                                })
+                                .exceptionally(finalAckEx -> {
+                                    Logger.error("Error waiting for final ACK: " + finalAckEx.getMessage(), finalAckEx);
+                                    resultFuture.completeExceptionally(finalAckEx);
+                                    return null;
+                                });
+                        } catch (Exception e) {
+                            Logger.error("Error in file data sending thread: " + e.getMessage(), e);
+                            resultFuture.completeExceptionally(e);
+                        }
+                    });
+                })
+                .exceptionally(ackEx -> {
+                    Logger.error("Error waiting for initial FILE_ACK: " + ackEx.getMessage(), ackEx);
+                    resultFuture.completeExceptionally(ackEx);
+                    return null;
+                });
         } catch (Exception e) {
-            CompletableFuture<Message> failed = new CompletableFuture<>();
-            failed.completeExceptionally(e);
-            return failed;
+            Logger.error("Error in uploadFileAsync: " + e.getMessage(), e);
+            resultFuture.completeExceptionally(e);
         }
+        return resultFuture;
     }
 
     public CompletableFuture<Message> downloadFileAsync(String remotePath, String localPath) {

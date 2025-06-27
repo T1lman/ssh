@@ -94,12 +94,22 @@ public class SSHClientModel {
         notifyServiceRequested(service);
     }
 
+    // Add a data class to hold shell result and working directory
+    public static class ShellResult {
+        public final String output;
+        public final String workingDirectory;
+        public ShellResult(String output, String workingDirectory) {
+            this.output = output;
+            this.workingDirectory = workingDirectory;
+        }
+    }
+
     /**
      * Send a shell command.
      */
-    public CompletableFuture<String> sendShellCommandAsync(String command) {
+    public java.util.concurrent.CompletableFuture<ShellResult> sendShellCommandAsync(String command) {
         if (!isConnected()) {
-            CompletableFuture<String> failed = new CompletableFuture<>();
+            java.util.concurrent.CompletableFuture<ShellResult> failed = new java.util.concurrent.CompletableFuture<>();
             failed.completeExceptionally(new Exception("Not connected to server"));
             return failed;
         }
@@ -109,12 +119,11 @@ public class SSHClientModel {
                 ssh.shared_model.protocol.messages.ShellMessage shellMsg = (ssh.shared_model.protocol.messages.ShellMessage) msg;
                 String output = (shellMsg.getStdout() != null ? shellMsg.getStdout() : "") +
                                 (shellMsg.getStderr() != null ? shellMsg.getStderr() : "");
-                notifyShellOutput(output);
                 String newWorkingDirectory = shellMsg.getWorkingDirectory();
                 if (newWorkingDirectory != null && !newWorkingDirectory.isEmpty()) {
                     notifyWorkingDirectoryChanged(newWorkingDirectory);
                 }
-                return output;
+                return new ShellResult(output, newWorkingDirectory != null && !newWorkingDirectory.isEmpty() ? newWorkingDirectory : getWorkingDirectory());
             });
     }
 

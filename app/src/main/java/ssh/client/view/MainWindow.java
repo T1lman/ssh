@@ -342,9 +342,9 @@ public class MainWindow {
         });
     }
     
-    public void displayShellCommand(String command, String output) {
+    public void displayShellCommand(String command, String output, String workingDirectory) {
         Platform.runLater(() -> {
-            String prompt = formatShellPrompt(currentWorkingDirectory);
+            String prompt = formatShellPrompt(workingDirectory);
             // Add prompt in gray color
             addStyledText(prompt, "prompt");
             // Add command in blue color
@@ -354,6 +354,10 @@ public class MainWindow {
                 addStyledText(output.trim() + "\n", "output");
             }
         });
+    }
+    
+    public void displayShellCommand(String command, String output) {
+        displayShellCommand(command, output, currentWorkingDirectory);
     }
     
     public void displayMessage(String message) {
@@ -396,19 +400,7 @@ public class MainWindow {
     }
 
     public void setOnCommandEntered(Consumer<String> onCommandEntered) {
-        this.onCommandEntered = command -> {
-            // Capture the working directory BEFORE processing the command
-            String currentDir = workingDirectoryProvider != null ? workingDirectoryProvider.get() : currentWorkingDirectory;
-            String prompt = formatShellPrompt(currentDir);
-            // Display prompt and command before sending
-            Platform.runLater(() -> {
-                // Add prompt in gray color
-                addStyledText(prompt, "prompt");
-                // Add command in blue color
-                addStyledText(command + "\n", "command");
-            });
-            onCommandEntered.accept(command);
-        };
+        this.onCommandEntered = onCommandEntered;
     }
 
     public void setWorkingDirectoryProvider(java.util.function.Supplier<String> workingDirectoryProvider) {
@@ -489,5 +481,19 @@ public class MainWindow {
     // Setter for port forward callback
     public void setOnPortForwardRequested(Consumer<PortForwardRequest> cb) {
         this.onPortForwardRequested = cb;
+    }
+
+    // Get the current prompt as shown in the input line
+    public String getCurrentPrompt() {
+        return commandInput.getPrompt();
+    }
+
+    // Print the prompt+command in the terminal output
+    public void printPromptAndCommand(String command) {
+        Platform.runLater(() -> {
+            String prompt = getCurrentPrompt();
+            addStyledText(prompt, "prompt");
+            addStyledText(command + "\n", "command");
+        });
     }
 } 

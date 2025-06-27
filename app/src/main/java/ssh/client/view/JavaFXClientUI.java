@@ -192,12 +192,8 @@ public class JavaFXClientUI implements ClientUI {
 
     @Override
     public void displayShellOutput(String output) {
-        Logger.info("[View] displayShellOutput called with output: " + output);
         if (mainWindow != null) {
-            Logger.info("[View] mainWindow is not null, updating UI");
             Platform.runLater(() -> mainWindow.displayShellOutput(output));
-        } else {
-            Logger.warn("[View] mainWindow is null, cannot display shell output");
         }
     }
 
@@ -258,6 +254,13 @@ public class JavaFXClientUI implements ClientUI {
         }
     }
 
+    public void displayShellCommand(String command, String output, String workingDirectory) {
+        if (mainWindow != null) {
+            Platform.runLater(() -> mainWindow.displayShellCommand(command, output, workingDirectory));
+        }
+    }
+
+    // Keep the old method for backward compatibility
     public void displayShellCommand(String command, String output) {
         if (mainWindow != null) {
             Platform.runLater(() -> mainWindow.displayShellCommand(command, output));
@@ -306,5 +309,9 @@ public class JavaFXClientUI implements ClientUI {
 
     public void setOnFileDownloadRequested(Consumer<String> onFileDownloadRequested) {
         this.onFileDownloadRequested = onFileDownloadRequested;
+    }
+
+    public MainWindow getMainWindow() {
+        return mainWindow;
     }
 } 

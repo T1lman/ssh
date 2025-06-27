@@ -8,6 +8,7 @@ import ssh.client.view.ClientUI;
 import ssh.client.view.ConsoleClientUI;
 import ssh.utils.CredentialsManager;
 import ssh.utils.Logger;
+import ssh.client.view.MainWindow;
 
 import java.util.function.Consumer;
 
@@ -143,6 +144,14 @@ public class SSHClientController {
                 Logger.info("SSHClientController: Shell service requested for GUI client");
                 model.getConnection().processIncomingMessages();
                 Logger.info("SSHClientController: Started dispatcher for GUI client");
+                // --- NEW: Get initial working directory from server ---
+                model.sendShellCommandAsync("pwd").thenAccept(result -> {
+                    String newWorkingDirectory = result.workingDirectory;
+                    if (view instanceof ssh.client.view.JavaFXClientUI) {
+                        ((ssh.client.view.JavaFXClientUI) view).updateWorkingDirectory(newWorkingDirectory);
+                    }
+                });
+                // --- END NEW ---
             } catch (Exception e) {
                 Logger.error("SSHClientController: Failed to request shell service for GUI: " + e.getMessage());
                 view.displayError("Failed to initialize shell: " + e.getMessage());
@@ -242,7 +251,26 @@ public class SSHClientController {
      */
     public void handleShellCommand(String command) {
         Logger.info("SSHClientController: Handling shell command: " + command);
+        // Print prompt+command in the terminal output immediately
+        if (view instanceof ssh.client.view.JavaFXClientUI) {
+            ssh.client.view.JavaFXClientUI guiView = (ssh.client.view.JavaFXClientUI) view;
+            MainWindow mainWindow = guiView.getMainWindow();
+            if (mainWindow != null) {
+                mainWindow.printPromptAndCommand(command);
+            }
+        }
         model.sendShellCommandAsync(command)
+            .thenAccept(result -> {
+                String output = result.output;
+                String newWorkingDirectory = result.workingDirectory;
+                // Update the working directory in the view for the next prompt
+                if (view instanceof ssh.client.view.JavaFXClientUI) {
+                    ((ssh.client.view.JavaFXClientUI) view).updateWorkingDirectory(newWorkingDirectory);
+                    ((ssh.client.view.JavaFXClientUI) view).displayShellOutput(output);
+                } else {
+                    view.displayShellOutput(output);
+                }
+            })
             .exceptionally(ex -> { view.displayError("Error sending shell command: " + ex.getMessage()); return null; });
     }
 
@@ -251,9 +279,25 @@ public class SSHClientController {
      */
     public void handleFileUpload(java.io.File file) {
         Logger.info("SSHClientController: Handling file upload: " + file.getName());
+        Logger.info("[FileUpload] Absolute path: " + file.getAbsolutePath());
+        Logger.info("[FileUpload] File size: " + file.length() + " bytes");
+        if (file.length() == 0) {
+            Logger.warn("[FileUpload] File is 0 bytes: " + file.getAbsolutePath());
+            view.displayError("Selected file is empty (0 bytes): " + file.getAbsolutePath());
+            return;
+        }
+        // Ensure dispatcher is running for file operations
+        if (model.getConnection() != null) {
+            Logger.info("SSHClientController: Ensuring dispatcher is running for file upload");
+            // The dispatcher should already be running from shell service, but let's make sure
+        }
         model.uploadFileAsync(file.getAbsolutePath(), file.getName())
             .thenAccept(v -> view.displayMessage("File upload complete: " + file.getName()))
-            .exceptionally(ex -> { view.displayError("File upload failed: " + ex.getMessage()); return null; });
+            .exceptionally(ex -> { 
+                Logger.error("SSHClientController: File upload failed: " + ex.getMessage());
+                view.displayError("File upload failed: " + ex.getMessage()); 
+                return null; 
+            });
     }
 
     /**

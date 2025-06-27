@@ -266,12 +266,26 @@ public class ServerConnection implements Runnable {
                     message = protocolHandler.receiveMessage();
                 } catch (java.net.SocketTimeoutException ste) {
                     // Timeout: no message, just flush outgoing queues
+                } catch (IOException e) {
+                    // Check if this is a client disconnect
+                    if (e.getMessage() != null && e.getMessage().contains("Client disconnected gracefully")) {
+                        Logger.info("Client disconnected gracefully, breaking out of service request loop");
+                        break;
+                    }
+                    // Re-throw other IO exceptions
+                    throw e;
                 }
                 if (message != null) {
                     handleMessage(message);
                 }
             } catch (Exception e) {
                 Logger.error("Error in handleServiceRequests: " + e.getMessage());
+                // Check if this is a client disconnect
+                if (e.getMessage() != null && e.getMessage().contains("Client disconnected gracefully")) {
+                    Logger.info("Client disconnected gracefully, breaking out of service request loop");
+                    break;
+                }
+                // For other exceptions, break out of the loop
                 break;
             }
         }
@@ -359,6 +373,7 @@ public class ServerConnection implements Runnable {
         ack.setSequenceNumber(0);
         ack.setStatus("ready");
         ack.setMessage("Ready to receive file: " + filename);
+        ack.setRequestId(message.getRequestId());
         protocolHandler.sendMessage(ack);
 
         // Receive file data in chunks
@@ -366,6 +381,9 @@ public class ServerConnection implements Runnable {
         int sequenceNumber = 1;
         boolean isLast = false;
 
+        // --- Set longer timeout for file upload ---
+        int oldTimeout = clientSocket.getSoTimeout();
+        clientSocket.setSoTimeout(5000); // 5 seconds
         try (java.io.FileOutputStream fos = new java.io.FileOutputStream(targetFile)) {
             while (!isLast) {
                 // Receive file data message
@@ -391,6 +409,8 @@ public class ServerConnection implements Runnable {
                 safeDisplayMessage("Received chunk " + (sequenceNumber - 1) + " from " + authenticatedUser + 
                           ", bytes: " + bytesReceived + "/" + fileSize + ", last: " + isLast);
             }
+        } finally {
+            clientSocket.setSoTimeout(oldTimeout); // Restore old timeout
         }
 
         // Send final acknowledgment
@@ -398,6 +418,7 @@ public class ServerConnection implements Runnable {
         finalAck.setSequenceNumber(sequenceNumber - 1);
         finalAck.setStatus("completed");
         finalAck.setMessage("File upload completed: " + filename + " (" + bytesReceived + " bytes)");
+        finalAck.setRequestId(message.getRequestId());
         protocolHandler.sendMessage(finalAck);
 
         safeDisplayMessage("File upload completed for " + authenticatedUser + ": " + filename + " -> " + targetFile.getAbsolutePath());
